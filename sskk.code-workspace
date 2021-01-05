@@ -1,0 +1,40 @@
+{
+	"folders": [
+		{
+			"name": "admin",
+			"path": "admin"
+		},
+		{
+			"name": "firebase",
+			"path": "firebase"
+		},
+		{
+			"name": "hasura-config",
+			"path": "hasura-config"
+		},
+		{
+			"name": "hasura-server",
+			"path": "hasura-server"
+		},
+		{
+			"name": "thedailyparagraph.com",
+			"path": "thedailyparagraph.com"
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+	  "editor.tabSize": 2,
+		"javascript.updateImportsOnFileMove.enabled": "always",
+		"javascript.preferences.importModuleSpecifier": "non-relative",
+		"typescript.tsdk": "admin/node_modules/typescript/lib",
+		"[markdown]": {
+			"editor.formatOnSave": false
+		},
+		"[json]": {
+			"editor.formatOnSave": false
+		},
+		"[sql]": {
+			"editor.formatOnSave": false
+		}
+	}
+}

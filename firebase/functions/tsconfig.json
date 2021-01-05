@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true,
+    "sourceRoot": ".",
+    "target": "es2017",
+    "types": [],
+    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": ".",
+  },
+  "compileOnSave": true,
+  "exclude": ["node_modules"],
+  "include": ["src"]
+}

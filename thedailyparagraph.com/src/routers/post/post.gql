@@ -1,0 +1,15 @@
+query Post($handle: String!, $slug: String!) {
+  profiles(where: {handle: {_eq: $handle}}) {
+    published_posts_by_slug(args: {p_slug: $slug}) {
+      title
+      published_at
+      updated_at
+      id
+      content
+    }
+    id
+    handle
+    display_name
+    avatar_url
+  }
+}

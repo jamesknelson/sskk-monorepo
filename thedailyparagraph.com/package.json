@@ -1,0 +1,67 @@
+{
+  "name": "thedailyparagraph.com",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next --port 3001",
+    "build": "next build",
+    "start": "next start",
+    "generate-graphql-types": "graphql-codegen --config graphql-codegen.yaml"
+  },
+  "dependencies": {
+    "@urql/exchange-graphcache": "^3.3.3",
+    "date-fns": "^2.16.1",
+    "firebase": "^8.2.1",
+    "graphql": "^15.4.0",
+    "isomorphic-unfetch": "^3.1.0",
+    "next": "^10.0.4",
+    "nextil": "^0.17.1",
+    "react": "0.0.0-experimental-3310209d0",
+    "react-dom": "0.0.0-experimental-3310209d0",
+    "retil-issues": "^0.17.1",
+    "retil-operation": "^0.17.1",
+    "retil-router": "^0.17.1",
+    "retil-source": "^0.17.1",
+    "retil-support": "^0.17.1",
+    "styled-components": "^5.2.1",
+    "urql": "^1.11.4"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.20.0",
+    "@graphql-codegen/introspection": "^1.18.1",
+    "@graphql-codegen/typed-document-node": "^1.18.2",
+    "@graphql-codegen/typescript": "^1.20.0",
+    "@graphql-codegen/typescript-operations": "^1.17.13",
+    "@graphql-typed-document-node/core": "^3.1.0",
+    "@svgr/webpack": "^5.5.0",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.2.2",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/styled-components": "^5.1.7",
+    "babel-plugin-named-asset-import": "^0.3.7",
+    "babel-plugin-styled-components": "^1.12.0",
+    "file-loader": "^6.2.0",
+    "graphql-tag": "^2.11.0",
+    "typescript": "4.1.2",
+    "url-loader": "^4.1.1"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

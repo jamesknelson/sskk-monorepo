@@ -1,0 +1,7 @@
+version: 2
+endpoint: http://localhost:3711
+admin_secret: Galf,galf77
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000

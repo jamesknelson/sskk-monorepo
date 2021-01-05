@@ -1,0 +1,15 @@
+query Home($limit: Int = 10) {
+  published_posts(limit: $limit) {
+    id
+    content
+    published_at
+    profile {
+      display_name
+      avatar_url
+      handle
+    }
+    slug
+    title
+    updated_at
+  }
+}
