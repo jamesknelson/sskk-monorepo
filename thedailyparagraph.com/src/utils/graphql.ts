@@ -147,14 +147,18 @@ export function getURQLState(
 
         const fetchOptions = context.fetchOptions
         const tokenInfo = await authController.getTokenInfo()
+        const headers = {
+          ...fetchOptions?.headers,
+          // 'X-Hasura-Role': context.role,
+        }
+
+        if (tokenInfo) {
+          headers['Authorization'] = `Bearer ${tokenInfo?.token}`
+        }
 
         return {
           ...fetchOptions,
-          headers: {
-            ...fetchOptions?.headers,
-            Authorization: `Bearer ${tokenInfo?.token}`,
-            // 'X-Hasura-Role': context.role,
-          },
+          headers,
         }
       }),
       fetchExchange,
