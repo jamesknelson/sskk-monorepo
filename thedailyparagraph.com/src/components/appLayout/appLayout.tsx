@@ -12,10 +12,8 @@ export const LoadingUser = { loading: true }
 
 export function AppLayout(props: AppLayoutProps) {
   const { children } = props
-  const { currentUser } = useAppRequest()
+  const { profile } = useAppRequest()
   const { signOut } = useAuthController()
-
-  console.log('currentUser', currentUser)
 
   return (
     <div>
@@ -24,10 +22,12 @@ export function AppLayout(props: AppLayoutProps) {
           <strong>¶</strong>
         </Link>
         <nav>
-          {currentUser !== undefined &&
-            (currentUser && !currentUser.isAnonymous ? (
+          {profile !== undefined &&
+            (profile ? (
               <>
-                <Link to="/settings">settings</Link> &nbsp;
+                <Link to="/dashboard">{profile.displayName}</Link>
+                &nbsp;&middot;&nbsp;
+                <Link to="/settings">Account settings</Link>&nbsp;
                 <button onClick={signOut}>logout</button>
               </>
             ) : (

@@ -26,7 +26,7 @@
 	  "editor.tabSize": 2,
 		"javascript.updateImportsOnFileMove.enabled": "always",
 		"javascript.preferences.importModuleSpecifier": "non-relative",
-		"typescript.tsdk": "admin/node_modules/typescript/lib",
+		"typescript.tsdk": "thedailyparagraph.com/node_modules/typescript/lib",
 		"[markdown]": {
 			"editor.formatOnSave": false
 		},

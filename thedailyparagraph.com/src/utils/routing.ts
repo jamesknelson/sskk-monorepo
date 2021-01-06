@@ -7,18 +7,25 @@ import {
   routeRedirect,
   useRouterRequest,
 } from 'retil-router'
+import { createMemo } from 'retil-support'
 import { Client } from 'urql'
 
-import { router as loadingRouter } from '../routers/loading'
+import { router as loadingRouter } from 'src/routers/loading'
 
 import { AuthUser, getAuthService } from './auth'
 import { CreatePrecachedQueryFunction, getURQLState } from './graphql'
+import { MemberProfile, getMemberProfileSource } from './memberProfile'
+
+export interface AppUser extends Omit<AuthUser, 'id'> {
+  memberId?: string
+}
 
 export type AppRequest = NextilRequest & {
   cache?: any
   client: Client
   createQuery: CreatePrecachedQueryFunction
-  currentUser?: null | AuthUser
+  user?: null | AppUser
+  profile?: null | MemberProfile
 
   // currentUser?: null | AuthUser
   doNotTrack?: boolean
@@ -32,20 +39,45 @@ export type AppRequest = NextilRequest & {
 
 export type AppRouterFunction = RouterFunction<AppRequest, NextilResponse>
 
+const authMemo = createMemo()
+
 export function appRoutedPage(pageRouter: AppRouterFunction) {
   return nextilRoutedPage(pageRouter, {
     extendRequest: (request, use) => {
       const [authSource, authController] = getAuthService(request)
       const auth = use(authSource, undefined)
+      const memberId =
+        auth === undefined
+          ? undefined
+          : auth?.user?.claims?.['https://hasura.io/jwt/claims']?.[
+              'x-hasura-user-id'
+            ] || null
+      const user =
+        !auth || !auth.user
+          ? (auth?.user as null | undefined)
+          : authMemo(
+              () => ({
+                ...(auth.user as AuthUser),
+                id: undefined,
+                memberId,
+              }),
+              [auth.user, memberId],
+            )
+
       const { client, cache, createQuery } = getURQLState(
         request,
         authController,
       )
+
+      const profileSource =
+        user && getMemberProfileSource(request, client, memberId)
+
       return {
         cache,
         client,
         createQuery,
-        currentUser: auth === undefined ? undefined : auth.user,
+        user: user,
+        profile: profileSource && use(profileSource),
         layoutOptions: {},
       }
     },
@@ -64,9 +96,9 @@ export function switchAuth(routers: {
   unauthenticated: AppRouterFunction
 }): AppRouterFunction {
   return (request, response) => {
-    return (request.currentUser === undefined
+    return (request.user === undefined
       ? routers.pending
-      : request.currentUser && !request.currentUser.isAnonymous
+      : request.user && !request.user.isAnonymous
       ? routers.authenticated
       : routers.unauthenticated)(request, response)
   }

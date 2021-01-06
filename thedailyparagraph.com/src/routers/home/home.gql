@@ -4,6 +4,7 @@ query Home($limit: Int = 10) {
     content
     published_at
     profile {
+      id
       display_name
       avatar_url
       handle

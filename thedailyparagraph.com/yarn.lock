@@ -6463,13 +6463,13 @@ next@^10.0.4:
   optionalDependencies:
     sharp "0.26.2"
 
-nextil@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/nextil/-/nextil-0.17.1.tgz#ccd49d510469f267a6d9ed17247afe351ba541e1"
-  integrity sha512-hLtLmE2gpl1M0y8JHtNTdQcLWIE2NQ8duJBfXnYDHmCd6UmmRFsHC7YggML7nEGukcUbyC0qKLJFnI6+M798fw==
+nextil@^0.17.2:
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/nextil/-/nextil-0.17.2.tgz#56836e5a9aec1a01d9eec218973834df5d21a68c"
+  integrity sha512-x9TU9lr7Sz3sJKcOeK1MXULdUwtRXU8hCSK1pWz3/X3Cy91Pco/NDcAswRgd9Hc9zz3Crje0/tJxgnAfsCrWyw==
   dependencies:
-    retil-history "^0.17.1"
-    retil-router "^0.17.1"
+    retil-history "^0.17.2"
+    retil-router "^0.17.2"
     tslib "2.0.1"
 
 no-case@^3.0.3:
@@ -7646,21 +7646,21 @@ ret@~0.1.10:
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-retil-history@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/retil-history/-/retil-history-0.17.1.tgz#1b27caacca0bbf988603aec8c571861442dd25ae"
-  integrity sha512-PPWwwcKgQLByJExaNhB6YMmGx9wLENPYLQd+pYzeokINvyKXb7pgFfzrGkpC9mk9Z/LWlBCobIK3gkuWc2GqMw==
+retil-history@^0.17.2:
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/retil-history/-/retil-history-0.17.2.tgz#3105c0685447aa0cc7fa179bed70a91bc2e604ad"
+  integrity sha512-xD85fqk2EiAY9XxeLhfQVBV7nQQqJh2E8X7fWxcqMr+ehhwTO07b6voti34MkJCo9u74202HBwe9cPIXV2697g==
   dependencies:
     history "^5.0.0"
     querystring "^0.2.0"
-    retil-source "^0.17.1"
+    retil-source "^0.17.2"
     retil-support "^0.17.1"
     tslib "2.0.1"
 
-retil-issues@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/retil-issues/-/retil-issues-0.17.1.tgz#3d1122beabb25971bce8e5c42b985c3545776ce1"
-  integrity sha512-5ocbewqK2r2YcE6xnft2gOE6bGqG9NlzcTO9PCjX7tRdA41doazWfGKO0ptxXsJVgMHYpBXlKRFIsiPe6vMApw==
+retil-issues@^0.17.2:
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/retil-issues/-/retil-issues-0.17.2.tgz#5f4b7d47900d624a0a2e863a967b403651f633cf"
+  integrity sha512-S9kFYr38GXKgCYxRNA+TIqJpwpkIbWxwb1TeBFQMzwcL4ENmepryzeiueX7Ubo6HN35bxdaQO8TdveFaCh+K0Q==
   dependencies:
     retil-support "^0.17.1"
     tslib "2.0.1"
@@ -7673,21 +7673,21 @@ retil-operation@^0.17.1:
     retil-support "^0.17.1"
     tslib "2.0.1"
 
-retil-router@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/retil-router/-/retil-router-0.17.1.tgz#3ed2e82adfeac3413b4778ae561ae34ba2645656"
-  integrity sha512-u8/iP4mPs/LeLNTuwbc+LTGm1IPr/FBp/M6oYvYDHxLo8cCZT5v2XllB78Vj7zPSmhMvrehQ/b9txN80LKJqaA==
+retil-router@^0.17.2:
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/retil-router/-/retil-router-0.17.2.tgz#2d59d23d2354186248e01b4a33aa13737556cb63"
+  integrity sha512-uSZqNtaMrOT04cDx4CkNkGtIOY3HfIXHI7sy5WeWF5wn/ES4ZfaiVlps9eKxzU4yU+4fevAS6avkNVeNxusoFA==
   dependencies:
     path-to-regexp "^6.1.0"
-    retil-history "^0.17.1"
-    retil-source "^0.17.1"
+    retil-history "^0.17.2"
+    retil-source "^0.17.2"
     retil-support "^0.17.1"
     tslib "2.0.1"
 
-retil-source@^0.17.1:
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/retil-source/-/retil-source-0.17.1.tgz#8d0873450da36adb3edc8f1a5a52e5326d44d432"
-  integrity sha512-AHKQiUbVbBAe3UDTRzsjhJK47UrQtWnaS/ouJ3BGSl8m7arYwpc7n0v+4wq1kNjXNSIYcQyQBFL15dRLcWPupQ==
+retil-source@^0.17.2:
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/retil-source/-/retil-source-0.17.2.tgz#0dbf20743b5b126c92eea11b11ac370b7b7e2564"
+  integrity sha512-bWS5lCMX7+daQP4D5wd8Q225ORXjzR9IhYp4Z5HkTnhTGUW9SJOmKpNAJIACch3hBVQe17EbLcRQr9NXHnlmrg==
   dependencies:
     retil-support "^0.17.1"
     tslib "2.0.1"

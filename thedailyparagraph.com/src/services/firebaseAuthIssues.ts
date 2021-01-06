@@ -1,6 +1,4 @@
-import { Issues } from 'types/issues'
-
-export type FirebaseAuthIssues = Issues
+import { ValidatorIssues } from 'retil-issues'
 
 export interface IssueCodeMap {
   [code: string]: string | IssueCodeMap
@@ -9,26 +7,26 @@ export interface IssueCodeMap {
 function buildIssueFromError(
   codeMap: string | IssueCodeMap,
   error: any,
-): Issues {
+): ValidatorIssues {
   if (typeof codeMap === 'string') {
-    return {
-      codes: [codeMap],
-      message: error.message,
-    }
+    return [
+      {
+        code: codeMap,
+        message: error.message,
+      },
+    ]
   } else {
     const path = Object.keys(codeMap)[0]
     return {
-      fields: {
-        [path]: buildIssueFromError(codeMap[path], error),
-      },
-    }
+      [path]: buildIssueFromError(codeMap[path], error),
+    } as ValidatorIssues
   }
 }
 
 export const convertErrorsToIssues = async (
   fn: Function,
   codeMap: IssueCodeMap,
-): Promise<null | FirebaseAuthIssues> => {
+): Promise<null | ValidatorIssues> => {
   const issueCodes = Object.keys(codeMap)
 
   try {

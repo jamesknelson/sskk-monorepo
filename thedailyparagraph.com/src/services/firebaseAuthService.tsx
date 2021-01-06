@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import { ValidatorIssues } from 'retil-issues'
 import {
   Source,
   act,
@@ -10,7 +11,7 @@ import {
   wait,
 } from 'retil-source'
 
-import { FirebaseAuthIssues, convertErrorsToIssues } from './firebaseAuthIssues'
+import { convertErrorsToIssues } from './firebaseAuthIssues'
 
 export type FirebaseAuthService = readonly [
   FirebaseAuthSource,
@@ -81,6 +82,8 @@ export interface FirebaseAuthSnapshot {
 export interface FirebaseAuthUser {
   id: string
 
+  claims: Record<string, any> | null
+
   isAnonymous: boolean
 
   providerData: {
@@ -121,15 +124,15 @@ export interface FirebaseAuthController {
   /**
    * Can be called before applying a code, to check whether it is still valid.
    */
-  checkCode(data: { code: string }): Promise<null | FirebaseAuthIssues>
+  checkCode(data: { code: string }): Promise<null | ValidatorIssues>
 
   clearMessage(): void
 
   createUserWithPassword(
     data: FirebaseAuthCredentials & Partial<FirebaseAuthProfile>,
-  ): Promise<null | FirebaseAuthIssues>
+  ): Promise<null | ValidatorIssues>
 
-  deleteUser(): Promise<null | FirebaseAuthIssues>
+  deleteUser(): Promise<null | ValidatorIssues>
 
   /**
    * This is data is placed on the controller instead of the source, as the
@@ -149,21 +152,21 @@ export interface FirebaseAuthController {
 
   reauthenticateWithPassword(data: {
     password: string
-  }): Promise<null | FirebaseAuthIssues>
+  }): Promise<null | ValidatorIssues>
 
-  recoverEmail(data: { code: string }): Promise<null | FirebaseAuthIssues>
+  recoverEmail(data: { code: string }): Promise<null | ValidatorIssues>
 
   resetPassword(data: {
     code: string
     newPassword: string
-  }): Promise<null | FirebaseAuthIssues>
+  }): Promise<null | ValidatorIssues>
 
   // // - firebase: user.reauthenticateWithRedirect
   // reauthenticateWithRedirect(provider: AuthProvider): void
 
   sendEmailVerification(options?: {
     url: string
-  }): Promise<null | FirebaseAuthIssues>
+  }): Promise<null | ValidatorIssues>
 
   sendPasswordResetEmail(
     data: { email: string },
@@ -171,7 +174,7 @@ export interface FirebaseAuthController {
       // a URL to continue to after resetting the email
       url: string
     },
-  ): Promise<null | FirebaseAuthIssues>
+  ): Promise<null | ValidatorIssues>
 
   // Useful for account creation processes, where you'd like to ensure a user
   // record is created in your database with the correct id *before* creating
@@ -181,7 +184,7 @@ export interface FirebaseAuthController {
 
   signInWithPassword(
     data: FirebaseAuthCredentials,
-  ): Promise<null | FirebaseAuthIssues>
+  ): Promise<null | ValidatorIssues>
 
   // // - firebase: auth.signInWithRedirect
   // //             or if logged in anonymously,
@@ -196,17 +199,15 @@ export interface FirebaseAuthController {
   // // - firebase: user.unlink(providerId)
   // unlink(data: { providerId: string }): Promise<null | Issues>
 
-  updateEmail(data: { newEmail: string }): Promise<null | FirebaseAuthIssues>
+  updateEmail(data: { newEmail: string }): Promise<null | ValidatorIssues>
 
-  updatePassword(data: {
-    newPassword: string
-  }): Promise<null | FirebaseAuthIssues>
+  updatePassword(data: { newPassword: string }): Promise<null | ValidatorIssues>
 
   updateProfile(
     data: Partial<FirebaseAuthProfile>,
-  ): Promise<null | FirebaseAuthIssues>
+  ): Promise<null | ValidatorIssues>
 
-  verifyEmail(data: { code: string }): Promise<null | FirebaseAuthIssues>
+  verifyEmail(data: { code: string }): Promise<null | ValidatorIssues>
 }
 
 export function createFirebaseAuthService(
@@ -221,9 +222,56 @@ export function createFirebaseAuthService(
 
   firebaseAuth.languageCode = languageCode
 
+  const getTokenInfoForUser = async (
+    user: firebase.User | null,
+    forceRefresh?: boolean,
+  ) => {
+    if (
+      !user ||
+      !firebaseAuth.currentUser ||
+      firebaseAuth.currentUser.uid !== user.uid
+    ) {
+      return null
+    }
+
+    // For some reason, this function doesn't exist on the user received
+    // by onStateChange, so we need to look on the underlying firebase auth
+    // instance.
+    const tokenInfo = await firebaseAuth.currentUser.getIdTokenResult(
+      forceRefresh,
+    )
+
+    if (!tokenInfo || forceRefresh) {
+      return tokenInfo || null
+    }
+
+    if (shouldRefreshToken && (await shouldRefreshToken(tokenInfo, user))) {
+      return firebaseAuth.currentUser?.getIdTokenResult(true) || null
+    } else {
+      return tokenInfo
+    }
+  }
+
+  const [claimsSource, setLatestClaims] = createState<Record<
+    string,
+    any
+  > | null>(null)
+
   const mutableFirebaseUserSource = observe<firebase.User | null>(
     (next, error, complete) =>
-      firebaseAuth.onAuthStateChanged(next, error, complete),
+      // TODO: fetch token, and put the claims on the result
+      firebaseAuth.onAuthStateChanged(
+        (user) => {
+          getTokenInfoForUser(user).then((tokenInfo) => {
+            act(authWithoutMessagesSource, () => {
+              setLatestClaims(tokenInfo?.claims || null)
+              next(user)
+            })
+          }, error)
+        },
+        error,
+        complete,
+      ),
   )
 
   const [userVersionSource, setUserVersion] = createState(1)
@@ -237,6 +285,7 @@ export function createFirebaseAuthService(
       use(userVersionSource)
 
       const mutableFirebaseUser = use(mutableFirebaseUserSource)
+      const claims = use(claimsSource)
 
       if (automaticallySignInAsAnonymous && mutableFirebaseUser === null) {
         effect(async () => {
@@ -253,6 +302,7 @@ export function createFirebaseAuthService(
       const user: FirebaseAuthUser | null = mutableFirebaseUser
         ? {
             id: mutableFirebaseUser.uid,
+            claims,
             isAnonymous: mutableFirebaseUser.isAnonymous,
             providerData: {
               firebase: {
@@ -294,7 +344,7 @@ export function createFirebaseAuthService(
   })
 
   const authController: FirebaseAuthController = {
-    checkCode: async (data): Promise<null | FirebaseAuthIssues> =>
+    checkCode: async (data): Promise<null | ValidatorIssues> =>
       convertErrorsToIssues(() => firebaseAuth.checkActionCode(data.code), {
         'expired-action-code': { code: 'expired' },
         'invalid-action-code': { code: 'already-used' },
@@ -306,17 +356,19 @@ export function createFirebaseAuthService(
       setMessage(null)
     },
 
-    createUserWithPassword: async (data): Promise<null | FirebaseAuthIssues> =>
+    createUserWithPassword: async (data): Promise<null | ValidatorIssues> =>
       act(authSource, async () => {
         const hasProfile = data.displayName || data.photoURL
 
         let firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
         if (firebaseUser && !firebaseUser.isAnonymous) {
-          return {
-            codes: ['already-logged-in'],
-            message:
-              "You're already logged into an account! If you really want to create a new account, please log out of your existing account first.",
-          }
+          return [
+            {
+              code: 'already-logged-in',
+              message:
+                "You're already logged into an account! If you really want to create a new account, please log out of your existing account first.",
+            },
+          ]
         }
 
         return convertErrorsToIssues(
@@ -385,14 +437,16 @@ export function createFirebaseAuthService(
         )
       }),
 
-    deleteUser: (): Promise<null | FirebaseAuthIssues> => {
+    deleteUser: (): Promise<null | ValidatorIssues> => {
       return act(authSource, async () => {
         const firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
         if (!firebaseUser || firebaseUser.isAnonymous) {
-          return {
-            codes: ['not-logged-in'],
-            message: 'You must be logged in to delete your account.',
-          }
+          return [
+            {
+              code: 'not-logged-in',
+              message: 'You must be logged in to delete your account.',
+            },
+          ]
         }
 
         return convertErrorsToIssues(
@@ -410,44 +464,32 @@ export function createFirebaseAuthService(
       const mutableFirebaseUser = await getSnapshotPromise(
         mutableFirebaseUserSource,
       )
-      if (
-        !mutableFirebaseUser ||
-        !firebaseAuth.currentUser ||
-        firebaseAuth.currentUser.uid !== mutableFirebaseUser.uid
-      ) {
-        return null
-      }
-
-      // For some reason, this function doesn't exist on the user received
-      // by onStateChange, so we need to look on the underlying firebase auth
-      // instance.
-      const tokenInfo = await firebaseAuth.currentUser.getIdTokenResult(
+      const tokenInfo = await getTokenInfoForUser(
+        mutableFirebaseUser,
         forceRefresh,
       )
-
-      if (!tokenInfo || forceRefresh) {
-        return tokenInfo || null
+      // Claims won't be reference equal, but since they're built the same way,
+      // equivalent claims should produce the same stringified output.
+      const areTokensEqual =
+        JSON.stringify(tokenInfo?.claims) ===
+        JSON.stringify(await getSnapshotPromise(claimsSource))
+      if (!areTokensEqual) {
+        setLatestClaims(tokenInfo?.claims || null)
       }
-
-      if (
-        shouldRefreshToken &&
-        (await shouldRefreshToken(tokenInfo, mutableFirebaseUser))
-      ) {
-        return firebaseAuth.currentUser?.getIdTokenResult(true) || null
-      } else {
-        return tokenInfo
-      }
+      return tokenInfo
     },
 
     reauthenticateWithPassword: async (
       data,
-    ): Promise<null | FirebaseAuthIssues> => {
+    ): Promise<null | ValidatorIssues> => {
       const firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
       if (!firebaseUser || firebaseUser.isAnonymous) {
-        return {
-          codes: ['not-logged-in'],
-          message: 'You must be logged in to delete your account.',
-        }
+        return [
+          {
+            code: 'not-logged-in',
+            message: 'You must be logged in to delete your account.',
+          },
+        ]
       }
 
       return convertErrorsToIssues(
@@ -465,7 +507,7 @@ export function createFirebaseAuthService(
       )
     },
 
-    recoverEmail: async (data): Promise<null | FirebaseAuthIssues> => {
+    recoverEmail: async (data): Promise<null | ValidatorIssues> => {
       return convertErrorsToIssues(
         async () => {
           const actionCodeInfo = await firebaseAuth.checkActionCode(data.code)
@@ -485,7 +527,7 @@ export function createFirebaseAuthService(
       )
     },
 
-    resetPassword: (data): Promise<null | FirebaseAuthIssues> => {
+    resetPassword: (data): Promise<null | ValidatorIssues> => {
       return act(authSource, async () => {
         const firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
 
@@ -524,15 +566,15 @@ export function createFirebaseAuthService(
       })
     },
 
-    sendEmailVerification: async (
-      options,
-    ): Promise<null | FirebaseAuthIssues> => {
+    sendEmailVerification: async (options): Promise<null | ValidatorIssues> => {
       const firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
       if (!firebaseUser || firebaseUser.isAnonymous) {
-        return {
-          codes: ['not-logged-in'],
-          message: 'You must be logged in to resend your verification.',
-        }
+        return [
+          {
+            code: 'not-logged-in',
+            message: 'You must be logged in to resend your verification.',
+          },
+        ]
       }
 
       await firebaseUser.sendEmailVerification(options)
@@ -543,7 +585,7 @@ export function createFirebaseAuthService(
     sendPasswordResetEmail: async (
       data,
       options,
-    ): Promise<null | FirebaseAuthIssues> => {
+    ): Promise<null | ValidatorIssues> => {
       return convertErrorsToIssues(
         async () => {
           await firebaseAuth.sendPasswordResetEmail(data.email, options)
@@ -595,13 +637,15 @@ export function createFirebaseAuthService(
       return firebaseAuth.signOut()
     },
 
-    updateEmail: async (data): Promise<null | FirebaseAuthIssues> => {
+    updateEmail: async (data): Promise<null | ValidatorIssues> => {
       const firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
       if (!firebaseUser || firebaseUser.isAnonymous) {
-        return {
-          codes: ['not-logged-in'],
-          message: 'You must be logged in to resend your verification.',
-        }
+        return [
+          {
+            code: 'not-logged-in',
+            message: 'You must be logged in to resend your verification.',
+          },
+        ]
       }
 
       return act(authSource, async () => {
@@ -619,13 +663,15 @@ export function createFirebaseAuthService(
       })
     },
 
-    updatePassword: async (data): Promise<null | FirebaseAuthIssues> => {
+    updatePassword: async (data): Promise<null | ValidatorIssues> => {
       const firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
       if (!firebaseUser || firebaseUser.isAnonymous) {
-        return {
-          codes: ['not-logged-in'],
-          message: 'You must be logged in to resend your verification.',
-        }
+        return [
+          {
+            code: 'not-logged-in',
+            message: 'You must be logged in to resend your verification.',
+          },
+        ]
       }
 
       return act(authSource, async () => {
@@ -645,13 +691,15 @@ export function createFirebaseAuthService(
       })
     },
 
-    updateProfile: async (data): Promise<null | FirebaseAuthIssues> => {
+    updateProfile: async (data): Promise<null | ValidatorIssues> => {
       const firebaseUser = await getSnapshotPromise(mutableFirebaseUserSource)
       if (!firebaseUser || firebaseUser.isAnonymous) {
-        return {
-          codes: ['not-logged-in'],
-          message: 'You must be logged in to resend your verification.',
-        }
+        return [
+          {
+            code: 'not-logged-in',
+            message: 'You must be logged in to resend your verification.',
+          },
+        ]
       }
 
       return act(authSource, async () => {
@@ -662,7 +710,7 @@ export function createFirebaseAuthService(
       })
     },
 
-    verifyEmail: (data): Promise<null | FirebaseAuthIssues> => {
+    verifyEmail: (data): Promise<null | ValidatorIssues> => {
       return convertErrorsToIssues(
         async () => {
           const actionCodeInfo = await firebaseAuth.checkActionCode(data.code)

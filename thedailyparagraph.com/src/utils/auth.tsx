@@ -2,7 +2,7 @@ import { NextilRequest } from 'nextil'
 import * as React from 'react'
 import { createContext, useContext } from 'react'
 import { useRouterRequest } from 'retil-router'
-import { createState, useSource } from 'retil-source'
+import { createState } from 'retil-source'
 
 import { auth as authConfig } from 'src/config'
 import {
@@ -25,8 +25,7 @@ const pendingAuthService = [pendingSource, {} as any] as const
 export function getAuthService(request: NextilRequest): AuthService {
   if (!request.isRoutedPage) {
     return anonymousAuthService
-  }
-  if (request.isSSR) {
+  } else if (request.isSSR) {
     return pendingAuthService
   } else if (!authServiceRef.current) {
     authServiceRef.current = createFirebaseAuthService({
@@ -56,7 +55,6 @@ export function createAnonymousAuthService(): AuthService {
   return [source, controller] as const
 }
 
-const AuthSourceContext = createContext<AuthSource>(null as any)
 const AuthControllerContext = createContext<AuthController>(null as any)
 
 export interface AuthProviderProps {
@@ -65,40 +63,15 @@ export interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const request = useRouterRequest<NextilRequest>()
-  const [source, controller] = getAuthService(request)
+  const [, controller] = getAuthService(request)
 
   return (
-    <AuthSourceContext.Provider value={source}>
-      <AuthControllerContext.Provider value={controller}>
-        {children}
-      </AuthControllerContext.Provider>
-    </AuthSourceContext.Provider>
+    <AuthControllerContext.Provider value={controller}>
+      {children}
+    </AuthControllerContext.Provider>
   )
 }
 
 export function useAuthController(): AuthController {
   return useContext(AuthControllerContext)
-}
-
-export function useAuthSnapshot<User = any, DefaultSnapshot = User>(
-  options: {
-    defaultValue?: DefaultSnapshot
-  } = {},
-): AuthSnapshot | DefaultSnapshot {
-  const source = useContext(AuthSourceContext)
-  const snapshot = useSource(source, options)
-  return snapshot as AuthSnapshot | DefaultSnapshot
-}
-
-export function useCurrentUser<User = any, DefaultUser = User>(
-  options: {
-    defaultValue?: DefaultUser
-  } = {},
-): User | DefaultUser | null {
-  const snapshotOptions =
-    'defaultValue' in options
-      ? { defaultValue: { currentUser: options.defaultValue } }
-      : {}
-  const snapshot = useAuthSnapshot(snapshotOptions) as AuthSnapshot
-  return (snapshot as any).currentUser
 }

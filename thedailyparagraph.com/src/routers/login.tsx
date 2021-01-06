@@ -32,7 +32,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('')
 
   const data = { email, password }
-  const issues = useIssues(data)
+  const issues = useIssues<any, any, 'base', any>(data)
   const [validateAll, validatePath] = useValidator(issues, validateLogin)
 
   const [login, loginPending] = useOperation(async (event: React.FormEvent) => {
