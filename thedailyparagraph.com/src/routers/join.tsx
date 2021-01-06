@@ -2,9 +2,9 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Link } from 'retil-router'
 
-import { useAuthController } from 'hooks/useFirebaseAuth'
-import { AuthLayout } from 'components/authLayout'
-import { Input } from 'components/input'
+import { useAuthController } from 'src/utils/auth'
+import { AuthLayout } from 'src/components/authLayout'
+import { Input } from 'src/components/input'
 
 export default function Join() {
   const { createUserWithPassword } = useAuthController()
