@@ -23,6 +23,7 @@
     "retil-router": "^0.17.2",
     "retil-source": "^0.17.2",
     "retil-support": "^0.17.1",
+    "slugify": "^1.4.6",
     "styled-components": "^5.2.1",
     "urql": "^1.11.4"
   },

@@ -49,7 +49,7 @@ export type UseQueryResponse<Result = any, Variables = object> = [
 ]
 
 export interface UseQueryArgs<Result = any, Variables extends object = object> {
-  query: PrecachedQuery<Result, Variables>
+  query: null | PrecachedQuery<Result, Variables>
   variables?: Variables
   requestPolicy?: RequestPolicy
   pollInterval?: number
@@ -63,11 +63,12 @@ export function usePrecachedQuery<
 >(args: UseQueryArgs<Result, Variables>): UseQueryResponse<Result, Variables> {
   const [result, trigger] = useQuery({
     ...args,
-    query: args.query.document,
+    query: args.query?.document || `query Empty { void }`,
     variables: {
-      ...args.query.variables,
+      ...args.query?.variables,
       ...args.variables,
     },
+    pause: args.query === null,
   })
   return [
     result as UseQueryState<Result, Variables> & { data: Result },

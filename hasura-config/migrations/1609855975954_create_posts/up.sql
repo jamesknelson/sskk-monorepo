@@ -66,16 +66,29 @@ create table "post_versions" (
 
   "locked_for_publication" boolean not null DEFAULT false,
 
+  -- TODO: once hasura supports upsert on partial unique indexes, remove this
+  -- and instead create an index on locked_for_publication.
+  "is_draft" boolean DEFAULT true,
+
   "created_at" timestamp not null DEFAULT CURRENT_TIMESTAMP,
   "updated_at" timestamp not null DEFAULT CURRENT_TIMESTAMP,
 
-  check (locked_for_publication is false OR content is not null)
+  check (locked_for_publication is false OR content is not null),
+
+  -- Force is_draft to null or true, so that we can enforce that there's max
+  -- one draft using a uniqueness constraint, enabling drfat upsert in hasura.
+  check (
+    (is_draft is true and locked_for_publication is false) OR
+    (is_draft is null OR locked_for_publication is true)
+  ),
+
+  constraint post_versions_locked_for_publication UNIQUE (post_id, is_draft)
 );
 
--- Ensures we have at most one draft version.
-create unique index post_versions_single_draft
-  ON post_versions (post_id, locked_for_publication)
-  WHERE ("locked_for_publication" is false);
+-- -- Ensures we have at most one draft version.
+-- create unique index post_versions_single_draft
+--   ON post_versions (post_id, locked_for_publication)
+--   WHERE ("locked_for_publication" is false);
 
 -- Useful for finding posts by previous slugs.
 create index post_versions_by_slug_and_date_idx
@@ -96,3 +109,18 @@ alter table posts
   REFERENCES post_versions (id, locked_for_publication, slug)
   MATCH FULL
   ON UPDATE CASCADE;
+
+---
+
+CREATE FUNCTION trigger_set_post_version_is_draft()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.is_draft = CASE WHEN NEW.locked_for_publication = true THEN null ELSE true END;
+  RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER set_post_version_is_draft
+  BEFORE INSERT OR UPDATE ON post_versions
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_post_version_is_draft();

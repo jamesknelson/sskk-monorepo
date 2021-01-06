@@ -96,7 +96,7 @@ export function switchAuth(routers: {
   unauthenticated: AppRouterFunction
 }): AppRouterFunction {
   return (request, response) => {
-    return (request.user === undefined
+    return (request.profile === undefined
       ? routers.pending
       : request.user && !request.user.isAnonymous
       ? routers.authenticated

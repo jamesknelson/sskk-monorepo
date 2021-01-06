@@ -39,7 +39,9 @@ export function AppLayout(props: AppLayoutProps) {
             ))}
         </nav>
       </header>
+      <hr />
       <main>{children}</main>
+      <hr />
       <footer>
         <Link to="/legal">Legal</Link>
       </footer>

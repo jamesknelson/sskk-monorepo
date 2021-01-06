@@ -50,7 +50,7 @@ RETURNS TRIGGER AS $$
 BEGIN
   IF (OLD.locked_for_publication IS true)
   THEN
-    RAISE EXCEPTION 'cannot update post_versions when locked_for_publication';
+    RAISE EXCEPTION 'cannot update post_versions if locked_for_publication';
   END IF;
 
   NEW.updated_at = NOW();
