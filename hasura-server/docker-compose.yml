@@ -21,7 +21,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES:
         startup, http-log, webhook-log, websocket-log, query-log
-      # HASURA_GRAPHQL_ADMIN_SECRET: Galf,galf77
+      # HASURA_GRAPHQL_ADMIN_SECRET: local
       # HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
       # HASURA_GRAPHQL_JWT_SECRET:
       #   '{"type":"RS256","jwk_url":
