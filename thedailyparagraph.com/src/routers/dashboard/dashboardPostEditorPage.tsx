@@ -8,6 +8,12 @@ import { joinPaths, useNavigate } from 'retil-router'
 import slugify from 'slugify'
 import { useMutation } from 'urql'
 
+import {
+  Editor,
+  serializeContent,
+  serializeEditorState,
+  useEditorState,
+} from 'src/components/editor'
 import { Input } from 'src/components/input'
 import {
   DashboardPostEditorQuery,
@@ -39,9 +45,7 @@ export function Page({ query }: Props) {
 
   const [title, setTitle] = useState(version?.title || '')
   const [slug, setSlug] = useState(version?.slug || '')
-  const [editorState, setEditorState] = useState(
-    JSON.stringify(version?.editor_state || {}),
-  )
+  const [editorState, setEditorState] = useEditorState(version?.editor_state)
 
   const placeholderSlug = slugify(title, {
     lower: true,
@@ -58,8 +62,8 @@ export function Page({ query }: Props) {
       const version = {
         title,
         slug: slug || placeholderSlug,
-        editor_state: JSON.parse(editorState),
-        content: JSON.parse(editorState),
+        editor_state: serializeEditorState(editorState),
+        content: serializeContent(editorState),
       }
 
       if (!query) {
@@ -130,7 +134,7 @@ export function Page({ query }: Props) {
           onChange={setSlug}
         />
         <br />
-        <Input type="text" value={editorState} onChange={setEditorState} />
+        <Editor state={editorState} onChange={setEditorState} />
         <br />
         <button disabled={submitPending} type="submit">
           {submitPending ? 'Saving...' : 'Save'}

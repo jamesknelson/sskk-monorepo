@@ -18,5 +18,5 @@ export function Input(props: InputProps) {
     [onChange],
   )
 
-  return <input {...rest} onChange={handleChange} />
+  return <input {...(rest as any)} onChange={handleChange} />
 }

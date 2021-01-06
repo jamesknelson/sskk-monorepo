@@ -4,6 +4,7 @@ query DashboardPostList($profile_id: uuid!) {
     versions: post_versions(order_by: {updated_at: desc}, limit: 1) {
       id
       title
+      content
       locked_for_publication
       updated_at
     }

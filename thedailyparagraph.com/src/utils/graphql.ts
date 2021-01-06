@@ -69,6 +69,7 @@ export function usePrecachedQuery<
       ...args.variables,
     },
     pause: args.query === null,
+    requestPolicy: 'cache-and-network',
   })
   return [
     result as UseQueryState<Result, Variables> & { data: Result },
