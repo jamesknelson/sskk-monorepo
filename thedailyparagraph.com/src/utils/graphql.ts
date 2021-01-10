@@ -6,6 +6,7 @@ import {
   OperationContext,
   RequestPolicy,
   createClient,
+  createRequest,
   dedupExchange,
   fetchExchange,
   makeOperation,
@@ -15,11 +16,20 @@ import { cacheExchange } from '@urql/exchange-graphcache'
 import { NextilRequest } from 'nextil'
 import { isPromiseLike } from 'retil-support'
 import { UseQueryState, useQuery } from 'urql'
-import { pipe, mergeMap, fromPromise, fromValue, map } from 'wonka'
+import {
+  pipe,
+  mergeMap,
+  fromPromise,
+  fromValue,
+  map,
+  take,
+  toPromise,
+} from 'wonka'
 
 import { graphqlURL } from 'src/config'
 
 import { AuthController } from './auth'
+import { useMemo } from 'react'
 
 interface URQLState {
   cache?: any
@@ -33,11 +43,13 @@ const serverStates = new WeakMap<any, URQLState>()
 export type CreatePrecachedQueryFunction = <Result, Variables extends object>(
   node: DocumentNode<Result, Variables>,
   variables?: Variables,
+  role?: string,
 ) => PrecachedQuery<Result, Variables>
 
 export interface PrecachedQuery<Result, Variables extends object = object> {
   client: Client
   document: DocumentNode<Result, Variables>
+  role?: string
   variables: Variables
 
   precache: () => Promise<Result>
@@ -61,16 +73,24 @@ export function usePrecachedQuery<
   Result = any,
   Variables extends object = object
 >(args: UseQueryArgs<Result, Variables>): UseQueryResponse<Result, Variables> {
+  const context = useMemo(() => ({ role: args.query?.role, suspense: false }), [
+    args.query?.role,
+  ])
+
+  const variables = {
+    ...args.query?.variables,
+    ...args.variables,
+  }
+
   const [result, trigger] = useQuery({
     ...args,
     query: args.query?.document || `query Empty { void }`,
-    variables: {
-      ...args.query?.variables,
-      ...args.variables,
-    },
+    variables,
+    context,
     pause: args.query === null,
     requestPolicy: 'cache-and-network',
   })
+
   return [
     result as UseQueryState<Result, Variables> & { data: Result },
     trigger,
@@ -91,22 +111,37 @@ export function getURQLState(
   const createQuery = <Result = any, Variables extends object = object>(
     document: DocumentNode<Result, Variables>,
     defaultVariables: Variables = {} as Variables,
+    role?: string,
   ): PrecachedQuery<Result, Variables> => {
     return {
       client,
       document,
+      role,
       variables: defaultVariables!,
 
       precache: async () => {
-        const { data, error } = await client
-          .query(document, defaultVariables)
-          .toPromise()
+        const query = client.executeQuery(
+          createRequest(document, defaultVariables),
+          {
+            role,
+            // CAUTION: cache-and-network DOES NOT WORK with toPromise, and
+            // while it's possible to manually make it work by looking at
+            // the second and subsequent values output by the query, this
+            // will cause the newly cached value to disappear because urql
+            // does not allow for access to a cached value while there's a
+            // network request in progress.
+            requestPolicy: 'cache-first',
+            suspense: false,
+          },
+        )
 
-        if (error) {
-          throw error
+        const result = await pipe(query, take(1), toPromise)
+
+        if (result.error) {
+          throw result.error
         }
 
-        return data!
+        return result.data!
       },
     }
   }
@@ -149,11 +184,21 @@ export function getURQLState(
         const tokenInfo = await authController.getTokenInfo()
         const headers = {
           ...fetchOptions?.headers,
-          // 'X-Hasura-Role': context.role,
         }
 
-        if (tokenInfo) {
-          headers['Authorization'] = `Bearer ${tokenInfo?.token}`
+        const userId =
+          tokenInfo?.['claims']?.['https://hasura.io/jwt/claims']?.[
+            'x-hasura-user-id'
+          ]
+
+        if (userId) {
+          headers['Authorization'] = `Bearer ${tokenInfo!.token}`
+          headers['X-Hasura-Role'] = context.role || 'member'
+
+          // WARNING: in production this header will be set by hasura based on
+          // the signed token's claims. However, in development mode, Hasura
+          // requires us to set it manually.
+          headers['X-Hasura-User-Id'] = userId
         }
 
         return {
@@ -173,16 +218,7 @@ export function getURQLState(
   return { client, createQuery }
 }
 
-export const cacheExchangeConfig = {
-  keys: {
-    LocaleString: () => null,
-    Slug: () => null,
-    Image: () => null,
-    SanityImageAsset: () => null,
-    Color: () => null,
-    BodyText: () => null,
-  },
-}
+export const cacheExchangeConfig = {}
 
 export const fetchOptionsExchange = (fn: any): Exchange => ({ forward }) => (
   ops$,
@@ -190,18 +226,6 @@ export const fetchOptionsExchange = (fn: any): Exchange => ({ forward }) => (
   return pipe(
     ops$,
     mergeMap((operation: Operation) => {
-      const context = operation.context
-
-      if (
-        !context.role &&
-        (operation.kind === 'mutation' || !operation.variables?.anonymous)
-      ) {
-        operation.context = {
-          ...operation.context,
-          role: 'user',
-        }
-      }
-
       const result = fn(operation.context)
       return pipe(
         isPromiseLike(result)

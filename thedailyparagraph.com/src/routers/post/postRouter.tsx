@@ -5,10 +5,14 @@ import { AppRequest } from 'src/utils/routing'
 
 export const router = routeAsync(async (req: AppRequest, res) => {
   const pageModulePromise = import('./postPage')
-  const query = req.createQuery(PostDocument, {
-    handle: req.params.handle as string,
-    slug: req.params.slug as string,
-  })
+  const query = req.createQuery(
+    PostDocument,
+    {
+      handle: req.params.handle as string,
+      slug: req.params.slug as string,
+    },
+    'editor',
+  )
 
   const result = await query.precache()
 

@@ -12,9 +12,13 @@ export const router = requireAuth(
     '/': routeRedirect('./posts'),
     '/posts': routeAsync(async (req: AppRequest) => {
       const pageModulePromise = import('./dashboardPostListPage')
-      const query = req.createQuery(DashboardPostListDocument, {
-        profile_id: req.profile!.id,
-      })
+      const query = req.createQuery(
+        DashboardPostListDocument,
+        {
+          profile_id: req.profile!.id,
+        },
+        'editor',
+      )
 
       await query.precache()
 
@@ -29,9 +33,13 @@ export const router = requireAuth(
     }),
     '/posts/:postId': routeAsync(async (req: AppRequest) => {
       const pageModulePromise = import('./dashboardPostEditorPage')
-      const query = req.createQuery(DashboardPostEditorDocument, {
-        post_id: req.params.postId as string,
-      })
+      const query = req.createQuery(
+        DashboardPostEditorDocument,
+        {
+          post_id: req.params.postId as string,
+        },
+        'editor',
+      )
 
       await query.precache()
 

@@ -67,10 +67,15 @@ export function Page({ query }: Props) {
       }
 
       if (!query) {
-        const result = await executeCreate({
-          profile_id: request.profile!.id,
-          version,
-        })
+        const result = await executeCreate(
+          {
+            profile_id: request.profile!.id,
+            version,
+          },
+          {
+            role: 'editor',
+          },
+        )
         const insertedId = result.data?.insert_posts_one?.id
         if (insertedId) {
           await navigate(joinPaths(request.pathname, '..', insertedId))
@@ -78,12 +83,17 @@ export function Page({ query }: Props) {
           alert("Couldn't save")
         }
       } else {
-        const result = await executeSave({
-          version: {
-            post_id: post.id,
-            ...version,
+        const result = await executeSave(
+          {
+            version: {
+              post_id: post.id,
+              ...version,
+            },
           },
-        })
+          {
+            role: 'editor',
+          },
+        )
         if (result.error) {
           alert("Couldn't save")
         } else {

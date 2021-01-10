@@ -31,9 +31,15 @@ export function getMemberProfileSource(
         return createState(memberId as null | undefined)[0]
       } else {
         const profilePromise = client
-          .query(MemberProfileDocument, {
-            memberId,
-          })
+          .query(
+            MemberProfileDocument,
+            {
+              memberId,
+            },
+            {
+              role: 'member',
+            },
+          )
           .toPromise()
           .then(({ data }) => {
             const profile = data?.member?.profile

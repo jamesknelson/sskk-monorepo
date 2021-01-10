@@ -2,232 +2,242 @@
     schema: public
     name: members
   object_relationships:
-    - name: profile
-      using:
-        foreign_key_constraint_on: profile_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+  select_permissions:
+  - role: member
+    permission:
+      columns:
+      - created_at
+      - id
+      - profile_id
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: post_versions
   object_relationships:
-    - name: post
-      using:
-        foreign_key_constraint_on: post_id
+  - name: post
+    using:
+      foreign_key_constraint_on: post_id
   insert_permissions:
-    - role: editor
-      permission:
-        check:
-          post:
-            profile:
-              member:
-                id:
-                  _eq: X-Hasura-User-Id
-        columns:
-          - content
-          - editor_state
-          - locked_for_publication
-          - post_id
-          - slug
-          - title
-        backend_only: false
+  - role: editor
+    permission:
+      check:
+        post:
+          profile:
+            member:
+              id:
+                _eq: X-Hasura-User-Id
+      columns:
+      - content
+      - editor_state
+      - locked_for_publication
+      - post_id
+      - slug
+      - title
+      backend_only: false
   select_permissions:
-    - role: editor
-      permission:
-        columns:
-          - id
-          - post_id
-          - slug
-          - title
-          - editor_state
-          - content
-          - locked_for_publication
-          - created_at
-          - updated_at
-        filter:
-          post:
-            profile:
-              member:
-                id:
-                  _eq: X-Hasura-User-Id
+  - role: editor
+    permission:
+      columns:
+      - id
+      - post_id
+      - slug
+      - title
+      - editor_state
+      - content
+      - locked_for_publication
+      - created_at
+      - updated_at
+      filter:
+        post:
+          profile:
+            member:
+              id:
+                _eq: X-Hasura-User-Id
   update_permissions:
-    - role: editor
-      permission:
-        columns:
-          - content
-          - editor_state
-          - locked_for_publication
-          - slug
-          - title
-        filter:
-          post:
-            profile:
-              member:
-                id:
-                  _eq: X-Hasura-User-Id
-        check: null
+  - role: editor
+    permission:
+      columns:
+      - content
+      - editor_state
+      - locked_for_publication
+      - slug
+      - title
+      filter:
+        post:
+          profile:
+            member:
+              id:
+                _eq: X-Hasura-User-Id
+      check: null
   delete_permissions:
-    - role: editor
-      permission:
-        filter:
-          post:
-            profile:
-              member:
-                id:
-                  _eq: X-Hasura-User-Id
+  - role: editor
+    permission:
+      filter:
+        post:
+          profile:
+            member:
+              id:
+                _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: posts
   object_relationships:
-    - name: profile
-      using:
-        foreign_key_constraint_on: profile_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
   array_relationships:
-    - name: post_versions
-      using:
-        foreign_key_constraint_on:
-          column: post_id
-          table:
-            schema: public
-            name: post_versions
+  - name: post_versions
+    using:
+      foreign_key_constraint_on:
+        column: post_id
+        table:
+          schema: public
+          name: post_versions
   insert_permissions:
-    - role: editor
-      permission:
-        check:
-          profile:
-            member:
-              id:
-                _eq: X-Hasura-User-Id
-        columns:
-          - profile_id
-        backend_only: false
+  - role: editor
+    permission:
+      check:
+        profile:
+          member:
+            id:
+              _eq: X-Hasura-User-Id
+      columns:
+      - profile_id
+      backend_only: false
   select_permissions:
-    - role: editor
-      permission:
-        columns:
-          - created_at
-          - deleted_at
-          - id
-          - latest_version_id
-          - latest_version_locked_for_publication
-          - latest_version_slug
-          - profile_id
-          - published_at
-        filter:
-          profile:
-            member:
-              id:
-                _eq: X-Hasura-User-Id
+  - role: editor
+    permission:
+      columns:
+      - created_at
+      - deleted_at
+      - id
+      - latest_version_id
+      - latest_version_locked_for_publication
+      - latest_version_slug
+      - profile_id
+      - published_at
+      filter:
+        profile:
+          member:
+            id:
+              _eq: X-Hasura-User-Id
   update_permissions:
-    - role: editor
-      permission:
-        columns: []
-        filter: {}
-        check: null
+  - role: editor
+    permission:
+      columns: []
+      filter: {}
+      check: null
   delete_permissions:
-    - role: editor
-      permission:
-        filter:
-          profile:
-            member:
-              id:
-                _eq: X-Hasura-User-Id
+  - role: editor
+    permission:
+      filter:
+        profile:
+          member:
+            id:
+              _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: profiles
   object_relationships:
-    - name: member
-      using:
-        manual_configuration:
-          remote_table:
-            schema: public
-            name: members
-          column_mapping:
-            id: profile_id
+  - name: member
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: members
+        column_mapping:
+          id: profile_id
   array_relationships:
-    - name: posts
-      using:
-        foreign_key_constraint_on:
-          column: profile_id
-          table:
-            schema: public
-            name: posts
+  - name: posts
+    using:
+      foreign_key_constraint_on:
+        column: profile_id
+        table:
+          schema: public
+          name: posts
   computed_fields:
-    - name: published_posts
-      definition:
-        function:
-          schema: public
-          name: profile_published_posts
-      comment: ""
-    - name: published_posts_by_slug
-      definition:
-        function:
-          schema: public
-          name: profile_published_posts_by_slug
-      comment: ""
+  - name: published_posts
+    definition:
+      function:
+        schema: public
+        name: profile_published_posts
+    comment: ""
+  - name: published_posts_by_slug
+    definition:
+      function:
+        schema: public
+        name: profile_published_posts_by_slug
+    comment: ""
   select_permissions:
-    - role: anonymous
-      permission:
-        columns:
-          - avatar_url
-          - created_at
-          - display_name
-          - id
-          - handle
-        filter: {}
-        limit: 1
-    - role: member
-      permission:
-        columns:
-          - avatar_url
-          - created_at
-          - display_name
-          - id
-          - handle
-        filter: {}
+  - role: anonymous
+    permission:
+      columns:
+      - avatar_url
+      - created_at
+      - display_name
+      - id
+      - handle
+      filter: {}
+      limit: 1
+  - role: member
+    permission:
+      columns:
+      - avatar_url
+      - created_at
+      - display_name
+      - id
+      - handle
+      filter: {}
   update_permissions:
-    - role: editor
-      permission:
-        columns:
-          - avatar_url
-          - display_name
-        filter:
-          member:
-            id:
-              _eq: X-Hasura-User-Id
-        check: null
+  - role: editor
+    permission:
+      columns:
+      - avatar_url
+      - display_name
+      filter:
+        member:
+          id:
+            _eq: X-Hasura-User-Id
+      check: null
 - table:
     schema: public
     name: published_posts
   object_relationships:
-    - name: profile
-      using:
-        manual_configuration:
-          remote_table:
-            schema: public
-            name: profiles
-          column_mapping:
-            profile_id: id
+  - name: profile
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: profiles
+        column_mapping:
+          profile_id: id
   select_permissions:
-    - role: anonymous
-      permission:
-        columns:
-          - id
-          - profile_id
-          - published_at
-          - slug
-          - title
-          - content
-          - updated_at
-        filter: {}
-        limit: 31
-    - role: member
-      permission:
-        columns:
-          - id
-          - profile_id
-          - published_at
-          - slug
-          - title
-          - content
-          - updated_at
-        filter: {}
-        limit: 31
+  - role: anonymous
+    permission:
+      columns:
+      - id
+      - profile_id
+      - published_at
+      - slug
+      - title
+      - content
+      - updated_at
+      filter: {}
+      limit: 31
+  - role: member
+    permission:
+      columns:
+      - id
+      - profile_id
+      - published_at
+      - slug
+      - title
+      - content
+      - updated_at
+      filter: {}
+      limit: 31

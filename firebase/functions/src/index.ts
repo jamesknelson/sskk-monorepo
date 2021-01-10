@@ -4,13 +4,17 @@ import * as CORS from 'cors'
 import fetch from 'node-fetch'
 
 const corsConfig = functions.config().cors
+const graphqlConfig = functions.config().graphql
 
 const cors = CORS({
   ...corsConfig,
   origin: corsConfig.origin === '*' ? true : corsConfig.origin,
 })
 
-admin.initializeApp(functions.config().firebase)
+admin.initializeApp({
+  ...functions.config().firebase,
+  serviceAccountId: functions.config().service_account.id,
+})
 
 const db = admin.firestore()
 const members = db.collection('members')
@@ -26,7 +30,9 @@ const InsertUserAndProfile = `
   mutation InsertUserAndProfile($firebase_uid: String = "", $profile: profiles_insert_input!) {
     insert_members_one(object: {firebase_uid: $firebase_uid, profile: {data: $profile}}) {
       id
-      profile_id
+      profile {
+        id
+      }
     }
   }
 `
@@ -42,13 +48,6 @@ const updateUserClaims = async (user: admin.auth.UserRecord) => {
   if (member.exists) {
     memberId = member.data()!.id
   } else {
-    const token = await admin.auth().createCustomToken(uid, {
-      'https://hasura.io/jwt/claims': {
-        'x-hasura-allowed-roles': ['admin'],
-        'x-hasura-default-role': 'admin',
-      },
-    })
-
     const query = JSON.stringify({
       query: hasProfile ? InsertUserAndProfile : InsertUserOnly,
       variables: {
@@ -62,10 +61,10 @@ const updateUserClaims = async (user: admin.auth.UserRecord) => {
       },
     })
 
-    const result = await fetch(functions.config().graphql.url, {
+    const result = await fetch(graphqlConfig.url, {
       headers: {
         'content-type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        'x-hasura-admin-secret': graphqlConfig.admin_secret,
       },
       method: 'POST',
       body: query,

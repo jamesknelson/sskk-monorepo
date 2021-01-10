@@ -4,5 +4,8 @@
   },
   "cors": {
     "origin": "*"
+  },
+  "service_account": {
+    "id": null
   }
 }

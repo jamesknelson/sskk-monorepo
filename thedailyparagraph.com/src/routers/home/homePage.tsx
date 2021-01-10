@@ -35,7 +35,7 @@ export function Page(props: Props) {
                     {format(new Date(post.published_at!), 'PPP')}
                   </time>
                 </span>
-                <div>{JSON.stringify(post.content)}</div>
+                <div dangerouslySetInnerHTML={{ __html: post.content }} />
               </article>
             )
           })}
