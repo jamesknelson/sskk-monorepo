@@ -1,44 +1,31 @@
+import {
+  ApolloClient,
+  FetchPolicy,
+  HttpLink,
+  InMemoryCache,
+  QueryResult,
+  useQuery,
+} from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
-import {
-  Client,
-  Exchange,
-  Operation,
-  OperationContext,
-  RequestPolicy,
-  createClient,
-  createRequest,
-  dedupExchange,
-  fetchExchange,
-  makeOperation,
-  ssrExchange,
-} from '@urql/core'
-import { cacheExchange } from '@urql/exchange-graphcache'
+import gql from 'graphql-tag'
 import { NextilRequest } from 'nextil'
-import { isPromiseLike } from 'retil-support'
-import { UseQueryState, useQuery } from 'urql'
-import {
-  pipe,
-  mergeMap,
-  fromPromise,
-  fromValue,
-  map,
-  take,
-  toPromise,
-} from 'wonka'
+import { useMemo } from 'react'
 
 import { graphqlURL } from 'src/config'
 
 import { AuthController } from './auth'
-import { useMemo } from 'react'
 
-interface URQLState {
+export type Client = ApolloClient<any>
+
+interface GraphQLClientState {
   cache?: any
   client: Client
   createQuery: CreatePrecachedQueryFunction
 }
 
-const clientStateRef: { current?: URQLState } = {}
-const serverStates = new WeakMap<any, URQLState>()
+const clientStateRef: { current?: GraphQLClientState } = {}
+const serverStates = new WeakMap<any, GraphQLClientState>()
 
 export type CreatePrecachedQueryFunction = <Result, Variables extends object>(
   node: DocumentNode<Result, Variables>,
@@ -55,53 +42,60 @@ export interface PrecachedQuery<Result, Variables extends object = object> {
   precache: () => Promise<Result>
 }
 
-export type UseQueryResponse<Result = any, Variables = object> = [
-  UseQueryState<Result, Variables> & { data: Result },
-  (opts?: Partial<OperationContext>) => void,
-]
+export type UseQueryResponse<Result = any, Variables = object> = QueryResult<
+  Result,
+  Variables
+> & {
+  // Remove possibility of `undefined`
+  data: Result
+}
 
-export interface UseQueryArgs<Result = any, Variables extends object = object> {
-  query: null | PrecachedQuery<Result, Variables>
+export interface UseQueryArgs<Variables extends object = object> {
   variables?: Variables
-  requestPolicy?: RequestPolicy
+  requestPolicy?: FetchPolicy
   pollInterval?: number
-  context?: Partial<OperationContext>
+  context?: any
   pause?: boolean
 }
+
+const emptyQuery = gql`
+  query Empty {
+    void
+  }
+`
 
 export function usePrecachedQuery<
   Result = any,
   Variables extends object = object
->(args: UseQueryArgs<Result, Variables>): UseQueryResponse<Result, Variables> {
-  const context = useMemo(() => ({ role: args.query?.role, suspense: false }), [
-    args.query?.role,
+>(
+  query: null | PrecachedQuery<Result, Variables>,
+  args: UseQueryArgs<Variables> = {},
+): UseQueryResponse<Result, Variables> {
+  const context = useMemo(() => ({ role: query?.role, suspense: false }), [
+    query?.role,
   ])
 
   const variables = {
-    ...args.query?.variables,
+    ...query?.variables,
     ...args.variables,
   }
 
-  const [result, trigger] = useQuery({
+  const result = useQuery(query?.document || emptyQuery, {
     ...args,
-    query: args.query?.document || `query Empty { void }`,
     variables,
     context,
-    pause: args.query === null,
-    requestPolicy: 'cache-and-network',
+    skip: query === null,
+    fetchPolicy: 'cache-first',
   })
 
-  return [
-    result as UseQueryState<Result, Variables> & { data: Result },
-    trigger,
-  ]
+  return result as UseQueryResponse<Result, Variables>
 }
 
 // TODO: if currentUser has an id and changes, then create a new cache.
-export function getURQLState(
+export function getGraphQLClientState(
   request: NextilRequest,
   authController: AuthController,
-): URQLState {
+): GraphQLClientState {
   if (clientStateRef.current) {
     return clientStateRef.current
   }
@@ -120,28 +114,29 @@ export function getURQLState(
       variables: defaultVariables!,
 
       precache: async () => {
-        const query = client.executeQuery(
-          createRequest(document, defaultVariables),
-          {
+        const cachedData = client.readQuery({
+          query: document,
+          variables: defaultVariables,
+        })
+
+        const networkResultPromise = client.query({
+          query: document,
+          variables: defaultVariables,
+          context: {
             role,
-            // CAUTION: cache-and-network DOES NOT WORK with toPromise, and
-            // while it's possible to manually make it work by looking at
-            // the second and subsequent values output by the query, this
-            // will cause the newly cached value to disappear because urql
-            // does not allow for access to a cached value while there's a
-            // network request in progress.
-            requestPolicy: 'cache-first',
-            suspense: false,
           },
-        )
+          fetchPolicy: 'network-only',
+        })
 
-        const result = await pipe(query, take(1), toPromise)
-
-        if (result.error) {
-          throw result.error
+        if (cachedData === null) {
+          const result = await networkResultPromise
+          if (result.error) {
+            throw result.error
+          }
+          return result.data
+        } else {
+          return cachedData
         }
-
-        return result.data!
       },
     }
   }
@@ -149,43 +144,25 @@ export function getURQLState(
   if (request.serverRequest) {
     let state = serverStates.get(request.serverRequest)
     if (!state) {
-      const cache = ssrExchange({
-        isClient: false,
-      })
-      client = createClient({
-        url: graphqlURL,
-        exchanges: [
-          dedupExchange,
-          cacheExchange(cacheExchangeConfig),
-          cache,
-          fetchExchange,
-        ],
+      const cache = new InMemoryCache()
+      client = new ApolloClient({
+        uri: graphqlURL,
+        cache,
       })
       state = { cache, client, createQuery }
       serverStates.set(request.serverRequest, state)
     }
     return state
-  }
+  } else {
+    const cache = new InMemoryCache().restore(request.serializedData)
 
-  client = createClient({
-    exchanges: [
-      dedupExchange,
-      cacheExchange(cacheExchangeConfig),
-      ssrExchange({
-        isClient: true,
-        initialState: request.serializedData,
-      }),
-      fetchOptionsExchange(async (context: any) => {
-        if (!context.role || context.role === 'anonymous') {
-          return context.fetchOptions
-        }
+    const link = new HttpLink({ uri: graphqlURL })
+    const authMiddleware = setContext(async (_, previousContext) => {
+      const role = previousContext.role
+      const headers = { ...previousContext.headers } as Record<string, string>
 
-        const fetchOptions = context.fetchOptions
+      if (role && role !== 'anonymous') {
         const tokenInfo = await authController.getTokenInfo()
-        const headers = {
-          ...fetchOptions?.headers,
-        }
-
         const userId =
           tokenInfo?.['claims']?.['https://hasura.io/jwt/claims']?.[
             'x-hasura-user-id'
@@ -193,52 +170,25 @@ export function getURQLState(
 
         if (userId) {
           headers['Authorization'] = `Bearer ${tokenInfo!.token}`
-          headers['X-Hasura-Role'] = context.role || 'member'
+          headers['X-Hasura-Role'] = role || 'member'
 
           // WARNING: in production this header will be set by hasura based on
           // the signed token's claims. However, in development mode, Hasura
           // requires us to set it manually.
           headers['X-Hasura-User-Id'] = userId
         }
+      }
 
-        return {
-          ...fetchOptions,
-          headers,
-        }
-      }),
-      fetchExchange,
-    ],
-    url: graphqlURL,
-  })
+      return { ...previousContext, headers }
+    })
 
-  if (!request.isSSR) {
+    client = new ApolloClient({
+      cache,
+      link: authMiddleware.concat(link),
+    })
+
     clientStateRef.current = { client, createQuery }
+
+    return { client, createQuery }
   }
-
-  return { client, createQuery }
-}
-
-export const cacheExchangeConfig = {}
-
-export const fetchOptionsExchange = (fn: any): Exchange => ({ forward }) => (
-  ops$,
-) => {
-  return pipe(
-    ops$,
-    mergeMap((operation: Operation) => {
-      const result = fn(operation.context)
-      return pipe(
-        isPromiseLike(result)
-          ? fromPromise(Promise.resolve(result))
-          : fromValue(result),
-        map((fetchOptions: RequestInit | (() => RequestInit)) =>
-          makeOperation(operation.kind, operation, {
-            ...operation.context,
-            fetchOptions,
-          }),
-        ),
-      )
-    }),
-    forward,
-  )
 }

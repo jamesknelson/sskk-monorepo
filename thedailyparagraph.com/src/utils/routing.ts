@@ -1,3 +1,4 @@
+import { InMemoryCache } from '@apollo/client'
 import { NextilRequest, NextilResponse, nextilRoutedPage } from 'nextil'
 import {
   RouterAction,
@@ -8,12 +9,15 @@ import {
   useRouterRequest,
 } from 'retil-router'
 import { createMemo } from 'retil-support'
-import { Client } from 'urql'
 
 import { router as loadingRouter } from 'src/routers/loading'
 
 import { AuthUser, getAuthService } from './auth'
-import { CreatePrecachedQueryFunction, getURQLState } from './graphql'
+import {
+  Client,
+  CreatePrecachedQueryFunction,
+  getGraphQLClientState,
+} from './graphql'
 import { MemberProfile, getMemberProfileSource } from './memberProfile'
 
 export interface AppUser extends Omit<AuthUser, 'id'> {
@@ -21,7 +25,7 @@ export interface AppUser extends Omit<AuthUser, 'id'> {
 }
 
 export type AppRequest = NextilRequest & {
-  cache?: any
+  cache?: InMemoryCache
   client: Client
   createQuery: CreatePrecachedQueryFunction
   user?: null | AppUser
@@ -64,7 +68,7 @@ export function appRoutedPage(pageRouter: AppRouterFunction) {
               [auth.user, memberId],
             )
 
-      const { client, cache, createQuery } = getURQLState(
+      const { client, cache, createQuery } = getGraphQLClientState(
         request,
         authController,
       )
@@ -82,7 +86,7 @@ export function appRoutedPage(pageRouter: AppRouterFunction) {
       }
     },
 
-    extractSerializedData: (request) => request.cache?.extractData?.(),
+    extractSerializedData: async (request) => request.cache?.extract(),
   })
 }
 

@@ -9,7 +9,7 @@ import { AppProps as NextAppProps } from 'next/app'
 import { NextilAppProps, NextilRouter, nextilApp } from 'nextil'
 import * as React from 'react'
 import { RouterContent, useRouterRequest } from 'retil-router'
-import { Provider as URQLProvider } from 'urql'
+import { ApolloProvider } from '@apollo/client'
 
 import { AppLayout } from 'src/components/appLayout'
 import { firebase as firebaseConfig, firebaseEmulators } from 'src/config'
@@ -31,6 +31,10 @@ if (typeof window !== 'undefined') {
 
 interface AppProps extends NextAppProps, NextilAppProps {}
 
+function LoadingFallback() {
+  return <div>Loading...</div>
+}
+
 function App(_props: AppProps) {
   return (
     <>
@@ -40,7 +44,7 @@ function App(_props: AppProps) {
           <AuthProvider>
             <HydrationBoundary>
               <AppLayout>
-                <HydrationBoundary fallback={<>loading</>}>
+                <HydrationBoundary fallback={<LoadingFallback />}>
                   <RouterContent />
                 </HydrationBoundary>
               </AppLayout>
@@ -54,7 +58,11 @@ function App(_props: AppProps) {
 
 export function ClientProvider(props: { children: React.ReactNode }) {
   const request = useRouterRequest() as AppRequest
-  return <URQLProvider value={request.client}>{props.children}</URQLProvider>
+  return request.client ? (
+    <ApolloProvider client={request.client}>{props.children}</ApolloProvider>
+  ) : (
+    <>{props.children}</>
+  )
 }
 
 export default nextilApp(App, {

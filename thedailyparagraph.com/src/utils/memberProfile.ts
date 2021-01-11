@@ -1,9 +1,10 @@
 import { NextilRequest } from 'nextil'
-import { Source, createState, fromPromise, selectDefault } from 'retil-source'
+import { Source, createState, fromPromise } from 'retil-source'
 import { createMemo } from 'retil-support'
-import { Client } from 'urql'
 
 import { MemberProfileDocument } from 'src/generated/graphql'
+
+import type { Client } from './graphql'
 
 export type MemberProfileSource = Source<MemberProfile | null | undefined>
 
@@ -31,16 +32,15 @@ export function getMemberProfileSource(
         return createState(memberId as null | undefined)[0]
       } else {
         const profilePromise = client
-          .query(
-            MemberProfileDocument,
-            {
+          .query({
+            query: MemberProfileDocument,
+            variables: {
               memberId,
             },
-            {
+            context: {
               role: 'member',
             },
-          )
-          .toPromise()
+          })
           .then(({ data }) => {
             const profile = data?.member?.profile
             return (
@@ -52,7 +52,7 @@ export function getMemberProfileSource(
               }
             )
           })
-        return selectDefault(fromPromise(profilePromise), undefined)
+        return fromPromise(profilePromise)
       }
     }, [client, memberId])
   }

@@ -11,7 +11,7 @@ export interface Props {
 
 export function Page(props: Props) {
   const { query } = props
-  const [{ data }] = usePrecachedQuery({ query })
+  const { data } = usePrecachedQuery(query)
   const posts = data.published_posts
 
   return (
