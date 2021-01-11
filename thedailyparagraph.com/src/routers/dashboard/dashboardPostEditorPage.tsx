@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client'
 import { formatDistance, formatISO } from 'date-fns'
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 import Head from 'next/head'
@@ -6,7 +7,6 @@ import { useEffect, useState } from 'react'
 import { useOperation } from 'retil-operation'
 import { joinPaths, useNavigate } from 'retil-router'
 import slugify from 'slugify'
-import { useMutation } from 'urql'
 
 import {
   Editor,
@@ -31,7 +31,7 @@ export interface Props {
 export function Page({ query }: Props) {
   const request = useAppRequest()
   const navigate = useNavigate()
-  const [{ data }, refresh] = usePrecachedQuery({ query })
+  const { data } = usePrecachedQuery(query)
   const post = data
     ? data.post!
     : {
@@ -52,8 +52,16 @@ export function Page({ query }: Props) {
     strict: true,
   })
 
-  const [, executeCreate] = useMutation(CreatePostDocument)
-  const [, executeSave] = useMutation(SavePostDraftDocument)
+  const [executeCreate] = useMutation(CreatePostDocument, {
+    context: {
+      role: 'editor',
+    },
+  })
+  const [executeSave] = useMutation(SavePostDraftDocument, {
+    context: {
+      role: 'editor',
+    },
+  })
 
   const [doSubmit, submitPending] = useOperation(
     async (event: React.FormEvent) => {
@@ -67,15 +75,12 @@ export function Page({ query }: Props) {
       }
 
       if (!query) {
-        const result = await executeCreate(
-          {
+        const result = await executeCreate({
+          variables: {
             profile_id: request.profile!.id,
             version,
           },
-          {
-            role: 'editor',
-          },
-        )
+        })
         const insertedId = result.data?.insert_posts_one?.id
         if (insertedId) {
           await navigate(joinPaths(request.pathname, '..', insertedId))
@@ -83,21 +88,16 @@ export function Page({ query }: Props) {
           alert("Couldn't save")
         }
       } else {
-        const result = await executeSave(
-          {
+        const result = await executeSave({
+          variables: {
             version: {
               post_id: post.id,
               ...version,
             },
           },
-          {
-            role: 'editor',
-          },
-        )
-        if (result.error) {
+        })
+        if (result.errors) {
           alert("Couldn't save")
-        } else {
-          await refresh()
         }
       }
     },
@@ -163,7 +163,11 @@ interface PublishButtonProps {
 }
 
 function PublishButton(props: PublishButtonProps) {
-  const [, executePublish] = useMutation(PublishPostDocument)
+  const [executePublish] = useMutation(PublishPostDocument, {
+    context: {
+      role: 'editor',
+    },
+  })
 
   const [publishedAt, setPublishedAt] = useState(
     props.publishedAt ||
@@ -177,11 +181,13 @@ function PublishButton(props: PublishButtonProps) {
       event.preventDefault()
 
       const result = await executePublish({
-        post_id: props.postId,
-        published_at: publishedAt,
+        variables: {
+          post_id: props.postId,
+          published_at: publishedAt,
+        },
       })
 
-      if (result.error) {
+      if (result.errors) {
         alert("Couldn't publish")
       }
     },

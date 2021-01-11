@@ -129,7 +129,9 @@
   update_permissions:
   - role: editor
     permission:
-      columns: []
+      columns:
+      - deleted_at
+      - published_at
       filter: {}
       check: null
   delete_permissions:
