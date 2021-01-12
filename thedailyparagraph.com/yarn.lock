@@ -2441,22 +2441,6 @@
   resolved "https://registry.yarnpkg.com/@ungap/global-this/-/global-this-0.4.3.tgz#44cb668b03e7c4bc88cb6e6f9329d381131878ee"
   integrity sha512-MuHEpDBurNVeD6mV9xBcAN2wfTwuaFQhHuhWkJuXmyVJ5P5sBCw+nnFpdfb0tAvgWkfefWCsAoAsh7MTUr3LPg==
 
-"@urql/core@>=1.16.1", "@urql/core@^1.16.0":
-  version "1.16.1"
-  resolved "https://registry.yarnpkg.com/@urql/core/-/core-1.16.1.tgz#a41487dd4436cbdc92fce714c6c1fc04315761d3"
-  integrity sha512-lcEMCS/rB+ug7jKSRDVZIsqNhZxRooTNa1kHfvSjJT2k4SXDyPmjNSfXBUJF2pDJmvv9EIKl9Tk0AF1CvG3Q/g==
-  dependencies:
-    "@graphql-typed-document-node/core" "^3.1.0"
-    wonka "^4.0.14"
-
-"@urql/exchange-graphcache@^3.3.3":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-3.3.3.tgz#bfd94899f52c8046d1b2e52caf4a3ccee623bb87"
-  integrity sha512-xkKvSN18bLsl6ldf64A7r2ibdoUwBlNJxog3cCyffktAgG3E1yuKbKs/qZELPsIQIEFPvTpC/gqCpBbJ7+0YRA==
-  dependencies:
-    "@urql/core" ">=1.16.1"
-    wonka "^4.0.14"
-
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.9.0.tgz#bd850604b4042459a5a41cd7d338cbed695ed964"
@@ -6569,13 +6553,13 @@ next@^10.0.4:
   optionalDependencies:
     sharp "0.26.2"
 
-nextil@^0.17.3:
-  version "0.17.3"
-  resolved "https://registry.yarnpkg.com/nextil/-/nextil-0.17.3.tgz#2e6fecc286a6a6e15125da30e9e2ba7c2c98bf1d"
-  integrity sha512-jjSA0dxV7TJYwcUoXSReG9pOk1vGiv5Wf/wQrqgTcOf/bzQIUvOPZ/DDV+B119+zpvGB2qur5KR/IbM5a0OwnQ==
+nextil@^0.17.4:
+  version "0.17.4"
+  resolved "https://registry.yarnpkg.com/nextil/-/nextil-0.17.4.tgz#c818b6795d1d7abebaf3d728611ba0ded89e3414"
+  integrity sha512-cxtyvy3qCxGQc4/M+ZnENUXaweN3VcAbM4iHTY35KJDKraxv00l1d+DacCZhYj/1U3PnwDehzOJt+IGg3zTy8g==
   dependencies:
     retil-history "^0.17.2"
-    retil-router "^0.17.3"
+    retil-router "^0.17.4"
     tslib "2.0.1"
 
 no-case@^3.0.3:
@@ -7915,10 +7899,10 @@ retil-operation@^0.17.1:
     retil-support "^0.17.1"
     tslib "2.0.1"
 
-retil-router@^0.17.3:
-  version "0.17.3"
-  resolved "https://registry.yarnpkg.com/retil-router/-/retil-router-0.17.3.tgz#e6d8590382080d483ba3a1fb69cf418377936acd"
-  integrity sha512-ES6+n7cs7PYC0B85hAYTJFibQl65RaSuVRG2SembEpp/m6fn+0Y4i34K7fsfz0fRtp1zw9ctmN+Sat9Cu+kyVQ==
+retil-router@^0.17.4:
+  version "0.17.4"
+  resolved "https://registry.yarnpkg.com/retil-router/-/retil-router-0.17.4.tgz#148626644441738d21fdef9712c227154256a2a8"
+  integrity sha512-05+cJUxeGa9JS0iu+/RsyWatIME9p0OGHhs+g1YuqQYhhD/wiWleI7OXfjP4t2YnyI057xsSqKkcRz8P8N5Zuw==
   dependencies:
     path-to-regexp "^6.1.0"
     retil-history "^0.17.2"
@@ -9077,14 +9061,6 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-urql@^1.11.4:
-  version "1.11.4"
-  resolved "https://registry.yarnpkg.com/urql/-/urql-1.11.4.tgz#f4eb430d7756baf61f2906779d5a1914e9eeef0d"
-  integrity sha512-VtX8xuzwxDtVXRCf/uvy1LcAnBIfiDrKlkblq6ENVJtI3eNsq7mTTxk3F1kZCxE29GWBayQpO4kcLzhEE0OojQ==
-  dependencies:
-    "@urql/core" "^1.16.0"
-    wonka "^4.0.14"
-
 use-prosemirror@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/use-prosemirror/-/use-prosemirror-1.2.1.tgz#ce9aba69c7785f937acd588c5e2b47e378523b4c"
@@ -9285,11 +9261,6 @@ wide-align@^1.1.0:
   integrity sha512-QGkOQc8XL6Bt5PwnsExKBPuMKBxnGxWWW3fU55Xt4feHozMUhdUMaBCk290qpm/wG5u/RSKzwdAC4i51YigihA==
   dependencies:
     string-width "^1.0.2 || 2"
-
-wonka@^4.0.14:
-  version "4.0.15"
-  resolved "https://registry.yarnpkg.com/wonka/-/wonka-4.0.15.tgz#9aa42046efa424565ab8f8f451fcca955bf80b89"
-  integrity sha512-U0IUQHKXXn6PFo9nqsHphVCE5m3IntqZNB9Jjn7EB1lrR7YTDY3YWgFvEvwniTzXSvOH/XMzAZaIfJF/LvHYXg==
 
 worker-farm@^1.7.0:
   version "1.7.0"

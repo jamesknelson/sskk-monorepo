@@ -1,7 +1,7 @@
-import { NextilRequest } from 'nextil'
+// import { NextilRequest } from 'nextil'
 import * as React from 'react'
 import { createContext, useContext } from 'react'
-import { useRouterRequest } from 'retil-router'
+// import { useRouterRequest } from 'retil-router'
 import { createState } from 'retil-source'
 
 import { auth as authConfig } from 'src/config'
@@ -19,13 +19,11 @@ export type { AuthController, AuthSnapshot, AuthService, AuthSource, AuthUser }
 const [pendingSource] = createState<AuthSnapshot>()
 
 const authServiceRef: { current?: AuthService } = {}
-const anonymousAuthService = createAnonymousAuthService()
+// const anonymousAuthService = createAnonymousAuthService()
 const pendingAuthService = [pendingSource, {} as any] as const
 
-export function getAuthService(request: NextilRequest): AuthService {
-  if (!request.isRoutedPage) {
-    return anonymousAuthService
-  } else if (request.isSSR) {
+export function getAuthService(): AuthService {
+  if (typeof window === 'undefined') {
     return pendingAuthService
   } else if (!authServiceRef.current) {
     authServiceRef.current = createFirebaseAuthService({
@@ -62,8 +60,8 @@ export interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const request = useRouterRequest<NextilRequest>()
-  const [, controller] = getAuthService(request)
+  // const request = useRouterRequest<NextilRequest>()
+  const [, controller] = getAuthService()
 
   return (
     <AuthControllerContext.Provider value={controller}>

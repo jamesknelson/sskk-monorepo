@@ -9,7 +9,6 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import gql from 'graphql-tag'
-import { NextilRequest } from 'nextil'
 import { useMemo } from 'react'
 
 import { graphqlURL } from 'src/config'
@@ -25,7 +24,6 @@ interface GraphQLClientState {
 }
 
 const clientStateRef: { current?: GraphQLClientState } = {}
-const serverStates = new WeakMap<any, GraphQLClientState>()
 
 export type CreatePrecachedQueryFunction = <Result, Variables extends object>(
   node: DocumentNode<Result, Variables>,
@@ -93,8 +91,8 @@ export function usePrecachedQuery<
 
 // TODO: if currentUser has an id and changes, then create a new cache.
 export function getGraphQLClientState(
-  request: NextilRequest,
   authController: AuthController,
+  serializedData: any,
 ): GraphQLClientState {
   if (clientStateRef.current) {
     return clientStateRef.current
@@ -114,11 +112,16 @@ export function getGraphQLClientState(
       variables: defaultVariables!,
 
       precache: async () => {
-        const cachedData = client.readQuery({
-          query: document,
-          variables: defaultVariables,
-        })
+        const cachedData =
+          typeof window === 'undefined'
+            ? null
+            : client.readQuery({
+                query: document,
+                variables: defaultVariables,
+              })
 
+        // TODO: somehow avoid reading from the network during the initial
+        // hydration request
         const networkResultPromise = client.query({
           query: document,
           variables: defaultVariables,
@@ -141,27 +144,22 @@ export function getGraphQLClientState(
     }
   }
 
-  if (request.serverRequest) {
-    let state = serverStates.get(request.serverRequest)
-    if (!state) {
-      const cache = new InMemoryCache()
-      client = new ApolloClient({
-        uri: graphqlURL,
-        cache,
-      })
-      state = { cache, client, createQuery }
-      serverStates.set(request.serverRequest, state)
-    }
-    return state
+  if (typeof window === 'undefined') {
+    const cache = new InMemoryCache()
+    client = new ApolloClient({
+      uri: graphqlURL,
+      cache,
+    })
+    return { cache, client, createQuery }
   } else {
-    const cache = new InMemoryCache().restore(request.serializedData)
+    const cache = new InMemoryCache().restore(serializedData)
 
     const link = new HttpLink({ uri: graphqlURL })
     const authMiddleware = setContext(async (_, previousContext) => {
       const role = previousContext.role
       const headers = { ...previousContext.headers } as Record<string, string>
 
-      if (role && role !== 'anonymous') {
+      if (authController && role && role !== 'anonymous') {
         const tokenInfo = await authController.getTokenInfo()
         const userId =
           tokenInfo?.['claims']?.['https://hasura.io/jwt/claims']?.[

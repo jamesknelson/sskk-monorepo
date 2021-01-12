@@ -8,13 +8,13 @@ import 'firebase/auth'
 import { AppProps as NextAppProps } from 'next/app'
 import { NextilAppProps, NextilRouter, nextilApp } from 'nextil'
 import * as React from 'react'
-import { RouterContent, useRouterRequest } from 'retil-router'
+import { useRouterContent, useRouterRequest } from 'retil-router'
 import { ApolloProvider } from '@apollo/client'
 
 import { AppLayout } from 'src/components/appLayout'
 import { firebase as firebaseConfig, firebaseEmulators } from 'src/config'
 import { GlobalStyles } from 'src/globalStyles'
-import { HydrationBoundary } from 'src/hooks/useHasHydrated'
+import { HydrationBoundary } from 'src/utils/hydration'
 import { AuthProvider } from 'src/utils/auth'
 import { AppRequest } from 'src/utils/routing'
 
@@ -32,6 +32,7 @@ if (typeof window !== 'undefined') {
 interface AppProps extends NextAppProps, NextilAppProps {}
 
 function LoadingFallback() {
+  console.log('CONTENT SUSPENDED')
   return <div>Loading...</div>
 }
 
@@ -42,18 +43,21 @@ function App(_props: AppProps) {
       <NextilRouter>
         <ClientProvider>
           <AuthProvider>
-            <HydrationBoundary>
-              <AppLayout>
-                <HydrationBoundary fallback={<LoadingFallback />}>
-                  <RouterContent />
-                </HydrationBoundary>
-              </AppLayout>
-            </HydrationBoundary>
+            <AppLayout>
+              <HydrationBoundary fallback={<LoadingFallback />}>
+                <Content />
+              </HydrationBoundary>
+            </AppLayout>
           </AuthProvider>
         </ClientProvider>
       </NextilRouter>
     </>
   )
+}
+
+export function Content() {
+  const content = useRouterContent()
+  return <>{content}</>
 }
 
 export function ClientProvider(props: { children: React.ReactNode }) {

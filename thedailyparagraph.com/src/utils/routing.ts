@@ -3,7 +3,6 @@ import { NextilRequest, NextilResponse, nextilRoutedPage } from 'nextil'
 import {
   RouterAction,
   RouterFunction,
-  // RouterResponse,
   createHref,
   routeRedirect,
   useRouterRequest,
@@ -18,6 +17,7 @@ import {
   CreatePrecachedQueryFunction,
   getGraphQLClientState,
 } from './graphql'
+import { hasHydratedSource } from './hydration'
 import { MemberProfile, getMemberProfileSource } from './memberProfile'
 
 export interface AppUser extends Omit<AuthUser, 'id'> {
@@ -34,6 +34,8 @@ export type AppRequest = NextilRequest & {
   // currentUser?: null | AuthUser
   doNotTrack?: boolean
 
+  hasHydrated: boolean
+
   // This is a mutable object which can be modified by routes to configure
   // how the layout behaves.
   layoutOptions: {
@@ -44,46 +46,58 @@ export type AppRequest = NextilRequest & {
 export type AppRouterFunction = RouterFunction<AppRequest, NextilResponse>
 
 const authMemo = createMemo()
+const defaultLayoutOptions = {}
 
 export function appRoutedPage(pageRouter: AppRouterFunction) {
   return nextilRoutedPage(pageRouter, {
     extendRequest: (request, use) => {
-      const [authSource, authController] = getAuthService(request)
+      const hasHydrated = use(hasHydratedSource)
+      const [authSource, authController] = getAuthService()
+
       const auth = use(authSource, undefined)
-      const memberId =
-        auth === undefined
-          ? undefined
-          : auth?.user?.claims?.['https://hasura.io/jwt/claims']?.[
-              'x-hasura-user-id'
-            ] || null
-      const user =
-        !auth || !auth.user
-          ? (auth?.user as null | undefined)
-          : authMemo(
-              () => ({
-                ...(auth.user as AuthUser),
-                id: undefined,
-                memberId,
-              }),
-              [auth.user, memberId],
-            )
 
       const { client, cache, createQuery } = getGraphQLClientState(
-        request,
         authController,
+        request.serializedData,
       )
-
-      const profileSource =
-        user && getMemberProfileSource(request, client, memberId)
-
-      return {
+      const extension = {
         cache,
         client,
         createQuery,
-        user: user,
-        profile: profileSource && use(profileSource),
-        layoutOptions: {},
+        hasHydrated,
+        layoutOptions: defaultLayoutOptions,
+        profile: undefined,
+        user: undefined,
       }
+
+      if (hasHydrated && auth !== undefined) {
+        const memberId =
+          auth === undefined
+            ? undefined
+            : auth?.user?.claims?.['https://hasura.io/jwt/claims']?.[
+                'x-hasura-user-id'
+              ] || null
+        const user =
+          !auth || !auth.user
+            ? (auth?.user as null | undefined)
+            : authMemo(
+                () => ({
+                  ...(auth.user as AuthUser),
+                  id: undefined,
+                  memberId,
+                }),
+                [auth.user, memberId],
+              )
+        const profileSource =
+          user && getMemberProfileSource(request, client, memberId)
+
+        Object.assign(extension, {
+          user,
+          profile: profileSource && use(profileSource),
+        })
+      }
+
+      return extension
     },
 
     extractSerializedData: async (request) => request.cache?.extract(),
