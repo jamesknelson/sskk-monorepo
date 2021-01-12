@@ -82,7 +82,7 @@ export const easings = {
 
 const mediaFactory = (query: string) => (...args: any[]) => css`
   @media screen and ${query} {
-    ${css.apply(null, args)}
+    ${css.apply(null, args as any)}
   }
 `
 
