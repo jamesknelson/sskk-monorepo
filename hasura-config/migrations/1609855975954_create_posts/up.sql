@@ -58,8 +58,8 @@ create table "post_versions" (
   "id" uuid not null primary key DEFAULT gen_random_uuid(),
   "post_id" uuid not null REFERENCES posts ON DELETE cascade,
 
-  "slug" text not null,
-  "title" text not null,
+  "slug" text,
+  "title" text,
 
   "editor_state" json,
   "content" json,
@@ -93,21 +93,29 @@ create table "post_versions" (
 -- Useful for finding posts by previous slugs.
 create index post_versions_by_slug_and_date_idx
   ON post_versions ("slug", "updated_at" DESC)
-  WHERE ("locked_for_publication" is true);
+  WHERE ("slug" IS NOT NULL AND "locked_for_publication" is true);
 
 create index post_versions_idx
   ON post_versions ("post_id", "updated_at" DESC);
 
 -- Necessary to create a foreign key constraint from posts to the latest
 -- versions.
-create unique index post_version_slugs
+create unique index post_version_fk_index_1
+  ON post_versions ("id", "locked_for_publication");
+create unique index post_version_fk_index_2
   ON post_versions ("id", "locked_for_publication", "slug");
 
 alter table posts
-  ADD CONSTRAINT latest_version_fk
+  ADD CONSTRAINT latest_version_fk_1
+  FOREIGN KEY (latest_version_id, latest_version_locked_for_publication)
+  REFERENCES post_versions (id, locked_for_publication)
+  MATCH FULL
+  ON UPDATE CASCADE;
+
+alter table posts
+  ADD CONSTRAINT latest_version_fk_2
   FOREIGN KEY (latest_version_id, latest_version_locked_for_publication, latest_version_slug)
   REFERENCES post_versions (id, locked_for_publication, slug)
-  MATCH FULL
   ON UPDATE CASCADE;
 
 ---

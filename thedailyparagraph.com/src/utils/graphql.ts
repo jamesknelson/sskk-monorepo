@@ -180,6 +180,9 @@ export function getGraphQLClientState(
           headers['X-Hasura-User-Id'] = userId
         }
       }
+      if (!headers['X-Hasura-Role']) {
+        headers['X-Hasura-Role'] = 'anonymous'
+      }
 
       return { ...previousContext, headers }
     })

@@ -75,11 +75,6 @@ BEGIN
     THEN
       RAISE EXCEPTION 'cannot update posts.published_at after publication';
     END IF;
-
-    IF (NEW.published_at <= NOW())
-    THEN
-      RAISE EXCEPTION 'cannot backdate posts.published_at';
-    END IF;
   END IF;
 
   RETURN NEW;

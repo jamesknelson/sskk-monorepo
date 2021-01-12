@@ -52,6 +52,11 @@ export function appRoutedPage(pageRouter: AppRouterFunction) {
       const hasHydrated = use(hasHydratedSource)
       const [authSource, authController] = getAuthService()
 
+      // We only want to provide a default "undefined" value during the
+      // hydration phase, which needs to happen immediately to prevent React
+      // from showing Suspense placeholders. Once hydrated, we want to wait
+      // until our auth and profile are available before publishing another
+      // request to the routers.
       const auth = use(authSource, ...(hasHydrated ? [] : [undefined]))
 
       const { client, cache, createQuery } = getGraphQLClientState(

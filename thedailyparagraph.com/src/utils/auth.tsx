@@ -19,7 +19,6 @@ export type { AuthController, AuthSnapshot, AuthService, AuthSource, AuthUser }
 const [pendingSource] = createState<AuthSnapshot>()
 
 const authServiceRef: { current?: AuthService } = {}
-// const anonymousAuthService = createAnonymousAuthService()
 const pendingAuthService = [pendingSource, {} as any] as const
 
 export function getAuthService(): AuthService {
@@ -41,16 +40,6 @@ export function getAuthService(): AuthService {
     })
   }
   return authServiceRef.current
-}
-
-export function createAnonymousAuthService(): AuthService {
-  const [source] = createState<AuthSnapshot>({
-    message: null,
-    mutableFirebaseUser: null,
-    user: null,
-  })
-  const controller: AuthController = {} as any
-  return [source, controller] as const
 }
 
 const AuthControllerContext = createContext<AuthController>(null as any)

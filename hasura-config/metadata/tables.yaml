@@ -132,8 +132,19 @@
       columns:
       - deleted_at
       - published_at
-      filter: {}
-      check: null
+      filter:
+        profile:
+          member:
+            id:
+              _eq: X-Hasura-User-Id
+      check:
+        _or:
+        - deleted_at:
+            _is_null: false
+        - published_at:
+            _gte: now()
+        - published_at:
+            _is_null: true
   delete_permissions:
   - role: editor
     permission:

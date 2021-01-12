@@ -68,8 +68,8 @@ export function Page({ query }: Props) {
       event.preventDefault()
 
       const version = {
-        title,
-        slug: slug || placeholderSlug,
+        title: title || null,
+        slug: slug || placeholderSlug || null,
         editor_state: serializeEditorState(editorState),
         content: serializeContent(editorState),
       }
