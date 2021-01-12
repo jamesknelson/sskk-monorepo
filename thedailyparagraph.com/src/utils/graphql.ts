@@ -10,10 +10,12 @@ import { setContext } from '@apollo/client/link/context'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import gql from 'graphql-tag'
 import { useMemo } from 'react'
+import { getSnapshot } from 'retil-source'
 
 import { graphqlURL } from 'src/config'
 
 import { AuthController } from './auth'
+import { hasHydratedSource } from './hydration'
 
 export type Client = ApolloClient<any>
 
@@ -120,25 +122,27 @@ export function getGraphQLClientState(
                 variables: defaultVariables,
               })
 
-        // TODO: somehow avoid reading from the network during the initial
-        // hydration request
-        const networkResultPromise = client.query({
-          query: document,
-          variables: defaultVariables,
-          context: {
-            role,
-          },
-          fetchPolicy: 'network-only',
-        })
+        const hasHydrated = getSnapshot(hasHydratedSource)
+        const shouldFetch = cachedData === null || hasHydrated
+        const networkResultPromise =
+          shouldFetch &&
+          client.query({
+            query: document,
+            variables: defaultVariables,
+            context: {
+              role,
+            },
+            fetchPolicy: 'network-only',
+          })
 
-        if (cachedData === null) {
+        if (cachedData === null && networkResultPromise) {
           const result = await networkResultPromise
           if (result.error) {
             throw result.error
           }
           return result.data
         } else {
-          return cachedData
+          return cachedData!
         }
       },
     }

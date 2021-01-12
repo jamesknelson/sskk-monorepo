@@ -54,7 +54,7 @@ export function appRoutedPage(pageRouter: AppRouterFunction) {
       const hasHydrated = use(hasHydratedSource)
       const [authSource, authController] = getAuthService()
 
-      const auth = use(authSource, undefined)
+      const auth = use(authSource, ...(hasHydrated ? [] : [undefined]))
 
       const { client, cache, createQuery } = getGraphQLClientState(
         authController,

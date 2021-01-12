@@ -9,6 +9,8 @@ export const router = routeAsync(async (req: AppRequest) => {
     limit: 10,
   })
 
+  console.log('rendering home', req)
+
   await query.precache()
 
   const { Page } = await pageModulePromise
