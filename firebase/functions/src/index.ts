@@ -6,9 +6,18 @@ import fetch from 'node-fetch'
 const corsConfig = functions.config().cors
 const graphqlConfig = functions.config().graphql
 
+const whitelist =
+  corsConfig.origin === '*' ? true : corsConfig.origin.split(',')
+
 const cors = CORS({
-  ...corsConfig,
-  origin: corsConfig.origin === '*' ? true : corsConfig.origin,
+  methods: 'GET,POST',
+  origin: (origin, callback) => {
+    if (whitelist === true || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
 })
 
 admin.initializeApp({

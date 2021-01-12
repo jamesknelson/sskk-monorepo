@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "sskk-dev"
+    "default": "sskk-dev",
+    "dev": "sskk-dev",
+    "prod": "sskk-prod"
   }
 }
