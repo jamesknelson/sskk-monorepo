@@ -31,9 +31,7 @@ export type AppRequest = NextilRequest & {
   user?: null | AppUser
   profile?: null | MemberProfile
 
-  // currentUser?: null | AuthUser
   doNotTrack?: boolean
-
   hasHydrated: boolean
 
   // This is a mutable object which can be modified by routes to configure

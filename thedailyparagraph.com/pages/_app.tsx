@@ -31,11 +31,6 @@ if (typeof window !== 'undefined') {
 
 interface AppProps extends NextAppProps, NextilAppProps {}
 
-function LoadingFallback() {
-  console.log('CONTENT SUSPENDED')
-  return <div>Loading...</div>
-}
-
 function App(_props: AppProps) {
   return (
     <>
@@ -55,18 +50,22 @@ function App(_props: AppProps) {
   )
 }
 
-export function Content() {
+function Content() {
   const content = useRouterContent()
   return <>{content}</>
 }
 
-export function ClientProvider(props: { children: React.ReactNode }) {
+function ClientProvider(props: { children: React.ReactNode }) {
   const request = useRouterRequest() as AppRequest
   return request.client ? (
     <ApolloProvider client={request.client}>{props.children}</ApolloProvider>
   ) : (
     <>{props.children}</>
   )
+}
+
+function LoadingFallback() {
+  return <div>Loading...</div>
 }
 
 export default nextilApp(App, {
