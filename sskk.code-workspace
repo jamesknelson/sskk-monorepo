@@ -1,8 +1,8 @@
 {
 	"folders": [
 		{
-			"name": "admin",
-			"path": "admin"
+			"name": "docs",
+			"path": "docs",
 		},
 		{
 			"name": "firebase",
