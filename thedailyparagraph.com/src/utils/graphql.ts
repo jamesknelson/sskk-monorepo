@@ -5,8 +5,10 @@ import {
   InMemoryCache,
   QueryResult,
   useQuery,
+  from,
 } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { onError } from '@apollo/client/link/error'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import gql from 'graphql-tag'
 import { useMemo } from 'react'
@@ -158,7 +160,7 @@ export function getGraphQLClientState(
   } else {
     const cache = new InMemoryCache().restore(serializedData)
 
-    const link = new HttpLink({ uri: graphqlURL })
+    const httpLink = new HttpLink({ uri: graphqlURL })
     const authMiddleware = setContext(async (_, previousContext) => {
       const role = previousContext.role
       const headers = { ...previousContext.headers } as Record<string, string>
@@ -187,9 +189,20 @@ export function getGraphQLClientState(
       return { ...previousContext, headers }
     })
 
+    const errorLink = onError(({ graphQLErrors, networkError }) => {
+      if (graphQLErrors)
+        graphQLErrors.map(({ message, locations, path }) =>
+          console.error(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          ),
+        )
+
+      if (networkError) console.error(`[Network error]: ${networkError}`)
+    })
+
     client = new ApolloClient({
       cache,
-      link: authMiddleware.concat(link),
+      link: from([errorLink, authMiddleware, httpLink]),
     })
 
     clientStateRef.current = { client, createQuery }

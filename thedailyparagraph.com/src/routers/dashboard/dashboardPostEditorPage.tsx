@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { formatDistance, formatISO } from 'date-fns'
+import { format, formatDistance, formatISO } from 'date-fns'
 import startOfTomorrow from 'date-fns/startOfTomorrow'
 import Head from 'next/head'
 import * as React from 'react'
@@ -75,28 +75,36 @@ export function Page({ query }: Props) {
       }
 
       if (!query) {
-        const result = await executeCreate({
-          variables: {
-            profile_id: request.profile!.id,
-            version,
-          },
-        })
-        const insertedId = result.data?.insert_posts_one?.id
-        if (insertedId) {
-          await navigate(joinPaths(request.pathname, '..', insertedId))
-        } else {
+        try {
+          const result = await executeCreate({
+            variables: {
+              profile_id: request.profile!.id,
+              version,
+            },
+          })
+          const insertedId = result.data?.insert_posts_one?.id
+          if (insertedId) {
+            await navigate(joinPaths(request.pathname, '..', insertedId))
+          } else {
+            alert("Couldn't save")
+          }
+        } catch (error) {
           alert("Couldn't save")
         }
       } else {
-        const result = await executeSave({
-          variables: {
-            version: {
-              post_id: post.id,
-              ...version,
+        try {
+          const result = await executeSave({
+            variables: {
+              version: {
+                post_id: post.id,
+                ...version,
+              },
             },
-          },
-        })
-        if (result.errors) {
+          })
+          if (result.errors) {
+            alert("Couldn't save")
+          }
+        } catch (error) {
           alert("Couldn't save")
         }
       }
@@ -133,6 +141,14 @@ export function Page({ query }: Props) {
             'Not yet saved'
           )}
           <br />
+          {post.published_at ? (
+            <>
+              Published on{' '}
+              <span>{format(new Date(version.updated_at + 'Z'), 'PPP')}</span>{' '}
+            </>
+          ) : (
+            'Not yet saved'
+          )}
         </p>
 
         <Input type="text" value={title} onChange={setTitle} />
@@ -170,24 +186,23 @@ function PublishButton(props: PublishButtonProps) {
   })
 
   const [publishedAt, setPublishedAt] = useState(
-    props.publishedAt ||
-      formatISO(startOfTomorrow(), {
-        representation: 'date',
-      }),
+    formatISO(startOfTomorrow(), {
+      representation: 'date',
+    }),
   )
 
   const [doPublish, publishPending] = useOperation(
     async (event: React.MouseEvent) => {
       event.preventDefault()
 
-      const result = await executePublish({
-        variables: {
-          post_id: props.postId,
-          published_at: publishedAt,
-        },
-      })
-
-      if (result.errors) {
+      try {
+        await executePublish({
+          variables: {
+            post_id: props.postId,
+            post: props.publishedAt ? {} : { published_at: publishedAt },
+          },
+        })
+      } catch (error) {
         alert("Couldn't publish")
       }
     },

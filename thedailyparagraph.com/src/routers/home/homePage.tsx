@@ -4,8 +4,9 @@ import * as React from 'react'
 import { css } from 'styled-components'
 
 import { HomeQuery } from 'src/generated/graphql'
-import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
 import { colors, dimensions, radii, shadows } from 'src/theme'
+import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
+import { renderJSONToReact } from 'src/utils/prosemirrorReactSerializer'
 
 export interface Props {
   query: PrecachedQuery<HomeQuery>
@@ -103,7 +104,12 @@ export function Page(props: Props) {
                     </h2>
                   )}
                 </header>
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                <div>
+                  {renderJSONToReact({
+                    doc: post.content,
+                    selection: { head: 0, anchor: 0, type: 'text' },
+                  })}
+                </div>
               </article>
             )
           })}

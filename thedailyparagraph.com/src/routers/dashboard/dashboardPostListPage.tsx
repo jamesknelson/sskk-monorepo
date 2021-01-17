@@ -5,6 +5,7 @@ import { Link } from 'retil-router'
 
 import { DashboardPostListQuery } from 'src/generated/graphql'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
+import { renderJSONToReact } from 'src/utils/prosemirrorReactSerializer'
 
 export interface Props {
   query: PrecachedQuery<DashboardPostListQuery>
@@ -54,9 +55,8 @@ export function Page(props: Props) {
                     </span>
                   </p>
                 </header>
-                {version.content && (
-                  <div dangerouslySetInnerHTML={{ __html: version.content }} />
-                )}
+                {version.editor_state &&
+                  renderJSONToReact(version.editor_state)}
                 <footer>
                   <p>
                     <Link to={`./${post.id}`}>Edit &raquo;</Link>

@@ -1,21 +1,12 @@
 import { exampleSetup } from 'prosemirror-example-setup'
-import { DOMSerializer, Schema } from 'prosemirror-model'
-import { schema as basicSchema } from 'prosemirror-schema-basic'
-import { addListNodes } from 'prosemirror-schema-list'
+import { DOMSerializer } from 'prosemirror-model'
 import { EditorState, Transaction } from 'prosemirror-state'
 import * as React from 'react'
 import { useCallback, useRef, useState } from 'react'
 import { css } from 'styled-components'
 import { Handle, ProseMirror } from 'use-prosemirror'
 
-const schema = new Schema({
-  nodes: addListNodes(
-    basicSchema.spec.nodes as any,
-    'paragraph block*',
-    'block',
-  ),
-  marks: basicSchema.spec.marks,
-})
+import { schema } from 'src/utils/prosemirrorSchema'
 
 const editorConfig = {
   schema,
@@ -40,12 +31,7 @@ export function serializeEditorState(state: EditorState) {
 }
 
 export function serializeContent(state: EditorState) {
-  let fragment = DOMSerializer.fromSchema(schema).serializeFragment(
-    state.doc.content,
-  )
-  let node = document.createElement('div')
-  node.appendChild(fragment)
-  return node.innerHTML
+  return state.toJSON().doc
 }
 
 export function Editor({ state, onChange }: EditorProps) {

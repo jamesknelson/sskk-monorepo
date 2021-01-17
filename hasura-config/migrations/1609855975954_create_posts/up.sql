@@ -76,7 +76,7 @@ create table "post_versions" (
   check (locked_for_publication is false OR content is not null),
 
   -- Force is_draft to null or true, so that we can enforce that there's max
-  -- one draft using a uniqueness constraint, enabling drfat upsert in hasura.
+  -- one draft using a uniqueness constraint, enabling draft upsert in hasura.
   check (
     (is_draft is true and locked_for_publication is false) OR
     (is_draft is null OR locked_for_publication is true)
