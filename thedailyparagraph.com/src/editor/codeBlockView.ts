@@ -64,7 +64,6 @@ export class CodeBlockView implements NodeView<Schema> {
   }
 
   handleFocus = () => {
-    console.log('on focus')
     this.forwardSelection()
   }
 
@@ -82,7 +81,6 @@ export class CodeBlockView implements NodeView<Schema> {
   }
 
   setSelection(anchor: number, head: number) {
-    console.log('setting selection')
     this.cm.focus()
     this.updating = true
     this.cm.setSelection(
@@ -157,7 +155,6 @@ export class CodeBlockView implements NodeView<Schema> {
   }
 
   selectNode() {
-    console.log('selecting node')
     this.cm.focus()
   }
 

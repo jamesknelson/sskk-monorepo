@@ -1,5 +1,3 @@
-import { ReactNode, Fragment as ReactFragment, createElement } from 'react'
-
 import {
   DOMOutputSpec,
   Fragment as ProsemirrorFragment,
@@ -7,6 +5,7 @@ import {
   Node as ProsemirrorNode,
 } from 'prosemirror-model'
 import { EditorState } from 'prosemirror-state'
+import { ReactNode, Fragment as ReactFragment, createElement } from 'react'
 
 import {
   AppMarkType,
@@ -87,7 +86,9 @@ export class ReactSerializer<S extends AppSchema = any> {
       currentChildren.push(triplet[1](markChildren))
     }
 
-    return createElement(ReactFragment, null, ...currentChildren)
+    return currentChildren.length === 1
+      ? currentChildren[0]
+      : createElement(ReactFragment, null, ...currentChildren)
   }
 
   serializeNode(node: ProsemirrorNode<S>): ReactNode {
