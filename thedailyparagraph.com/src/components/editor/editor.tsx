@@ -1,5 +1,4 @@
 import { exampleSetup } from 'prosemirror-example-setup'
-import { DOMSerializer } from 'prosemirror-model'
 import { EditorState, Transaction } from 'prosemirror-state'
 import * as React from 'react'
 import { useCallback, useRef, useState } from 'react'
