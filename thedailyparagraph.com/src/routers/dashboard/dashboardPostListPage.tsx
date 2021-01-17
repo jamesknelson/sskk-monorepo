@@ -5,7 +5,7 @@ import { Link } from 'retil-router'
 
 import { DashboardPostListQuery } from 'src/generated/graphql'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
-import { renderJSONToReact } from 'src/utils/prosemirrorReactSerializer'
+import { renderJSONToReact } from 'src/editor/reactSerializer'
 
 export interface Props {
   query: PrecachedQuery<DashboardPostListQuery>

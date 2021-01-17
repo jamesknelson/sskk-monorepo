@@ -45,7 +45,9 @@ export function Page({ query }: Props) {
 
   const [title, setTitle] = useState(version?.title || '')
   const [slug, setSlug] = useState(version?.slug || '')
-  const [editorState, setEditorState] = useEditorState(version?.editor_state)
+  const [editorState, applyEditorTransaction] = useEditorState(
+    version?.editor_state,
+  )
 
   const placeholderSlug = slugify(title, {
     lower: true,
@@ -160,7 +162,7 @@ export function Page({ query }: Props) {
           onChange={setSlug}
         />
         <br />
-        <Editor state={editorState} onChange={setEditorState} />
+        <Editor state={editorState} applyTransaction={applyEditorTransaction} />
         <br />
         <button disabled={submitPending} type="submit">
           {submitPending ? 'Saving...' : 'Save'}

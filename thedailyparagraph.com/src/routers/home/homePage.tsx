@@ -6,7 +6,7 @@ import { css } from 'styled-components'
 import { HomeQuery } from 'src/generated/graphql'
 import { colors, dimensions, radii, shadows } from 'src/theme'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
-import { renderJSONToReact } from 'src/utils/prosemirrorReactSerializer'
+import { renderJSONToReact } from 'src/editor/reactSerializer'
 
 export interface Props {
   query: PrecachedQuery<HomeQuery>
