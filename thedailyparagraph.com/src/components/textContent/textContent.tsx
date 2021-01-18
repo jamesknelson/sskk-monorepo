@@ -31,6 +31,11 @@ export const TextContent = styled.div`
     padding: 0.15em;
   }
 
+  ol,
+  ul {
+    padding-left: 30px;
+  }
+
   p,
   h1,
   h2,

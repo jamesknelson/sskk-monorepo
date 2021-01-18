@@ -128,7 +128,9 @@ export function Page({ query }: Props) {
         })
         const insertedId = result.data?.insert_posts_one?.id
         if (insertedId) {
-          await navigate(joinPaths(request.pathname, '..', insertedId))
+          await navigate(
+            joinPaths(request.pathname, '..', '..', 'story', insertedId),
+          )
         } else {
           alert("Couldn't save")
           return
@@ -213,7 +215,7 @@ export function Page({ query }: Props) {
             post_id: post.id,
           },
         })
-        await navigate(joinPaths(request.pathname, '..'))
+        await navigate(joinPaths(request.pathname, '..', '..', 'stories'))
       } catch (error) {
         alert("Couldn't delete")
       }

@@ -119,10 +119,13 @@
       - profile_id
       - published_at
       filter:
-        profile:
-          member:
-            id:
-              _eq: X-Hasura-User-Id
+        _and:
+        - profile:
+            member:
+              id:
+                _eq: X-Hasura-User-Id
+        - deleted_at:
+            _is_null: true
   update_permissions:
   - role: editor
     permission:
@@ -130,10 +133,13 @@
       - deleted_at
       - published_at
       filter:
-        profile:
-          member:
-            id:
-              _eq: X-Hasura-User-Id
+        _and:
+        - profile:
+            member:
+              id:
+                _eq: X-Hasura-User-Id
+        - deleted_at:
+            _is_null: true
       check:
         _or:
         - deleted_at:

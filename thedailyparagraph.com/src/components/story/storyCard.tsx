@@ -30,7 +30,7 @@ export function StoryCard(props: StoryCardProps) {
   } = props
 
   const canCancel = publishedAt && publishedAt > new Date()
-  const canEdit = profile && profile.handle === profileHandle
+  const canEdit = storyId && profile && profile.handle === profileHandle
 
   return (
     <Card as="article" {...rest}>
