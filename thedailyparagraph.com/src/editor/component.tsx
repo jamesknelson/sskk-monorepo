@@ -28,6 +28,8 @@ export interface EditorProps extends ProsemirrorProps {
     transaction: Transaction,
   ) => EditorState | null
 
+  minHeight?: string
+
   state: EditorState
 
   className?: string
@@ -119,7 +121,12 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
       style={style}
       className={className}
       css={css`
-        border: 1px solid black;
+        ${props.minHeight &&
+        css`
+          .ProseMirror {
+            min-height: ${props.minHeight};
+          }
+        `}
 
         .CodeMirror {
           border: 1px solid #eee;
@@ -150,12 +157,4 @@ export function useEditorState(initialStateJSON?: any) {
   )
 
   return [editorState, applyTransaction] as const
-}
-
-export function serializeEditorState(state: EditorState<Schema>) {
-  return state.toJSON()
-}
-
-export function serializeContent(state: EditorState<Schema>) {
-  return state.toJSON().doc
 }

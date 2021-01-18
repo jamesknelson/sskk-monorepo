@@ -14,3 +14,11 @@ export function decodeUUID(maybeEncodedUUID: string): string {
   const bytes = decode(maybeEncodedUUID)
   return stringifyUUID(bytes)
 }
+
+export function maybeDecodeUUID(maybeEncodedUUID: string): string | null {
+  try {
+    return decodeUUID(maybeEncodedUUID)
+  } catch (error) {
+    return null
+  }
+}

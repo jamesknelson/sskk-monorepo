@@ -1,12 +1,13 @@
-import { format } from 'date-fns'
 import Head from 'next/head'
 import * as React from 'react'
 import { css } from 'styled-components'
 
-import { HomeQuery } from 'src/generated/graphql'
-import { colors, dimensions, radii, shadows } from 'src/theme'
-import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
+import { StoryCard } from 'src/components/story'
+import { createStateFromContentObject } from 'src/editor/contentObject'
 import { renderJSONToReact } from 'src/editor/reactSerializer'
+import { HomeQuery } from 'src/generated/graphql'
+import { dimensions } from 'src/theme'
+import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
 
 export interface Props {
   query: PrecachedQuery<HomeQuery>
@@ -23,7 +24,7 @@ export function Page(props: Props) {
         <title>The Daily Paragraph</title>
       </Head>
 
-      <main>
+      <>
         <h1
           css={css`
             font-family: 'UnifrakturMaguntia', cursive;
@@ -39,88 +40,42 @@ export function Page(props: Props) {
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-width: ${dimensions.largeCardWidth};
+            width: calc(100% - 1rem);
+            margin: 0 auto;
           `}>
           {posts.map((post) => {
             const profile = post.profile!
 
             return (
-              <article
+              <StoryCard
                 key={post.id!}
+                profileDisplayName={profile.display_name}
+                profileHandle={profile.handle!}
+                profileId={profile.id}
+                publishedAt={new Date(post.published_at! + 'Z')}
+                storyId={post.id}
                 css={css`
-                  background-color: ${colors.structure.bg};
-                  border-bottom: 1px solid ${colors.structure.border};
-                  box-shadow: ${shadows.card()};
-                  border-radius: ${radii.small};
-
-                  display: flex;
-                  flex-direction: column;
                   margin: 0.5rem 1rem;
-                  max-width: ${dimensions.largeCardWidth};
-                  width: calc(100% - 1rem);
-                  padding: 1rem 2rem;
+                  width: 100%;
                 `}>
-                <header
-                  css={css`
-                    padding-top: 0.5rem;
-                  `}>
-                  <div
-                    css={css`
-                      font-size: 0.9rem;
-                      display: flex;
-                      justify-content: space-between;
-                      border-bottom: 1px solid ${colors.structure.border};
-                      padding-bottom: 0.25rem;
-                    `}>
-                    <span>
-                      <span
+                {renderJSONToReact(createStateFromContentObject(post.content), {
+                  nodes: {
+                    title: () => (children: React.ReactNode) => (
+                      <h2
                         css={css`
-                          font-weight: 700;
+                          margin: 2rem 0 1rem;
                         `}>
-                        {profile.display_name!}
-                      </span>
-                      <span
-                        css={css`
-                          color: ${colors.text.tertiary};
-                          margin: 0 0.375rem;
-                        `}>
-                        @{profile.handle}
-                      </span>
-                    </span>
-                    <time
-                      dateTime={post.published_at!}
-                      css={css`
-                        color: ${colors.text.tertiary};
-                        margin-left: 0.375rem;
-                      `}>
-                      {format(new Date(post.published_at!), 'PPP')}
-                    </time>
-                  </div>
-                </header>
-                <div>
-                  {renderJSONToReact(
-                    {
-                      doc: post.content,
-                      selection: { head: 0, anchor: 0, type: 'text' },
-                    },
-                    {
-                      nodes: {
-                        title: () => (children: React.ReactNode) => (
-                          <h2
-                            css={css`
-                              margin: 2rem 0 0rem;
-                            `}>
-                            {children}
-                          </h2>
-                        ),
-                      },
-                    },
-                  )}
-                </div>
-              </article>
+                        {children}
+                      </h2>
+                    ),
+                  },
+                })}
+              </StoryCard>
             )
           })}
         </div>
-      </main>
+      </>
     </>
   )
 }

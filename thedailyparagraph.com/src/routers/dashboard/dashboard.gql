@@ -1,5 +1,5 @@
 query DashboardPostList($profile_id: uuid!) {
-  posts(where: {profile_id: {_eq: $profile_id}}, order_by: {published_at: desc_nulls_first}) {
+  posts(where: {profile_id: {_eq: $profile_id}, deleted_at: {_is_null: true}}, order_by: {published_at: desc_nulls_first}) {
     id
     versions: post_versions(order_by: {updated_at: desc}, limit: 1) {
       id
@@ -10,11 +10,16 @@ query DashboardPostList($profile_id: uuid!) {
     created_at
     deleted_at
     published_at
+    profile {
+      id
+      display_name
+      handle
+    }
   }
 }
 
-query DashboardPostEditor($post_id: uuid!) {
-  post: posts_by_pk(id: $post_id) {
+query DashboardPostEditor($post_id: uuid = "", $is_new: Boolean = false) {
+  post: posts_by_pk(id: $post_id) @skip(if: $is_new) {
     id
     versions: post_versions(order_by: {updated_at: desc}, limit: 1) {
       id
@@ -25,6 +30,10 @@ query DashboardPostEditor($post_id: uuid!) {
     }
     created_at
     deleted_at
+    published_at
+  }
+  queued_posts: posts(where: {published_at: {_gt: "now()"}}) {
+    id
     published_at
   }
 }
@@ -65,12 +74,17 @@ mutation CreatePost($profile_id: uuid!, $version: post_versions_insert_input!) {
 mutation SavePostDraft($version: post_versions_insert_input!) {
   insert_post_versions(objects: [$version], on_conflict: {constraint: post_versions_locked_for_publication, update_columns: [editor_state, content, slug], where: {locked_for_publication: {_eq: false}}}) {
     returning {
-      id
-      locked_for_publication
-      editor_state
-      slug
-      updated_at
-      created_at
+      post {
+        id
+        versions: post_versions(order_by: {updated_at: desc}, limit: 1) {
+          id
+          locked_for_publication
+          editor_state
+          slug
+          updated_at
+          created_at
+        }
+      }
     }
   }
 }
@@ -83,8 +97,16 @@ mutation SavePostDraft($version: post_versions_insert_input!) {
 mutation PublishPost($post_id: uuid!, $post: posts_set_input) {
   update_post_versions(where: {post_id: {_eq: $post_id}, locked_for_publication: {_eq: false}}, _set: {locked_for_publication: true}) {
     returning {
-      id
-      locked_for_publication
+      post {
+        versions: post_versions(order_by: {updated_at: desc}, limit: 1) {
+          id
+          locked_for_publication
+          editor_state
+          slug
+          updated_at
+          created_at
+        }
+      }
     }
   }
   update_posts_by_pk(pk_columns: {id: $post_id}, _set: $post) {
@@ -93,5 +115,19 @@ mutation PublishPost($post_id: uuid!, $post: posts_set_input) {
     latest_version_locked_for_publication
     latest_version_slug
     published_at
+  }
+}
+
+mutation CancelPostPublish($post_id: uuid!) {
+  update_posts_by_pk(pk_columns: {id: $post_id}, _set: { published_at: null }) {
+    id
+    published_at
+  }
+}
+
+mutation DeletePost($post_id: uuid!) {
+  update_posts_by_pk(pk_columns: {id: $post_id}, _set: { deleted_at: "now()" }) {
+    id
+    deleted_at
   }
 }

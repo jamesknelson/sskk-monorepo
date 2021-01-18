@@ -239,13 +239,8 @@ export function buildMenuItems(schema: Schema) {
       }),
       joinUpItem,
       liftItem,
-      selectParentNodeItem,
     ],
   ]
 
-  return (inlineMenu as any).concat(
-    [[insertMenu, typeMenu]],
-    [[undoItem, redoItem]],
-    blockMenu,
-  )
+  return (inlineMenu as any).concat([[insertMenu, typeMenu]], blockMenu)
 }

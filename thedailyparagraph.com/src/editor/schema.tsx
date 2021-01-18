@@ -101,7 +101,7 @@ export const schema = createAppSchema({
   nodes: {
     // :: NodeSpec The top level document node.
     doc: {
-      content: 'title? block+',
+      content: '(block|title) block*',
     },
 
     // :: NodeSpec A plain paragraph textblock. Represented in the DOM

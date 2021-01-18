@@ -1,7 +1,4 @@
 import * as React from 'react'
+import { LoadingScreen } from 'src/components/loading'
 
-export const router = () => <LoadingPage />
-
-export function LoadingPage() {
-  return <div>LOADING</div>
-}
+export const router = () => <LoadingScreen />

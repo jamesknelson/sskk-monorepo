@@ -1,16 +1,22 @@
 import * as React from 'react'
-import { routeAsync, routeByPattern, routeRedirect } from 'retil-router'
+import {
+  routeAsync,
+  routeByPattern,
+  routeNotFound,
+  routeRedirect,
+} from 'retil-router'
 
 import {
   DashboardPostListDocument,
   DashboardPostEditorDocument,
 } from 'src/generated/graphql'
-import { AppRequest, requireAuth } from 'src/utils/routing'
+import { requireAuth } from 'src/utils/routing'
+import { decodeUUID } from 'src/utils/uuid'
 
 export const router = requireAuth(
   routeByPattern({
-    '/': routeRedirect('./posts'),
-    '/posts': routeAsync(async (req: AppRequest) => {
+    '/': routeRedirect('./stories'),
+    '/stories': routeAsync(async (req) => {
       const pageModulePromise = import('./dashboardPostListPage')
       const query = req.createQuery(
         DashboardPostListDocument,
@@ -26,22 +32,44 @@ export const router = requireAuth(
 
       return <Page query={query} />
     }),
-    '/posts/new': routeAsync(async () => {
-      const pageModulePromise = import('./dashboardPostEditorPage')
-      const { Page } = await pageModulePromise
-      return <Page query={null} />
-    }),
-    '/posts/:postId': routeAsync(async (req: AppRequest) => {
+    '/stories/new': routeAsync(async (req) => {
       const pageModulePromise = import('./dashboardPostEditorPage')
       const query = req.createQuery(
         DashboardPostEditorDocument,
         {
-          post_id: req.params.postId as string,
+          is_new: true,
         },
         'editor',
       )
 
       await query.precache()
+
+      const { Page } = await pageModulePromise
+
+      return <Page query={query} />
+    }),
+    '/story/:storyId': routeAsync(async (req, res) => {
+      let storyId: string
+      try {
+        storyId = decodeUUID(req.params.storyId as string)
+      } catch (error) {
+        return routeNotFound()(req, res)
+      }
+
+      const pageModulePromise = import('./dashboardPostEditorPage')
+      const query = req.createQuery(
+        DashboardPostEditorDocument,
+        {
+          post_id: storyId as string,
+        },
+        'editor',
+      )
+
+      const { post } = await query.precache()
+
+      if (!post) {
+        return routeNotFound()(req, res)
+      }
 
       const { Page } = await pageModulePromise
 

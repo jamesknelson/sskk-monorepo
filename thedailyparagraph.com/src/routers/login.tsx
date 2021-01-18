@@ -6,9 +6,12 @@ import {
   useNavigate /*, useWaitUntilNavigationCompletes*/,
 } from 'retil-router'
 import { useOperation } from 'retil-operation'
+import { css } from 'styled-components'
 
 import { AuthLayout } from 'src/components/authLayout'
+import { Button } from 'src/components/button'
 import { Input } from 'src/components/input'
+import { colors, shadows } from 'src/theme'
 import { useAuthController } from 'src/utils/auth'
 
 interface LoginData {
@@ -55,36 +58,49 @@ export function LoginPage() {
 
   return (
     <AuthLayout title="Sign in">
-      <form onSubmit={login}>
+      <form
+        onSubmit={login}
+        css={css`
+          margin: 1rem 0 2rem;
+
+          label {
+            display: block;
+            margin-bottom: 1rem;
+          }
+
+          input {
+            border: 1px solid ${colors.control.border.default};
+            background-color: ${colors.control.bg.default};
+            border-radius: 4px;
+            padding: 0.5rem;
+            display: block;
+            width: 100%;
+          }
+        `}>
         <label>
           Email
-          <br />
           <Input
             type="email"
             value={email}
             onBlur={() => validatePath('email')}
             onChange={setEmail}
           />
-          <br />
           {issues.on.email?.message}
         </label>
         <label>
           Password
-          <br />
           <Input
             type="password"
             value={password}
             onBlur={() => validatePath('password')}
             onChange={setPassword}
           />
-          <br />
           {issues.on.password?.message}
         </label>
-        <button disabled={loginPending} type="submit">
+        <Button busy={loginPending} disabled={loginPending} type="submit">
           {loginPending ? 'Signing in...' : 'Sign in'}
-        </button>
+        </Button>
       </form>
-      <hr />
       {/* <Link to="/join">Create New Account</Link>{' '} */}
       <Link to="/recover">Recover Account</Link>
     </AuthLayout>

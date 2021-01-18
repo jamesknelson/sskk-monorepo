@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Link } from 'retil-router'
 import { css } from 'styled-components'
 
+import { Button, LinkButton } from 'src/components/button'
 import { useAuthController } from 'src/utils/auth'
 import { useAppRequest } from 'src/utils/routing'
 import { colors, dimensions, shadows } from 'src/theme'
@@ -9,8 +10,6 @@ import { colors, dimensions, shadows } from 'src/theme'
 export interface AppLayoutProps {
   children: React.ReactNode
 }
-
-export const LoadingUser = { loading: true }
 
 export function AppLayout(props: AppLayoutProps) {
   const { children } = props
@@ -32,7 +31,8 @@ export function AppLayout(props: AppLayoutProps) {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          height: ${dimensions.bar};
+          flex-basis: ${dimensions.bar};
+          flex-shrink: 0;
           padding: 0 2rem;
           width: 100%;
         `}>
@@ -46,18 +46,33 @@ export function AppLayout(props: AppLayoutProps) {
           `}>
           ¶
         </Link>
-        <nav>
+        <nav
+          css={css`
+            display: flex;
+            align-items: center;
+          `}>
           {profile !== undefined &&
             (profile ? (
               <>
-                <Link to="/dashboard">{profile.displayName}</Link>
-                &nbsp;&middot;&nbsp;
-                <Link to="/settings">Account settings</Link>&nbsp;
-                <button onClick={signOut}>logout</button>
+                <Link
+                  to="/dashboard"
+                  css={css`
+                    color: ${colors.ink.black};
+                    margin-right: 1rem;
+                  `}>
+                  {profile.displayName}
+                </Link>
+                {/* &nbsp;&middot;&nbsp;
+                <Link to="/settings">Account settings</Link>&nbsp; */}
+                <Button outline tabIndex={-1} onClick={signOut}>
+                  Log Out
+                </Button>
               </>
             ) : (
               <>
-                <Link to="/login">sign in</Link>
+                <LinkButton outline tabIndex={-1} to="/login">
+                  Sign In
+                </LinkButton>
                 {/* &nbsp;
                 <Link to="/join">join</Link>{' '} */}
               </>
@@ -73,12 +88,14 @@ export function AppLayout(props: AppLayoutProps) {
       <footer
         css={css`
           text-align: center;
-          margin: 2rem;
+          margin: 2rem 2rem 0;
+          padding-bottom: 2rem;
         `}>
         <Link
           css={css`
             color: ${colors.ink.mid};
             font-size: 90%;
+            text-decoration: underline;
           `}
           to="/legal">
           Legal

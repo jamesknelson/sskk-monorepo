@@ -1,43 +1,42 @@
 todo
 
-o stop storing content as HTML, start storing it as a strict subset of the editor json
+o create a "post" component which is used on the front page and dashboard
+o put a poem on the "legal" page
+o individual post pages
+o show a warning before hitting delete
+- meta description tag for home page
+- switch hasura-prod to a paid dyno
 
-o ensure failed publishes don't jam the tab, or in production, actually show up in the UI
-o fix publishing updates
-o can add a `toReact` function to schema to use if available, instead of `toDOM`
-o add codemirror editor to the editor
-o add code highlighter react component
-o hide slug field - autogenerate slug from title (if it exists) for now
-
-- add editor styles to make it look like a card, with your name and publish date
-  (or "draft" marker) above the editor, and the menu floating above it. move
-  the save draft and publish button inside the menu
-- auto-fill the date field with the next available date for publication
-
-- if no draft exists, first save a draft when hitting "publish update"
-- button to cancel things queued for publish
-
-- show "updated at" on card if it has been updated
-
-- add some basic styles on login form, dashboard
+- rename the "editor" directory to "prose"
 
 - profile pages
-- individual post pages
+- move to render hosting
+  * https://community.render.com/t/migrating-postgresql-from-heroku-to-render/386
 
-- move to hosting with no startup time
-
-- ensure <meta> tags work well
+- figure out how to make the front page card look decent on mobile
+- check how extra space at the end of a story is rendered
+- Attempting to close while there are unsaved changes should show a warning
 
 - daily pages and links from the front page to daily pages
 
-- reimplement editor menu as React component
+- figure out why the fallback router is catching all top-level routes
 
-- put a poem on the "legal" page
+- why does clicking a link scroll to top of page?
+- move date conversion for published_at into apollo
+- add a user dropdown with logout button, and use a button-styled link for "login"
+- when there are changes, should automatically save a draft after x seconds of
+  no typing, or after x seconds -- whichever comes first
+- add an editor card at the top of the dashboard, and make it so clicking
+  anything on the dashboard brings up an editor around it
+- reimplement editor menu as React component
 - fix navigation to 404; it should display a 404 message
 - improved layout
 - redirect to onboarding screen for users without a profile or username (usernames are free initially)
-- edit profile page
+- edit profile page, with profile photo
 - account settings (edit password, email)
+
+- rename "post" to "story" within db, etc.
+- figure out why React.HTMLAttributes can't be assigned to <div> props
 
 - get images working, with image upload, drag and drop
 - youtube embed

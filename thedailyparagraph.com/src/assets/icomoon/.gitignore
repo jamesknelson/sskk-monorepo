@@ -1,0 +1,6 @@
+demo-files/*
+*.html
+*.txt
+*.js
+*.css
+symbol-defs.svg

@@ -12,6 +12,7 @@ import {
   AppNodeType,
   AppSchema,
   ReactHole,
+  Schema,
   schema,
 } from './schema'
 
@@ -23,10 +24,9 @@ export interface SerializerCustomizer<S extends AppSchema = any> {
 }
 
 export function renderJSONToReact(
-  initialStateJSON: any,
+  state: EditorState<Schema>,
   customizer?: SerializerCustomizer,
 ): ReactNode {
-  const state = EditorState.fromJSON({ schema }, initialStateJSON)
   return ReactSerializer.fromSchema(schema, customizer).serializeFragment(
     state.doc.content,
   )

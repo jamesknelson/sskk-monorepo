@@ -1,3 +1,5 @@
 export * from './component'
+export * from './contentObject'
+export * from './getTitle'
 export * from './reactSerializer'
 export * from './schema'

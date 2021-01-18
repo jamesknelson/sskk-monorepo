@@ -37,7 +37,6 @@
       - locked_for_publication
       - post_id
       - slug
-      - title
       backend_only: false
   select_permissions:
   - role: editor
@@ -46,7 +45,6 @@
       - id
       - post_id
       - slug
-      - title
       - editor_state
       - content
       - locked_for_publication
@@ -66,7 +64,6 @@
       - editor_state
       - locked_for_publication
       - slug
-      - title
       filter:
         post:
           profile:
@@ -197,6 +194,18 @@
       - handle
       filter: {}
       limit: 1
+  - role: editor
+    permission:
+      columns:
+      - id
+      - handle
+      - display_name
+      - avatar_url
+      - created_at
+      filter:
+        member:
+          id:
+            _eq: X-Hasura-User-Id
   - role: member
     permission:
       columns:
@@ -237,7 +246,6 @@
       - profile_id
       - published_at
       - slug
-      - title
       - content
       - updated_at
       filter: {}
@@ -249,7 +257,6 @@
       - profile_id
       - published_at
       - slug
-      - title
       - content
       - updated_at
       filter: {}

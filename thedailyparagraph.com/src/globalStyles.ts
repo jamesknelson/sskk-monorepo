@@ -1,33 +1,47 @@
 import { createGlobalStyle } from 'styled-components'
-import { colors } from './theme'
+
+import { colors, dimensions } from 'src/theme'
+
+// import emojiMartCSS from '!raw-loader!emoji-mart/css/emoji-mart.css'
 
 export const GlobalStyles = createGlobalStyle`
   * {
-    box-sizing: border-box;
+    appearance: none;
+    border: 0;
+    box-sizing: inherit;
+    -webkit-font-smoothing: auto;
+    font-weight: inherit;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    text-decoration: none;
+    text-rendering: optimizeLegibility;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
 
 	/* These styles make the body full-height */
   html {
-    font-size: 16px;
-		min-height: 100%;
-    height: 100%;
-  }
-
-  body {
     background-color: ${colors.structure.wash};
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box;
     font-family: Lora, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
       Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
       'Helvetica Neue', sans-serif;
-    font-size: 1rem;
+    font-size: ${dimensions.base};
+    height: 100%;
     line-height: 1.5rem;
+    min-height: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body, #__next {
     height: 100%;
     min-height: 100%;
   }
 
   #__next {
-    min-height: 100%;
     display: flex;
     flex-grow: 1;
   }
