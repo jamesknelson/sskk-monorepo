@@ -22,6 +22,10 @@ export function Page(props: Props) {
     <>
       <Head>
         <title>The Daily Paragraph</title>
+        <meta
+          name="description"
+          content="What if you wrote at least one paragraph, every day?"
+        />
       </Head>
 
       <>

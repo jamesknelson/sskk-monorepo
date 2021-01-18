@@ -1,11 +1,6 @@
 todo
 
-o create a "post" component which is used on the front page and dashboard
-o put a poem on the "legal" page
-o individual post pages
-o show a warning before hitting delete
 - meta description tag for home page
-- switch hasura-prod to a paid dyno
 
 - rename the "editor" directory to "prose"
 
@@ -20,6 +15,10 @@ o show a warning before hitting delete
 - daily pages and links from the front page to daily pages
 
 - figure out why the fallback router is catching all top-level routes
+
+- add minimum character count: you need at least 140 characters
+- scheduling posts per day
+- GitHub-style graph of when you've posted
 
 - why does clicking a link scroll to top of page?
 - move date conversion for published_at into apollo
