@@ -1,4 +1,3 @@
-import { exampleSetup } from 'prosemirror-example-setup'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { EditorView, EditorProps as ProsemirrorProps } from 'prosemirror-view'
 import React, {
@@ -11,14 +10,9 @@ import React, {
 } from 'react'
 import { css } from 'styled-components'
 
-import { arrowHandlers } from 'src/editor/arrowHandlers'
-import { CodeBlockView } from 'src/editor/codeBlockView'
-import { Schema, schema } from 'src/editor/schema'
-
-const editorConfig = {
-  schema,
-  plugins: exampleSetup({ schema }).concat(arrowHandlers),
-}
+import { CodeBlockView } from './codeBlockView'
+import { config } from './config'
+import { Schema } from './schema'
 
 export interface EditorHandle {
   root: HTMLDivElement
@@ -142,8 +136,8 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
 export function useEditorState(initialStateJSON?: any) {
   const [editorState, setEditorState] = useState(() =>
     initialStateJSON
-      ? EditorState.fromJSON(editorConfig, initialStateJSON)
-      : EditorState.create(editorConfig),
+      ? EditorState.fromJSON(config, initialStateJSON)
+      : EditorState.create(config),
   )
 
   const applyTransaction = useCallback(

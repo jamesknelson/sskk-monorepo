@@ -34,7 +34,6 @@ export function Page(props: Props) {
               <hr />
               <article>
                 <header>
-                  <h2>{version.title!}</h2>
                   <p>
                     {post.published_at && (
                       <>

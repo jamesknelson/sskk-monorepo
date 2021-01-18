@@ -95,20 +95,26 @@ export function Page(props: Props) {
                       {format(new Date(post.published_at!), 'PPP')}
                     </time>
                   </div>
-                  {post.title && (
-                    <h2
-                      css={css`
-                        margin: 2rem 0 0rem;
-                      `}>
-                      {post.title}
-                    </h2>
-                  )}
                 </header>
                 <div>
-                  {renderJSONToReact({
-                    doc: post.content,
-                    selection: { head: 0, anchor: 0, type: 'text' },
-                  })}
+                  {renderJSONToReact(
+                    {
+                      doc: post.content,
+                      selection: { head: 0, anchor: 0, type: 'text' },
+                    },
+                    {
+                      nodes: {
+                        title: () => (children: React.ReactNode) => (
+                          <h2
+                            css={css`
+                              margin: 2rem 0 0rem;
+                            `}>
+                            {children}
+                          </h2>
+                        ),
+                      },
+                    },
+                  )}
                 </div>
               </article>
             )

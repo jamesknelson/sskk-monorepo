@@ -101,7 +101,7 @@ export const schema = createAppSchema({
   nodes: {
     // :: NodeSpec The top level document node.
     doc: {
-      content: 'block+',
+      content: 'title? block+',
     },
 
     // :: NodeSpec A plain paragraph textblock. Represented in the DOM
@@ -135,11 +135,20 @@ export const schema = createAppSchema({
       },
     },
 
+    title: {
+      content: 'text*',
+      defining: true,
+      parseDOM: [{ tag: 'h1' }],
+      toDOM() {
+        return ['h1', 0]
+      },
+    },
+
     // :: NodeSpec A heading textblock, with a `level` attribute that
     // should hold the number 1 to 6. Parsed and serialized as `<h1>` to
     // `<h6>` elements.
     heading: {
-      attrs: { level: { default: 1 } },
+      attrs: { level: { default: 2 } },
       content: 'inline*',
       group: 'block',
       defining: true,

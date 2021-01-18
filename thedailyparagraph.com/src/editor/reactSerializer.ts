@@ -15,9 +15,21 @@ import {
   schema,
 } from './schema'
 
-export function renderJSONToReact(initialStateJSON: any): ReactNode {
+export interface SerializerCustomizer<S extends AppSchema = any> {
+  nodes?: {
+    [name: string]: (node: ProsemirrorNode<S>) => ReactHole | ReactNode
+  }
+  marks?: { [name: string]: (mark: Mark<S>, inline: boolean) => ReactHole }
+}
+
+export function renderJSONToReact(
+  initialStateJSON: any,
+  customizer?: SerializerCustomizer,
+): ReactNode {
   const state = EditorState.fromJSON({ schema }, initialStateJSON)
-  return ReactSerializer.fromSchema(schema).serializeFragment(state.doc.content)
+  return ReactSerializer.fromSchema(schema, customizer).serializeFragment(
+    state.doc.content,
+  )
 }
 
 export class ReactSerializer<S extends AppSchema = any> {
@@ -120,13 +132,10 @@ export class ReactSerializer<S extends AppSchema = any> {
     return toReact && toReact(mark, inline)
   }
 
-  static fromSchema(schema: AppSchema) {
-    return (
-      schema.cached.reactSerializer ||
-      (schema.cached.reactSerializer = new ReactSerializer(
-        this.nodesFromSchema(schema),
-        this.marksFromSchema(schema),
-      ))
+  static fromSchema(schema: AppSchema, customizer: SerializerCustomizer = {}) {
+    return new ReactSerializer(
+      { ...this.nodesFromSchema(schema), ...customizer.nodes },
+      { ...this.marksFromSchema(schema), ...customizer.marks },
     )
   }
 

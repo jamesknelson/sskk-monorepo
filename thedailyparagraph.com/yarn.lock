@@ -2335,10 +2335,32 @@
     "@types/prosemirror-state" "*"
     "@types/prosemirror-view" "*"
 
+"@types/prosemirror-dropcursor@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/prosemirror-dropcursor/-/prosemirror-dropcursor-1.0.0.tgz#2df872bc6431a9f06bc1a4a0eac7c2dc527e7f12"
+  integrity sha512-S2ndHt94M64avSqjBcgIblaF3YeC3RfcmpY9/WIdfqU7aoJxuOh4RJk5emdmQPHZT1wbczMHFmFSsRqgErK0EQ==
+  dependencies:
+    "@types/prosemirror-state" "*"
+
+"@types/prosemirror-gapcursor@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/prosemirror-gapcursor/-/prosemirror-gapcursor-1.0.1.tgz#56a6274ef39f62c339adcc64305294b800211a5e"
+  integrity sha512-ruA7FK9NJv+bn5s55SZYFf9SwaN3wk/MkBvqRmhIqIHvowTTa7nzIGWbUdWZMga1DDTk+GrwdcQaEHunAFjFsQ==
+  dependencies:
+    "@types/prosemirror-state" "*"
+
 "@types/prosemirror-history@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/prosemirror-history/-/prosemirror-history-1.0.1.tgz#b8d7595f73788b63fc9f2b57a763ba8375abfe87"
   integrity sha512-BYyPJlWDo3VEnWS5X2DCHXrrAKEjdbCe1DUjGL6R/8hmwMFe3iMJGYdBkOXU1FfkTpw7Z+PlwY/pMyeelVydmg==
+  dependencies:
+    "@types/prosemirror-model" "*"
+    "@types/prosemirror-state" "*"
+
+"@types/prosemirror-inputrules@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@types/prosemirror-inputrules/-/prosemirror-inputrules-1.0.3.tgz#3f8f07921f692b6c7e4781fa426aee3e76b9018c"
+  integrity sha512-cxMkCcu/di8//68jWc/NrRpvpCbizgq9vqv4rCRsAiuSiJ8L5hf4aFlCBUYCffuQnrY98uOfJ8YAUY3dbtaF9A==
   dependencies:
     "@types/prosemirror-model" "*"
     "@types/prosemirror-state" "*"
@@ -2349,6 +2371,15 @@
   integrity sha512-iCYUtt0u8y6qeDZVsidEWJGbw2Kas+jtHD1QY374W/N2jASYp+8auucFLXe0UvoOy9jiWcGcqcecec1R+vkzgw==
   dependencies:
     "@types/prosemirror-commands" "*"
+    "@types/prosemirror-model" "*"
+    "@types/prosemirror-state" "*"
+    "@types/prosemirror-view" "*"
+
+"@types/prosemirror-menu@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@types/prosemirror-menu/-/prosemirror-menu-1.0.2.tgz#8213ff47280da90c11784b9c8e3bebc4abf21910"
+  integrity sha512-u79CwEQR271k/kjdvRXyPGG7Rn+vPKbJfgSO7vOR/zEYcvSz7lLhBg1OZiSKqfSuhnIAbQh53qLylmB8PTw+WA==
+  dependencies:
     "@types/prosemirror-model" "*"
     "@types/prosemirror-state" "*"
     "@types/prosemirror-view" "*"

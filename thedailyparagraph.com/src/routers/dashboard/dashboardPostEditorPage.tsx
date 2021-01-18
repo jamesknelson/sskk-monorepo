@@ -13,7 +13,7 @@ import {
   serializeContent,
   serializeEditorState,
   useEditorState,
-} from 'src/components/editor'
+} from 'src/editor'
 import { Input } from 'src/components/input'
 import {
   DashboardPostEditorQuery,
@@ -43,13 +43,14 @@ export function Page({ query }: Props) {
       }
   const version = post.versions[0]
 
-  const [title, setTitle] = useState(version?.title || '')
-  const [slug, setSlug] = useState(version?.slug || '')
   const [editorState, applyEditorTransaction] = useEditorState(
     version?.editor_state,
   )
 
-  const placeholderSlug = slugify(title, {
+  const firstBlock = editorState.doc.content.firstChild
+  const title =
+    (firstBlock?.type.name === 'title' && firstBlock.textContent) || ''
+  const slug = slugify(title, {
     lower: true,
     strict: true,
   })
@@ -70,8 +71,7 @@ export function Page({ query }: Props) {
       event.preventDefault()
 
       const version = {
-        title: title || null,
-        slug: slug || placeholderSlug || null,
+        slug: slug || null,
         editor_state: serializeEditorState(editorState),
         content: serializeContent(editorState),
       }
@@ -126,7 +126,9 @@ export function Page({ query }: Props) {
   return (
     <>
       <Head>
-        <title>{title ? `Edit "${title}"` : 'New post'}</title>
+        <title>
+          {post.id ? `Edit ${title ? `"${title}"` : 'story'}` : 'New story'}
+        </title>
       </Head>
 
       <form onSubmit={doSubmit}>
@@ -153,14 +155,6 @@ export function Page({ query }: Props) {
           )}
         </p>
 
-        <Input type="text" value={title} onChange={setTitle} />
-        <br />
-        <Input
-          type="text"
-          placeholder={placeholderSlug}
-          value={slug}
-          onChange={setSlug}
-        />
         <br />
         <Editor state={editorState} applyTransaction={applyEditorTransaction} />
         <br />

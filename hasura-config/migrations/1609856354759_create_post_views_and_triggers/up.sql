@@ -4,7 +4,6 @@ SELECT
   posts.profile_id,
   posts.published_at as published_at,
   post_versions.slug,
-  post_versions.title,
   post_versions.content,
   (case
     when post_versions.updated_at < posts.published_at
