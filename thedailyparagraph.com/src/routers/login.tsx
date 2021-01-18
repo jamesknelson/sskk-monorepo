@@ -11,7 +11,7 @@ import { css } from 'styled-components'
 import { AuthLayout } from 'src/components/authLayout'
 import { Button } from 'src/components/button'
 import { Input } from 'src/components/input'
-import { colors, shadows } from 'src/theme'
+import { colors } from 'src/theme'
 import { useAuthController } from 'src/utils/auth'
 
 interface LoginData {

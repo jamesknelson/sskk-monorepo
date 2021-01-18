@@ -6,9 +6,6 @@ import {
   MenuItemSpec,
   joinUpItem,
   liftItem,
-  selectParentNodeItem,
-  undoItem,
-  redoItem,
   icons,
   MenuItem,
 } from 'prosemirror-menu'

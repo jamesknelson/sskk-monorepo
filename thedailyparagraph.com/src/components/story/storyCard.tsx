@@ -78,6 +78,17 @@ export function StoryCard(props: StoryCardProps) {
                 color: ${colors.text.tertiary};
               }
             `}>
+            {canEdit && (
+              <Link to={`/dashboard/story/${encodeUUID(storyId!)}`}>edit</Link>
+            )}
+            {canEdit && publishedAt && (
+              <span
+                css={css`
+                  padding: 0 0.5rem;
+                `}>
+                &middot;
+              </span>
+            )}
             {publishedAt && (
               <>
                 {canCancel && (
@@ -96,17 +107,6 @@ export function StoryCard(props: StoryCardProps) {
                   </Link>
                 )}
               </>
-            )}
-            {canEdit && publishedAt && (
-              <span
-                css={css`
-                  padding: 0 0.5rem;
-                `}>
-                &middot;
-              </span>
-            )}
-            {canEdit && (
-              <Link to={`/dashboard/story/${encodeUUID(storyId!)}`}>edit</Link>
             )}
           </span>
         </div>
