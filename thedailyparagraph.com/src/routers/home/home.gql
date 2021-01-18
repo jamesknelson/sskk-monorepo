@@ -10,7 +10,6 @@ query Home($limit: Int = 10) {
       handle
     }
     slug
-    title
     updated_at
   }
 }

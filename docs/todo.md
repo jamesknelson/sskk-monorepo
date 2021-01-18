@@ -7,11 +7,11 @@ o fix publishing updates
 o can add a `toReact` function to schema to use if available, instead of `toDOM`
 o add codemirror editor to the editor
 o add code highlighter react component
+o hide slug field - autogenerate slug from title (if it exists) for now
 
 - add editor styles to make it look like a card, with your name and publish date
   (or "draft" marker) above the editor, and the menu floating above it. move
   the save draft and publish button inside the menu
-- hide slug field - autogenerate slug from title (if it exists) for now
 - auto-fill the date field with the next available date for publication
 
 - if no draft exists, first save a draft when hitting "publish update"

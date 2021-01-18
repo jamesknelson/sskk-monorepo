@@ -3,7 +3,6 @@ query DashboardPostList($profile_id: uuid!) {
     id
     versions: post_versions(order_by: {updated_at: desc}, limit: 1) {
       id
-      title
       editor_state
       locked_for_publication
       updated_at
@@ -19,7 +18,6 @@ query DashboardPostEditor($post_id: uuid!) {
     id
     versions: post_versions(order_by: {updated_at: desc}, limit: 1) {
       id
-      title
       locked_for_publication
       updated_at
       editor_state
@@ -37,7 +35,6 @@ query DashboardPostEditor($post_id: uuid!) {
 #   "version": {
 #    	"content": {"test": true},
 #    	"editor_state": {"test": true},
-#     "title": "Test",
 #   	"slug": "test"
 #   }
 # }
@@ -52,7 +49,6 @@ mutation CreatePost($profile_id: uuid!, $version: post_versions_insert_input!) {
       id
       locked_for_publication
       slug
-      title
     }
   }
 }
@@ -63,18 +59,16 @@ mutation CreatePost($profile_id: uuid!, $version: post_versions_insert_input!) {
 #     "post_id": "df7a2c2e-b857-484c-9868-43e940504535",
 #     "content": {"test1": true},
 #     "editor_state": {"test1": true},
-#     "title": "Test",
 #     "slug": "test"
 #   }
 # }
 mutation SavePostDraft($version: post_versions_insert_input!) {
-  insert_post_versions(objects: [$version], on_conflict: {constraint: post_versions_locked_for_publication, update_columns: [editor_state, content, slug, title], where: {locked_for_publication: {_eq: false}}}) {
+  insert_post_versions(objects: [$version], on_conflict: {constraint: post_versions_locked_for_publication, update_columns: [editor_state, content, slug], where: {locked_for_publication: {_eq: false}}}) {
     returning {
       id
       locked_for_publication
       editor_state
       slug
-      title
       updated_at
       created_at
     }
