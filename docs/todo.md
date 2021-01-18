@@ -1,17 +1,19 @@
 todo
 
-- meta description tag for home page
-
 - rename the "editor" directory to "prose"
 
-- profile pages
-- move to render hosting
-  * https://community.render.com/t/migrating-postgresql-from-heroku-to-render/386
+- figure out what needs doing next.
 
 - figure out how to make the front page card look decent on mobile
 - check how extra space at the end of a story is rendered
+
+- move to render hosting
+  * https://community.render.com/t/migrating-postgresql-from-heroku-to-render/386
+
 - Attempting to close while there are unsaved changes should show a warning
 
+
+- twitter-style profile pages, with name and avatar
 - daily pages and links from the front page to daily pages
 
 - figure out why the fallback router is catching all top-level routes
