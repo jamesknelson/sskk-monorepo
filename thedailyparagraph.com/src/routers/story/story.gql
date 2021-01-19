@@ -1,15 +1,25 @@
-query Story($handle: String!, $post_id: uuid!) {
-  published_posts(where: {id: {_eq: $post_id}, profile: {handle: {_eq: $handle}}}) {
-    id
-    content
-    published_at
-    profile {
-      id
-      display_name
-      avatar_url
-      handle
-    }
-    slug
-    updated_at
+query StoryById($post_id: uuid!) {
+  stories: published_posts(where: {id: {_eq: $post_id}}) {
+    ...storyFields
   }
+}
+
+query StoryByHandleAndSlug($handle: String!, $slug: String!) {
+  stories: published_posts(where: {profile: {handle: {_eq: $handle}}, slug: {_eq: $slug}}) {
+    ...storyFields
+  }
+}
+
+fragment storyFields on published_posts {
+  id
+  content
+  published_at
+  profile {
+    id
+    display_name
+    avatar_url
+    handle
+  }
+  slug
+  updated_at
 }

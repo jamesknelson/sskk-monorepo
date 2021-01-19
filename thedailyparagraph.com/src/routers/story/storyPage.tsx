@@ -3,27 +3,39 @@ import React, { useMemo } from 'react'
 import { css } from 'styled-components'
 
 import { StoryCard } from 'src/components/story'
-import { createStateFromContentObject } from 'src/editor/contentObject'
-import { getTitle } from 'src/editor/getTitle'
-import { renderJSONToReact } from 'src/editor/reactSerializer'
-import { StoryQuery } from 'src/generated/graphql'
+import { publicURL } from 'src/config'
+import { createStateFromContentObject } from 'src/prose/contentObject'
+import { getTitle } from 'src/prose/getTitle'
+import { StoryFieldsFragment } from 'src/generated/graphql'
 import { dimensions } from 'src/theme'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
+import { getStoryPath } from 'src/utils/routing'
 
 export interface Props {
-  query: PrecachedQuery<StoryQuery>
+  query: PrecachedQuery<{ stories: StoryFieldsFragment[] }>
 }
 
 export function Page(props: Props) {
   const { query } = props
   const { data } = usePrecachedQuery(query)
-  const post = data.published_posts[0]
-  const profile = post.profile!
+  const story = data.stories[0]
+  const profile = story.profile!
   const editorState = useMemo(
-    () => createStateFromContentObject(post.content),
-    [post.content],
+    () => createStateFromContentObject(story.content),
+    [story.content],
   )
+  const publishedAt = new Date(story.published_at! + 'Z')
+  const isPublished = publishedAt <= new Date()
   const title = getTitle(editorState)
+
+  const canonicalPath = getStoryPath({
+    profileId: profile.id,
+    profileHandle: profile.handle,
+    publishedAt,
+    storyId: story.id,
+    storySlug: story.slug,
+  })
+  const canonicalURL = publicURL + canonicalPath
 
   return (
     <>
@@ -31,6 +43,10 @@ export function Page(props: Props) {
         <title>
           {title || profile.display_name} &ndash; The Daily Paragraph
         </title>
+        {isPublished && story.slug && (
+          <link rel="canonical" href={canonicalURL} />
+        )}
+        {!isPublished && <meta name="robots" content="noindex" />}
       </Head>
       <div
         css={css`
@@ -42,28 +58,20 @@ export function Page(props: Props) {
           margin: 0 auto;
         `}>
         <StoryCard
+          disableTitlePath
+          editorState={editorState}
           profileDisplayName={profile.display_name}
           profileHandle={profile.handle!}
           profileId={profile.id}
-          publishedAt={new Date(post.published_at! + 'Z')}
-          storyId={post.id}
+          publishedAt={publishedAt}
+          storyId={story.id}
+          storySlug={story.slug}
+          titleAs="h1"
           css={css`
             margin: 2rem 1rem;
             width: 100%;
-          `}>
-          {renderJSONToReact(editorState, {
-            nodes: {
-              title: () => (children: React.ReactNode) => (
-                <h2
-                  css={css`
-                    margin: 2rem 0 1rem;
-                  `}>
-                  {children}
-                </h2>
-              ),
-            },
-          })}
-        </StoryCard>
+          `}
+        />
       </div>
     </>
   )

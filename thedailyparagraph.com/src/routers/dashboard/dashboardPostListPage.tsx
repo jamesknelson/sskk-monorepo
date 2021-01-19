@@ -5,8 +5,8 @@ import { css } from 'styled-components'
 
 import { LinkButton } from 'src/components/button'
 import { StoryCard } from 'src/components/story'
-import { renderJSONToReact } from 'src/editor/reactSerializer'
-import { schema } from 'src/editor/schema'
+import { renderJSONToReact } from 'src/prose/reactSerializer'
+import { schema } from 'src/prose/schema'
 import { DashboardPostListQuery } from 'src/generated/graphql'
 import { colors, dimensions } from 'src/theme'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
@@ -23,7 +23,7 @@ export function Page(props: Props) {
   return (
     <>
       <Head>
-        <title>Your posts</title>
+        <title>Your Stories &ndash; The Daily Paragraph</title>
       </Head>
 
       <div
@@ -62,20 +62,23 @@ export function Page(props: Props) {
             return (
               <StoryCard
                 key={post.id}
+                editorState={EditorState.fromJSON(
+                  { schema },
+                  version.editor_state,
+                )}
                 profileDisplayName={post.profile.display_name}
                 profileHandle={post.profile.handle!}
+                profileId={post.profile.id}
                 publishedAt={
                   post.published_at && new Date(post.published_at + 'Z')
                 }
                 storyId={post.id}
+                storySlug={version.slug}
                 css={css`
                   margin: 0.5rem 1rem;
                   width: 100%;
-                `}>
-                {renderJSONToReact(
-                  EditorState.fromJSON({ schema }, version.editor_state),
-                )}
-              </StoryCard>
+                `}
+              />
             )
           })}
       </div>

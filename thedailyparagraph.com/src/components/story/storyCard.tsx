@@ -1,19 +1,29 @@
 import { format, formatISO } from 'date-fns'
+import { EditorState } from 'prosemirror-state'
 import React from 'react'
 import { Link } from 'retil-router'
 import { css } from 'styled-components'
 
 import { Card } from 'src/components/card'
 import { TextContent } from 'src/components/textContent'
+import { Schema } from 'src/prose/schema'
 import { colors } from 'src/theme'
-import { useAppRequest } from 'src/utils/routing'
+import { getStoryPath, useAppRequest } from 'src/utils/routing'
 import { encodeUUID } from 'src/utils/uuid'
 
+import { StoryContent } from './storyContent'
+
 export type StoryCardProps = React.ComponentProps<typeof Card> & {
+  disableEdit?: boolean
+  disableTitlePath?: boolean
+  editorState?: EditorState<Schema>
   profileDisplayName: string
-  profileHandle: string
+  profileHandle?: string
+  profileId: string
   publishedAt?: Date
   storyId?: string
+  storySlug?: string | null
+  titleAs?: 'h1' | 'h2'
 }
 
 export function StoryCard(props: StoryCardProps) {
@@ -21,16 +31,40 @@ export function StoryCard(props: StoryCardProps) {
 
   const {
     children,
-    profileId: editHref,
+    disableEdit,
+    disableTitlePath,
+    editorState,
     profileDisplayName,
     profileHandle,
+    profileId,
     publishedAt,
     storyId,
+    storySlug,
+    titleAs,
     ...rest
   } = props
 
   const canCancel = publishedAt && publishedAt > new Date()
-  const canEdit = storyId && profile && profile.handle === profileHandle
+  const canEdit =
+    !disableEdit && storyId && profile && profile.handle === profileHandle
+
+  const path =
+    storyId &&
+    getStoryPath({
+      profileId,
+      profileHandle,
+      publishedAt,
+      storyId,
+      storySlug,
+    })
+
+  const content = children || (
+    <StoryContent
+      editorState={editorState!}
+      path={disableTitlePath ? undefined : path}
+      titleAs={titleAs}
+    />
+  )
 
   return (
     <Card as="article" {...rest}>
@@ -38,11 +72,8 @@ export function StoryCard(props: StoryCardProps) {
         css={css`
           padding: 1.5rem 2rem 0;
 
-          a {
+          a:hover {
             text-decoration: underline;
-            :hover {
-              opacity: 0.8;
-            }
           }
         `}>
         <div
@@ -63,13 +94,14 @@ export function StoryCard(props: StoryCardProps) {
               `}>
               {profileDisplayName}
             </span>
-            <span
+            <Link
+              to={`/@${profileHandle}`}
               css={css`
                 color: ${colors.text.tertiary};
                 margin: 0 0.375rem;
               `}>
               @{profileHandle}
-            </span>
+            </Link>
           </span>
           <span
             css={css`
@@ -79,9 +111,15 @@ export function StoryCard(props: StoryCardProps) {
               }
             `}>
             {canEdit && (
-              <Link to={`/dashboard/story/${encodeUUID(storyId!)}`}>edit</Link>
+              <Link
+                css={css`
+                  text-decoration: underline;
+                `}
+                to={`/dashboard/story/${encodeUUID(storyId!)}`}>
+                edit
+              </Link>
             )}
-            {canEdit && publishedAt && (
+            {canEdit && path && (
               <span
                 css={css`
                   padding: 0 0.5rem;
@@ -89,25 +127,28 @@ export function StoryCard(props: StoryCardProps) {
                 &middot;
               </span>
             )}
-            {publishedAt && (
-              <>
-                {canCancel && (
-                  <span
-                    css={css`
-                      font-style: italic;
-                    `}>
-                    Publishing at{' '}
-                  </span>
-                )}
-                {publishedAt && (
-                  <Link to={`/@${profileHandle}/${encodeUUID(storyId!)}`}>
-                    <time dateTime={formatISO(publishedAt)}>
-                      {format(publishedAt, 'PPP')}
-                    </time>
-                  </Link>
-                )}
-              </>
-            )}
+            {path &&
+              (publishedAt ? (
+                <>
+                  {canCancel && (
+                    <span
+                      css={css`
+                        font-style: italic;
+                      `}>
+                      Publishing at{' '}
+                    </span>
+                  )}
+                  {publishedAt && (
+                    <Link to={path}>
+                      <time dateTime={formatISO(publishedAt)}>
+                        {format(publishedAt, 'PPP')}
+                      </time>
+                    </Link>
+                  )}
+                </>
+              ) : (
+                <Link to={path}>draft</Link>
+              ))}
           </span>
         </div>
       </header>
@@ -115,7 +156,7 @@ export function StoryCard(props: StoryCardProps) {
         css={css`
           padding: 0rem 2rem 1rem;
         `}>
-        {children}
+        {content}
       </TextContent>
     </Card>
   )

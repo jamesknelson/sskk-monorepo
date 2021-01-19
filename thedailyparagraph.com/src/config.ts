@@ -16,3 +16,5 @@ export const firebase = {
 }
 
 export const graphqlURL = process.env.NEXT_PUBLIC_GRAPHQL_URL!
+
+export const publicURL = process.env.NEXT_PUBLIC_URL!

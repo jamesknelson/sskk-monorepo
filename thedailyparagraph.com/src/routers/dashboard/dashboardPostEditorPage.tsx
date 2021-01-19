@@ -17,7 +17,7 @@ import {
   getTitle,
   serializeToContentObject,
   useEditorState,
-} from 'src/editor'
+} from 'src/prose'
 import {
   DashboardPostEditorQuery,
   CancelPostPublishDocument,
@@ -268,10 +268,13 @@ export function Page({ query }: Props) {
           `}
         />
         <StoryCard
+          disableEdit
           profileDisplayName={profile.displayName}
+          profileId={profile.id}
           profileHandle={profile.handle!}
           publishedAt={publishedAt}
           storyId={post.id}
+          storySlug={version?.slug}
           css={css`
             margin: 0.25rem 0;
 

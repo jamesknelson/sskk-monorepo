@@ -16,6 +16,13 @@ export const TextContent = styled.div`
     width: 33% !important;
   }
 
+  h1,
+  h1 a,
+  h2,
+  h2 a {
+    color: ${colors.ink.black};
+  }
+
   strong {
     font-weight: bold;
   }

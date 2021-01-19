@@ -1,37 +1,52 @@
 todo
 
-- rename the "editor" directory to "prose"
-
-- figure out what needs doing next.
-
-- figure out how to make the front page card look decent on mobile
+- hide the placeholder text when you start by adding a bullet point
+- mark unpublished changes on the story card
+- move date conversion for published_at into apollo
 - check how extra space at the end of a story is rendered
+- try to disable headings at the top of the document schema - only allow title or non-heading
+- allow viewing of unpublished urls when you have the link -- urls are unlisted by default (not private)
 
-- move to render hosting
-  * https://community.render.com/t/migrating-postgresql-from-heroku-to-render/386
+- update the registration handler to create a profile w/ avatar url
+  generated from email, and display name taken from part of email
+  before the "@" sign
+- add gravatar to existing accounts
+- show photo on cards
+- improve profile page layout
 
-- Attempting to close while there are unsaved changes should show a warning
+- GitHub-style graph of when you've posted
 
+- add a user dropdown with logout button, and use a button-styled link for "login"
+- make a prettier masthead for the home page, and hide the app bar
+  on the front page when the masthead is visible. make sure it all
+  looks okay on mobile
+- figure out how to make the front page + profile pages look decent on mobile
 
-- twitter-style profile pages, with name and avatar
+- why does clicking a link scroll to top of page?
+
+- add minimum character count: you need at least 140 characters
+- attempting to close while there are unsaved changes should show a warning
+- when there are changes, should automatically save a draft after x seconds of
+  no typing, or after x seconds -- whichever comes first
+- add dropdown to publish button that allows you to choose the date
+- add a toggle switch to the dashboard that allows you to show/hide drafts
 - daily pages and links from the front page to daily pages
+- only show 31 stories at a time on profile page; add pagination for now
+  (eventually we'll want to use an archive)
+
+- move hasura instance to render
+  * https://community.render.com/t/migrating-postgresql-from-heroku-to-render/386
+- add cache headers to public pages
+
+- add a link next to "legal" called "join in", with a poem and a form that
+  asks you for your name, your email, your desired handle, and your first story.
 
 - figure out why the fallback router is catching all top-level routes
 
-- add minimum character count: you need at least 140 characters
-- scheduling posts per day
-- GitHub-style graph of when you've posted
-
-- why does clicking a link scroll to top of page?
-- move date conversion for published_at into apollo
-- add a user dropdown with logout button, and use a button-styled link for "login"
-- when there are changes, should automatically save a draft after x seconds of
-  no typing, or after x seconds -- whichever comes first
 - add an editor card at the top of the dashboard, and make it so clicking
   anything on the dashboard brings up an editor around it
 - reimplement editor menu as React component
 - fix navigation to 404; it should display a 404 message
-- improved layout
 - redirect to onboarding screen for users without a profile or username (usernames are free initially)
 - edit profile page, with profile photo
 - account settings (edit password, email)

@@ -1,10 +1,10 @@
 import { routeByPattern, routeLazy } from 'retil-router'
 
+import { router as profileRouter } from 'src/routers/profile'
 import { appRoutedPage } from 'src/utils/routing'
-import { router as storyRouter } from 'src/routers/story'
 
 const router = routeByPattern({
-  '/@:handle*': storyRouter,
+  '/@:handle': profileRouter,
 
   // FIXME: why are these even needed? shouldn't the separate pages be called?!
   '/legal': routeLazy(() =>
@@ -20,13 +20,12 @@ const router = routeByPattern({
   ),
 })
 
-export default appRoutedPage((req, res) => {
-  return router(
+export default appRoutedPage((req, res) =>
+  router(
     {
       ...req,
-      // Somehow the wildcard gets into the basename on this route
-      basename: req.basename.replace('/[...params]', ''),
+      basename: '',
     },
     res,
-  )
-})
+  ),
+)

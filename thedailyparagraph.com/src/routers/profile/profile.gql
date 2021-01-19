@@ -1,0 +1,15 @@
+query ProfileByHandle($handle: String!, $limit: Int = 10) {
+  profiles(where: {handle: {_eq: $handle}}) {
+    id
+    display_name
+    avatar_url
+    handle
+  }
+  published_posts(limit: $limit, order_by: {published_at: desc}, where: {profile: {handle: {_eq: $handle}}}) {
+    id
+    content
+    published_at
+    slug
+    updated_at
+  }
+}

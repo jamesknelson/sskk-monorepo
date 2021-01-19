@@ -19,6 +19,7 @@ import {
 } from './graphql'
 import { hasHydratedSource } from './hydration'
 import { MemberProfile, getMemberProfileSource } from './memberProfile'
+import { encodeUUID } from './uuid'
 
 export interface AppUser extends Omit<AuthUser, 'id'> {
   memberId?: string
@@ -152,4 +153,20 @@ export function requireNoAuth(
     pending: pendingHandler,
     unauthenticated: unauthenticatedHandler,
   })
+}
+
+export function getStoryPath(options: {
+  profileId: string
+  profileHandle?: string | null
+  publishedAt?: Date
+  storyId?: string | null
+  storySlug?: string | null
+}) {
+  const slug =
+    options.publishedAt && options.publishedAt <= new Date()
+      ? options.storySlug
+      : null
+  return slug
+    ? `/@${options.profileHandle || encodeUUID(options.profileId)}/${slug}`
+    : `/story/${encodeUUID(options.storyId!)}`
 }
