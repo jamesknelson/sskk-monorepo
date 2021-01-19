@@ -5,7 +5,6 @@ import { css } from 'styled-components'
 
 import { LinkButton } from 'src/components/button'
 import { StoryCard } from 'src/components/story'
-import { renderJSONToReact } from 'src/prose/reactSerializer'
 import { schema } from 'src/prose/schema'
 import { DashboardPostListQuery } from 'src/generated/graphql'
 import { colors, dimensions } from 'src/theme'
