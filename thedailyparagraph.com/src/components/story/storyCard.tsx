@@ -74,7 +74,7 @@ export function StoryCard(props: StoryCardProps) {
     <Card as="article" {...rest}>
       <header
         css={css`
-          padding: 1.5rem 2rem 0;
+          padding: 1.5rem 2rem 0.5rem;
           ${media.phoneOnly`
             padding: 0;
           `}
@@ -90,10 +90,10 @@ export function StoryCard(props: StoryCardProps) {
             justify-content: space-between;
             align-items: flex-end;
             border-bottom: 1px solid ${colors.structure.border};
-            padding-bottom: 0.25rem;
+            padding-bottom: 0.5rem;
 
             ${media.phoneOnly`
-              padding: 0.75rem 1rem 0.5rem;
+              padding: 1.25rem 1rem 0.5rem;
             `}
           `}>
           <span
@@ -121,7 +121,7 @@ export function StoryCard(props: StoryCardProps) {
                 css={css`
                   font-weight: 700;
                   margin-right: 0.375rem;
-                  line-height: 1.25rem;
+                  line-height: 1rem;
                   display: block;
                 `}>
                 {profileDisplayName}
@@ -130,6 +130,7 @@ export function StoryCard(props: StoryCardProps) {
                 to={`/@${profileHandle}`}
                 css={css`
                   color: ${colors.text.tertiary};
+                  margin-left: -1px;
                 `}>
                 @{profileHandle}
               </Link>
