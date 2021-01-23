@@ -9,6 +9,10 @@ module.exports = {
     ignoreDevErrors: false,
   },
 
+  images: {
+    domains: ['www.gravatar.com'],
+  },
+
   webpack: (config, options) => {
     config.module.rules.push({
       loader: require.resolve('file-loader'),

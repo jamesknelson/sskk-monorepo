@@ -60,6 +60,7 @@ export function Page(props: Props) {
         <StoryCard
           disableTitlePath
           editorState={editorState}
+          profileAvatarURL={profile.avatar_url}
           profileDisplayName={profile.display_name}
           profileHandle={profile.handle!}
           profileId={profile.id}

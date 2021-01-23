@@ -72,7 +72,7 @@ export function appRoutedPage(pageRouter: AppRouterFunction) {
         client,
         createQuery,
         hasHydrated,
-        layoutOptions: defaultLayoutOptions,
+        layoutOptions: { ...defaultLayoutOptions },
         profile: undefined,
         user: undefined,
       }

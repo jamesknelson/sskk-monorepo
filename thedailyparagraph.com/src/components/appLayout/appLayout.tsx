@@ -14,7 +14,7 @@ export interface AppLayoutProps {
 
 export function AppLayout(props: AppLayoutProps) {
   const { children } = props
-  const { layoutOptions, profile } = useAppRequest()
+  const { layoutOptions = {}, profile } = useAppRequest()
   const { signOut } = useAuthController()
 
   const headerRef = useRef<HTMLDivElement>(null!)
@@ -86,6 +86,9 @@ export function AppLayout(props: AppLayoutProps) {
           flex-shrink: 0;
 
           padding: 0 1.5rem 0 2rem;
+          ${media.phoneOnly`
+          padding: 0 1rem 0 1.5rem;
+          `}
 
           transition: transform 150ms ${easings.easeInOut};
 

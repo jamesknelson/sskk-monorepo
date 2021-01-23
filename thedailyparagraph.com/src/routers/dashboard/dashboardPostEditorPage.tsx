@@ -269,6 +269,7 @@ export function Page({ query }: Props) {
         />
         <StoryCard
           disableEdit
+          profileAvatarURL={profile.avatarURL}
           profileDisplayName={profile.displayName}
           profileId={profile.id}
           profileHandle={profile.handle!}

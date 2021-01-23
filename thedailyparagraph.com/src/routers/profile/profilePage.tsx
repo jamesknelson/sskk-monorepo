@@ -57,6 +57,7 @@ export function Page(props: Props) {
             <StoryCard
               key={post.id!}
               editorState={createStateFromContentObject(post.content)}
+              profileAvatarURL={profile.avatar_url}
               profileDisplayName={profile.display_name}
               profileHandle={profile.handle!}
               profileId={profile.id}

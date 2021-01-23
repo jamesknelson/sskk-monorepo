@@ -11,7 +11,7 @@ const layoutOptions = {
 }
 
 export const router = routeAsync(async (req: AppRequest) => {
-  req.layoutOptions = layoutOptions
+  Object.assign(req.layoutOptions, layoutOptions)
 
   const pageModulePromise = import('./homePage')
   const query = req.createQuery(HomeDocument, {

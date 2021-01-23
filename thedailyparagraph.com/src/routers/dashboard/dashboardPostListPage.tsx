@@ -65,6 +65,7 @@ export function Page(props: Props) {
                   { schema },
                   version.editor_state,
                 )}
+                profileAvatarURL={post.profile.avatar_url}
                 profileDisplayName={post.profile.display_name}
                 profileHandle={post.profile.handle!}
                 profileId={post.profile.id}

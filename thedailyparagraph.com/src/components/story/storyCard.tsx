@@ -1,4 +1,5 @@
 import { format, formatISO } from 'date-fns'
+import Image from 'next/image'
 import { EditorState } from 'prosemirror-state'
 import React from 'react'
 import { Link } from 'retil-router'
@@ -18,6 +19,7 @@ export type StoryCardProps = React.ComponentProps<typeof Card> & {
   disableEdit?: boolean
   disableTitlePath?: boolean
   editorState?: EditorState<Schema>
+  profileAvatarURL?: string | null
   profileDisplayName: string
   profileHandle?: string
   profileId: string
@@ -35,6 +37,7 @@ export function StoryCard(props: StoryCardProps) {
     disableEdit,
     disableTitlePath,
     editorState,
+    profileAvatarURL,
     profileDisplayName,
     profileHandle,
     profileId,
@@ -90,31 +93,47 @@ export function StoryCard(props: StoryCardProps) {
             padding-bottom: 0.25rem;
 
             ${media.phoneOnly`
-              padding: 1rem 1.5rem 0.5rem;
+              padding: 0.75rem 1rem 0.5rem;
             `}
           `}>
           <span
             css={css`
-              margin-right: 0.375rem;
+              display: flex;
+              justify-content: flex-start;
+              align-items: flex-end;
             `}>
-            <span
-              css={css`
-                font-weight: 700;
-                margin-right: 0.375rem;
-                line-height: 1.25rem;
-                ${media.phoneOnly`
+            {profileAvatarURL && (
+              <div
+                css={css`
+                  border-radius: 9999px;
+                  overflow: hidden;
+                  height: 48px;
+                  width: 48px;
                   display: block;
-                `}
-              `}>
-              {profileDisplayName}
+                  margin-right: 0.5rem;
+                  margin-bottom: 4px;
+                `}>
+                <Image src={profileAvatarURL} width={48} height={48} />
+              </div>
+            )}
+            <span>
+              <span
+                css={css`
+                  font-weight: 700;
+                  margin-right: 0.375rem;
+                  line-height: 1.25rem;
+                  display: block;
+                `}>
+                {profileDisplayName}
+              </span>
+              <Link
+                to={`/@${profileHandle}`}
+                css={css`
+                  color: ${colors.text.tertiary};
+                `}>
+                @{profileHandle}
+              </Link>
             </span>
-            <Link
-              to={`/@${profileHandle}`}
-              css={css`
-                color: ${colors.text.tertiary};
-              `}>
-              @{profileHandle}
-            </Link>
           </span>
           <span
             css={css`
@@ -171,7 +190,7 @@ export function StoryCard(props: StoryCardProps) {
         css={css`
           padding: 0rem 2rem 1rem;
           ${media.phoneOnly`
-            padding: 0 1.5rem 1rem;
+            padding: 0 1rem 1rem;
           `}
         `}>
         {content}
