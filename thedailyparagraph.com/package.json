@@ -12,6 +12,8 @@
     "@apollo/client": "^3.3.6",
     "@popperjs/core": "^2.6.0",
     "@tippy.js/react": "^3.1.1",
+    "@types/basicscroll": "^3.0.0",
+    "basicscroll": "^3.0.4",
     "codemirror": "^5.59.1",
     "d64": "^1.0.0",
     "date-fns": "^2.16.1",

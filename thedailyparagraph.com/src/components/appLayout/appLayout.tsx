@@ -1,11 +1,12 @@
-import * as React from 'react'
+import { BasicScroll, create as createBasicScroll } from 'basicscroll'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'retil-router'
 import { css } from 'styled-components'
 
 import { Button, LinkButton } from 'src/components/button'
 import { useAuthController } from 'src/utils/auth'
 import { useAppRequest } from 'src/utils/routing'
-import { colors, dimensions, shadows } from 'src/theme'
+import { colors, dimensions, easings, media, shadows } from 'src/theme'
 
 export interface AppLayoutProps {
   children: React.ReactNode
@@ -13,8 +14,50 @@ export interface AppLayoutProps {
 
 export function AppLayout(props: AppLayoutProps) {
   const { children } = props
-  const { profile } = useAppRequest()
+  const { layoutOptions, profile } = useAppRequest()
   const { signOut } = useAuthController()
+
+  const headerRef = useRef<HTMLDivElement>(null!)
+
+  const scrollingHeader = layoutOptions.scrollingHeader
+
+  useEffect(() => {
+    let instance: BasicScroll
+
+    if (scrollingHeader) {
+      const instance = createBasicScroll({
+        elem: headerRef.current,
+        from: scrollingHeader.from,
+        to: scrollingHeader.to,
+        direct: headerRef.current,
+        props: {
+          '--header-background-opacity': {
+            from: 0,
+            to: 1,
+          },
+        },
+        outside: () => {
+          if (headerRef.current) {
+            headerRef.current.classList.add('visible')
+          }
+        },
+        inside: () => {
+          if (headerRef.current) {
+            headerRef.current.classList.remove('visible')
+          }
+        },
+      })
+
+      instance.update()
+      instance.start()
+    }
+
+    return () => {
+      if (instance) {
+        instance.destroy()
+      }
+    }
+  }, [scrollingHeader])
 
   return (
     <div
@@ -22,25 +65,44 @@ export function AppLayout(props: AppLayoutProps) {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        padding-top: ${dimensions.bar};
       `}>
       <header
+        ref={headerRef}
         css={css`
+          position: fixed;
+          top: 0;
+          width: 100%;
+          left: 0;
+          height: ${dimensions.bar};
+          z-index: 1;
+
           background-color: ${colors.structure.bg};
           border-bottom: 1px solid ${colors.structure.border};
           box-shadow: ${shadows.card()};
           display: flex;
           align-items: center;
           justify-content: space-between;
-          flex-basis: ${dimensions.bar};
           flex-shrink: 0;
-          padding: 0 2rem;
-          width: 100%;
+
+          padding: 0 1.5rem 0 2rem;
+
+          transition: transform 150ms ${easings.easeInOut};
+
+          ${!!scrollingHeader &&
+          media.tabletPlus`
+            transform: translateY(-110%);
+
+            &.visible {
+              transform: translateY(0);
+            }
+          `}
         `}>
         <Link
           to="/"
           css={css`
             color: ${colors.ink.black};
-            font-family: 'Arial';
+            font-family: 'chomskyregular', Arial, sans-serif;
             font-size: 1.5rem;
             text-decoration: none;
           `}>
@@ -81,7 +143,9 @@ export function AppLayout(props: AppLayoutProps) {
       </header>
       <main
         css={css`
+          position: relative;
           flex-grow: 1;
+          z-index: 0;
         `}>
         {children}
       </main>

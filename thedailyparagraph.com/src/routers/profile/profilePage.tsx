@@ -5,7 +5,7 @@ import { css } from 'styled-components'
 import { StoryCard } from 'src/components/story'
 import { createStateFromContentObject } from 'src/prose/contentObject'
 import { ProfileByHandleQuery } from 'src/generated/graphql'
-import { dimensions } from 'src/theme'
+import { dimensions, media } from 'src/theme'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
 
 export interface Props {
@@ -31,10 +31,16 @@ export function Page(props: Props) {
       <>
         <h1
           css={css`
-            font-size: 3.5rem;
-            line-height: 3.5rem;
+            font-size: 2.5rem;
+            line-height: 2.5rem;
             text-align: center;
-            margin: 5rem 1rem 3rem;
+            margin: 3.5rem 1rem 2.5rem;
+
+            ${media.phoneOnly`
+              font-size: 2rem;
+              line-height: 2rem;
+              margin: 3rem 1rem 2rem;
+            `}
           `}>
           {profile.display_name}
         </h1>

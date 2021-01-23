@@ -1,11 +1,17 @@
 todo
 
+- pagination
+
+- need some way of knowing if anybody is reading
+
 - hide the placeholder text when you start by adding a bullet point
 - mark unpublished changes on the story card
 - move date conversion for published_at into apollo
 - check how extra space at the end of a story is rendered
 - try to disable headings at the top of the document schema - only allow title or non-heading
 - allow viewing of unpublished urls when you have the link -- urls are unlisted by default (not private)
+
+- affix the editor toolbar to top
 
 - update the registration handler to create a profile w/ avatar url
   generated from email, and display name taken from part of email
@@ -52,6 +58,7 @@ todo
 - account settings (edit password, email)
 
 - rename "post" to "story" within db, etc.
+- rename "profile" to "persona" within db, etc.
 - figure out why React.HTMLAttributes can't be assigned to <div> props
 
 - get images working, with image upload, drag and drop

@@ -7,11 +7,12 @@ import { css } from 'styled-components'
 import { Card } from 'src/components/card'
 import { TextContent } from 'src/components/textContent'
 import { Schema } from 'src/prose/schema'
-import { colors } from 'src/theme'
+import { colors, media } from 'src/theme'
 import { getStoryPath, useAppRequest } from 'src/utils/routing'
 import { encodeUUID } from 'src/utils/uuid'
 
 import { StoryContent } from './storyContent'
+import { TabletPlus } from '../responsive'
 
 export type StoryCardProps = React.ComponentProps<typeof Card> & {
   disableEdit?: boolean
@@ -71,6 +72,9 @@ export function StoryCard(props: StoryCardProps) {
       <header
         css={css`
           padding: 1.5rem 2rem 0;
+          ${media.phoneOnly`
+            padding: 0;
+          `}
 
           a:hover {
             text-decoration: underline;
@@ -81,8 +85,13 @@ export function StoryCard(props: StoryCardProps) {
             font-size: 0.9rem;
             display: flex;
             justify-content: space-between;
+            align-items: flex-end;
             border-bottom: 1px solid ${colors.structure.border};
             padding-bottom: 0.25rem;
+
+            ${media.phoneOnly`
+              padding: 1rem 1.5rem 0.5rem;
+            `}
           `}>
           <span
             css={css`
@@ -91,6 +100,11 @@ export function StoryCard(props: StoryCardProps) {
             <span
               css={css`
                 font-weight: 700;
+                margin-right: 0.375rem;
+                line-height: 1.25rem;
+                ${media.phoneOnly`
+                  display: block;
+                `}
               `}>
               {profileDisplayName}
             </span>
@@ -98,7 +112,6 @@ export function StoryCard(props: StoryCardProps) {
               to={`/@${profileHandle}`}
               css={css`
                 color: ${colors.text.tertiary};
-                margin: 0 0.375rem;
               `}>
               @{profileHandle}
             </Link>
@@ -110,23 +123,25 @@ export function StoryCard(props: StoryCardProps) {
                 color: ${colors.text.tertiary};
               }
             `}>
-            {canEdit && (
-              <Link
-                css={css`
-                  text-decoration: underline;
-                `}
-                to={`/dashboard/story/${encodeUUID(storyId!)}`}>
-                edit
-              </Link>
-            )}
-            {canEdit && path && (
-              <span
-                css={css`
-                  padding: 0 0.5rem;
-                `}>
-                &middot;
-              </span>
-            )}
+            <TabletPlus as="span">
+              {canEdit && (
+                <Link
+                  css={css`
+                    text-decoration: underline;
+                  `}
+                  to={`/dashboard/story/${encodeUUID(storyId!)}`}>
+                  edit
+                </Link>
+              )}
+              {canEdit && path && (
+                <span
+                  css={css`
+                    padding: 0 0.5rem;
+                  `}>
+                  &middot;
+                </span>
+              )}
+            </TabletPlus>
             {path &&
               (publishedAt ? (
                 <>
@@ -155,6 +170,9 @@ export function StoryCard(props: StoryCardProps) {
       <TextContent
         css={css`
           padding: 0rem 2rem 1rem;
+          ${media.phoneOnly`
+            padding: 0 1.5rem 1rem;
+          `}
         `}>
         {content}
       </TextContent>

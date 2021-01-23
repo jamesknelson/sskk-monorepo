@@ -38,7 +38,10 @@ export type AppRequest = NextilRequest & {
   // This is a mutable object which can be modified by routes to configure
   // how the layout behaves.
   layoutOptions: {
-    disableSearch?: boolean
+    scrollingHeader?: {
+      from: string
+      to: string
+    }
   }
 }
 

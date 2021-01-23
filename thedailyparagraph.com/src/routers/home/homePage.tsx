@@ -5,7 +5,7 @@ import { css } from 'styled-components'
 import { StoryCard } from 'src/components/story'
 import { createStateFromContentObject } from 'src/prose/contentObject'
 import { HomeQuery } from 'src/generated/graphql'
-import { dimensions } from 'src/theme'
+import { dimensions, media } from 'src/theme'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/graphql'
 
 export interface Props {
@@ -30,11 +30,17 @@ export function Page(props: Props) {
       <>
         <h1
           css={css`
-            font-family: 'UnifrakturMaguntia', cursive;
+            font-family: 'chomskyregular', sans-serif;
             font-size: 3.5rem;
             line-height: 3.5rem;
             text-align: center;
-            margin: 5rem 1rem 3rem;
+            margin: 0rem 1rem 3rem;
+
+            ${media.phoneOnly`
+              font-size: 2rem;
+              line-height: 1.5rem;
+              margin: 3rem 1rem 1.5rem;
+            `}
           `}>
           The Daily Paragraph
         </h1>

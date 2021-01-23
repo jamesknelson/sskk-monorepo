@@ -5,6 +5,14 @@ import { colors, dimensions } from 'src/theme'
 // import emojiMartCSS from '!raw-loader!emoji-mart/css/emoji-mart.css'
 
 export const GlobalStyles = createGlobalStyle`
+  @font-face {
+    font-family: 'chomskyregular';
+    src: url('/fonts/chomsky-webfont.woff2') format('woff2'),
+         url('/fonts/chomsky-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   * {
     appearance: none;
     border: 0;
