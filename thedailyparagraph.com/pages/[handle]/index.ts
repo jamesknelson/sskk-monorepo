@@ -13,6 +13,9 @@ const router = routeByPattern({
   '/login': routeLazy(() =>
     import('src/routers/login').then(({ router }) => ({ default: router })),
   ),
+  '/logout': routeLazy(() =>
+    import('src/routers/logout').then(({ router }) => ({ default: router })),
+  ),
   '/recover': routeLazy(() =>
     import('src/routers/recoverAccount').then(({ router }) => ({
       default: router,

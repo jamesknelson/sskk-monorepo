@@ -39,7 +39,7 @@ export function Page(props: Props) {
             ${media.phoneOnly`
               font-size: 2rem;
               line-height: 1.5rem;
-              margin: 3rem 1rem 1.5rem;
+              margin: 2.5rem 1rem 2.5rem;
             `}
           `}>
           The Daily Paragraph

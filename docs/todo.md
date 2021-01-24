@@ -1,36 +1,35 @@
 todo
 
-- pagination
+- add a user dropdown with logout button, and use a button-styled link for "login"
+- your profile photo/caret should always be visible, even before the app menu
+  drops down on the home page
 
-- need some way of knowing if anybody is reading
+- why does clicking a link scroll to top of page?
+  * need to disable Next's automatic scroll handling by passing { scroll: false }
+    in nextil router's history
+  * need to then add my own scroll handling
 
 - hide the placeholder text when you start by adding a bullet point
 - mark unpublished changes on the story card
 - move date conversion for published_at into apollo
 - check how extra space at the end of a story is rendered
 - try to disable headings at the top of the document schema - only allow title or non-heading
+- add a switch to set post to private/unlisted/listed (i.e. on member page)/discoverable (i.e. on front page),
+  by default is private, and publishing sets to discoverable
 - allow viewing of unpublished urls when you have the link -- urls are unlisted by default (not private)
+- add minimum character count: you need at least 140 characters to publish
+  (but not to save draft)
 
-- affix the editor toolbar to top
+- "read more" button
+- sticky the editor toolbar to top
 
 - update the registration handler to create a profile w/ avatar url
   generated from email, and display name taken from part of email
   before the "@" sign
-- add gravatar to existing accounts
-- show photo on cards
-- improve profile page layout
 
+- profile page redesign
 - GitHub-style graph of when you've posted
 
-- add a user dropdown with logout button, and use a button-styled link for "login"
-- make a prettier masthead for the home page, and hide the app bar
-  on the front page when the masthead is visible. make sure it all
-  looks okay on mobile
-- figure out how to make the front page + profile pages look decent on mobile
-
-- why does clicking a link scroll to top of page?
-
-- add minimum character count: you need at least 140 characters
 - attempting to close while there are unsaved changes should show a warning
 - when there are changes, should automatically save a draft after x seconds of
   no typing, or after x seconds -- whichever comes first

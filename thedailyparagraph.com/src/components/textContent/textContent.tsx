@@ -16,13 +16,6 @@ export const TextContent = styled.div`
     width: 33% !important;
   }
 
-  h1,
-  h1 a,
-  h2,
-  h2 a {
-    color: ${colors.ink.black};
-  }
-
   strong {
     font-weight: bold;
   }
@@ -61,13 +54,20 @@ export const TextContent = styled.div`
     margin: 1rem 0;
   }
 
+  h1,
+  h1 a,
+  h2,
+  h2 a {
+    color: ${colors.ink.black};
+  }
+
   h1 {
     font-size: 1.5rem;
     line-height: 2.5rem;
     font-weight: 600;
   }
   h2 {
-    line-height: 2.5rem;
+    line-height: 2rem;
     font-weight: 600;
     font-size: 1.5rem;
   }

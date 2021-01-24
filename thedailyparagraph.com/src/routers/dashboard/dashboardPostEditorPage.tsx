@@ -281,7 +281,7 @@ export function Page({ query }: Props) {
 
             .ProseMirror-menubar {
               position: absolute;
-              margin-top: -93px;
+              margin-top: -122px;
               border-bottom: none;
               padding: 0 1.75rem;
             }

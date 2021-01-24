@@ -74,14 +74,10 @@ export function StoryCard(props: StoryCardProps) {
     <Card as="article" {...rest}>
       <header
         css={css`
-          padding: 1.5rem 2rem 0.5rem;
+          padding: 1rem 2rem 0.5rem;
           ${media.phoneOnly`
             padding: 0;
           `}
-
-          a:hover {
-            text-decoration: underline;
-          }
         `}>
         <div
           css={css`
@@ -90,35 +86,38 @@ export function StoryCard(props: StoryCardProps) {
             justify-content: space-between;
             align-items: flex-end;
             border-bottom: 1px solid ${colors.structure.border};
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.75rem;
 
             ${media.phoneOnly`
-              padding: 1.25rem 1rem 0.5rem;
+              padding: 1rem 1rem 0.75rem;
             `}
           `}>
-          <span
+          <Link
+            to={`/@${profileHandle}`}
             css={css`
               display: flex;
               justify-content: flex-start;
               align-items: flex-end;
+              text-decoration: none;
             `}>
             {profileAvatarURL && (
-              <div
+              <span
                 css={css`
                   border-radius: 9999px;
                   overflow: hidden;
-                  height: 48px;
-                  width: 48px;
+                  height: 40px;
+                  width: 40px;
                   display: block;
                   margin-right: 0.5rem;
                   margin-bottom: 4px;
                 `}>
-                <Image src={profileAvatarURL} width={48} height={48} />
-              </div>
+                <Image src={profileAvatarURL} width={40} height={40} />
+              </span>
             )}
             <span>
               <span
                 css={css`
+                  color: ${colors.ink.black};
                   font-weight: 700;
                   margin-right: 0.375rem;
                   line-height: 1rem;
@@ -126,24 +125,30 @@ export function StoryCard(props: StoryCardProps) {
                 `}>
                 {profileDisplayName}
               </span>
-              <Link
-                to={`/@${profileHandle}`}
+              <span
                 css={css`
                   color: ${colors.text.tertiary};
                   margin-left: -1px;
                 `}>
                 @{profileHandle}
-              </Link>
+              </span>
             </span>
-          </span>
+          </Link>
           <span
             css={css`
+              ${media.phoneOnly`
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                justify-content: flex-end;
+              `}
+
               &,
               a {
                 color: ${colors.text.tertiary};
               }
             `}>
-            <TabletPlus as="span">
+            <span>
               {canEdit && (
                 <Link
                   css={css`
@@ -154,14 +159,15 @@ export function StoryCard(props: StoryCardProps) {
                 </Link>
               )}
               {canEdit && path && (
-                <span
+                <TabletPlus
+                  inline
                   css={css`
                     padding: 0 0.5rem;
                   `}>
                   &middot;
-                </span>
+                </TabletPlus>
               )}
-            </TabletPlus>
+            </span>
             {path &&
               (publishedAt ? (
                 <>

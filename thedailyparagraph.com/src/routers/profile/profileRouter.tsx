@@ -7,7 +7,7 @@ export const router = routeAsync(async (req: AppRequest, res) => {
   const pageModulePromise = import('./profilePage')
   const query = req.createQuery(ProfileByHandleDocument, {
     handle: req.params.handle as string,
-    limit: 10,
+    limit: 31,
   })
 
   await query.precache()

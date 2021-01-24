@@ -1,9 +1,11 @@
 import { EditorState } from 'prosemirror-state'
+import styled from 'styled-components'
 import React from 'react'
 import { Link } from 'retil-router'
 
 import { renderJSONToReact } from 'src/prose/reactSerializer'
 import { Schema } from 'src/prose/schema'
+import { media } from 'src/theme'
 
 export interface StoryContentProps {
   editorState: EditorState<Schema>
@@ -12,19 +14,26 @@ export interface StoryContentProps {
 }
 
 export function StoryContent(props: StoryContentProps) {
-  const { editorState, path, titleAs: TitleAs = 'h2' } = props
+  const { editorState, path, titleAs = 'h2' } = props
 
   return (
     <>
       {renderJSONToReact(editorState, {
         nodes: {
           title: () => (children: React.ReactNode) => (
-            <TitleAs style={{ marginTop: '1.5rem' }}>
+            <StyledTitle as={titleAs}>
               {path ? <Link to={path}>{children}</Link> : children}
-            </TitleAs>
+            </StyledTitle>
           ),
         },
       })}
     </>
   )
 }
+
+const StyledTitle = styled.h1`
+  margin-top: 1.25rem !important;
+  ${media.phoneOnly`
+    margin-top: 2rem !important;
+  `}
+`
