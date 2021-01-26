@@ -1,8 +1,9 @@
 todo
 
-- figure out how to style the user menu on mobile
 - your profile photo/caret should always be visible, even before the app menu
-  drops down on the home page
+  drops down on the home page. to make this work, keep the header stuff
+  always visible, and have the home page render a border at the same
+  height that the header would usually appear at (but without the logo button)
 
 - figure out what's causing the flash of "loading" now. may need to open the
   page on an incognito tab to find it

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Placement } from '@popperjs/core'
+import { Placement } from 'popper.js'
 import Tippy, { TippyProps } from '@tippy.js/react'
 
 import { mediaQueries } from 'src/theme'

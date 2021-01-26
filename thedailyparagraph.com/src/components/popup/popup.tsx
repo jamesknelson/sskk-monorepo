@@ -58,7 +58,7 @@ function InnerPopperTrigger({ children, popperRef }: any) {
   return children(ref)
 }
 
-interface UnstyledPopupProps extends Omit<PopperProps<any>, 'children'> {
+interface UnstyledPopupProps extends Omit<PopperProps, 'children'> {
   children: (props: PopperChildrenProps) => React.ReactNode
 }
 
