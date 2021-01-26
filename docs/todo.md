@@ -1,8 +1,11 @@
 todo
 
-- add a user dropdown with logout button, and use a button-styled link for "login"
+- figure out how to style the user menu on mobile
 - your profile photo/caret should always be visible, even before the app menu
   drops down on the home page
+
+- figure out what's causing the flash of "loading" now. may need to open the
+  page on an incognito tab to find it
 
 - why does clicking a link scroll to top of page?
   * need to disable Next's automatic scroll handling by passing { scroll: false }

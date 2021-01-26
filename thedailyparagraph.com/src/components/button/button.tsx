@@ -1,6 +1,11 @@
 import { rgba } from 'polished'
 import React, { forwardRef } from 'react'
-import { animated, useSpring, useTransition } from 'react-spring'
+import {
+  animated,
+  useSpring,
+  useTransition,
+  to as interpolate,
+} from 'react-spring'
 import styled, { css } from 'styled-components'
 
 import { Icon } from 'src/components/icon'
@@ -8,14 +13,18 @@ import { LoadingSpinner } from 'src/components/loading'
 import { Tooltip, TooltipPlacement } from 'src/components/tooltip'
 import { colors, easings, focusRing, media } from 'src/theme'
 
-export const StyledAnimatedButtonGlyph = styled(animated.div)`
+const StyledButtonGlyph = styled.div`
   position: absolute;
   left: 0rem;
 `
 
-export const StyledAnimatedButtonLabel = styled(animated.span)`
+const AnimatedStyledButtonGlyph = animated(StyledButtonGlyph)
+
+const StyledButtonLabel = styled.span`
   flex-grow: 1;
 `
+
+const AnimatedStyledButtonLabel = animated(StyledButtonLabel)
 
 export interface StyledButtonBaseProps {
   inline?: boolean
@@ -254,7 +263,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       glyph = 'busy'
     }
 
-    let glyphTransitions = useTransition<any, any>(glyph, null, {
+    let glyphTransitions = useTransition(glyph, {
       config: {
         friction: 5,
         mass: 0.1,
@@ -281,13 +290,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         ref={ref}
         {...(props as any)}>
-        {glyphTransitions.map(
-          ({ item, props: { t }, key }) =>
+        {glyphTransitions(
+          ({ t }, item, { key }) =>
             item && (
-              <StyledAnimatedButtonGlyph
+              <AnimatedStyledButtonGlyph
                 key={key}
                 style={{
-                  transform: t.interpolate(
+                  transform: interpolate(
+                    [t],
                     (t: number) =>
                       `translateX(${props.size === 'small' ? 0.5 * t : t}rem)`,
                   ),
@@ -308,12 +318,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                     glyph={item}
                   />
                 )}
-              </StyledAnimatedButtonGlyph>
+              </AnimatedStyledButtonGlyph>
             ),
         )}
-        <StyledAnimatedButtonLabel style={labelStyleSpring}>
+        <AnimatedStyledButtonLabel style={labelStyleSpring}>
           {children}
-        </StyledAnimatedButtonLabel>
+        </AnimatedStyledButtonLabel>
       </StyledButton>
     )
   },

@@ -39,21 +39,12 @@ export function Page(props: Props) {
             font-size: 2rem;
             line-height: 2rem;
             text-align: center;
-            margin: 4rem 1rem 0;
+            margin: 3rem 1rem 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid ${colors.structure.border};
             width: 100%;
           `}>
           Your Stories
         </h1>
-        <LinkButton
-          css={css`
-            margin: 2rem 0;
-          `}
-          outline
-          to="./new">
-          Start a story
-        </LinkButton>
         {posts
           .filter((post) => !post.deleted_at)
           .map((post) => {
