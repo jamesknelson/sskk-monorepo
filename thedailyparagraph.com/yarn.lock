@@ -8249,10 +8249,10 @@ retil-operation@^0.17.1:
     retil-support "^0.17.1"
     tslib "2.0.1"
 
-retil-popup-trigger@^0.17.6:
-  version "0.17.6"
-  resolved "https://registry.yarnpkg.com/retil-popup-trigger/-/retil-popup-trigger-0.17.6.tgz#c1bc48ccc6b3f560c5fef7ab50db4f78cb7dec0c"
-  integrity sha512-fPONUYrAawlqIan10Uv34znTmeP6uXhVgSSmwtmbuboJEV3Vc1hrh8i6Kadw52ZEfhtjISxQG/O119qLjLWNLA==
+retil-popup-trigger@^0.17.7:
+  version "0.17.7"
+  resolved "https://registry.yarnpkg.com/retil-popup-trigger/-/retil-popup-trigger-0.17.7.tgz#d1b57a8298ed16f6e2627adf7d1e37c9fbc599f2"
+  integrity sha512-zrzSijiVA613ngXNLeF3KEYyY1FPcfu6bjvW7jB/50UwYuVDNlPxPV62gne9uv/ap445jX8JKl7DSTteb8c/YQ==
   dependencies:
     tslib "2.0.1"
 

@@ -35,7 +35,7 @@
     "react-spring": "^9.0.0-rc.3",
     "retil-issues": "^0.17.2",
     "retil-operation": "^0.17.1",
-    "retil-popup-trigger": "^0.17.6",
+    "retil-popup-trigger": "^0.17.7",
     "retil-router": "^0.17.4",
     "retil-source": "^0.17.2",
     "retil-support": "^0.17.1",
