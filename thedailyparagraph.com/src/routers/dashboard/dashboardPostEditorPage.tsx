@@ -14,6 +14,7 @@ import { StoryCard } from 'src/components/story'
 import { Edit, Message, Trash, X } from 'src/constants/glyphs'
 import {
   Editor,
+  createEditorState,
   getTitle,
   serializeToContentObject,
   useEditorState,
@@ -74,9 +75,15 @@ export function Page({ query }: Props) {
   }
   const version = post.versions[0]
 
-  const [editorState, applyEditorTransaction] = useEditorState(
-    version?.editor_state,
-  )
+  const [
+    editorState,
+    setEditorState,
+    applyEditorTransaction,
+  ] = useEditorState(() => createEditorState(version?.editor_state))
+
+  useEffect(() => {
+    setEditorState(createEditorState(version?.editor_state))
+  }, [post.id])
 
   const [lastSavedDoc, setLastSavedDoc] = useState(editorState.doc)
 

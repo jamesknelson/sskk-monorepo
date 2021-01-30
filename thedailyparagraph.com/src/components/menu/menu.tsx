@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { RouterAction, useLink } from 'retil-router'
 import styled from 'styled-components'
 
@@ -82,49 +82,63 @@ export interface MenuItemProps extends React.ComponentProps<'div'> {
 
 export const MenuItem = React.forwardRef<HTMLDivElement, MenuItemProps>(
   ({ disabled, onDidSelect, onClick, ...rest }, ref) => {
-    let context = useContext(MenuContext)
+    const context = useContext(MenuContext)
 
     if (!onDidSelect) {
       onDidSelect = context.onDidSelect
     }
 
-    return (
-      <StyledMenuItem
-        {...rest}
-        ref={ref}
-        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          if (disabled) {
-            event.preventDefault()
-            return
-          }
-          if (onClick) {
-            onClick(event)
-          }
-          if (!event.defaultPrevented && onDidSelect) {
-            onDidSelect()
-          }
-        }}
-      />
+    const handleClick = useCallback(
+      (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        if (disabled) {
+          event.preventDefault()
+          return
+        }
+        if (onClick) {
+          onClick(event)
+        }
+        if (!event.defaultPrevented && onDidSelect) {
+          onDidSelect()
+        }
+      },
+      [onClick, onDidSelect],
     )
+
+    return <StyledMenuItem {...rest} ref={ref} onClick={handleClick} />
   },
 )
 
 export interface MenuLinkItemProps
-  extends Omit<React.ComponentProps<'a'>, 'hrfe'> {
+  extends Omit<React.ComponentProps<'a'>, 'href'> {
   disabled?: boolean
   to: RouterAction
 }
 
-export const MenuLinkItem = ({
-  to,
-  onClick,
-  onMouseEnter,
-  ...rest
-}: MenuLinkItemProps) => {
+export const MenuLinkItem = React.forwardRef<
+  HTMLAnchorElement,
+  MenuLinkItemProps
+>(({ disabled, to, onClick, onMouseEnter, ...rest }, ref) => {
+  const { onDidSelect } = useContext(MenuContext)
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      if (disabled) {
+        event.preventDefault()
+        return
+      }
+      if (onClick) {
+        onClick(event)
+      }
+      if (!event.defaultPrevented && onDidSelect) {
+        onDidSelect()
+      }
+    },
+    [onClick, onDidSelect],
+  )
+
   const linkProps = useLink(to, {
-    onClick,
+    onClick: handleClick,
     onMouseEnter,
   })
-  //@ts-ignore
-  return <MenuItem {...rest} {...linkProps} />
-}
+
+  return <StyledMenuItem as="a" {...rest} {...linkProps} ref={ref} />
+})

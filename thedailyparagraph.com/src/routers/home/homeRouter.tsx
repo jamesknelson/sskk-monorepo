@@ -1,18 +1,9 @@
 import { routeAsync } from 'retil-router'
 
 import { HomeDocument } from 'src/generated/graphql'
-import { AppRequest } from 'src/utils/routing'
+import { AppRequest, routeWithLayoutOptions } from 'src/utils/routing'
 
-const layoutOptions = {
-  scrollingHeader: {
-    from: '0px',
-    to: '64px',
-  },
-}
-
-export const router = routeAsync(async (req: AppRequest) => {
-  Object.assign(req.layoutOptions, layoutOptions)
-
+const asyncRouter = routeAsync(async (req: AppRequest) => {
   const pageModulePromise = import('./homePage')
   const query = req.createQuery(HomeDocument, {
     limit: 10,
@@ -23,4 +14,11 @@ export const router = routeAsync(async (req: AppRequest) => {
   const { Page } = await pageModulePromise
 
   return <Page query={query} />
+})
+
+export const router = routeWithLayoutOptions(asyncRouter, {
+  scrollingHeader: {
+    from: '0px',
+    to: '64px',
+  },
 })

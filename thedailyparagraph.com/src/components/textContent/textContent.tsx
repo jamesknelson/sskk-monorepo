@@ -14,6 +14,8 @@ export const TextContent = styled.div`
     margin: 6rem auto;
     position: relative;
     width: 33% !important;
+    height: 1px;
+    background-color: ${colors.structure.divider};
   }
 
   strong {

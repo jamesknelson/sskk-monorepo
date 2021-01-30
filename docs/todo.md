@@ -1,12 +1,18 @@
 todo
 
+o figure out what's causing the flash of "loading" now. may need to open the
+  page on an incognito tab to find it
+o clicking "start a story" when you're on a story already should work
+o clicking a link in the popup menu should close the menu
+o render horizontal rules
+
 - your profile photo/caret should always be visible, even before the app menu
   drops down on the home page. to make this work, keep the header stuff
   always visible, and have the home page render a border at the same
   height that the header would usually appear at (but without the logo button)
 
-- figure out what's causing the flash of "loading" now. may need to open the
-  page on an incognito tab to find it
+- allow language selection in editor
+- don't allow code as last block in document
 
 - why does clicking a link scroll to top of page?
   * need to disable Next's automatic scroll handling by passing { scroll: false }
@@ -18,13 +24,15 @@ todo
 - move date conversion for published_at into apollo
 - check how extra space at the end of a story is rendered
 - try to disable headings at the top of the document schema - only allow title or non-heading
-- add a switch to set post to private/unlisted/listed (i.e. on member page)/discoverable (i.e. on front page),
+- add a drop-down switch to set post to private/unlisted/listed (i.e. on member page)/discoverable (i.e. on front page),
   by default is private, and publishing sets to discoverable
-- allow viewing of unpublished urls when you have the link -- urls are unlisted by default (not private)
+- allow viewing of unlisted urls when you have the link -- urls are unlisted by default (not private)
+- don't add links to private urls
 - add minimum character count: you need at least 140 characters to publish
   (but not to save draft)
 
-- "read more" button
+- "read more" pagination button
+
 - sticky the editor toolbar to top
 
 - update the registration handler to create a profile w/ avatar url

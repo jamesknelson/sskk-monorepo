@@ -1,7 +1,7 @@
 import { keymap } from 'prosemirror-keymap'
 import { history } from 'prosemirror-history'
 import { baseKeymap } from 'prosemirror-commands'
-import { Plugin } from 'prosemirror-state'
+import { EditorState, Plugin } from 'prosemirror-state'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { menuBar } from 'prosemirror-menu'
@@ -35,3 +35,8 @@ export const config = {
     arrowHandlers,
   ],
 }
+
+export const createEditorState = (initialStateJSON?: any) =>
+  initialStateJSON
+    ? EditorState.fromJSON(config, initialStateJSON)
+    : EditorState.create(config)

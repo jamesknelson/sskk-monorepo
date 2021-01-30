@@ -25,6 +25,15 @@ export interface AppUser extends Omit<AuthUser, 'id'> {
   memberId?: string
 }
 
+// This is a mutable object which can be modified by routes to configure
+// how the layout behaves.
+export interface AppLayoutOptions {
+  scrollingHeader?: {
+    from: string
+    to: string
+  }
+}
+
 export type AppRequest = NextilRequest & {
   cache?: InMemoryCache
   client: Client
@@ -35,14 +44,7 @@ export type AppRequest = NextilRequest & {
   doNotTrack?: boolean
   hasHydrated: boolean
 
-  // This is a mutable object which can be modified by routes to configure
-  // how the layout behaves.
-  layoutOptions: {
-    scrollingHeader?: {
-      from: string
-      to: string
-    }
-  }
+  layoutOptions: AppLayoutOptions
 }
 
 export type AppRouterFunction = RouterFunction<AppRequest, NextilResponse>
@@ -56,12 +58,10 @@ export function appRoutedPage(pageRouter: AppRouterFunction) {
       const hasHydrated = use(hasHydratedSource)
       const [authSource, authController] = getAuthService()
 
-      // We only want to provide a default "undefined" value during the
-      // hydration phase, which needs to happen immediately to prevent React
-      // from showing Suspense placeholders. Once hydrated, we want to wait
-      // until our auth and profile are available before publishing another
-      // request to the routers.
-      const auth = use(authSource, ...(hasHydrated ? [] : [undefined]))
+      // We don't want to use the auth source until hydration is complete,
+      // as we don't want it to trigger any renders and cause the initial
+      // content to be nuked.
+      const auth = hasHydrated ? use(authSource) : undefined
 
       const { client, cache, createQuery } = getGraphQLClientState(
         authController,
@@ -172,4 +172,14 @@ export function getStoryPath(options: {
   return slug
     ? `/@${options.profileHandle || encodeUUID(options.profileId)}/${slug}`
     : `/story/${encodeUUID(options.storyId!)}`
+}
+
+export function routeWithLayoutOptions(
+  router: AppRouterFunction,
+  layoutOptions: AppLayoutOptions,
+) {
+  return (req: AppRequest, res: NextilResponse) => {
+    Object.assign(req.layoutOptions, layoutOptions)
+    return router(req, res)
+  }
 }

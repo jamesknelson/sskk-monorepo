@@ -11,7 +11,6 @@ import React, {
 import { css } from 'styled-components'
 
 import { CodeBlockView } from './codeBlockView'
-import { config } from './config'
 import { Schema } from './schema'
 
 export interface EditorHandle {
@@ -140,13 +139,18 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
   )
 })
 
-export function useEditorState(initialStateJSON?: any) {
-  const [editorState, setEditorState] = useState(() =>
-    initialStateJSON
-      ? EditorState.fromJSON(config, initialStateJSON)
-      : EditorState.create(config),
-  )
+export function useEditorState(getInitialEditorState: () => EditorState) {
+  const [editorState, setEditorState] = useState(getInitialEditorState)
 
+  // This function acts a little like a combination between a reducer and a
+  // `dispatch` function. It receives a state and an action ("transaction"),
+  // computes the new state, and then both calls `setEditorState` to store the
+  // state in the React component, *and* returns the new state to be
+  // synchronously set on ProseMirror's internal state store.
+  //
+  // It's important that the state also be returned to be synchronously set on
+  // ProseMirror's internal state store, as React's slight delay in updating
+  // state can cause bugs with ProseMirror.
   const applyTransaction = useCallback(
     (state: EditorState, transaction: Transaction) => {
       const newState = state.apply(transaction)
@@ -156,5 +160,5 @@ export function useEditorState(initialStateJSON?: any) {
     [],
   )
 
-  return [editorState, applyTransaction] as const
+  return [editorState, setEditorState, applyTransaction] as const
 }

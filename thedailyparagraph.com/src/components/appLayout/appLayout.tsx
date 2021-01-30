@@ -33,10 +33,8 @@ const Caret = styled.div`
   margin-top: 3px;
 `
 
-export function AppLayout(props: AppLayoutProps) {
-  const { children } = props
+export function AppLayout({ children }: AppLayoutProps) {
   const { layoutOptions = {}, profile } = useAppRequest()
-
   const headerRef = useRef<HTMLDivElement>(null!)
 
   const scrollingHeader = layoutOptions.scrollingHeader
@@ -207,7 +205,7 @@ function UserMenu(props: UserMenuProps) {
                     cursor: pointer;
                     flex: 1;
                     padding-right: 15px;
-                    padding-left: 3px;
+                    padding-left: 5px;
                     margin-left: 0.5rem;
                     height: 2rem;
                     font-size: 0.9rem;
@@ -244,8 +242,8 @@ function UserMenu(props: UserMenuProps) {
                         /* background-color: #f6f8fa; */
                         background-color: white;
                         border-radius: 99px;
-                        height: 26px;
-                        width: 26px;
+                        height: 24px;
+                        width: 24px;
                         overflow: hidden;
                       `}>
                       {<Image src={profile.avatarURL} width={30} height={30} />}
