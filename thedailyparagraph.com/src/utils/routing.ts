@@ -169,9 +169,9 @@ export function getStoryPath(options: {
     options.publishedAt && options.publishedAt <= new Date()
       ? options.storySlug
       : null
-  return slug
-    ? `/@${options.profileHandle || encodeUUID(options.profileId)}/${slug}`
-    : `/story/${encodeUUID(options.storyId!)}`
+  return `/@${options.profileHandle || encodeUUID(options.profileId)}/${
+    slug ? slug : '~' + encodeUUID(options.storyId!)
+  }`
 }
 
 export function routeWithLayoutOptions(

@@ -54,6 +54,7 @@ export function StoryCard(props: StoryCardProps) {
 
   const path =
     storyId &&
+    publishedAt &&
     getStoryPath({
       profileId,
       profileHandle,
@@ -150,58 +151,55 @@ export function StoryCard(props: StoryCardProps) {
             `}>
             <span>
               {canEdit && (
-                <Link
-                  css={css`
-                    text-decoration: underline;
-                  `}
-                  to={`/dashboard/story/${encodeUUID(storyId!)}`}>
-                  edit
-                </Link>
-              )}
-              {canEdit && path && (
-                <TabletPlus
-                  inline
-                  css={css`
-                    padding: 0 0.5rem;
-                  `}>
-                  &middot;
-                </TabletPlus>
+                <>
+                  <Link
+                    css={css`
+                      text-decoration: underline;
+                    `}
+                    to={`/dashboard/story/${encodeUUID(storyId!)}`}>
+                    edit
+                  </Link>
+                  <TabletPlus
+                    inline
+                    css={css`
+                      padding: 0 0.5rem;
+                    `}>
+                    &middot;
+                  </TabletPlus>
+                </>
               )}
             </span>
-            {path &&
-              (publishedAt ? (
-                <>
-                  {canCancel && (
-                    <span
-                      css={css`
-                        font-style: italic;
-                      `}>
-                      Publishing at{' '}
-                    </span>
-                  )}
-                  {publishedAt && (
-                    <Link to={path}>
-                      <time dateTime={formatISO(publishedAt)}>
-                        {format(publishedAt, 'PPP')}
-                      </time>
-                    </Link>
-                  )}
-                </>
-              ) : (
-                <Link to={path}>draft</Link>
-              ))}
+            {path && publishedAt ? (
+              <>
+                {canCancel && (
+                  <span
+                    css={css`
+                      font-style: italic;
+                      line-height: 1rem;
+                    `}>
+                    Publishing at{' '}
+                  </span>
+                )}
+                {publishedAt && (
+                  <Link to={path}>
+                    <time dateTime={formatISO(publishedAt)}>
+                      {format(publishedAt, 'PPP')}
+                    </time>
+                  </Link>
+                )}
+              </>
+            ) : (
+              <span>draft</span>
+            )}
           </span>
         </div>
       </header>
-      <TextContent
+      <TextContent>{content}</TextContent>
+      <div
         css={css`
-          padding: 0rem 2rem 1rem;
-          ${media.phoneOnly`
-            padding: 0 1rem 1rem;
-          `}
-        `}>
-        {content}
-      </TextContent>
+          height: 1rem;
+        `}
+      />
     </Card>
   )
 }

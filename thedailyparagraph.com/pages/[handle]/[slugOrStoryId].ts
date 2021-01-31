@@ -4,6 +4,7 @@ import { router as storyRouter } from 'src/routers/story'
 import { appRoutedPage } from 'src/utils/routing'
 
 const router = routeByPattern({
+  '/@:handle/~:storyId': storyRouter,
   '/@:handle/:slug': storyRouter,
 })
 

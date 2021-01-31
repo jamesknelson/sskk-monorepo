@@ -1,43 +1,52 @@
 todo
 
-o figure out what's causing the flash of "loading" now. may need to open the
-  page on an incognito tab to find it
-o clicking "start a story" when you're on a story already should work
-o clicking a link in the popup menu should close the menu
-o render horizontal rules
+- mark unpublished changes on the story card header, and the editor footer
+- add minimum character counter: you need at least 140 characters to publish
+  (but not to save draft)
 
-- your profile photo/caret should always be visible, even before the app menu
-  drops down on the home page. to make this work, keep the header stuff
-  always visible, and have the home page render a border at the same
-  height that the header would usually appear at (but without the logo button)
+- add a drop-down switch to set post to private/unlisted/listed (i.e. on member page)/discoverable (i.e. on front page),
+  by default is private, and publishing sets to discoverable
+- allow viewing of unlisted urls when you have the link -- urls are unlisted by default (not private)
+- don't add links to private urls
 
-- allow language selection in editor
-- don't allow code as last block in document
+- create links for front page to different days
+
+- move date conversion for published_at into apollo
 
 - why does clicking a link scroll to top of page?
   * need to disable Next's automatic scroll handling by passing { scroll: false }
     in nextil router's history
   * need to then add my own scroll handling
 
-- hide the placeholder text when you start by adding a bullet point
-- mark unpublished changes on the story card
-- move date conversion for published_at into apollo
-- check how extra space at the end of a story is rendered
+- allow language selection in editor
+- use word wrap by default in the editor
+- don't allow code as last block in document
 - try to disable headings at the top of the document schema - only allow title or non-heading
-- add a drop-down switch to set post to private/unlisted/listed (i.e. on member page)/discoverable (i.e. on front page),
-  by default is private, and publishing sets to discoverable
-- allow viewing of unlisted urls when you have the link -- urls are unlisted by default (not private)
-- don't add links to private urls
-- add minimum character count: you need at least 140 characters to publish
-  (but not to save draft)
+- fix copy/paste from notes into the editor
+  * paragraph break get broken up
+  * turn ``` ``` blocks into markdown
+  * turn `-` or `--` or etc. paragraphs into horizontal rules
 
-- "read more" pagination button
-
-- sticky the editor toolbar to top
+- change password
+- set display name
+- set profile photo
+- recover account
+- join page
 
 - update the registration handler to create a profile w/ avatar url
   generated from email, and display name taken from part of email
   before the "@" sign
+
+- "writing prompts" area, where you can quickly just add a title or idea
+
+- figure out messaging
+- figure out quote tweeting
+
+- refactor "profile" name to "persona"
+
+- "read more" pagination button
+
+- sticky the editor toolbar to top
 
 - profile page redesign
 - GitHub-style graph of when you've posted

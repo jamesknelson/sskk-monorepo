@@ -84,6 +84,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         flex-direction: column;
         flex-grow: 1;
         padding-top: ${dimensions.bar};
+        max-width: 100%;
       `}>
       <header
         ref={headerRef}
@@ -105,7 +106,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
           padding: 0 1.5rem 0 2rem;
           ${media.phoneOnly`
-          padding: 0 1rem 0 1.5rem;
+            padding: 0 1rem 0 1.5rem;
           `}
 
           transition: transform 150ms ${easings.easeInOut};
@@ -129,26 +130,36 @@ export function AppLayout({ children }: AppLayoutProps) {
           `}>
           ¶
         </Link>
-        <nav
-          css={css`
-            display: flex;
-            align-items: stretch;
-            position: relative;
-          `}>
-          {profile !== undefined &&
-            (profile ? (
-              <UserMenu profile={profile} />
-            ) : (
-              <>
-                <LinkButton outline to="/login">
-                  Sign In
-                </LinkButton>
-                {/* &nbsp;
-                <Link to="/join">join</Link>{' '} */}
-              </>
-            ))}
-        </nav>
       </header>
+      <nav
+        css={css`
+          position: fixed;
+          top: 0;
+          right: 0;
+          height: ${dimensions.bar};
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+
+          padding: 0 1.5rem 0 2rem;
+          ${media.phoneOnly`
+            padding: 0 1rem 0 1.5rem;
+          `}
+        `}>
+        {profile !== undefined &&
+          (profile ? (
+            <UserMenu profile={profile} />
+          ) : (
+            <>
+              <LinkButton outline to="/login">
+                Sign In
+              </LinkButton>
+              {/* &nbsp;
+                <Link to="/join">join</Link>{' '} */}
+            </>
+          ))}
+      </nav>
       <main
         css={css`
           position: relative;

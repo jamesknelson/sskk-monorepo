@@ -34,7 +34,7 @@ export function Page(props: Props) {
             font-size: 3.5rem;
             line-height: 3.5rem;
             text-align: center;
-            margin: 0rem 1rem 3rem;
+            margin: 1.5rem 1rem 3rem;
 
             ${media.phoneOnly`
               font-size: 2rem;

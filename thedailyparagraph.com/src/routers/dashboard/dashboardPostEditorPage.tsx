@@ -18,6 +18,7 @@ import {
   getTitle,
   serializeToContentObject,
   useEditorState,
+  isEmpty,
 } from 'src/prose'
 import {
   DashboardPostEditorQuery,
@@ -87,13 +88,12 @@ export function Page({ query }: Props) {
 
   const [lastSavedDoc, setLastSavedDoc] = useState(editorState.doc)
 
+  const empty = isEmpty(editorState)
   const title = getTitle(editorState)
   const slug = slugify(title || '', {
     lower: true,
     strict: true,
   })
-
-  const isEmpty = !editorState.doc.textContent
 
   const publishedAt = post.published_at && new Date(post.published_at + 'Z')
 
@@ -236,13 +236,13 @@ export function Page({ query }: Props) {
 
   const canCancel = !cancelPending && publishedAt && publishedAt > new Date()
   const canDelete = !deletePending && !!post.id
-  const canSave = !savePending && !isEmpty && lastSavedDoc !== editorState.doc
+  const canSave = !savePending && !empty && lastSavedDoc !== editorState.doc
   const canPublish =
     !publishPending &&
     (canSave ||
       (!canSave &&
         !savePending &&
-        !isEmpty &&
+        !empty &&
         version &&
         (!version.locked_for_publication || !post.published_at)))
 
@@ -293,7 +293,7 @@ export function Page({ query }: Props) {
               padding: 0 1.75rem;
             }
           `}>
-          {isEmpty && (
+          {empty && (
             <div
               css={css`
                 position: absolute;
@@ -319,7 +319,7 @@ export function Page({ query }: Props) {
                 glyph={Message}
                 type="button"
                 onClick={doPublish}>
-                {publishedAt ? 'Amend' : 'Publish'}
+                {publishedAt ? 'Revise' : 'Publish'}
               </Button>
               <Button
                 busy={!publishPending && savePending}
@@ -330,7 +330,7 @@ export function Page({ query }: Props) {
                 css={css`
                   margin-left: 0.5rem;
                 `}>
-                Save draft
+                Save draft{publishedAt ? ' revision' : ''}
               </Button>
             </FooterGroup>
             <FooterGroup>

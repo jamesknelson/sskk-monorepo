@@ -12,7 +12,7 @@ import {
 } from 'prosemirror-model'
 import React, { ReactNode } from 'react'
 
-import { CodeBlock } from 'src/components/codeBlock'
+import { StyledCodeBlock } from 'src/components/codeBlock'
 
 export type ReactHole = (content?: ReactNode) => ReactNode
 
@@ -179,7 +179,7 @@ export const schema = createAppSchema({
         return codeBlockDOM
       },
       toReact() {
-        return (content: string) => <CodeBlock children={content} />
+        return (content: string) => <StyledCodeBlock children={content} />
       },
     },
 

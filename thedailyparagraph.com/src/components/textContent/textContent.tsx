@@ -1,21 +1,13 @@
 import styled from 'styled-components'
 
-import { colors } from 'src/theme'
+import { StyledCodeBlock } from 'src/components/codeBlock'
+import { colors, media } from 'src/theme'
 
 export const TextContent = styled.div`
   position: relative;
 
   * {
     word-wrap: break-word;
-  }
-
-  hr {
-    left: 33% !important;
-    margin: 6rem auto;
-    position: relative;
-    width: 33% !important;
-    height: 1px;
-    background-color: ${colors.structure.divider};
   }
 
   strong {
@@ -53,7 +45,32 @@ export const TextContent = styled.div`
   blockquote {
     font-size: 1rem;
     line-height: 1.5rem;
-    margin: 1rem 0;
+
+    margin: 1rem 1rem 1rem;
+    ${media.tabletPlus`
+      margin: 1rem 2rem 1rem;      
+    `}
+  }
+
+  hr {
+    left: 33% !important;
+    margin: 1.5rem 1rem;
+    ${media.tabletPlus`
+      margin: 1.5rem 1rem; 
+    `}
+    position: relative;
+    width: 33% !important;
+    height: 1px;
+    background-color: ${colors.structure.border};
+  }
+
+  ${StyledCodeBlock} {
+    margin: 1rem 0.5rem;
+    padding: 0.5rem;
+    ${media.tabletPlus`
+      margin: 1rem;
+      padding: 0.5rem 1rem;
+    `}
   }
 
   h1,

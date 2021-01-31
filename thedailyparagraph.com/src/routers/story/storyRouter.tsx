@@ -10,25 +10,24 @@ import { AppRequest, getStoryPath } from 'src/utils/routing'
 import { decodeUUID } from 'src/utils/uuid'
 
 export const router = routeAsync(async (req: AppRequest, res) => {
+  const handle = req.params.handle as string | undefined
+  const slug = req.params.slug as string | undefined
+  const maybeEncodedStoryId = req.params.storyId as string | undefined
+
   let query: PrecachedQuery<{ stories: StoryFieldsFragment[] }>
 
   try {
-    if (req.params.storyId) {
-      const storyId = decodeUUID(req.params.storyId as string)
+    if (maybeEncodedStoryId) {
+      const storyId = decodeUUID(maybeEncodedStoryId)
       query = req.createQuery(
         StoryByIdDocument,
-        {
-          post_id: storyId,
-        },
+        { post_id: storyId },
         'anonymous',
       )
-    } else if (req.params.handle && req.params.slug) {
+    } else if (handle && slug) {
       query = req.createQuery(
         StoryByHandleAndSlugDocument,
-        {
-          handle: req.params.handle as string,
-          slug: req.params.slug as string,
-        },
+        { handle, slug },
         'anonymous',
       )
     } else {
@@ -42,7 +41,7 @@ export const router = routeAsync(async (req: AppRequest, res) => {
   const result = await query.precache()
 
   const story = result.stories[0]
-  if (!story) {
+  if (!story || (handle && story.profile?.handle !== handle)) {
     return routeNotFound()(req, res)
   }
 

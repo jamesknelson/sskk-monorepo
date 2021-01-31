@@ -1,7 +1,7 @@
 import { darken, desaturate, lighten } from 'polished'
 import React, { useMemo } from 'react'
 import Prism from 'prismjs'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const green = '#12c8ba'
 const red = '#dd3c6f'
@@ -15,7 +15,7 @@ const black = '#0f0035'
 
 const lightRed = desaturate(0.15, lighten(0.15, red))
 
-export const twoToneTheme: CodeBlockTheme = {
+export const twoToneColorScheme: CodeBlockColorScheme = {
   background: black,
   propAttr: lighten(0.3, red),
   text: darken(0.05, lightGrey),
@@ -31,7 +31,7 @@ export const twoToneTheme: CodeBlockTheme = {
   fn: green,
 }
 
-export const lightTheme: CodeBlockTheme = {
+export const lightColorScheme: CodeBlockColorScheme = {
   background: lighterGrey,
   propAttr: lighten(0.15, lightBlack),
   text: darken(0.1, darkerGrey),
@@ -47,7 +47,7 @@ export const lightTheme: CodeBlockTheme = {
   fn: green,
 }
 
-export interface CodeBlockTheme {
+export interface CodeBlockColorScheme {
   background: string
   propAttr: string
   text: string
@@ -63,16 +63,16 @@ export interface CodeBlockTheme {
   fn: string
 }
 
-export interface CodeBlockProps extends React.HTMLAttributes<HTMLPreElement> {
+export interface CodeBlockProps extends React.ComponentProps<'pre'> {
   children: string
   language?: string
-  theme?: CodeBlockTheme
+  colorScheme?: CodeBlockColorScheme
 }
 
-export function CodeBlock({
+function CodeBlock({
   children,
   language = 'javascript',
-  theme = lightTheme,
+  colorScheme,
   ...rest
 }: CodeBlockProps) {
   const html = useMemo(
@@ -81,159 +81,140 @@ export function CodeBlock({
   )
 
   return (
-    <StyledPre {...rest} codeTheme={theme}>
+    <pre {...rest}>
       <code
         dangerouslySetInnerHTML={{
           __html: html,
         }}
       />
-    </StyledPre>
+    </pre>
   )
 }
 
-const theme = {
-  background: ({ codeTheme }: { codeTheme: CodeBlockTheme }) =>
-    codeTheme.background,
-  propAttr: ({ codeTheme }: { codeTheme: CodeBlockTheme }) =>
-    codeTheme.propAttr,
-  text: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.text,
-  comment: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.comment,
-  keyword: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.keyword,
-  string: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.string,
-  variable: ({ codeTheme }: { codeTheme: CodeBlockTheme }) =>
-    codeTheme.variable,
-  tag: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.tag,
-  entity: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.entity,
-  operator: ({ codeTheme }: { codeTheme: CodeBlockTheme }) =>
-    codeTheme.operator,
-  number: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.number,
-  inserted: ({ codeTheme }: { codeTheme: CodeBlockTheme }) =>
-    codeTheme.inserted,
-  fn: ({ codeTheme }: { codeTheme: CodeBlockTheme }) => codeTheme.fn,
-}
+export const StyledCodeBlock = styled(CodeBlock)(
+  ({ colorScheme = lightColorScheme }: CodeBlockProps) => css`
+    background: ${colorScheme.background};
+    border-radius: 5px;
+    margin: 0;
+    overflow: auto;
 
-const StyledPre: any = styled.pre<{ codeTheme: CodeBlockTheme }>`
-  background: ${theme.background};
-  border-radius: 5px;
-  margin: 0;
-  overflow: auto;
+    &,
+    & > code {
+      color: ${colorScheme.text} !important;
+      font-family: monospace;
+      text-align: left;
+      white-space: pre;
+      word-spacing: normal;
+      word-break: normal;
+      word-wrap: normal;
+      font-size: 14px;
+      line-height: 1.3 !important;
 
-  &,
-  & > code {
-    color: ${theme.text} !important;
-    font-family: monospace;
-    text-align: left;
-    white-space: pre;
-    word-spacing: normal;
-    word-break: normal;
-    word-wrap: normal;
-    font-size: 14px;
-    line-height: 1.3 !important;
+      -moz-tab-size: 4;
+      -o-tab-size: 4;
+      tab-size: 4;
 
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
-    tab-size: 4;
+      -webkit-hyphens: none;
+      -moz-hyphens: none;
+      -ms-hyphens: none;
+      hyphens: none;
+    }
 
-    -webkit-hyphens: none;
-    -moz-hyphens: none;
-    -ms-hyphens: none;
-    hyphens: none;
-  }
+    > code {
+      background-color: transparent;
+    }
 
-  > code {
-    background-color: transparent;
-  }
+    .highlighted-line {
+      background-color: rgba(255, 255, 255, 0.4);
+      display: block;
+      margin-right: -16px;
+      margin-left: -16px;
+      padding-right: 1em;
+      padding-left: 0.75em;
+      border-left: 3px solid ${colorScheme.entity};
+    }
 
-  .highlighted-line {
-    background-color: rgba(255, 255, 255, 0.4);
-    display: block;
-    margin-right: -16px;
-    margin-left: -16px;
-    padding-right: 1em;
-    padding-left: 0.75em;
-    border-left: 3px solid ${theme.entity};
-  }
+    .token.comment,
+    .token.block-comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: ${colorScheme.comment};
+    }
 
-  .token.comment,
-  .token.block-comment,
-  .token.prolog,
-  .token.doctype,
-  .token.cdata {
-    color: ${theme.comment};
-  }
+    .token.punctuation {
+      color: ${colorScheme.text};
+    }
 
-  .token.punctuation {
-    color: ${theme.text};
-  }
+    .token.tag {
+      color: ${colorScheme.tag};
+    }
 
-  .token.tag {
-    color: ${theme.tag};
-  }
+    .token.function-name {
+      color: ${colorScheme.variable};
+    }
 
-  .token.function-name {
-    color: ${theme.variable};
-  }
+    .token.boolean,
+    .token.number {
+      color: ${colorScheme.number};
+    }
 
-  .token.boolean,
-  .token.number {
-    color: ${theme.number};
-  }
+    .token.function {
+      color: ${colorScheme.fn};
+    }
 
-  .token.function {
-    color: ${theme.fn};
-  }
+    .token.namespace,
+    .token.deleted,
+    .token.attr-name,
+    .token.property,
+    .token.class-name,
+    .token.constant,
+    .token.symbol {
+      color: ${colorScheme.propAttr};
+    }
 
-  .token.namespace,
-  .token.deleted,
-  .token.attr-name,
-  .token.property,
-  .token.class-name,
-  .token.constant,
-  .token.symbol {
-    color: ${theme.propAttr};
-  }
+    .token.selector,
+    .token.important,
+    .token.atrule,
+    .token.keyword,
+    .token.builtin {
+      color: ${colorScheme.keyword};
+    }
 
-  .token.selector,
-  .token.important,
-  .token.atrule,
-  .token.keyword,
-  .token.builtin {
-    color: ${theme.keyword};
-  }
+    .token.string,
+    .token.char,
+    .token.attr-value,
+    .token.regex {
+      color: ${colorScheme.string};
+    }
 
-  .token.string,
-  .token.char,
-  .token.attr-value,
-  .token.regex {
-    color: ${theme.string};
-  }
+    .token.variable {
+      color: ${colorScheme.variable};
+    }
 
-  .token.variable {
-    color: ${theme.variable};
-  }
+    .token.operator {
+      color: ${colorScheme.operator};
+    }
 
-  .token.operator {
-    color: ${theme.operator};
-  }
+    .token.entity,
+    .token.url {
+      color: ${colorScheme.entity};
+    }
 
-  .token.entity,
-  .token.url {
-    color: ${theme.entity};
-  }
+    .token.important,
+    .token.bold {
+      font-weight: bold;
+    }
+    .token.italic {
+      font-style: italic;
+    }
 
-  .token.important,
-  .token.bold {
-    font-weight: bold;
-  }
-  .token.italic {
-    font-style: italic;
-  }
+    .token.entity {
+      cursor: help;
+    }
 
-  .token.entity {
-    cursor: help;
-  }
-
-  .token.inserted {
-    color: ${theme.inserted};
-  }
-`
+    .token.inserted {
+      color: ${colorScheme.inserted};
+    }
+  `,
+)
