@@ -14,7 +14,6 @@ import { AppLayout } from 'src/components/appLayout'
 import { firebase as firebaseConfig, firebaseEmulators } from 'src/config'
 import { GlobalStyles } from 'src/globalStyles'
 import { AuthProvider } from 'src/utils/auth'
-import { HydrationBoundary } from 'src/utils/hydration'
 import { AppRequest } from 'src/utils/routing'
 import NotFoundPage from './404'
 
@@ -48,9 +47,7 @@ function App(_props: AppProps) {
         <ClientProvider>
           <AuthProvider>
             <AppLayout>
-              <HydrationBoundary fallback={<LoadingFallback />}>
-                <Content />
-              </HydrationBoundary>
+              <Content />
             </AppLayout>
           </AuthProvider>
         </ClientProvider>
@@ -71,10 +68,6 @@ function ClientProvider(props: { children: React.ReactNode }) {
   ) : (
     <>{props.children}</>
   )
-}
-
-function LoadingFallback() {
-  return <div>Loading...</div>
 }
 
 export default nextilApp(App, {

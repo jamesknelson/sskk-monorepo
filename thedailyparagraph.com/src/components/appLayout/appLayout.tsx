@@ -10,6 +10,7 @@ import { Menu, MenuDivider, MenuItem, MenuLinkItem } from 'src/components/menu'
 import { PopupProvider, PopupTrigger, Popup } from 'src/components/popup'
 import { PhoneOnly, TabletPlus } from 'src/components/responsive'
 import { useAuthController } from 'src/utils/auth'
+import { RoutingBoundary } from 'src/utils/boundary'
 import { MemberProfile } from 'src/utils/memberProfile'
 import { useAppRequest } from 'src/utils/routing'
 import {
@@ -166,7 +167,9 @@ export function AppLayout({ children }: AppLayoutProps) {
           flex-grow: 1;
           z-index: 0;
         `}>
-        {children}
+        <RoutingBoundary fallback={<LoadingFallback />}>
+          {children}
+        </RoutingBoundary>
       </main>
       <footer
         css={css`
@@ -316,4 +319,8 @@ function UserMenu(props: UserMenuProps) {
       </PopupProvider>
     </>
   )
+}
+
+function LoadingFallback() {
+  return <div>Loading...</div>
 }

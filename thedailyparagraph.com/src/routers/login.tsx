@@ -1,10 +1,6 @@
-import * as React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Validator, useIssues, useValidator } from 'retil-issues'
-import {
-  Link,
-  useNavigate /*, useWaitUntilNavigationCompletes*/,
-} from 'retil-router'
+import { Link, useNavigate } from 'retil-router'
 import { useOperation } from 'retil-operation'
 import { css } from 'styled-components'
 
@@ -13,53 +9,58 @@ import { Button } from 'src/components/button'
 import { Input } from 'src/components/input'
 import { colors } from 'src/theme'
 import { useAuthController } from 'src/utils/auth'
+import { useModel, useModelField } from 'src/utils/model'
 
-interface LoginData {
+interface LoginModelValue {
   email: string
   password: string
 }
 
-const validateLogin: Validator<LoginData> = (data) => ({
-  email: [!data.email && 'Please enter your email'],
-  password: [!data.password && 'Please enter your password'],
+const validateLogin: Validator<LoginModelValue> = (value) => ({
+  email: [!value.email && 'Please enter your email'],
+  password: [!value.password && 'Please enter your password'],
 })
 
 export const router = () => <LoginPage />
 
 export function LoginPage() {
+  const [value, update] = useState({
+    email: '',
+    password: '',
+  })
+  const [issues, addIssues, clearIssues] = useIssues(value)
+  const [validate] = useValidator(addIssues, validateLogin)
+  const model = useModel({
+    issues,
+    value,
+    update,
+    validate,
+  })
+
   const authController = useAuthController()
   const navigate = useNavigate()
-  // const waitUntilNavigationCompletes = useWaitUntilNavigationCompletes()
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const data = { email, password }
-  const issues = useIssues<any, any, 'base', any>(data)
-  const [validateAll, validatePath] = useValidator(issues, validateLogin)
-
-  const [login, loginPending] = useOperation(async (event: React.FormEvent) => {
-    event.preventDefault()
-
-    const isValid = await validateAll()
-    if (!isValid) {
-      return
-    }
-
-    issues.clear()
-
-    const signInIssues = await authController.signInWithPassword(data)
-    if (signInIssues) {
-      issues.add(signInIssues)
-    } else {
-      return navigate('/dashboard')
+  const [login, loginPending] = useOperation(async () => {
+    if (await validate()) {
+      clearIssues()
+      const signInIssues = await authController.signInWithPassword(value)
+      if (signInIssues) {
+        addIssues(signInIssues)
+      } else {
+        await navigate('/dashboard')
+      }
     }
   })
+
+  const [emailInput, emailIssues] = useModelField(model, 'email')
+  const [passwordInput, passwordIssues] = useModelField(model, 'password')
 
   return (
     <AuthLayout title="Sign in">
       <form
-        onSubmit={login}
+        onSubmit={(event) => {
+          event.preventDefault()
+          login()
+        }}
         css={css`
           margin: 1rem 0 2rem;
 
@@ -79,23 +80,13 @@ export function LoginPage() {
         `}>
         <label>
           Email
-          <Input
-            type="email"
-            value={email}
-            onBlur={() => validatePath('email')}
-            onChange={setEmail}
-          />
-          {issues.on.email?.message}
+          <Input type="email" {...emailInput} />
+          {emailIssues[0]?.message}
         </label>
         <label>
           Password
-          <Input
-            type="password"
-            value={password}
-            onBlur={() => validatePath('password')}
-            onChange={setPassword}
-          />
-          {issues.on.password?.message}
+          <Input type="password" {...passwordInput} />
+          {passwordIssues[0]?.message}
         </label>
         <Button busy={loginPending} disabled={loginPending} type="submit">
           {loginPending ? 'Signing in...' : 'Sign in'}

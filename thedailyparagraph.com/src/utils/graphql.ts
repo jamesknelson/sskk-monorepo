@@ -17,7 +17,7 @@ import { getSnapshot } from 'retil-source'
 import { graphqlURL } from 'src/config'
 
 import { AuthController } from './auth'
-import { hasHydratedSource } from './hydration'
+import { hasHydratedSource } from './boundary'
 
 export type Client = ApolloClient<any>
 

@@ -17,7 +17,7 @@ import {
   CreatePrecachedQueryFunction,
   getGraphQLClientState,
 } from './graphql'
-import { hasHydratedSource } from './hydration'
+import { hasHydratedSource } from './boundary'
 import { MemberProfile, getMemberProfileSource } from './memberProfile'
 import { encodeUUID } from './uuid'
 

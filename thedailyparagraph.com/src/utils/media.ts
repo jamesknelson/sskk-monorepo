@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useHasHydrated } from 'src/utils/hydration'
+import { useHasHydrated } from 'src/utils/boundary'
 
 export function useMediaQuery(queryInput: string): boolean | null {
   const hasHydrated = useHasHydrated()

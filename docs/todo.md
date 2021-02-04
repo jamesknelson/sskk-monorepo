@@ -1,5 +1,10 @@
 todo
 
+- user sidebar
+- notetaking-style editor layout
+
+- add a loading bar
+
 - mark unpublished changes on the story card header, and the editor footer
 - add minimum character counter: you need at least 140 characters to publish
   (but not to save draft)
@@ -12,11 +17,6 @@ todo
 - create links for front page to different days
 
 - move date conversion for published_at into apollo
-
-- why does clicking a link scroll to top of page?
-  * need to disable Next's automatic scroll handling by passing { scroll: false }
-    in nextil router's history
-  * need to then add my own scroll handling
 
 - allow language selection in editor
 - use word wrap by default in the editor
