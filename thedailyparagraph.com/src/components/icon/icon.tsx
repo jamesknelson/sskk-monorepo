@@ -1,4 +1,5 @@
 import React from 'react'
+import { CSSFunction, useHighStyle } from 'retil-style'
 import styled, { css } from 'styled-components'
 
 import { colors } from 'src/theme'
@@ -32,6 +33,7 @@ const StyledIconContainer = styled.span<StyledIconContainerProps>`
 `
 
 interface StyledIconProps {
+  styleFn: CSSFunction
   size: string
 }
 
@@ -41,11 +43,7 @@ const StyledIcon = styled.span<StyledIconProps>`
   height: ${(props) => props.size};
   width: ${(props) => props.size};
 
-  ${(props) =>
-    props.color &&
-    css`
-      fill: ${props.color};
-    `}
+  ${(props) => props.styleFn(props.theme)}
 `
 
 export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
@@ -55,7 +53,7 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
       glyph,
       label,
       size = DEFAULT_ICON_SIZE,
-      color = colors.control.icon.default,
+      color = 'currentColor',
       testID,
       transform,
       ...props
@@ -64,11 +62,15 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
   ) => {
     size = addDefaultRemUnits(size)
 
+    const styleFn = useHighStyle({
+      fill: color,
+    })
+
     return (
       <StyledIconContainer ref={ref} display={display} size={size} {...props}>
         <StyledIcon
           size={size}
-          color={color}
+          styleFn={styleFn}
           data-testid={testID}
           as={glyph}
           role="img"

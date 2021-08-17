@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
 import { formatISO } from 'date-fns'
 import Head from 'next/head'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { ControlProvider } from 'retil-interactions'
 import { useOperation } from 'retil-operation'
 import { joinPaths, useNavigate } from 'retil-router'
 import slugify from 'slugify'
@@ -10,14 +10,18 @@ import styled, { css } from 'styled-components'
 
 import { Button } from 'src/components/button'
 import { Card } from 'src/components/card/card'
+import {
+  Editor,
+  EditorHandle,
+  EditorMenu,
+  useEditorState,
+} from 'src/components/editor'
 import { StoryCard } from 'src/components/story'
 import { Edit, Message, Trash, X } from 'src/constants/glyphs'
 import {
-  Editor,
   createEditorState,
   getTitle,
   serializeToContentObject,
-  useEditorState,
   isEmpty,
 } from 'src/prose'
 import {
@@ -75,6 +79,8 @@ export function Page({ query }: Props) {
     deleted_at: null,
   }
   const version = post.versions[0]
+
+  const editorHandleRef = useRef<EditorHandle | null>(null)
 
   const [
     editorState,
@@ -269,47 +275,47 @@ export function Page({ query }: Props) {
           max-width: ${dimensions.largeCardWidth};
           width: calc(100% - 1rem);
         `}>
-        <Card
-          css={css`
-            height: 48px;
-          `}
-        />
-        <StoryCard
-          disableEdit
-          profileAvatarURL={profile.avatarURL}
-          profileDisplayName={profile.displayName}
-          profileId={profile.id}
-          profileHandle={profile.handle!}
-          publishedAt={publishedAt}
-          storyId={post.id}
-          storySlug={version?.slug}
-          css={css`
-            margin: 0.25rem 0;
-
-            .ProseMirror-menubar {
-              position: absolute;
-              margin-top: -122px;
-              border-bottom: none;
-              padding: 0 1.75rem;
-            }
-          `}>
-          {empty && (
-            <div
-              css={css`
-                position: absolute;
-                left: 2rem;
-                top: 1rem;
-                color: ${colors.ink.light};
-              `}>
-              Your story...
-            </div>
-          )}
-          <Editor
-            state={editorState}
-            applyTransaction={applyEditorTransaction}
-            minHeight="80px"
-          />
-        </StoryCard>
+        <ControlProvider>
+          <Card
+            css={css`
+              height: 48px;
+            `}>
+            <EditorMenu
+              state={editorState}
+              applyTransaction={applyEditorTransaction}
+            />
+          </Card>
+          <StoryCard
+            disableEdit
+            profileAvatarURL={profile.avatarURL}
+            profileDisplayName={profile.displayName}
+            profileId={profile.id}
+            profileHandle={profile.handle!}
+            publishedAt={publishedAt}
+            storyId={post.id}
+            storySlug={version?.slug}
+            css={css`
+              margin: 0.25rem 0;
+            `}>
+            {empty && (
+              <div
+                css={css`
+                  position: absolute;
+                  left: 2rem;
+                  top: 1rem;
+                  color: ${colors.ink.light};
+                `}>
+                Your story...
+              </div>
+            )}
+            <Editor
+              state={editorState}
+              applyTransaction={applyEditorTransaction}
+              minHeight="80px"
+              ref={editorHandleRef}
+            />
+          </StoryCard>
+        </ControlProvider>
         <Card as="footer">
           <FooterLayout>
             <FooterGroup>

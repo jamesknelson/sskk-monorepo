@@ -6417,6 +6417,11 @@ lodash@^4.17.13, lodash@^4.17.20, lodash@~4.17.20:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
 log-symbols@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-1.0.2.tgz#376ff7b58ea3086a0f09facc74617eca501e1a18"
@@ -6545,6 +6550,11 @@ mdn-data@2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.6.tgz#852dc60fcaa5daa2e8cf6c9189c440ed3e042978"
   integrity sha512-rQvjv71olwNHgiTbfPZFkJtjNMciWgswYeciZhtvWLO8bmX3TnhyA62I6sTWOyZssWHJJjY6/KiWwqQsWWsqOA==
+
+memoize-one@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.1.1.tgz#047b6e3199b508eaec03504de71229b8eb1d75c0"
+  integrity sha512-HKeeBpWvqiVJD57ZUAsJNm71eHTykffzcLZVYWiVfQeI1rJtuEaS7hQiEpWfVVk18donPwJEcFKIkCmPJNOhHA==
 
 memory-fs@^0.4.1:
   version "0.4.1"
@@ -6842,13 +6852,13 @@ next@^10.0.5:
   optionalDependencies:
     sharp "0.26.3"
 
-nextil@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/nextil/-/nextil-0.18.0.tgz#0a80c18b7ac273e89795a2a9930f7be31545f693"
-  integrity sha512-zKC2/AJNWt1lordx2WvNFTMamalCYH6LA91PT7kP9pziUh6ldhPyeUD0f3PWM61ReoyD/kvg4uqY4666jeSe9Q==
+nextil@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/nextil/-/nextil-0.18.5.tgz#2f0ae4fdbca85c601ad19448e93176ae6d3068f4"
+  integrity sha512-RdjlpA/S6QXmWvlqKqmb+95vBiN3B2cpAdDbQiCFLOzVftNklsstiViKXZA3SAQ8Fyb0D/ZCXCSevKgrzc7U7Q==
   dependencies:
-    retil-history "^0.18.0"
-    retil-router "^0.18.0"
+    retil-history "^0.18.5"
+    retil-router "^0.18.5"
     tslib "2.0.1"
 
 no-case@^3.0.3:
@@ -7711,6 +7721,11 @@ prosemirror-transform@^1.0.0, prosemirror-transform@^1.1.0:
   dependencies:
     prosemirror-model "^1.0.0"
 
+prosemirror-utils@^0.9.6:
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/prosemirror-utils/-/prosemirror-utils-0.9.6.tgz#3d97bd85897e3b535555867dc95a51399116a973"
+  integrity sha512-UC+j9hQQ1POYfMc5p7UFxBTptRiGPR7Kkmbl3jVvU8VgQbkI89tR/GK+3QYC8n+VvBZrtAoCrJItNhWSxX3slA==
+
 prosemirror-view@^1.0.0, prosemirror-view@^1.1.0, prosemirror-view@^1.16.5:
   version "1.16.5"
   resolved "https://registry.yarnpkg.com/prosemirror-view/-/prosemirror-view-1.16.5.tgz#1a4646832e16c1cf116b54b9becf4b0663821125"
@@ -8232,31 +8247,40 @@ ret@~0.1.10:
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-retil-history@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/retil-history/-/retil-history-0.18.0.tgz#1b1d718517acaab789035e77c0f1eb870703091a"
-  integrity sha512-7C5K2zFi5AI5dslYJaqS68C651id82nvmn/a94SozTh72KOV+pjZRx1MHpDN5QQtNI6ADf6pDIjRSZRM+EX4dQ==
+retil-history@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/retil-history/-/retil-history-0.18.5.tgz#358b3d3577c3093eea9dea8bb4a27e0586c5ccb8"
+  integrity sha512-3yqkeJGGJHRPSYuGpKvebILeun3DIoHl1Cpj9OMx4GkMGwROD1lh1HTgJEbZSSnkcjLqS6igN1SPZmtrr2zIcQ==
   dependencies:
     history "^5.0.0"
     querystring "^0.2.0"
-    retil-source "^0.18.0"
-    retil-support "^0.18.0"
+    retil-source "^0.18.5"
+    retil-support "^0.18.5"
     tslib "2.0.1"
 
-retil-issues@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/retil-issues/-/retil-issues-0.18.0.tgz#ed8c452c43c680bb2699b903e2f5a262c3828f01"
-  integrity sha512-cRZ2128dYMZniQYCndDX7jXLh7ez8c62+qssr6Ir2Jno6h37J2eWPpkjPHVQFO3X7aCL1iwk5AcHij2KSWVxww==
+retil-interactions@^0.18.9:
+  version "0.18.9"
+  resolved "https://registry.yarnpkg.com/retil-interactions/-/retil-interactions-0.18.9.tgz#2b1ba1d794a8a8713e82a3f0aa1aca09c794757e"
+  integrity sha512-Cye7HOhj/vn4fRSgplX1ZmAc2Kg58m/jrOwE/fZh+rSrivzAL7ov+vL7eVNyyZ9O/BeDL7d85aCk2fiIuh26IQ==
   dependencies:
-    retil-support "^0.18.0"
+    retil-style "^0.18.5"
+    retil-support "^0.18.5"
     tslib "2.0.1"
 
-retil-operation@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/retil-operation/-/retil-operation-0.18.0.tgz#6982a3c1e34d6ba4d584e5b6d655b439168f5821"
-  integrity sha512-hhFFtr2WJnZjtsRzEnsviBGGnzGHduySfwThYpVdSCaxC92qzbNywfhh1vQRrFDJT1dBq05d47uPbUeqHPWbWA==
+retil-issues@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/retil-issues/-/retil-issues-0.18.5.tgz#d271694db48929c0f56999a4ff001b009592ff82"
+  integrity sha512-5h/bV9vMS/qR0jfWAEnzlYYT0JT7676tdOR3/VZUW08pazbm0CtiZCEREIEaBG1aATJIoI3yCasWVKwbfexyuQ==
   dependencies:
-    retil-support "^0.18.0"
+    retil-support "^0.18.5"
+    tslib "2.0.1"
+
+retil-operation@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/retil-operation/-/retil-operation-0.18.5.tgz#ce4d2e538e0e5a57ce7ef13810f91ae57f4f8807"
+  integrity sha512-qWHagIf6as/lG9WqI8Up2eSaTBOpH/+0dTzWbqhPcRuU7XfUhIMZ204y73a+Z7kjcGzEYMngjdmtvfiRbHzRHw==
+  dependencies:
+    retil-support "^0.18.5"
     tslib "2.0.1"
 
 retil-popup-trigger@^0.18.0:
@@ -8266,31 +8290,41 @@ retil-popup-trigger@^0.18.0:
   dependencies:
     tslib "2.0.1"
 
-retil-router@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/retil-router/-/retil-router-0.18.0.tgz#f97e997e361984aa4bcc9ff4f32007724f5527eb"
-  integrity sha512-III7fnvK/z2G125rDGzk1HWe36M1QHMGgd/QRF1hrmR/LnlTJgoGXuFsrKHGagXH8HqrHJxIL0tVDW5G5T77CQ==
+retil-router@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/retil-router/-/retil-router-0.18.5.tgz#5a1eee7e2f81dca9ac2b8c9e2d59e5b91b726494"
+  integrity sha512-jA2HY0kNxFLHAIQYf4rfMLKIHveNbGmIifO+E5hp+oiOnbajAYj388fJq/Bnd36sVWoQmvQLwup6syAV9dYAxg==
   dependencies:
     path-to-regexp "^6.1.0"
-    retil-history "^0.18.0"
-    retil-source "^0.18.0"
-    retil-support "^0.18.0"
+    retil-history "^0.18.5"
+    retil-source "^0.18.5"
+    retil-support "^0.18.5"
     tslib "2.0.1"
 
-retil-source@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/retil-source/-/retil-source-0.18.0.tgz#7316e9dcdc0910a60fcc07de801acb7f2c7fe9cb"
-  integrity sha512-KrZnt44WDiDdMA2WUHEuZFfv14HFz2WQq78i4w6oORpl0zuCzuKFBRJuWV28J8QtY8RL5cgHAbv8atpn0Lq8nA==
+retil-source@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/retil-source/-/retil-source-0.18.5.tgz#410a010eff06ce7c59de2453ffcdcb0b4fe8e48c"
+  integrity sha512-POlWLHFZ/K66jw25f1CMtGxz2TB4c9lVbv8woj0FDcPVyuJlHnDx1fmmemtMCG9ao6gIawJ1VYojr6YlU/2oug==
   dependencies:
-    retil-support "^0.18.0"
+    retil-support "^0.18.5"
     tslib "2.0.1"
     use-subscription "1.5.1"
 
-retil-support@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/retil-support/-/retil-support-0.18.0.tgz#b5646961de6e6703436d3816fedcba9e07f77d94"
-  integrity sha512-RcsEZUbN4gxlC+F9/RGbw4qGXG35oN/2yHoGc2mzjBVrr1ZM5uQoTB7MxCHbiE+L04HS9AZy7LKlPFAHflczAQ==
+retil-style@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/retil-style/-/retil-style-0.18.5.tgz#6f43636a401a00efc8ee83ee37edad17a176c336"
+  integrity sha512-eiLDqTX74qSK4f3Lekx5J6LgiO+UjQOb/wu3sP4h7Fs5gi5PARLQOUVf402kw310Fpp7ayBOUzsyt6frtZmWKg==
   dependencies:
+    retil-support "^0.18.5"
+    tslib "2.0.1"
+
+retil-support@^0.18.5:
+  version "0.18.5"
+  resolved "https://registry.yarnpkg.com/retil-support/-/retil-support-0.18.5.tgz#b892c47f6dede131c160dec8c79d7a8fa430c90b"
+  integrity sha512-T9OMRao0QG5Ti6ng+OHiyUyBlQWPN4/2Ksc0AKhvfKTj4kKAo4spba6B8wXzYxkRtmUp6yY/bem/u/9IELarmQ==
+  dependencies:
+    lodash "^4.17.21"
+    memoize-one "^5.1.1"
     tslib "2.0.1"
 
 reusify@^1.0.4:

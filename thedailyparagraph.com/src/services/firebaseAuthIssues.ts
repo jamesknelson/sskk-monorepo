@@ -7,7 +7,7 @@ export interface IssueCodeMap {
 function buildIssueFromError(
   codeMap: string | IssueCodeMap,
   error: any,
-): ValidatorIssues {
+): ValidatorIssues<any> {
   if (typeof codeMap === 'string') {
     return [
       {
@@ -19,14 +19,14 @@ function buildIssueFromError(
     const path = Object.keys(codeMap)[0]
     return {
       [path]: buildIssueFromError(codeMap[path], error),
-    } as ValidatorIssues
+    } as ValidatorIssues<any>
   }
 }
 
 export const convertErrorsToIssues = async (
   fn: Function,
   codeMap: IssueCodeMap,
-): Promise<null | ValidatorIssues> => {
+): Promise<null | ValidatorIssues<any>> => {
   const issueCodes = Object.keys(codeMap)
 
   try {

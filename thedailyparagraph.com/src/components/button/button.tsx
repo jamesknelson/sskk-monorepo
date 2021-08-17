@@ -126,6 +126,7 @@ export const StyledIconButton = styled.button<StyledIconButtonProps>`
 export interface IconButtonProps {
   color?: string
   glyph: React.ComponentType<any>
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   outline?: string
   size?: string
   tooltip?: React.ReactChild | React.ReactChild[]

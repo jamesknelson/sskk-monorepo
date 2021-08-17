@@ -1,4 +1,8 @@
-import { parse as parseUUID, stringify as stringifyUUID } from 'uuid'
+import {
+  parse as parseUUID,
+  stringify as stringifyUUID,
+  v4 as generateRandomUUID,
+} from 'uuid'
 import { encode, decode } from 'd64'
 
 export function encodeUUID(uuid: string): string {
@@ -22,3 +26,5 @@ export function maybeDecodeUUID(maybeEncodedUUID: string): string | null {
     return null
   }
 }
+
+export { generateRandomUUID }
