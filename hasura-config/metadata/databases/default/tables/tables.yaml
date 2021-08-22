@@ -1,0 +1,5 @@
+- "!include public_members.yaml"
+- "!include public_post_versions.yaml"
+- "!include public_posts.yaml"
+- "!include public_profiles.yaml"
+- "!include public_published_posts.yaml"
