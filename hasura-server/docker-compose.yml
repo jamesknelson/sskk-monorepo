@@ -1,22 +1,33 @@
 version: "3.7"
 services:
   postgres:
+    container_name: sskk_postgres
     image: postgres:12
+    platform: linux/arm64
     restart: always
+    expose:
+      - "5431" # Publishes 5431 to other containers but NOT to host machine
+    ports:
+      - "5431:5431"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - sskk_db_data:/var/lib/postgresql/data
+    command: -p 5431
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
-    build: .
+    container_name: sskk_hasura
+    image: fedormelexin/graphql-engine-arm64:v2.0.7
     ports:
-      - "3711:3711"
+      - "3711:8080"
     depends_on:
       - "postgres"
     restart: always
     environment:
-      DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
       PORT: 3711
+      ## postgres database to store Hasura metadata
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5431/postgres
+      ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
+      PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5431/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES:
@@ -28,4 +39,4 @@ services:
       #   "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com","audience":
       #   "sskk-dev","issuer": "https://securetoken.google.com/sskk-dev"}'
 volumes:
-  db_data:
+  sskk_db_data:
