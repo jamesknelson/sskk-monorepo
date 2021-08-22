@@ -1,36 +1,37 @@
 import React from 'react'
 import { loadAsync } from 'retil-mount'
-import { NotFoundError, loadMatch, loadRedirect } from 'retil-nav'
+import { loadMatch, loadRedirect, notFoundLoader } from 'retil-nav'
+import { AppEnv } from 'src/env'
 
 import { loadAuthenticated } from 'src/env/routing'
 import {
   DashboardPostListDocument,
   DashboardPostEditorDocument,
 } from 'src/generated/graphql'
-import { decodeUUID } from 'src/utils/uuid'
+import { decodeUUID, patternFor } from 'src/utils/urls'
 
-export const router = loadAuthenticated(
-  loadMatch({
-    '/': loadMatch('./stories'),
-    '/stories': routeAsync(async (req) => {
+import urls, { EditorLetterParams } from './editorURLs'
+
+const loader = loadAuthenticated(
+  loadMatch<AppEnv>({
+    '/': loadRedirect(urls.drafts()),
+    [patternFor(urls.drafts)]: loadAsync(async (env) => {
       const pageModulePromise = import('./dashboardPostListPage')
-      const query = req.createQuery(
+      const query = await env.precacheQuery(
         DashboardPostListDocument,
         {
-          profile_id: req.profile!.id,
+          profile_id: env.profile!.id,
         },
         'editor',
       )
-
-      await query.precache()
 
       const { Page } = await pageModulePromise
 
       return <Page query={query} />
     }),
-    '/stories/new': routeAsync(async (req) => {
+    [patternFor(urls.new)]: loadAsync(async (env) => {
       const pageModulePromise = import('./dashboardPostEditorPage')
-      const query = req.createQuery(
+      const query = await env.precacheQuery(
         DashboardPostEditorDocument,
         {
           is_new: true,
@@ -38,38 +39,38 @@ export const router = loadAuthenticated(
         'editor',
       )
 
-      await query.precache()
-
       const { Page } = await pageModulePromise
 
       return <Page query={query} />
     }),
-    '/story/:storyId': routeAsync(async (req, res) => {
-      let storyId: string
-      try {
-        storyId = decodeUUID(req.params.storyId as string)
-      } catch (error) {
-        return routeNotFound()(req, res)
-      }
+    [patternFor(urls.letter)]: loadAsync<AppEnv<EditorLetterParams>>(
+      async (env) => {
+        let storyId: string
+        try {
+          storyId = decodeUUID(env.nav.params.letterId)
+        } catch (error) {
+          return notFoundLoader(env)
+        }
 
-      const pageModulePromise = import('./dashboardPostEditorPage')
-      const query = req.createQuery(
-        DashboardPostEditorDocument,
-        {
-          post_id: storyId as string,
-        },
-        'editor',
-      )
+        const pageModulePromise = import('./dashboardPostEditorPage')
+        const query = await env.precacheQuery(
+          DashboardPostEditorDocument,
+          {
+            post_id: storyId as string,
+          },
+          'editor',
+        )
 
-      const { post } = await query.precache()
+        if (!query.data.post) {
+          return notFoundLoader(env)
+        }
 
-      if (!post) {
-        return routeNotFound()(req, res)
-      }
+        const { Page } = await pageModulePromise
 
-      const { Page } = await pageModulePromise
-
-      return <Page query={query} />
-    }),
+        return <Page query={query} />
+      },
+    ),
   }),
 )
+
+export default loader

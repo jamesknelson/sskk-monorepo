@@ -1,5 +1,5 @@
 import { loadAsync } from 'retil-mount'
-import { NotFoundError } from 'retil-nav'
+import { notFoundLoader } from 'retil-nav'
 
 import {
   LetterByIdDocument,
@@ -11,21 +11,9 @@ import { PrecachedQuery } from 'src/utils/precachedQuery'
 import { urls } from 'src/utils/urls'
 import { decodeUUID } from 'src/utils/uuid'
 
-export type LetterParams = {
-  letterId: string
-  letterSlug?: string
-  profileNametag: string
-}
-export type LetterQuery = {
-  /**
-   * If this is set to a *known and supported* url, then the back button in
-   * the mobile interface will point there, and this will also affect the
-   * match on the primary navigation bar.
-   */
-  from?: string
-}
+import { LetterParams, LetterQuery } from './letterURLs'
 
-const loader = loadAsync(async (env: AppEnv<LetterParams, LetterQuery>) => {
+const loader = loadAsync<AppEnv<LetterParams, LetterQuery>>(async (env) => {
   const {
     letterId: maybeEncodedLetterId,
     letterSlug,
@@ -52,7 +40,7 @@ const loader = loadAsync(async (env: AppEnv<LetterParams, LetterQuery>) => {
       throw new Error('Missing parameters')
     }
   } catch (error) {
-    throw new NotFoundError(env.nav)
+    return notFoundLoader(env)
   }
 
   const pageModulePromise = import('./letterPage')
@@ -63,7 +51,7 @@ const loader = loadAsync(async (env: AppEnv<LetterParams, LetterQuery>) => {
     !letter ||
     (profileNametag && letter.profile?.handle !== profileNametag)
   ) {
-    throw new NotFoundError(env.nav)
+    return notFoundLoader(env)
   }
 
   const path = urls.letter({
@@ -73,7 +61,7 @@ const loader = loadAsync(async (env: AppEnv<LetterParams, LetterQuery>) => {
   })
 
   if (path.pathname !== env.nav.pathname) {
-    throw new NotFoundError(env.nav)
+    return notFoundLoader(env)
   }
 
   const { Page } = await pageModulePromise

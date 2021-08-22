@@ -1,14 +1,18 @@
 import { encodeUUID, nestURLSchema, urlSchema } from 'src/utils/urls'
 
+import editorURLs from './editor/editorURLs'
+import joinURLs from './join/joinURLs'
 import { LetterParams, LetterQuery } from './letter/letterURLs'
 import profileURLs, { ProfileParams } from './profile/profileURLs'
+import readURLs from './read/readURLs'
+import settingsURLs from './settings/settingsURLs'
 
 const urls = urlSchema({
-  // editor: nestURLSchema('/editor', editorURLs),
+  editor: nestURLSchema('/editor', editorURLs),
 
   hello: () => `/hello`,
 
-  // join: nestURLSchema('/join', joinURLs),
+  join: nestURLSchema('/join', joinURLs),
 
   /**
    * Shows a letter on a page without the selection bar. On mobile, links from
@@ -33,15 +37,15 @@ const urls = urlSchema({
   policies: () => `/policies`,
 
   profile: nestURLSchema(
-    (profileParams: ProfileParams) => `/${profileParams.nametag}`,
+    (profileParams: ProfileParams) => `/@${profileParams.nametag}`,
     profileURLs,
   ),
 
-  // read: nestURLSchema('/read', readURLs),
+  read: nestURLSchema('/read', readURLs),
 
   recoverAccount: () => `/recover-account`,
 
-  // settings: nestURLSchema('/settings', settingsURLs),
+  settings: nestURLSchema('/settings', settingsURLs),
 })
 
 export default urls

@@ -1,8 +1,8 @@
 import { NavAction, NavLocation, NavParams } from 'retil-nav'
 import { parse as parseUUID, stringify as stringifyUUID } from 'uuid'
 
-import { LetterParams, LetterQuery } from 'src/pages/letter/letterLoader'
-import { ProfileParams } from 'src/pages/profile/profileLoader'
+import { LetterParams, LetterQuery } from 'src/pages/letter/letterURLs'
+import { ProfileParams } from 'src/pages/profile/profileURLs'
 
 const editorURLs = urlSchema({
   dashboard: () => `/dashboard`,
@@ -131,6 +131,8 @@ patternFor(urls.editor.letter, {
   optional: ['letterId'],
 })
 
+patternFor(urls.editor)
+
 // ---
 
 type URLConfig<TParams extends NavParams = NavParams> =
@@ -181,7 +183,7 @@ type URLSchemaFromConfig<TConfig extends URLSchemaConfig> = {
     keyof TConfig,
     string
   >]: TConfig[Key] extends URLNestedSchemaAndLeaf<infer ISchema, infer IParams>
-    ? URLNestedSchema<ISchema, IParams>
+    ? URLNestedSchemaAndLeaf<ISchema, IParams>
     : TConfig[Key] extends URLConfig<any>
     ? URLSchemaLeafFromConfig<TConfig[Key]>
     : TConfig[Key]

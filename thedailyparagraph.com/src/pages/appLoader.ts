@@ -2,92 +2,39 @@ import { loadLazy } from 'retil-mount'
 import { loadMatch, loadNotFoundBoundary } from 'retil-nav'
 import { AppEnv } from 'src/env'
 
-import {
-  encodeUUID,
-  nestURLSchema,
-  patternFor,
-  urlSchema,
-} from 'src/utils/urls'
+import { patternFor } from 'src/utils/urls'
 
+import urls from './appURLs'
 import notFoundLoader from './notFoundLoader'
-
-export const appUrls = urlSchema({
-  // editor: nestURLSchema('/editor', editorURLs),
-
-  hello: () => `/hello`,
-
-  // join: nestURLSchema('/join', joinURLs),
-
-  /**
-   * Shows a letter on a page without the selection bar. On mobile, links from
-   * the selection bar will use this route with a `from` param, while on a
-   * two-column layout, double clicking in the selection bar will cause this
-   * link to be used – and should also cause the selection bar to be animated
-   * out.
-   */
-  letter: ({
-    profileNametag,
-    letterId,
-    letterSlug,
-    ...query
-  }: LetterParams & LetterQuery) => ({
-    query: { ...query },
-    pathname: `/${profileNametag}/${letterSlug || ''}~${encodeUUID(letterId)}`,
-  }),
-
-  login: () => `/login`,
-  logout: () => `/logout`,
-
-  policies: () => `/policies`,
-
-  profile: nestURLSchema(
-    (profileParams: ProfileParams) => `/${profileParams.nametag}`,
-    profileURLs,
-  ),
-
-  read: nestURLSchema('/read', readURLs),
-
-  recoverAccount: () => `/recover-account`,
-
-  settings: nestURLSchema('/settings', settingsURLs),
-})
 
 const appLoader = loadNotFoundBoundary(
   loadMatch<AppEnv>({
-    // [urls.editor.index()]: loadLazy(() => import('./editor/editorLoader')),
+    [patternFor(urls.editor)]: loadLazy(() => import('./editor/editorLoader')),
 
-    [patternFor(appUrls.hello)]: loadLazy(() => import('./hello/helloLoader')),
+    [patternFor(urls.hello)]: loadLazy(() => import('./hello/helloLoader')),
 
-    // [urls.join()]: loadLazy(() => import('./join/joinLoader')),
+    [patternFor(urls.join)]: loadLazy(() => import('./join/joinLoader')),
 
-    // [urls.letter(
-    //   generatePatternParams({
-    //     profileNametag: true,
-    //     letterSlug: false,
-    //     letterId: true,
-    //   }),
-    // ).pathname]: loadLazy(() => import('./letter/letterLoader')),
+    [patternFor(urls.letter, { optional: ['letterSlug'] })]: loadLazy(
+      () => import('./letter/letterLoader'),
+    ),
 
-    // [urls.login()]: loadLazy(() => import('./loginLoader')),
-    // [urls.logout()]: loadLazy(() => import('./logoutLoader')),
+    [patternFor(urls.login)]: loadLazy(() => import('./loginLoader')),
+    [patternFor(urls.logout)]: loadLazy(() => import('./logoutLoader')),
 
-    // [urls.policies()]: loadLazy(() => import('./policiesLoader')),
+    [patternFor(urls.profile)]: loadLazy(
+      () => import('./profile/profileLoader'),
+    ),
 
-    // [urls.recoverAccount()]: loadLazy(
-    //   () => import('./recoverAccountLoader'),
-    // ),
+    [patternFor(urls.policies)]: loadLazy(() => import('./policiesLoader')),
 
-    // [urls.settings()]: loadLazy(
-    //   () => import('./settings/settingsLoader'),
-    // ),
+    [patternFor(urls.recoverAccount)]: loadLazy(
+      () => import('./recoverAccountLoader'),
+    ),
 
-    // //
-    // // !!! THIS MUST BE LAST !!!
-    // // The profile pattern must be last, as it is a wildcard
-    // //
-    // [urls.profile({ nametag: true })]: loadLazy(
-    //   () => import('./profile/profileLoader'),
-    // ),
+    [patternFor(urls.settings)]: loadLazy(
+      () => import('./settings/settingsLoader'),
+    ),
   }),
   notFoundLoader,
 )
