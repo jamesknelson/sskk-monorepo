@@ -1,9 +1,9 @@
 import React from 'react'
 import { Placement } from 'popper.js'
+import { useMediaSelector } from 'retil-media'
 import Tippy, { TippyProps } from '@tippy.js/react'
 
-import { mediaQueries } from 'src/theme'
-import { useMediaQuery } from 'src/utils/media'
+import { mediaSelectors } from 'src/theme'
 
 export interface TooltipProps extends Omit<TippyProps, 'content'> {
   content?: TippyProps['content']
@@ -18,7 +18,7 @@ export function Tooltip({
   enabled,
   ...rest
 }: TooltipProps) {
-  let isPhone = useMediaQuery(mediaQueries.phoneOnly)
+  let isPhone = useMediaSelector(mediaSelectors.phoneOnly)
   if (isPhone) {
     return children
   } else {

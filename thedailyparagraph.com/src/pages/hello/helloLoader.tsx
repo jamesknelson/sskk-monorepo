@@ -1,0 +1,33 @@
+import { loadAsync } from 'retil-mount'
+
+import { AppEnv } from 'src/env'
+import { loadWithLayoutOptions } from 'src/env/routing'
+import { HelloDocument } from 'src/generated/graphql'
+
+const asyncRouter = loadAsync(async (env: AppEnv) => {
+  const pageModulePromise = import('./helloPage')
+  const query = await env.precacheQuery(HelloDocument, {
+    limit: 10,
+  })
+
+  const { Page } = await pageModulePromise
+
+  env.head.push(
+    <title>The Daily Paragraph</title>,
+    <meta
+      name="description"
+      content="A project to encourage ordinary people to write a couple sentences a day."
+    />,
+  )
+
+  return <Page query={query} />
+})
+
+const loader = loadWithLayoutOptions(asyncRouter, {
+  scrollingHeader: {
+    from: '0px',
+    to: '64px',
+  },
+})
+
+export default loader

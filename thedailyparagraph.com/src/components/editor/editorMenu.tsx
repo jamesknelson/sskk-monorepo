@@ -1,12 +1,13 @@
 import { EditorState, Transaction } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
 import React from 'react'
-import { ButtonSurface } from 'retil-interactions'
+import { ButtonSurface, inHoveredSurface } from 'retil-interaction'
 
 import { Icon } from 'src/components/icon'
 import { FormatBold } from 'src/constants/glyphs'
 import { createToggleMarkCommand } from 'src/prose/commands/toggleMarkCommand'
 import { MARK_STRONG } from 'src/prose/markNames'
+import { IconButtonBody } from '../buttons'
 
 const toggleStrongCommand = createToggleMarkCommand(MARK_STRONG)
 
@@ -26,16 +27,16 @@ export function EditorMenu(props: EditorMenuProps) {
 
   return (
     <ButtonSurface
-      onPress={() => {
+      onTrigger={() => {
         toggleStrongCommand.execute(state, (transaction) => {
           applyTransaction(state, transaction)
         })
       }}>
-      <Icon
+      <IconButtonBody
         glyph={FormatBold}
         color={{
           default: 'black',
-          hover: 'red',
+          [inHoveredSurface]: 'red',
         }}
       />
     </ButtonSurface>

@@ -8,7 +8,6 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { useControlFocusTargetRef } from 'retil-interactions'
 import { css } from 'styled-components'
 
 import { CodeBlockView } from 'src/prose/codeBlockView'

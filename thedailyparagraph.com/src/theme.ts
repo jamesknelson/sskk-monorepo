@@ -1,4 +1,5 @@
 import { rgba } from 'polished'
+import { createMediaSelector } from 'retil-media'
 import { css } from 'styled-components'
 
 // styled-system expects breakpoints to be an array, but we're sticking to
@@ -80,11 +81,14 @@ export const easings = {
   easeOut: 'cubic-bezier(0.165, 0.840, 0.440, 1.000)',
 }
 
-const mediaFactory = (query: string) => (...args: any[]) => css`
-  @media screen and ${query} {
-    ${css.apply(null, args as any)}
-  }
-`
+const mediaFactory =
+  (query: string) =>
+  (...args: any[]) =>
+    css`
+      @media screen and ${query} {
+        ${css.apply(null, args as any)}
+      }
+    `
 
 export const mediaQueries = {
   smallPhoneOnly: `(max-width: calc(${breakpoints.mediumPhonePlus} - 1px))`,
@@ -99,6 +103,13 @@ export const media = {
   mediumPhonePlus: mediaFactory(mediaQueries.mediumPhonePlus),
   tabletPlus: mediaFactory(mediaQueries.tabletPlus),
   laptopPdualColumnPluslus: mediaFactory(mediaQueries.dualColumnPlus),
+}
+export const mediaSelectors = {
+  smallPhoneOnly: createMediaSelector(mediaQueries.smallPhoneOnly),
+  phoneOnly: createMediaSelector(mediaQueries.phoneOnly),
+  mediumPhonePlus: createMediaSelector(mediaQueries.mediumPhonePlus),
+  tabletPlus: createMediaSelector(mediaQueries.tabletPlus),
+  laptopPdualColumnPluslus: createMediaSelector(mediaQueries.dualColumnPlus),
 }
 
 export const messages = {

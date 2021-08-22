@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import { RouterAction, useLink } from 'retil-router'
+import { NavAction, useNavLinkProps } from 'retil-nav'
 import styled from 'styled-components'
 
 import { PopupContext } from 'src/components/popup'
@@ -111,7 +111,7 @@ export const MenuItem = React.forwardRef<HTMLDivElement, MenuItemProps>(
 export interface MenuLinkItemProps
   extends Omit<React.ComponentProps<'a'>, 'href'> {
   disabled?: boolean
-  to: RouterAction
+  to: NavAction
 }
 
 export const MenuLinkItem = React.forwardRef<
@@ -135,7 +135,7 @@ export const MenuLinkItem = React.forwardRef<
     [onClick, onDidSelect],
   )
 
-  const linkProps = useLink(to, {
+  const linkProps = useNavLinkProps(to, {
     onClick: handleClick,
     onMouseEnter,
   })

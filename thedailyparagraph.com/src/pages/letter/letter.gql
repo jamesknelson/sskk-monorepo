@@ -1,0 +1,25 @@
+query LetterById($post_id: uuid!) {
+  letters: published_posts(where: {id: {_eq: $post_id}}) {
+    ...letterFields
+  }
+}
+
+query LetterByHandleAndSlug($handle: String!, $slug: String!) {
+  letters: published_posts(where: {profile: {handle: {_eq: $handle}}, slug: {_eq: $slug}}) {
+    ...letterFields
+  }
+}
+
+fragment letterFields on published_posts {
+  id
+  content
+  published_at
+  profile {
+    id
+    display_name
+    avatar_url
+    handle
+  }
+  slug
+  updated_at
+}
