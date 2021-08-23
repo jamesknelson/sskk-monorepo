@@ -2,13 +2,17 @@ import { BasicScroll, create as createBasicScroll } from 'basicscroll'
 import { rgba } from 'polished'
 import React, { useEffect, useRef } from 'react'
 import { Boundary } from 'retil-boundary'
-import { LinkSurface } from 'retil-interaction'
+import {
+  LinkSurface,
+  PopupProvider,
+  PopupTriggerSurface,
+} from 'retil-interaction'
 import { useMediaRenderer } from 'retil-media'
 import styled, { css } from 'styled-components'
 
 import { ButtonBody } from 'src/components/buttons'
 import { Menu, MenuDivider, MenuItem, MenuLinkItem } from 'src/components/menu'
-import { PopupProvider, PopupTrigger, Popup } from 'src/components/popup'
+import { PopupDialog } from 'src/components/popup'
 import { MemberProfile, useAppEnv, useAuthController } from 'src/env'
 import {
   colors,
@@ -202,122 +206,116 @@ function UserMenu(props: UserMenuProps) {
       <LinkSurface href="/dashboard/stories/new">
         <ButtonBody outline>Start a story</ButtonBody>
       </LinkSurface>
-      <PopupProvider triggerOnFocus triggerOnSelect>
-        <PopupTrigger>
-          {(triggerRef) => (
-            <>
-              {renderOnTabletPlus((hideCSS) => (
+      <PopupProvider>
+        <PopupTriggerSurface triggerOnFocus triggerOnPress>
+          {renderOnTabletPlus((hideCSS) => (
+            <div
+              tabIndex={-1}
+              css={css`
+                ${hideCSS}
+
+                position: relative;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                flex: 1;
+                padding-right: 15px;
+                padding-left: 5px;
+                margin-left: 0.5rem;
+                height: 2rem;
+                font-size: 0.9rem;
+                font-family: sans-serif;
+                user-select: none;
+
+                border-radius: 9999px;
+
+                box-shadow: 0 0 0 1px ${colors.ink.black} inset,
+                  0 0 10px ${rgba(colors.ink.black, 0.12)},
+                  0 0 10px ${rgba(colors.ink.black, 0.12)} inset;
+                color: ${colors.ink.black};
+                text-shadow: 0 0 5px ${rgba(colors.ink.black, 0.1)};
+
+                transition: opacity 200ms ${easings.easeOut},
+                  text-shadow 200ms ${easings.easeOut},
+                  box-shadow 200ms ${easings.easeOut},
+                  color 200ms ${easings.easeOut};
+
+                ${focusRing('::after', { radius: '9999px' })}
+
+                :active {
+                  box-shadow: 0 0 0 1px ${colors.ink.black} inset,
+                    0 0 15px ${rgba(colors.ink.black, 0.2)},
+                    0 0 15px ${rgba(colors.ink.black, 0.2)} inset;
+                  text-shadow: 0 0 8px ${rgba(colors.ink.black, 0.15)};
+                }
+              `}>
+              {profile.avatarURL && (
                 <div
-                  ref={triggerRef}
-                  tabIndex={-1}
                   css={css`
-                    ${hideCSS}
-
                     position: relative;
-                    display: flex;
-                    align-items: center;
-                    cursor: pointer;
-                    flex: 1;
-                    padding-right: 15px;
-                    padding-left: 5px;
-                    margin-left: 0.5rem;
-                    height: 2rem;
-                    font-size: 0.9rem;
-                    font-family: sans-serif;
-                    user-select: none;
-
-                    border-radius: 9999px;
-
-                    box-shadow: 0 0 0 1px ${colors.ink.black} inset,
-                      0 0 10px ${rgba(colors.ink.black, 0.12)},
-                      0 0 10px ${rgba(colors.ink.black, 0.12)} inset;
-                    color: ${colors.ink.black};
-                    text-shadow: 0 0 5px ${rgba(colors.ink.black, 0.1)};
-
-                    transition: opacity 200ms ${easings.easeOut},
-                      text-shadow 200ms ${easings.easeOut},
-                      box-shadow 200ms ${easings.easeOut},
-                      color 200ms ${easings.easeOut};
-
-                    ${focusRing('::after', { radius: '9999px' })}
-
-                    :active {
-                      box-shadow: 0 0 0 1px ${colors.ink.black} inset,
-                        0 0 15px ${rgba(colors.ink.black, 0.2)},
-                        0 0 15px ${rgba(colors.ink.black, 0.2)} inset;
-                      text-shadow: 0 0 8px ${rgba(colors.ink.black, 0.15)};
-                    }
-                  `}>
-                  {profile.avatarURL && (
-                    <div
-                      css={css`
-                        position: relative;
-                        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03) inset;
-                        /* background-color: #f6f8fa; */
-                        background-color: white;
-                        border-radius: 99px;
-                        height: 24px;
-                        width: 24px;
-                        overflow: hidden;
-                      `}>
-                      {<img src={profile.avatarURL} width={30} height={30} />}
-                    </div>
-                  )}
-                  <span
-                    css={css`
-                      margin: 0 0.5rem;
-                    `}>
-                    {profile.displayName}
-                  </span>
-                  <Caret
-                    css={css`
-                      position: absolute;
-                      right: 9px;
-                    `}
-                  />
-                </div>
-              ))}
-              {renderOnPhoneOnly((hideCSS) => (
-                <div
-                  ref={triggerRef}
-                  css={css`
-                    ${hideCSS}
-
-                    position: relative;
-                    display: flex;
-                    align-items: center;
-                    margin-left: 0.5rem;
+                    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03) inset;
+                    /* background-color: #f6f8fa; */
+                    background-color: white;
+                    border-radius: 99px;
+                    height: 24px;
+                    width: 24px;
                     overflow: hidden;
                   `}>
-                  <div
-                    css={css`
-                      position: relative;
-                      box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03) inset;
-                      background-color: white;
-                      border-radius: 99px;
-                      height: 28px;
-                      width: 28px;
-                      overflow: hidden;
-                    `}>
-                    <img src={profile.avatarURL!} width={28} height={28} />
-                  </div>
-                  <Caret
-                    css={css`
-                      margin-left: 0.25rem;
-                    `}
-                  />
+                  {<img src={profile.avatarURL} width={30} height={30} />}
                 </div>
-              ))}
-            </>
-          )}
-        </PopupTrigger>
-        <Popup placement="bottom-end">
+              )}
+              <span
+                css={css`
+                  margin: 0 0.5rem;
+                `}>
+                {profile.displayName}
+              </span>
+              <Caret
+                css={css`
+                  position: absolute;
+                  right: 9px;
+                `}
+              />
+            </div>
+          ))}
+          {renderOnPhoneOnly((hideCSS) => (
+            <div
+              css={css`
+                ${hideCSS}
+
+                position: relative;
+                display: flex;
+                align-items: center;
+                margin-left: 0.5rem;
+                overflow: hidden;
+              `}>
+              <div
+                css={css`
+                  position: relative;
+                  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03) inset;
+                  background-color: white;
+                  border-radius: 99px;
+                  height: 28px;
+                  width: 28px;
+                  overflow: hidden;
+                `}>
+                <img src={profile.avatarURL!} width={28} height={28} />
+              </div>
+              <Caret
+                css={css`
+                  margin-left: 0.25rem;
+                `}
+              />
+            </div>
+          ))}
+        </PopupTriggerSurface>
+        <PopupDialog placement="bottom-end">
           <Menu>
             <MenuLinkItem to="/dashboard">Your Stories</MenuLinkItem>
             <MenuDivider />
             <MenuItem onClick={signOut}>Log Out</MenuItem>
           </Menu>
-        </Popup>
+        </PopupDialog>
       </PopupProvider>
     </>
   )

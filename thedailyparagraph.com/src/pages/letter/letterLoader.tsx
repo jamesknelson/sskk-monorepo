@@ -7,8 +7,8 @@ import {
   LetterFieldsFragment,
 } from 'src/generated/graphql'
 import { AppEnv } from 'src/env/appEnv'
+import urls from 'src/pages/appURLs'
 import { PrecachedQuery } from 'src/utils/precachedQuery'
-import { urls } from 'src/utils/urls'
 import { decodeUUID } from 'src/utils/uuid'
 
 import { LetterParams, LetterQuery } from './letterURLs'
@@ -57,7 +57,7 @@ const loader = loadAsync<AppEnv<LetterParams, LetterQuery>>(async (env) => {
   const path = urls.letter({
     profileNametag: letter.profile!.handle!,
     letterId: letter.id,
-    letterSlug: letter.slug,
+    letterSlug: letter.slug || undefined,
   })
 
   if (path.pathname !== env.nav.pathname) {

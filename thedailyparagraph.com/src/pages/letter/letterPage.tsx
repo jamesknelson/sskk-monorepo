@@ -4,21 +4,21 @@ import { css } from 'styled-components'
 
 import { LetterCard } from 'src/components/letter'
 import { publicURL } from 'src/config'
+import { LetterFieldsFragment } from 'src/generated/graphql'
+import urls from 'src/pages/appURLs'
 import { createStateFromContentObject } from 'src/prose/contentObject'
 import { getTitle } from 'src/prose/getTitle'
-import { LetterFieldsFragment } from 'src/generated/graphql'
 import { dimensions } from 'src/theme'
 import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
-import { urls } from 'src/utils/urls'
 
 export interface Props {
-  query: PrecachedQuery<{ stories: LetterFieldsFragment[] }>
+  query: PrecachedQuery<{ letters: LetterFieldsFragment[] }>
 }
 
 export function Page(props: Props) {
   const { query } = props
   const { data } = usePrecachedQuery(query)
-  const story = data.stories[0]
+  const story = data.letters[0]
   const profile = story.profile!
   const editorState = useMemo(
     () => createStateFromContentObject(story.content),

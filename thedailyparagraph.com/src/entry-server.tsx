@@ -67,6 +67,8 @@ export async function render(
         ),
       )
 
+      // Render the head separately, as once it is done, as this makes it
+      // possible to stream the rest of the content.
       const helmetContext = {} as { helmet: HelmetData }
       renderToString(
         <HelmetProvider context={helmetContext}>

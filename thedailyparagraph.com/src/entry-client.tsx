@@ -5,6 +5,8 @@
 
 import createStyleCache from '@emotion/cache'
 import { CacheProvider as StyleCacheProvider } from '@emotion/react'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import { cloneElement } from 'react'
 import { createRoot } from 'react-dom'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
@@ -13,11 +15,21 @@ import { CSSProvider } from 'retil-css'
 import { ThemeContext, css } from 'styled-components'
 
 import { App } from './components/app'
+import { firebase as firebaseConfig, firebaseEmulators } from 'src/config'
 import { retilDataCacheName } from './constants/htmlGeneration'
 import { useAppEnv } from './env/appEnv'
 import { createBrowserAppEnvSource } from './env/browserAppEnv'
 import { AppGlobalStyles } from './styles/appGlobalStyles'
 import appLoader from './pages/appLoader'
+
+if (typeof window !== 'undefined') {
+  firebase.initializeApp(firebaseConfig)
+
+  const auth = firebase.auth()
+  if (firebaseEmulators.auth) {
+    auth.useEmulator(firebaseEmulators.auth)
+  }
+}
 
 const styleCache = createStyleCache({ key: 'sskk' })
 const rootNode = document.getElementById('root')!

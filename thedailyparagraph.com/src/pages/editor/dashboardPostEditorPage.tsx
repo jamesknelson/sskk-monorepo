@@ -1,12 +1,14 @@
 import { useMutation } from '@apollo/client'
 import { formatISO } from 'date-fns'
 import React, { useEffect, useRef, useState } from 'react'
-import { ControlProvider } from 'retil-interactions'
-import { useOperation } from 'retil-operation'
+import { Helmet } from 'react-helmet-async'
 import {
-  joinPaths,
-  useNavigate,
-} from 'src/pages/letter/node_modules/retil-router'
+  ButtonSurface,
+  ControlProvider,
+  SubmitButtonSurface,
+} from 'retil-interaction'
+import { joinPathnames, useNavController } from 'retil-nav'
+import { useOperation } from 'retil-operation'
 import slugify from 'slugify'
 import styled, { css } from 'styled-components'
 
@@ -35,11 +37,8 @@ import {
   PublishPostDocument,
 } from 'src/generated/graphql'
 import { colors, dimensions } from 'src/theme'
-import {
-  PrecachedQuery,
-  usePrecachedQuery,
-} from 'src/pages/letter/node_modules/src/utils/graphql'
-import { useAppRequest } from 'src/pages/letter/node_modules/src/utils/routing'
+import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
+import { useAppEnv } from 'src/env'
 
 export interface Props {
   query: null | PrecachedQuery<DashboardPostEditorQuery>
@@ -72,9 +71,9 @@ function getNextAvailableDate(publishTimes: number[]): Date {
 }
 
 export function Page({ query }: Props) {
-  const request = useAppRequest()
-  const profile = request.profile!
-  const navigate = useNavigate()
+  const env = useAppEnv()
+  const profile = env.profile!
+  const { navigate } = useNavController()
   const { data } = usePrecachedQuery(query)
   const post = data?.post || {
     id: undefined,
@@ -138,14 +137,14 @@ export function Page({ query }: Props) {
       try {
         const result = await executeCreate({
           variables: {
-            profile_id: request.profile!.id,
+            profile_id: env.profile!.id,
             version,
           },
         })
         const insertedId = result.data?.insert_posts_one?.id
         if (insertedId) {
           await navigate(
-            joinPaths(request.pathname, '..', '..', 'story', insertedId),
+            joinPathnames(env.nav.pathname, '..', '..', 'story', insertedId),
           )
         } else {
           alert("Couldn't save")
@@ -231,7 +230,7 @@ export function Page({ query }: Props) {
             post_id: post.id,
           },
         })
-        await navigate(joinPaths(request.pathname, '..', '..', 'stories'))
+        await navigate(joinPathnames(env.nav.pathname, '..', '..', 'stories'))
       } catch (error) {
         alert("Couldn't delete")
       }
@@ -265,11 +264,11 @@ export function Page({ query }: Props) {
 
   return (
     <>
-      <Head>
+      <Helmet>
         <title>
           {post.id ? `Edit ${title ? `"${title}"` : 'story'}` : 'New story'}
         </title>
-      </Head>
+      </Helmet>
 
       <form
         onSubmit={handleSubmit}
@@ -322,45 +321,37 @@ export function Page({ query }: Props) {
         <Card as="footer">
           <FooterLayout>
             <FooterGroup>
-              <ButtonBody
-                busy={publishPending}
-                disabled={!canPublish}
-                glyph={Message}
-                type="button"
-                onClick={doPublish}>
-                {publishedAt ? 'Revise' : 'Publish'}
-              </ButtonBody>
-              <ButtonBody
-                busy={!publishPending && savePending}
-                disabled={!canSave}
-                glyph={Edit}
-                type="submit"
-                outline
-                css={css`
-                  margin-left: 0.5rem;
-                `}>
-                Save draft{publishedAt ? ' revision' : ''}
-              </ButtonBody>
+              <ButtonSurface disabled={!canPublish} onTrigger={doPublish}>
+                <ButtonBody busy={publishPending} glyph={Message}>
+                  {publishedAt ? 'Revise' : 'Publish'}
+                </ButtonBody>
+              </ButtonSurface>
+
+              <SubmitButtonSurface disabled={!canSave}>
+                <ButtonBody
+                  busy={!publishPending && savePending}
+                  glyph={Edit}
+                  outline
+                  css={css`
+                    margin-left: 0.5rem;
+                  `}>
+                  Save draft{publishedAt ? ' revision' : ''}
+                </ButtonBody>
+              </SubmitButtonSurface>
             </FooterGroup>
             <FooterGroup>
               {canCancel ? (
-                <ButtonBody
-                  busy={cancelPending}
-                  disabled={!canCancel}
-                  glyph={X}
-                  onClick={doCancel}
-                  outline>
-                  Cancel
-                </ButtonBody>
+                <ButtonSurface disabled={!canCancel} onTrigger={doCancel}>
+                  <ButtonBody busy={cancelPending} glyph={X} outline>
+                    Cancel
+                  </ButtonBody>
+                </ButtonSurface>
               ) : (
-                <ButtonBody
-                  busy={deletePending}
-                  disabled={!canDelete}
-                  glyph={Trash}
-                  onClick={doDelete}
-                  outline>
-                  Delete
-                </ButtonBody>
+                <ButtonSurface disabled={!canDelete} onTrigger={doDelete}>
+                  <ButtonBody busy={deletePending} glyph={Trash} outline>
+                    Delete
+                  </ButtonBody>
+                </ButtonSurface>
               )}
             </FooterGroup>
           </FooterLayout>

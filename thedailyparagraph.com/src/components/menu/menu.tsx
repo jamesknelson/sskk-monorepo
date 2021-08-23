@@ -1,8 +1,8 @@
 import React, { useCallback, useContext } from 'react'
+import { usePopupHandle } from 'retil-interaction'
 import { NavAction, useNavLinkProps } from 'retil-nav'
 import styled from 'styled-components'
 
-import { PopupContext } from 'src/components/popup'
 import { colors } from 'src/theme'
 
 const StyledMenu = styled.div`
@@ -43,13 +43,12 @@ export interface MenuProps extends React.ComponentProps<'div'> {
 
 export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
   ({ children, onDidSelect, ...rest }, ref) => {
-    const popup = useContext(PopupContext)
+    const handle = usePopupHandle()
 
     return (
       <MenuContext.Provider
         value={{
-          onDidSelect:
-            onDidSelect || (popup.trigger ? popup.trigger.close : undefined),
+          onDidSelect: onDidSelect || handle?.close,
         }}>
         <StyledMenu {...rest} ref={ref}>
           {children}

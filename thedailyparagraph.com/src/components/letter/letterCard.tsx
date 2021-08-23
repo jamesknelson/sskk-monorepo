@@ -7,9 +7,9 @@ import { css } from 'styled-components'
 import { Card } from 'src/components/card'
 import { TextContent } from 'src/components/textContent'
 import { useAppEnv } from 'src/env'
+import urls from 'src/pages/appURLs'
 import { Schema } from 'src/prose/schema'
 import { colors, media, mediaSelectors } from 'src/theme'
-import { urls } from 'src/utils/urls'
 
 import { LetterContent } from './letterContent'
 
@@ -22,7 +22,7 @@ export type LetterCardProps = React.ComponentProps<typeof Card> & {
   profileNametag: string
   publishedAt?: Date
   letterId?: string
-  letterSlug?: string
+  letterSlug?: string | null
   titleAs?: 'h1' | 'h2'
 }
 

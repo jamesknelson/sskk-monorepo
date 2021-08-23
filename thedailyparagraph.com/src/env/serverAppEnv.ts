@@ -1,4 +1,5 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import fetch from 'cross-fetch'
 import type { Request, Response } from 'express'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import type { ReactElement } from 'react'
@@ -14,9 +15,11 @@ export function createServerAppEnv(
   response: Response,
 ): AppEnv {
   const cache = new InMemoryCache()
+  const httpLink = new HttpLink({ fetch, uri: graphqlURL })
   const client = new ApolloClient({
     uri: graphqlURL,
     cache,
+    link: httpLink,
   })
 
   const precacheQuery = async <Result = any, Variables extends object = object>(

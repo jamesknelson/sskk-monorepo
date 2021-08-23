@@ -1,162 +1,71 @@
 import React from 'react'
 import { animated, to as interpolate } from 'react-spring'
-import styled from 'styled-components'
+import { css } from 'styled-components'
 
-import { colors } from 'src/theme'
-
-import { PopupCard } from './popupCard'
-
-export const PopupArrow = styled.div`
-  position: absolute;
-  width: 0;
-  height: 0;
-
-  &::before,
-  &::after {
-    content: '';
-    margin: auto;
-    display: block;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-color: transparent;
-    position: absolute;
-  }
-  &::before {
-    border-width: 8px;
-  }
-  &::after {
-    border-width: 7px;
-  }
-
-  &[data-placement*='bottom'] {
-    top: 0;
-    left: 0;
-    margin-top: -1rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    &::before {
-      border-color: transparent transparent ${colors.structure.border}
-        transparent;
-      z-index: 1;
-    }
-    &::after {
-      border-color: transparent transparent ${colors.structure.bg} transparent;
-      z-index: 2;
-      margin-left: 1px;
-      margin-top: 2px;
-    }
-  }
-  &[data-placement*='top'] {
-    bottom: 0;
-    left: 0;
-    margin-bottom: -0.5rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    &::before {
-      border-color: ${colors.structure.border} transparent transparent
-        transparent;
-      z-index: 1;
-    }
-    &::after {
-      border-color: ${colors.structure.bg} transparent transparent transparent;
-      z-index: 2;
-      margin-left: 1px;
-      margin-bottom: -2px;
-    }
-  }
-  &[data-placement*='right'] {
-    top: 0;
-    left: 0;
-    margin-top: -0.75rem;
-    margin-left: -1rem;
-    height: 0.5rem;
-    width: 0.5rem;
-    &::before {
-      border-color: transparent ${colors.structure.border} transparent
-        transparent;
-      z-index: 1;
-    }
-    &::after {
-      border-color: transparent ${colors.structure.bg} transparent transparent;
-      z-index: 2;
-      margin-top: 1px;
-      margin-left: 2px;
-    }
-  }
-  &[data-placement*='left'] {
-    top: 0;
-    right: -0.5rem;
-    margin-top: -0.75rem;
-    height: 0.5rem;
-    width: 0.5rem;
-    &::before {
-      border-color: transparent transparent transparent
-        ${colors.structure.border};
-      z-index: 1;
-    }
-    &::after {
-      border-color: transparent transparent transparent ${colors.structure.bg};
-      z-index: 2;
-      margin-top: 1px;
-      margin-left: 0px;
-    }
-  }
-`
-
-const StyledPopupBox = animated(styled(PopupCard)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  &[data-placement*='bottom'],
-  &[data-placement*='top'] {
-    margin: 0.5rem 0;
-  }
-  &[data-placement*='left'],
-  &[data-placement*='right'] {
-    margin: 0 0.5rem;
-  }
-  top: 0;
-  left: 0;
-  max-height: 65vh;
-  z-index: 1000;
-  transform-origin: top center;
-`)
-
-type PopupBoxProps = React.ComponentProps<typeof StyledPopupBox> & {
-  innerRef?: any
-  left?: any
-  position?: React.CSSProperties['position']
-  top?: any
-  transitionProps?: any
+const shadows = {
+  default:
+    '0 0 15px 100vh rgba(0, 0, 0, 0.02), 0 0 15px 3px rgba(0, 0, 0, 0.03) inset',
+  raised: '0 0 10px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 0, 0, 0.05)',
 }
 
-export const PopupBox = React.forwardRef<HTMLDivElement, PopupBoxProps>(
+export interface PopupCardProps extends React.ComponentProps<'div'> {
+  radius?: string
+  raised?: boolean
+  rounded?: boolean
+}
+
+const AnimatedDiv = animated.div as unknown as 'div'
+
+export const AnimatedPopupCard = React.forwardRef<
+  HTMLDivElement,
+  PopupCardProps
+>(({ radius = '3px', raised = true, rounded, ...rest }, ref) => (
+  <AnimatedDiv
+    ref={ref}
+    css={css`
+      background-color: white;
+      border: 1px solid #f0f0f0;
+      box-shadow: ${shadows[raised ? 'raised' : 'default']};
+      border-radius: ${radius || (rounded ? 10 : 0) + 'px'};
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      &[data-placement*='bottom'],
+      &[data-placement*='top'] {
+        margin: 0.5rem 0;
+      }
+      &[data-placement*='left'],
+      &[data-placement*='right'] {
+        margin: 0 0.5rem;
+      }
+      top: 0;
+      left: 0;
+      max-height: 65vh;
+      z-index: 1000;
+      transform-origin: top center;
+      -webkit-overflow-scrolling: touch;
+    `}
+    {...rest}
+  />
+))
+
+export const createMergeStyle =
+  ({ opacity, top: topOffset }: any) =>
   (
-    {
-      transitionProps: { opacity, scale, top: topOffset },
-      left,
-      top,
-      innerRef,
-      ...props
-    },
-    ref,
-  ) => (
-    <StyledPopupBox
-      ref={ref}
-      radius="3px"
-      raised
-      {...props}
-      style={{
-        opacity: opacity,
-        transform: interpolate(
-          [scale, topOffset],
-          (scale, topOffset) =>
-            `translate3d(${left}px, ${top + topOffset}px, 0) scale(${scale})`,
-        ),
-        position: props.position,
-      }}
-    />
-  ),
-)
+    { left, top, ...popupStyle }: React.CSSProperties = {},
+    styleProp?: React.CSSProperties,
+  ) => ({
+    ...styleProp,
+    ...popupStyle,
+    opacity,
+    transform: interpolate(
+      [topOffset],
+      (topOffset) =>
+        `translate3d(${parseInt(left as string, 10)}px, ${
+          parseInt(top as string, 10) + (topOffset as number)
+        }px, 0)`,
+    ) as any,
+  })

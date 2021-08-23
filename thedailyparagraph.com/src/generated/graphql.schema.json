@@ -329,6 +329,16 @@
             "defaultValue": null
           },
           {
+            "name": "_iregex",
+            "description": "does the column match the given POSIX regular expression, case insensitive",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_is_null",
             "description": null,
             "type": {
@@ -407,6 +417,16 @@
             "defaultValue": null
           },
           {
+            "name": "_niregex",
+            "description": "does the column NOT match the given POSIX regular expression, case insensitive",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_nlike",
             "description": "does the column NOT match the given pattern",
             "type": {
@@ -417,8 +437,28 @@
             "defaultValue": null
           },
           {
+            "name": "_nregex",
+            "description": "does the column NOT match the given POSIX regular expression, case sensitive",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "_nsimilar",
             "description": "does the column NOT match the given SQL regular expression",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "_regex",
+            "description": "does the column match the given POSIX regular expression, case sensitive",
             "type": {
               "kind": "SCALAR",
               "name": "String",
@@ -636,13 +676,9 @@
             "description": "An object relationship",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "profiles",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "profiles",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -6130,27 +6166,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "INPUT_OBJECT",
-        "name": "profile_published_posts_by_slug_args",
-        "description": null,
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "p_slug",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "profiles",
         "description": "columns and relationships of \"profiles\"",
@@ -6506,13 +6521,13 @@
             "args": [
               {
                 "name": "args",
-                "description": "input parameters for function \"profile_published_posts_by_slug\"",
+                "description": "input parameters for computed field \"published_posts_by_slug\" defined on table \"profiles\"",
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "profile_published_posts_by_slug_args",
+                    "name": "published_posts_by_slug_profiles_args",
                     "ofType": null
                   }
                 },
@@ -6852,6 +6867,16 @@
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "posts_bool_exp",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "published_posts",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "published_posts_bool_exp",
               "ofType": null
             },
             "defaultValue": null
@@ -7325,6 +7350,16 @@
               "ofType": null
             },
             "defaultValue": null
+          },
+          {
+            "name": "published_posts_aggregate",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "published_posts_aggregate_order_by",
+              "ofType": null
+            },
+            "defaultValue": null
           }
         ],
         "interfaces": null,
@@ -7734,6 +7769,47 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "published_posts_aggregate_order_by",
+        "description": "order by aggregate values of table \"published_posts\"",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "count",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "max",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "published_posts_max_order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "min",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "published_posts_min_order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "published_posts_bool_exp",
         "description": "Boolean expression to filter rows from the table \"published_posts\". All fields are combined with a logical 'AND'.",
         "fields": null,
@@ -7860,6 +7936,27 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "published_posts_by_slug_profiles_args",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "p_slug",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "published_posts_max_fields",
         "description": "aggregate max on columns",
@@ -7931,6 +8028,67 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "published_posts_max_order_by",
+        "description": "order by max() on columns of table \"published_posts\"",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "id",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "profile_id",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "published_at",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "slug",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "updated_at",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "published_posts_min_fields",
         "description": "aggregate min on columns",
@@ -7998,6 +8156,67 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "published_posts_min_order_by",
+        "description": "order by min() on columns of table \"published_posts\"",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "id",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "profile_id",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "published_at",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "slug",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "updated_at",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "order_by",
+              "ofType": null
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -8337,7 +8556,7 @@
           },
           {
             "name": "post_versions",
-            "description": "fetch data from the table: \"post_versions\"",
+            "description": "An array relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -8428,7 +8647,7 @@
           },
           {
             "name": "post_versions_aggregate",
-            "description": "fetch aggregated fields from the table: \"post_versions\"",
+            "description": "An aggregate relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -8538,7 +8757,7 @@
           },
           {
             "name": "posts",
-            "description": "fetch data from the table: \"posts\"",
+            "description": "An array relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -8629,7 +8848,7 @@
           },
           {
             "name": "posts_aggregate",
-            "description": "fetch aggregated fields from the table: \"posts\"",
+            "description": "An aggregate relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -9326,7 +9545,7 @@
           },
           {
             "name": "post_versions",
-            "description": "fetch data from the table: \"post_versions\"",
+            "description": "An array relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -9417,7 +9636,7 @@
           },
           {
             "name": "post_versions_aggregate",
-            "description": "fetch aggregated fields from the table: \"post_versions\"",
+            "description": "An aggregate relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -9527,7 +9746,7 @@
           },
           {
             "name": "posts",
-            "description": "fetch data from the table: \"posts\"",
+            "description": "An array relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -9618,7 +9837,7 @@
           },
           {
             "name": "posts_aggregate",
-            "description": "fetch aggregated fields from the table: \"posts\"",
+            "description": "An aggregate relationship",
             "args": [
               {
                 "name": "distinct_on",
@@ -11249,6 +11468,44 @@
       }
     ],
     "directives": [
+      {
+        "name": "cached",
+        "description": "whether this query should be cached (Hasura Cloud only)",
+        "isRepeatable": false,
+        "locations": [
+          "QUERY"
+        ],
+        "args": [
+          {
+            "name": "ttl",
+            "description": "measured in seconds",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "defaultValue": "60"
+          },
+          {
+            "name": "refresh",
+            "description": "refresh the cache entry",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": "false"
+          }
+        ]
+      },
       {
         "name": "include",
         "description": "Directs the executor to include this field or fragment only when the `if` argument is true.",

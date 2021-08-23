@@ -21,6 +21,14 @@ const profileTopLoader = loadAsync<AppEnv<ProfileParams>>(async (env) => {
     return notFoundLoader(env)
   }
 
+  env.head.push(
+    <title>{profile.display_name} &ndash; The Daily Paragraph</title>,
+    <meta
+      name="description"
+      content="A project to encourage ordinary people to write a couple sentences a day."
+    />,
+  )
+
   return <Page query={query} />
 })
 

@@ -1,141 +1,20 @@
-import { NavAction, NavLocation, NavParams } from 'retil-nav'
+import { NavAction, NavLocation, joinPathnames, parseLocation } from 'retil-nav'
+import { emptyObject } from 'retil-support'
 import { parse as parseUUID, stringify as stringifyUUID } from 'uuid'
 
-import { LetterParams, LetterQuery } from 'src/pages/letter/letterURLs'
-import { ProfileParams } from 'src/pages/profile/profileURLs'
+export type URLParams = Record<
+  string,
+  string | string[] | boolean | null | undefined
+>
 
-const editorURLs = urlSchema({
-  dashboard: () => `/dashboard`,
+// Allow null values to be passed into optional parameters
+type ExtendParams<TParams> = {
+  [Key in keyof TParams]: undefined extends TParams[Key]
+    ? TParams[Key] | null
+    : TParams[Key]
+}
 
-  drafts: () => `/drafts`,
-
-  letter: (params: { letterId: string }) => `/~${params.letterId}`,
-
-  published: () => `/published`,
-})
-
-editorURLs.dashboard()
-patternFor(editorURLs.dashboard)
-editorURLs.letter({ letterId: 'test' })
-patternFor(editorURLs.letter)
-
-const joinURLs = urlSchema({
-  // To start, ask for an email/password. Explain that you can't login with
-  // Google or Facebook, as we value their privacy.
-  createAccount: () => `/`,
-
-  // Show the costs involved with the nametag, but do not ask for billing
-  // information immediately.
-  // Free nametags end with 4 random numbers, and the preceeding characters
-  // or any combination of them with a subset of the 4 trailing numbers,
-  // cannot match any existing paid handles.
-  createNametag: () => `/create-nametag`,
-
-  // Members must write an introduction that passes spam detection, with at
-  // least 280 characters, before reserving a nametag.
-  // Show the new nametag next to the introduction, with an option to edit
-  // the nametag in a popup, showing any associated costs.
-  writeIntroduction: () => `/write-introduction`,
-
-  // Conditionally shown if the user has picked a paid membership. Charges
-  // for 1 year of posting under this nametag, and reserves the name for 4
-  // years after that.
-  purchaseMembership: () => `/purchase-membership`,
-
-  thankyou: () => `/thankyou`,
-})
-
-const profileURLs = urlSchema({
-  /**
-   * A full list of all the member's publications
-   */
-  publishedLetters: () => `/publications`,
-
-  /**
-   * By default, the member's landing page will just contain the user's
-   * introduction except at the top, and a list of recently excerpts of
-   * recently published letters *excluding* the introduction – although
-   * at some point, it'll be possible for the user to edit this while
-   * keeping the introduction the same.
-   */
-  top: () => `/`,
-})
-
-const readURLs = urlSchema({
-  feed: () => `/`,
-  inbox: () => `/inbox`,
-})
-
-const settingsURLs = urlSchema({
-  changeEmail: () => `/change-email`,
-  changePassword: () => `/change-password`,
-
-  // Includes nametag and billing details
-  membership: () => `/membership`,
-})
-
-export const urls = urlSchema({
-  editor: nestURLSchema('/editor', editorURLs),
-
-  hello: () => `/hello`,
-
-  join: nestURLSchema('/join', joinURLs),
-
-  /**
-   * Shows a letter on a page without the selection bar. On mobile, links from
-   * the selection bar will use this route with a `from` param, while on a
-   * two-column layout, double clicking in the selection bar will cause this
-   * link to be used – and should also cause the selection bar to be animated
-   * out.
-   */
-  letter: ({
-    profileNametag,
-    letterId,
-    letterSlug,
-    ...query
-  }: LetterParams & LetterQuery) => ({
-    query: { ...query },
-    pathname: `/${profileNametag}/${letterSlug || ''}~${encodeUUID(letterId)}`,
-  }),
-
-  login: () => `/login`,
-  logout: () => `/logout`,
-
-  policies: () => `/policies`,
-
-  profile: nestURLSchema(
-    (profileParams: ProfileParams) => `/${profileParams.nametag}`,
-    profileURLs,
-  ),
-
-  read: nestURLSchema('/read', readURLs),
-
-  recoverAccount: () => `/recover-account`,
-
-  settings: nestURLSchema('/settings', settingsURLs),
-})
-
-urls.editor.dashboard()
-
-urls.profile.publishedLetters({ nametag: 'test' })
-
-patternFor(urls.letter, {
-  optional: ['letterSlug'],
-})
-
-patternFor(urls.profile.publishedLetters, {
-  optional: ['nametag'],
-})
-
-patternFor(urls.editor.letter, {
-  optional: ['letterId'],
-})
-
-patternFor(urls.editor)
-
-// ---
-
-type URLConfig<TParams extends NavParams = NavParams> =
+type URLConfig<TParams extends URLParams = URLParams> =
   // https://stackoverflow.com/questions/52667959/what-is-the-purpose-of-bivariancehack-in-typescript-types
   { bivarianceHack(instance: TParams): NavAction }['bivarianceHack']
 
@@ -147,11 +26,11 @@ type URLSchema = {
   [name: string]: URLSchema | URLSchemaLeaf<any>
 }
 
-type URLSchemaLeaf<TParams extends NavParams = {}> = {} extends TParams
+type URLSchemaLeaf<TParams extends URLParams = {}> = {} extends TParams
   ? (params?: URLSchemaEmptyParams) => NavLocation
   : (params: TParams) => NavLocation
 
-type URLNestableSchemaLeaf<TParams extends NavParams = NavParams> =
+type URLNestableSchemaLeaf<TParams extends URLParams = URLParams> =
   | { bivarianceHack(instance?: TParams): NavLocation }['bivarianceHack']
 
 type URLNestableSchema = {
@@ -160,12 +39,12 @@ type URLNestableSchema = {
 
 type URLNestedSchemaAndLeaf<
   TSchema extends URLNestableSchema,
-  TParams extends NavParams = {},
+  TParams extends URLParams = {},
 > = URLSchemaLeaf<TParams> & URLNestedSchema<TSchema, TParams>
 
 type URLNestedSchema<
   TSchema extends URLNestableSchema,
-  TParams extends NavParams = {},
+  TParams extends URLParams = {},
 > = {} extends TParams ? TSchema : NestedURLSchema<TSchema, TParams>
 
 /**
@@ -193,14 +72,14 @@ type URLSchemaLeafFromConfig<TConfig extends URLConfig<any>> =
   TConfig extends () => NavAction
     ? (params?: URLSchemaEmptyParams) => NavLocation
     : TConfig extends (params: infer IParams) => NavAction
-    ? (params: IParams) => NavLocation
+    ? (params: ExtendParams<IParams>) => NavLocation
     : never
 
 // ---
 
 type NestedURLSchema<
   TSchema extends URLSchema,
-  TParams extends NavParams = {},
+  TParams extends URLParams = {},
 > = {
   [Key in Extract<keyof TSchema, string>]: TSchema[Key] extends URLSchema
     ? NestedURLSchema<TSchema[Key], TParams>
@@ -215,32 +94,90 @@ type NestedURLSchema<
 
 // ---
 
+const nestedSchemaSymbol = Symbol()
+
 export function urlSchema<TConfig extends URLSchemaConfig>(
   config: TConfig,
 ): URLSchemaFromConfig<TConfig> {
-  return undefined as any
+  const keys = Object.keys(config)
+  const schema = {} as URLSchema
+  for (const key of keys) {
+    const value = config[key]
+    schema[key] =
+      typeof value !== 'function'
+        ? value
+        : (params: URLParams = {}) => parseLocation(value(params))
+  }
+  return schema as URLSchemaFromConfig<TConfig>
 }
 
-// take a schema node and return a new schema node, w/ a .pattern fn on it
 export function nestURLSchema<
   TSchema extends URLNestableSchema,
-  TParams extends NavParams = {},
+  TParams extends URLParams = {},
 >(
   root: string | URLConfig<TParams>,
   schema: TSchema,
 ): URLNestedSchemaAndLeaf<TSchema, TParams> {
-  return undefined as any
+  const leaf = typeof root !== 'string' ? root : () => root
+
+  const handler: ProxyHandler<URLNestableSchemaLeaf> = {
+    apply: (target, thisArg, argumentsList) => {
+      const head = parseLocation(leaf.apply(thisArg, argumentsList))
+      if (target === leaf) {
+        return head
+      }
+      const tail = target.apply(thisArg, argumentsList)
+      return parseLocation({
+        pathname: joinPathnames(head.pathname || '', tail?.pathname || ''),
+        query: (head.query || tail?.query) && {
+          ...head.query,
+          ...tail?.query,
+        },
+      })
+    },
+    get: (target, key) => {
+      if (key === nestedSchemaSymbol) {
+        return true
+      }
+      const child = schema[key as string]
+      if (child) {
+        return new Proxy(child, handler)
+      }
+      return Reflect.get(target, key)
+    },
+    has: (target, key) => {
+      return Reflect.has(schema, key) || Reflect.has(target, key)
+    },
+    ownKeys: (target) =>
+      Reflect.ownKeys(schema).concat(Reflect.ownKeys(target)),
+  }
+
+  return new Proxy(leaf, handler) as URLNestedSchemaAndLeaf<TSchema, TParams>
 }
 
-export function patternFor<TParams extends NavParams>(
-  url:
+export function patternFor<TParams extends URLParams>(
+  getter: (
     | ((params?: URLSchemaEmptyParams) => NavLocation)
-    | ((params: TParams) => NavLocation),
+    | ((params: TParams) => NavLocation)
+  ) & {
+    [nestedSchemaSymbol]?: true
+  },
   options: {
     optional?: (keyof TParams)[]
   } = {},
 ): string {
-  return undefined as any
+  const { optional = [] } = options
+  const { pathname } = getter(
+    new Proxy(emptyObject as any, {
+      get: (_target, prop) =>
+        ':' +
+        (typeof prop === 'string' && optional.includes(prop)
+          ? prop + '?'
+          : String(prop)),
+    }),
+  )
+  const wildcard = getter[nestedSchemaSymbol] === true ? '*' : ''
+  return pathname + wildcard
 }
 
 // Copied wholesale from: https://www.npmjs.com/package/d64

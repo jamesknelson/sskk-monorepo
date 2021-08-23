@@ -1,5 +1,5 @@
 import { loadLazy } from 'retil-mount'
-import { loadMatch, loadNotFoundBoundary } from 'retil-nav'
+import { loadMatch, loadNotFoundBoundary, loadRedirect } from 'retil-nav'
 import { AppEnv } from 'src/env'
 
 import { patternFor } from 'src/utils/urls'
@@ -9,6 +9,8 @@ import notFoundLoader from './notFoundLoader'
 
 const appLoader = loadNotFoundBoundary(
   loadMatch<AppEnv>({
+    './': loadRedirect(patternFor(urls.hello)),
+
     [patternFor(urls.editor)]: loadLazy(() => import('./editor/editorLoader')),
 
     [patternFor(urls.hello)]: loadLazy(() => import('./hello/helloLoader')),
