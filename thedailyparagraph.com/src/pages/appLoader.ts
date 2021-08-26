@@ -15,14 +15,16 @@ const appLoader = loadNotFoundBoundary(
 
     [patternFor(urls.hello)]: loadLazy(() => import('./hello/helloLoader')),
 
-    [patternFor(urls.join)]: loadLazy(() => import('./join/joinLoader')),
-
     [patternFor(urls.letter, { optional: ['letterSlug'] })]: loadLazy(
       () => import('./letter/letterLoader'),
     ),
 
     [patternFor(urls.login)]: loadLazy(() => import('./loginLoader')),
     [patternFor(urls.logout)]: loadLazy(() => import('./logoutLoader')),
+
+    [patternFor(urls.onboarding)]: loadLazy(
+      () => import('./onboarding/onboardingLoader'),
+    ),
 
     [patternFor(urls.profile)]: loadLazy(
       () => import('./profile/profileLoader'),

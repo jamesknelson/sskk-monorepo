@@ -10,6 +10,7 @@ import { ButtonBody } from 'src/components/buttons'
 import { Input } from 'src/components/input'
 import { colors } from 'src/theme'
 import { useAuthController } from 'src/env/auth'
+import appURLs from 'src/pages/appURLs'
 import { useModel, useModelField } from 'src/utils/model'
 
 interface LoginModelValue {
@@ -49,7 +50,7 @@ export function LoginPage() {
       if (signInIssues) {
         addIssues(signInIssues)
       } else {
-        await navigate('/dashboard')
+        await navigate(appURLs.read.summary())
       }
     }
   })

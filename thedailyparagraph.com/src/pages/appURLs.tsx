@@ -1,18 +1,16 @@
 import { encodeUUID, nestURLSchema, urlSchema } from 'src/utils/urls'
 
 import editorURLs from './editor/editorURLs'
-import joinURLs from './join/joinURLs'
+import onboardingURLs from './onboarding/onboardingURLs'
 import { LetterParams, LetterQuery } from './letter/letterURLs'
 import profileURLs, { ProfileParams } from './profile/profileURLs'
-import readURLs from './read/readURLs'
+import readerURLs from './reader/readerURLs'
 import settingsURLs from './settings/settingsURLs'
 
 const urls = urlSchema({
   editor: nestURLSchema('/editor', editorURLs),
 
   hello: () => `/hello`,
-
-  join: nestURLSchema('/join', joinURLs),
 
   /**
    * Shows a letter on a page without the selection bar. On mobile, links from
@@ -28,11 +26,13 @@ const urls = urlSchema({
     ...query
   }: LetterParams & LetterQuery) => ({
     query: { ...query },
-    pathname: `/${profileNametag}/${letterSlug || ''}~${encodeUUID(letterId)}`,
+    pathname: `/@${profileNametag}/${letterSlug || ''}~${encodeUUID(letterId)}`,
   }),
 
   login: () => `/login`,
   logout: () => `/logout`,
+
+  onboarding: nestURLSchema('/join', onboardingURLs),
 
   policies: () => `/policies`,
 
@@ -41,7 +41,7 @@ const urls = urlSchema({
     profileURLs,
   ),
 
-  read: nestURLSchema('/read', readURLs),
+  read: nestURLSchema('/read', readerURLs),
 
   recoverAccount: () => `/recover-account`,
 

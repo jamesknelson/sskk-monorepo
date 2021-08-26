@@ -3,7 +3,8 @@ styles
 external vs internal styles
 
 external styles are things that can be applied directly to a container without
-affecting its internals. these include things like:
+affecting its internals, other how they adjust to size. these include things
+like:
 
 - position
 - flex-basis
@@ -28,7 +29,7 @@ some css properties don't always fit neatly into one of these two categories.
 for example, setting `display` can change both the external style (e.g. width
 and/or height) and internal style (can set internal elements to flex). in cases
 like these where a property doesn't fit neatly into either category, the safest
-approach is to treat it as external, exposing any required functionality via
+approach is to treat it as internal, exposing any required functionality via
 props.
 
 when applying internal styles, instead of using a css/sx prop, you'll want to
