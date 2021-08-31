@@ -1,10 +1,22 @@
 https://github.com/chanzuckerberg/czi-prosemirror
 
 
+o add a down migration
+o add a name field to the recipients
+- figure out how to test actions
+
+- use hasura claims_map configuration to expose a session variable with the
+  auth time, so that it's possible to create a volatile function that upserts
+  a row into the logins table, along with any entries/referrers using a single
+  hasura query
+- ensure "audience" is set in prod auth configuration
+- set up hasura actions
+- configure X-Forwarded-For to expose IP to hasura:
+  https://github.com/hasura/graphql-engine/issues/4770
+
+- start working on onboarding and connecting payments
 
 - add back the svgo babel loader somehow
-
-
 
 todo
 
