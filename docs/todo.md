@@ -4,6 +4,9 @@ https://github.com/chanzuckerberg/czi-prosemirror
 o add a down migration
 o add a name field to the recipients
 - figure out how to test actions
+  * create a msw service which supports a subset of hasura required by 'actions'
+  * setup jest for service-actions using supertest
+  * write tests for each action
 
 - use hasura claims_map configuration to expose a session variable with the
   auth time, so that it's possible to create a volatile function that upserts
@@ -13,6 +16,12 @@ o add a name field to the recipients
 - set up hasura actions
 - configure X-Forwarded-For to expose IP to hasura:
   https://github.com/hasura/graphql-engine/issues/4770
+
+- get login screen working
+- create a user registration page that creates a new customer id without setting up a persona
+
+
+
 
 - start working on onboarding and connecting payments
 

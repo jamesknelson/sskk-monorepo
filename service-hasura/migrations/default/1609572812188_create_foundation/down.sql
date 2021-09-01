@@ -18,4 +18,6 @@ drop table "readers";
 drop table "personas";
 drop table "memberships";
 drop table "membership_levels";
+drop table "logins";
+drop table "clients";
 drop table "customers";
