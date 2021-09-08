@@ -107,7 +107,7 @@ services:
 
 databases:
   - name: sskk-db-postgres
-    databaseName: sskk-db-hasura # optional (Render may add a suffix)
+    databaseName: hasura # optional (Render may add a suffix)
     ipAllowList: [] # only allow internal connections
 
 envVarGroups:
