@@ -1,6 +1,6 @@
 import { join, resolve } from 'path'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
+import tsconfigPaths from 'vite-tsconfig-paths-alt'
 
 import reactEmotion from './vite/reactEmotion'
 
@@ -22,7 +22,6 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     mode !== 'production' && require('@vitejs/plugin-react-refresh')(),
-    // mode !== 'production' &&
     tsconfigPaths({
       root: projectRootDir,
       projects: ['.'],

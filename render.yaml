@@ -31,11 +31,7 @@ services:
     branch: main
     region: oregon
     plan: starter
-    buildCommand:
-      # for some reason, vite build crashes if run by yarn, so we have to
-      # call it manually
-      cd client-web && yarn install --frozen-lockfile && node_modules/.bin/vite
-      build --ssr src/entry-server.tsx --outDir dist/server && yarn build:client
+    buildCommand: cd client-web && yarn install --frozen-lockfile && yarn build
     startCommand: cd client-web && yarn serve
     healthCheckPath: /
     envVars:
@@ -84,7 +80,7 @@ services:
     initialDeployHook: ./service-hasura/seed-database.sh
     branch: main
     region: oregon
-    healthCheckPath: /heathz
+    healthCheckPath: /healthz
     envVars:
       - key: PORT
         value: 8080
@@ -114,6 +110,16 @@ services:
           name: sskk-service-actions
           type: pserv
           property: hostport
+      - key: HASURA_GRAPHQL_JWT_SECRET
+        value:
+          '{ "type":"RS256",
+          "jwk_url":"https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com",
+          "audience":"sskk-dev",
+          "issuer":"https://securetoken.google.com/sskk-dev", "claims_map":{
+          "x-hasura-allowed-roles":["anonymous","customer"],
+          "x-hasura-default-role":"customer",
+          "x-hasura-auth-time":{"path":"$.auth_time"},
+          "x-hasura-customer-id":{"path":"$.customer_id"} } }'
 
 databases:
   - name: sskk-db-hasura

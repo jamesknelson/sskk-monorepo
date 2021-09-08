@@ -2177,15 +2177,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "16.9.46"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.46.tgz#f0326cd7adceda74148baa9bff6e918632f5069e"
-  integrity sha512-dbHzO3aAq1lB3jRQuNpuZ/mnu+CdD3H0WVaaBQA8LTT3S33xhVBUj232T8M3tAhSWJs/D/UqORYUlJNl/8VQZg==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^3.0.2"
-
-"@types/react@^17.0.19":
+"@types/react@*", "@types/react@^17.0.19":
   version "17.0.19"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.19.tgz#8f2a85e8180a43b57966b237d26a29481dacc991"
   integrity sha512-sX1HisdB1/ZESixMTGnMxH9TDe8Sk709734fEQZzCV/4lSu9kJCPbo2PbTRoZM+53Pp0P10hYVyReUueGwUi4A==
@@ -6516,10 +6508,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-tsconfig-paths@3.3.13:
+vite-tsconfig-paths-alt@3.3.13:
   version "3.3.13"
-  resolved "https://registry.yarnpkg.com/vite-tsconfig-paths/-/vite-tsconfig-paths-3.3.13.tgz#a9e60aa3759799f3035581de8e4bb00215f039f6"
-  integrity sha512-G7OO+1g2H6xVN61RIp1xFjvciqJoF5cGKcWfP6ZOZFeA8QRy2X7yaGUZLhXtKxNLEsR2MthDm7KwSNTKQHzwvA==
+  resolved "https://registry.yarnpkg.com/vite-tsconfig-paths-alt/-/vite-tsconfig-paths-alt-3.3.13.tgz#81cd780fb01e20418e8112fc0f281120cbe9dfa1"
+  integrity sha512-o3+74deHJh8dY/FVO9iiMjIIMvPlVyN8Dtx6Cw7AZGrWVXPXkdg1M4StNG8UumYVfme+ukWYFTDAHmg6KXq/Dw==
   dependencies:
     debug "^4.1.1"
     globrex "^0.1.2"
