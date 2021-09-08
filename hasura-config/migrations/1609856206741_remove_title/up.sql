@@ -1,1 +1,0 @@
-alter table post_versions drop column title;

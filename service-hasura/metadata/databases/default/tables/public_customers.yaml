@@ -1,0 +1,53 @@
+table:
+  name: customers
+  schema: public
+object_relationships:
+- name: membership
+  using:
+    manual_configuration:
+      column_mapping:
+        id: id
+      insertion_order: null
+      remote_table:
+        name: memberships
+        schema: public
+array_relationships:
+- name: firebase_tokens
+  using:
+    foreign_key_constraint_on:
+      column: customer_id
+      table:
+        name: firebase_tokens
+        schema: public
+- name: personas
+  using:
+    foreign_key_constraint_on:
+      column: customer_id
+      table:
+        name: personas
+        schema: public
+select_permissions:
+- permission:
+    columns:
+    - contact_name
+    - created_at
+    - id
+    - unverified_email
+    - verified_email
+    filter:
+      _and:
+      - id:
+          _eq: X-Hasura-Customer-Id
+      - _exists:
+          _table:
+            name: firebase_tokens
+            schema: public
+          _where:
+            _and:
+            - auth_time:
+                _eq: X-Hasura-Auth-Time
+            - customer_id:
+                _eq: X-Hasura-Customer-Id
+            - revoked_at:
+                _is_null: true
+  role: customer

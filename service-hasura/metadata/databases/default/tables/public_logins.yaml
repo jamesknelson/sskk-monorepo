@@ -1,0 +1,10 @@
+table:
+  name: logins
+  schema: public
+object_relationships:
+- name: firebase_token
+  using:
+    foreign_key_constraint_on: firebase_token_id
+- name: user_agent
+  using:
+    foreign_key_constraint_on: user_agent_id

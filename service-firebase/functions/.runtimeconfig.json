@@ -1,0 +1,12 @@
+{
+  "graphql": {
+    "url": "http://localhost:3711/v1/graphql",
+    "admin_secret": null
+  },
+  "cors": {
+    "origin": "*"
+  },
+  "service_account": {
+    "id": null
+  }
+}

@@ -1,32 +1,34 @@
 {
 	"folders": [
 		{
+			"name": "client-web",
+			"path": "client-web"
+		},
+		{
 			"name": "docs",
-			"path": "docs",
+			"path": "docs"
 		},
 		{
-			"name": "firebase",
-			"path": "firebase"
+			"name": "service-actions",
+			"path": "service-actions"
 		},
 		{
-			"name": "hasura-config",
-			"path": "hasura-config"
+			"name": "service-firebase",
+			"path": "service-firebase"
 		},
 		{
-			"name": "hasura-server",
-			"path": "hasura-server"
-		},
-		{
-			"name": "thedailyparagraph.com",
-			"path": "thedailyparagraph.com"
+			"name": "service-hasura",
+			"path": "service-hasura"
 		}
 	],
 	"settings": {
 		"editor.formatOnSave": true,
-	  "editor.tabSize": 2,
+		"editor.tabSize": 2,
+		"graphql-config.load.baseDir": "./client-web",
+		"graphql-config.load.filePath": "./client-web/graphql.config.yml",
 		"javascript.updateImportsOnFileMove.enabled": "always",
 		"javascript.preferences.importModuleSpecifier": "non-relative",
-		"typescript.tsdk": "thedailyparagraph.com/node_modules/typescript/lib",
+		"typescript.tsdk": "client-web/node_modules/typescript/lib",
 		"[markdown]": {
 			"editor.formatOnSave": false
 		},

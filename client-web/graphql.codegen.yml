@@ -1,0 +1,17 @@
+schema:
+  - "http://localhost:3711/v1/graphql"
+documents: "./src/**/*.gql"
+overwrite: true
+config:
+  strict: true
+  avoidOptionals: true
+  maybeValue: T | null
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typed-document-node"
+  src/generated/graphql.schema.json:
+    plugins:
+      - "introspection"

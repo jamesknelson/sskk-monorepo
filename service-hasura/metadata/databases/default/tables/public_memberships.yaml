@@ -1,0 +1,37 @@
+table:
+  name: memberships
+  schema: public
+object_relationships:
+- name: customer
+  using:
+    foreign_key_constraint_on: id
+- name: membership_level
+  using:
+    foreign_key_constraint_on: level
+select_permissions:
+- permission:
+    columns:
+    - active_until
+    - created_at
+    - id
+    - level
+    - lifetime
+    - sabbatical_available_until
+    - updated_at
+    filter:
+      _and:
+      - id:
+          _eq: X-Hasura-Customer-Id
+      - _exists:
+          _table:
+            name: firebase_tokens
+            schema: public
+          _where:
+            _and:
+            - auth_time:
+                _eq: X-Hasura-Auth-Time
+            - customer_id:
+                _eq: X-Hasura-Customer-Id
+            - revoked_at:
+                _is_null: true
+  role: customer

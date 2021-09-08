@@ -1,0 +1,7 @@
+- "!include public_customers.yaml"
+- "!include public_firebase_tokens.yaml"
+- "!include public_logins.yaml"
+- "!include public_membership_levels.yaml"
+- "!include public_memberships.yaml"
+- "!include public_personas.yaml"
+- "!include public_user_agents.yaml"

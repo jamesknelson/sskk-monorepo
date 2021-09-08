@@ -1,1 +1,0 @@
-alter table post_versions add column title text;

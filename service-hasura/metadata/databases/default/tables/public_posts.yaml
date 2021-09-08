@@ -1,0 +1,76 @@
+table:
+  name: posts
+  schema: public
+object_relationships:
+- name: profile
+  using:
+    foreign_key_constraint_on: profile_id
+array_relationships:
+- name: post_versions
+  using:
+    foreign_key_constraint_on:
+      column: post_id
+      table:
+        name: post_versions
+        schema: public
+insert_permissions:
+- permission:
+    backend_only: false
+    check:
+      profile:
+        member:
+          id:
+            _eq: X-Hasura-User-Id
+    columns:
+    - profile_id
+  role: editor
+select_permissions:
+- permission:
+    columns:
+    - created_at
+    - deleted_at
+    - id
+    - latest_version_id
+    - latest_version_locked_for_publication
+    - latest_version_slug
+    - profile_id
+    - published_at
+    filter:
+      _and:
+      - profile:
+          member:
+            id:
+              _eq: X-Hasura-User-Id
+      - deleted_at:
+          _is_null: true
+  role: editor
+update_permissions:
+- permission:
+    check:
+      _or:
+      - deleted_at:
+          _is_null: false
+      - published_at:
+          _gte: now()
+      - published_at:
+          _is_null: true
+    columns:
+    - deleted_at
+    - published_at
+    filter:
+      _and:
+      - profile:
+          member:
+            id:
+              _eq: X-Hasura-User-Id
+      - deleted_at:
+          _is_null: true
+  role: editor
+delete_permissions:
+- permission:
+    filter:
+      profile:
+        member:
+          id:
+            _eq: X-Hasura-User-Id
+  role: editor

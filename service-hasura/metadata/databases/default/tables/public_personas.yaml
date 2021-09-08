@@ -1,0 +1,32 @@
+table:
+  name: personas
+  schema: public
+object_relationships:
+- name: customer
+  using:
+    foreign_key_constraint_on: customer_id
+select_permissions:
+- permission:
+    columns:
+    - list_address_with_byline
+    - name
+    - photo_url
+    - created_at
+    - updated_at
+    - preferred_broadcast_time
+    - customer_id
+    - id
+    filter: {}
+  role: anonymous
+- permission:
+    columns:
+    - id
+    - name
+    - photo_url
+    - customer_id
+    - list_address_with_byline
+    - preferred_broadcast_time
+    - created_at
+    - updated_at
+    filter: {}
+  role: customer
