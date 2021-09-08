@@ -34,7 +34,8 @@ services:
         startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: inherited_roles
 
-      ACTION_BASE_URL: http://host.docker.internal:8000
+      ACTION_BASE_PROTOCOL: http
+      ACTION_BASE_HOST_AND_PORT: host.docker.internal:8000
       ACTION_SECRET: test
 
       # HASURA_GRAPHQL_ADMIN_SECRET: local
