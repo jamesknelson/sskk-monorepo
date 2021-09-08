@@ -1,5 +1,4 @@
 import { css } from '@emotion/react'
-import React from 'react'
 
 import { colors } from 'src/theme'
 

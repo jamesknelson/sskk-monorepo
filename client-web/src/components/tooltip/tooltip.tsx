@@ -1,4 +1,3 @@
-import React from 'react'
 import { Placement } from 'popper.js'
 import { useMediaSelector } from 'retil-media'
 import Tippy, { TippyProps } from '@tippy.js/react'

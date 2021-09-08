@@ -123,11 +123,11 @@ export function nestURLSchema<
 
   const handler: ProxyHandler<URLNestableSchemaLeaf> = {
     apply: (target, thisArg, argumentsList) => {
-      const head = parseLocation(leaf.apply(thisArg, argumentsList))
+      const head = parseLocation(leaf.apply(thisArg, [argumentsList[0] || {}]))
       if (target === leaf) {
         return head
       }
-      const tail = target.apply(thisArg, argumentsList)
+      const tail = target.apply(thisArg, [argumentsList[0] || {}])
       return parseLocation({
         pathname: joinPathnames(head.pathname || '', tail?.pathname || ''),
         query: (head.query || tail?.query) && {

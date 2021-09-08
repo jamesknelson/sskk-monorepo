@@ -10,7 +10,7 @@ import {
   Schema as ProsemirrorSchema,
   SchemaSpec,
 } from 'prosemirror-model'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 import { StyledCodeBlock } from 'src/components/codeBlock'
 

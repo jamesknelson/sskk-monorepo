@@ -32,7 +32,7 @@ export const convertErrorsToIssues = async (
   try {
     await fn()
     return null
-  } catch (error) {
+  } catch (error: any) {
     const code = error.code && error.code.replace('auth/', '')
     if (code && issueCodes.includes(code)) {
       return buildIssueFromError(codeMap[code], error)
