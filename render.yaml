@@ -6,7 +6,8 @@ services:
     name: sskk-client-web-static
     env: static
     branch: main
-    buildCommand: cd client-web && yarn install && yarn build:client
+    buildCommand:
+      cd client-web && yarn install --frozen-lockfile && yarn build:client
     staticPublishPath: client-web/dist/client
     headers:
       - path: /*
@@ -30,7 +31,7 @@ services:
     branch: main
     region: oregon
     plan: starter
-    buildCommand: cd client-web && yarn install && yarn build
+    buildCommand: cd client-web && yarn install --frozen-lockfile && yarn build
     startCommand: cd client-web && yarn serve
     healthCheckPath: /
     envVars:
@@ -47,7 +48,8 @@ services:
     branch: main
     region: oregon
     plan: starter
-    buildCommand: cd service-actions && yarn install && yarn build
+    buildCommand:
+      cd service-actions && yarn install --frozen-lockfile && yarn build
     startCommand: cd service-actions && yarn start
     envVars:
       - key: ACTION_SECRET
@@ -73,6 +75,8 @@ services:
   - type: web
     name: sskk-service-hasura
     env: docker
+    dockerfilePath: ./service-hasura/Dockerfile
+    dockerContext: ./service-hasura
     initialDeployHook: ./service-hasura/seed-database.sh
     branch: main
     region: oregon

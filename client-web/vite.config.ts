@@ -1,4 +1,3 @@
-import reactRefresh from '@vitejs/plugin-react-refresh'
 import { join, resolve } from 'path'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -22,7 +21,7 @@ export default defineConfig(({ mode }) => ({
     jsxInject: `import {Fragment, jsx} from '${join(__dirname, 'react-shim')}'`,
   },
   plugins: [
-    mode !== 'production' && reactRefresh(),
+    mode !== 'production' && require('@vitejs/plugin-react-refresh')(),
     // mode !== 'production' &&
     tsconfigPaths({
       root: projectRootDir,
