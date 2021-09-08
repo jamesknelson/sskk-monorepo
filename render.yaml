@@ -106,8 +106,8 @@ services:
           property: hostport
 
 databases:
-  - name: sskk-db-postgres
-    databaseName: hasura # optional (Render may add a suffix)
+  - name: sskk-db-hasura
+    databaseName: sskk_db_hasura # optional (Render may add a suffix)
     ipAllowList: [] # only allow internal connections
 
 envVarGroups:
