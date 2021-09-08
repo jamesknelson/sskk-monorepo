@@ -31,7 +31,11 @@ services:
     branch: main
     region: oregon
     plan: starter
-    buildCommand: cd client-web && yarn install --frozen-lockfile && yarn build
+    buildCommand:
+      # for some reason, vite build crashes if run by yarn, so we have to
+      # call it manually
+      cd client-web && yarn install --frozen-lockfile && node_modules/.bin/vite
+      build --ssr src/entry-server.tsx --outDir dist/server && yarn build:client
     startCommand: cd client-web && yarn serve
     healthCheckPath: /
     envVars:
@@ -83,7 +87,9 @@ services:
     healthCheckPath: /heathz
     envVars:
       - key: PORT
-        value: 10000
+        value: 8080
+      - key: HASURA_GRAPHQL_UNAUTHORIZED_ROLE
+        value: anonymous
       - key: HASURA_GRAPHQL_METADATA_DATABASE_URL
         fromDatabase:
           name: sskk-db-hasura
