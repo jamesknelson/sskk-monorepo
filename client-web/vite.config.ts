@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import reactEmotion from './vite/reactEmotion'
-import reactStyledComponents from './vite/reactStyledComponents'
 
 const projectRootDir = resolve(__dirname)
 
@@ -24,18 +23,14 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     mode !== 'production' && reactRefresh(),
-    mode !== 'production' &&
-      tsconfigPaths({
-        root: projectRootDir,
-        projects: ['.'],
-      }),
+    // mode !== 'production' &&
+    tsconfigPaths({
+      root: projectRootDir,
+      projects: ['.'],
+    }),
     reactEmotion(),
-    reactStyledComponents(),
   ],
   resolve: {
     dedupe: ['react', 'react-dom', 'react-is'],
-  },
-  ssr: {
-    external: [require.resolve('styled-components')],
   },
 }))

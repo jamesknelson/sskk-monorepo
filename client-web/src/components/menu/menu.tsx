@@ -1,11 +1,15 @@
+import styled from '@emotion/styled'
 import React, { useCallback, useContext } from 'react'
 import { usePopupHandle } from 'retil-interaction'
-import { NavAction, useNavLinkProps } from 'retil-nav'
-import styled from 'styled-components'
 
 import { colors } from 'src/theme'
 
 const StyledMenu = styled.div`
+  background-color: white;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  position: relative;
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -106,38 +110,3 @@ export const MenuItem = React.forwardRef<HTMLDivElement, MenuItemProps>(
     return <StyledMenuItem {...rest} ref={ref} onClick={handleClick} />
   },
 )
-
-export interface MenuLinkItemProps
-  extends Omit<React.ComponentProps<'a'>, 'href'> {
-  disabled?: boolean
-  to: NavAction
-}
-
-export const MenuLinkItem = React.forwardRef<
-  HTMLAnchorElement,
-  MenuLinkItemProps
->(({ disabled, to, onClick, onMouseEnter, ...rest }, ref) => {
-  const { onDidSelect } = useContext(MenuContext)
-  const handleClick = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>) => {
-      if (disabled) {
-        event.preventDefault()
-        return
-      }
-      if (onClick) {
-        onClick(event)
-      }
-      if (!event.defaultPrevented && onDidSelect) {
-        onDidSelect()
-      }
-    },
-    [onClick, onDidSelect],
-  )
-
-  const linkProps = useNavLinkProps(to, {
-    onClick: handleClick,
-    onMouseEnter,
-  })
-
-  return <StyledMenuItem as="a" {...rest} {...linkProps} ref={ref} />
-})

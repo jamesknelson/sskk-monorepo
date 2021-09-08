@@ -1,6 +1,6 @@
+import { css } from '@emotion/react'
 import { rgba } from 'polished'
 import { createMediaSelector } from 'retil-media'
-import { css } from 'styled-components'
 
 // styled-system expects breakpoints to be an array, but we're sticking to
 // named breakpoints as it's easier to read.

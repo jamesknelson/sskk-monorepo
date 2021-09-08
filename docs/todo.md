@@ -3,24 +3,39 @@ https://github.com/chanzuckerberg/czi-prosemirror
 
 o add a down migration
 o add a name field to the recipients
-- figure out how to test actions
-  * create a msw service which supports a subset of hasura required by 'actions'
-  * setup jest for service-actions using supertest
-  * write tests for each action
-
-- use hasura claims_map configuration to expose a session variable with the
+o create basic tests for login action
+  
+o use hasura claims_map configuration to expose a session variable with the
   auth time, so that it's possible to create a volatile function that upserts
   a row into the logins table, along with any entries/referrers using a single
   hasura query
-- ensure "audience" is set in prod auth configuration
-- set up hasura actions
-- configure X-Forwarded-For to expose IP to hasura:
-  https://github.com/hasura/graphql-engine/issues/4770
+o rename "member" to "customer" in firebase functions
+o get login screen working w/ local services
 
-- get login screen working
+o fix so preloading redirects don't cause an infinite loop
+o port from styled-components to emotion
+o get things rendering without a flash of "loading"
+o get logout dropdown working
+
+- deploy to "dev"
+  * ensure "audience" is set in "dev" auth configuration
+  * get login screen working on dev
+  * ensure X-Forwarded-For works as expected, and ip address appears in logins:
+    https://github.com/hasura/graphql-engine/issues/4770
+  * ensure cookie stays identical between logins
+
+- fix login form issues types (remove the "as any")
+
+- fix nav precaching in retil w/ tests; figure out why hovering between
+  two different links causes an ever increasing number of loader calls.
+
 - create a user registration page that creates a new customer id without setting up a persona
 
+- port the "hello I am" screen to create a persona. we'll probably want an
+  action to handle persona creation too.
 
+
+---
 
 
 - start working on onboarding and connecting payments

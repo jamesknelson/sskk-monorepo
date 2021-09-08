@@ -1,8 +1,8 @@
 import { format, formatISO } from 'date-fns'
+import { css } from '@emotion/react'
 import { EditorState } from 'prosemirror-state'
 import React from 'react'
 import { LinkSurface } from 'retil-interaction'
-import { css } from 'styled-components'
 
 import { Card } from 'src/components/card'
 import { TextContent } from 'src/components/textContent'
@@ -17,9 +17,10 @@ export type LetterCardProps = React.ComponentProps<typeof Card> & {
   disableEdit?: boolean
   disableTitlePath?: boolean
   editorState?: EditorState<Schema>
-  profileAvatarURL?: string | null
-  profileDisplayName: string
-  profileNametag: string
+  personaId: string
+  personaAvatarURL?: string | null
+  personaDisplayName: string
+  personaAddress: string
   publishedAt?: Date
   letterId?: string
   letterSlug?: string | null
@@ -27,16 +28,17 @@ export type LetterCardProps = React.ComponentProps<typeof Card> & {
 }
 
 export function LetterCard(props: LetterCardProps) {
-  const { profile } = useAppEnv()
+  const { customer } = useAppEnv()
 
   const {
     children,
     disableEdit,
     disableTitlePath,
     editorState,
-    profileAvatarURL,
-    profileDisplayName,
-    profileNametag,
+    personaId,
+    personaAvatarURL,
+    personaDisplayName,
+    personaAddress,
     publishedAt,
     letterId,
     letterSlug,
@@ -46,13 +48,16 @@ export function LetterCard(props: LetterCardProps) {
 
   const canCancel = publishedAt && publishedAt > new Date()
   const canEdit =
-    !disableEdit && letterId && profile && profile.handle === profileNametag
+    !disableEdit &&
+    letterId &&
+    customer &&
+    customer.personas.map((persona) => persona.id).includes(personaId)
 
   const path =
     letterId &&
     publishedAt &&
     urls.letter({
-      profileNametag: profileNametag,
+      personaAddress,
       letterId,
       letterSlug,
     })?.pathname
@@ -88,14 +93,14 @@ export function LetterCard(props: LetterCardProps) {
             `}
           `}>
           <LinkSurface
-            href={urls.profile({ nametag: profileNametag })}
+            href={urls.profile({ nametag: personaAddress })}
             css={css`
               display: flex;
               justify-content: flex-start;
               align-items: flex-end;
               text-decoration: none;
             `}>
-            {profileAvatarURL && (
+            {personaAvatarURL && (
               <span
                 css={css`
                   border-radius: 9999px;
@@ -106,7 +111,7 @@ export function LetterCard(props: LetterCardProps) {
                   margin-right: 0.5rem;
                   margin-bottom: 4px;
                 `}>
-                <img src={profileAvatarURL} width={40} height={40} />
+                <img src={personaAvatarURL} width={40} height={40} />
               </span>
             )}
             <span>
@@ -118,14 +123,14 @@ export function LetterCard(props: LetterCardProps) {
                   line-height: 1rem;
                   display: block;
                 `}>
-                {profileDisplayName}
+                {personaDisplayName}
               </span>
               <span
                 css={css`
                   color: ${colors.text.tertiary};
                   margin-left: -1px;
                 `}>
-                @{profileNametag}
+                @{personaAddress}
               </span>
             </span>
           </LinkSurface>
@@ -154,13 +159,14 @@ export function LetterCard(props: LetterCardProps) {
                     edit
                   </LinkSurface>
                   <span
-                    css={css`
-                      padding: 0 0.5rem;
-
-                      ${mediaSelectors.phoneOnly(css`
+                    css={[
+                      css`
+                        padding: 0 0.5rem;
+                      `,
+                      mediaSelectors.phoneOnly(css`
                         display: none;
-                      `)}
-                    `}>
+                      `),
+                    ]}>
                     &middot;
                   </span>
                 </>

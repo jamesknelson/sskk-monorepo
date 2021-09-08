@@ -1,6 +1,7 @@
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import React, { forwardRef } from 'react'
-import { HighStyleValue, highStyle } from 'retil-css'
-import styled, { css } from 'styled-components'
+import { HighStyleValue } from 'retil-css'
 
 import { Icon } from 'src/components/icon'
 import { colors, easings, focusRing } from 'src/theme'
@@ -9,26 +10,16 @@ import { inDisabledSurface } from 'retil-interaction'
 export interface IconButtonProps {
   color?: HighStyleValue<string>
   glyph: React.ComponentType<any>
-  outline?: HighStyleValue<string>
   size?: HighStyleValue<string | number>
 }
 
 export const IconButtonBody = forwardRef<HTMLDivElement, IconButtonProps>(
   (
-    {
-      color = colors.control.icon.default,
-      glyph,
-      outline,
-      size = '1.5rem',
-      ...rest
-    },
+    { color = colors.control.icon.default, glyph, size = '1.5rem', ...rest },
     ref,
   ) => {
-    if (outline && typeof outline !== 'string') {
-      outline = color
-    }
     return (
-      <StyledIconButton ref={ref} {...rest} outline={highStyle(outline)}>
+      <StyledIconButton ref={ref} {...rest}>
         <Icon color={color} glyph={glyph} size={size} />
       </StyledIconButton>
     )
@@ -37,7 +28,6 @@ export const IconButtonBody = forwardRef<HTMLDivElement, IconButtonProps>(
 
 interface StyledIconButtonProps {
   inline?: boolean
-  outline?: string
 }
 
 const StyledIconButton = styled.div<StyledIconButtonProps>`
@@ -56,13 +46,6 @@ const StyledIconButton = styled.div<StyledIconButtonProps>`
     text-shadow 200ms ${easings.easeOut};
   min-width: 2.5rem;
   min-height: 2.5rem;
-
-  ${(props) =>
-    props.outline &&
-    css`
-      border: 1px solid ${props.outline};
-      border-radius: 9999px;
-    `}
 
   > * {
     position: relative;

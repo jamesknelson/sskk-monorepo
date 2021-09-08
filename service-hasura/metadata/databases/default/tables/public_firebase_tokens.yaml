@@ -1,0 +1,15 @@
+table:
+  name: firebase_tokens
+  schema: public
+object_relationships:
+- name: customer
+  using:
+    foreign_key_constraint_on: customer_id
+array_relationships:
+- name: logins
+  using:
+    foreign_key_constraint_on:
+      column: firebase_token_id
+      table:
+        name: logins
+        schema: public

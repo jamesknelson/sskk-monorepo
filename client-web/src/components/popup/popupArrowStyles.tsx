@@ -1,5 +1,5 @@
+import styled from '@emotion/styled'
 import { PopupDialogArrowDiv } from 'retil-interaction'
-import styled from 'styled-components'
 
 import { colors } from 'src/theme'
 

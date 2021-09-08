@@ -8,6 +8,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 import gql from 'graphql-tag'
 import { useMemo } from 'react'
 
+import { Role } from 'src/constants/roles'
+
 export interface PrecachedQuery<Data, Variables extends object = object> {
   client: ApolloClient<any>
   document: DocumentNode<Data, Variables>
@@ -42,7 +44,7 @@ const emptyQuery = gql`
 export type QueryPrecacher = <Result, Variables extends object>(
   node: DocumentNode<Result, Variables>,
   variables?: Variables,
-  role?: string,
+  role?: Role,
 ) => Promise<PrecachedQuery<Result, Variables>>
 
 export function usePrecachedQuery<

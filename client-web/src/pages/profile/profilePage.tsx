@@ -1,21 +1,21 @@
-import React from 'react'
-import { css } from 'styled-components'
+// import React from 'react'
+import { css } from '@emotion/react'
 
-import { LetterCard } from 'src/components/letter'
-import { createStateFromContentObject } from 'src/prose/contentObject'
-import { ProfileByHandleQuery } from 'src/generated/graphql'
+// import { LetterCard } from 'src/components/letter'
+// import { createStateFromContentObject } from 'src/prose/contentObject'
+// import { ProfileByHandleQuery } from 'src/generated/graphql'
 import { dimensions, media } from 'src/theme'
-import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
+// import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
 
 export interface Props {
-  query: PrecachedQuery<ProfileByHandleQuery>
+  // query: PrecachedQuery<ProfileByHandleQuery>
 }
 
-export function Page(props: Props) {
-  const { query } = props
-  const { data } = usePrecachedQuery(query)
-  const profile = data.profiles[0]
-  const posts = data.published_posts
+export function Page(_props: Props) {
+  // const { query } = props
+  // const { data } = usePrecachedQuery(query)
+  // const profile = data.profiles[0]
+  // const posts = data.published_posts
 
   return (
     <>
@@ -32,7 +32,7 @@ export function Page(props: Props) {
               margin: 3rem 1rem 2rem;
             `}
         `}>
-        {profile.display_name}
+        {/* {profile.display_name} */}
       </h1>
       <div
         css={css`
@@ -43,7 +43,7 @@ export function Page(props: Props) {
           width: calc(100% - 1rem);
           margin: 0 auto;
         `}>
-        {posts.map((post) => (
+        {/* {posts.map((post) => (
           <LetterCard
             key={post.id!}
             editorState={createStateFromContentObject(post.content)}
@@ -58,7 +58,7 @@ export function Page(props: Props) {
               width: 100%;
             `}
           />
-        ))}
+        ))} */}
       </div>
     </>
   )

@@ -19,5 +19,6 @@ drop table "personas";
 drop table "memberships";
 drop table "membership_levels";
 drop table "logins";
-drop table "clients";
+drop table "firebase_tokens";
+drop table "user_agents";
 drop table "customers";

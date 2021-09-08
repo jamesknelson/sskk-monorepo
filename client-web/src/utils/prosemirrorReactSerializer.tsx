@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { ReactNode, createElement } from 'react'
 
 import {
   DOMOutputSpec,
@@ -44,14 +44,14 @@ export class ReactSerializer<S extends Schema = any> {
   }
 
   // Serialize the content of this fragment to a React fragment.
-  serializeFragment(fragment: Fragment<S>): React.ReactNode {
+  serializeFragment(fragment: Fragment<S>): ReactNode {
     const activeMarks = [] as (readonly [
-      markContainer: React.ReactNode[],
+      markContainer: ReactNode[],
       renderMark: Hole,
       mark: Mark<S>,
     ])[]
 
-    let currentChildren = [] as React.ReactNode[]
+    let currentChildren = [] as ReactNode[]
 
     fragment.forEach((node) => {
       let keep = 0
@@ -93,7 +93,7 @@ export class ReactSerializer<S extends Schema = any> {
       currentChildren.push(triplet[1](markChildren))
     }
 
-    return React.createElement(React.Fragment, null, ...currentChildren)
+    return createElement(React.Fragment, null, ...currentChildren)
   }
 
   // :: (Node, ?Object) → dom.Node
@@ -147,8 +147,7 @@ export class ReactSerializer<S extends Schema = any> {
       const start = hasProps ? 2 : 1
 
       if (structure[start] === 0 && structure.length === start + 1) {
-        return (child?: React.ReactNode) =>
-          React.createElement(type, props, child)
+        return (child?: React.ReactNode) => createElement(type, props, child)
       }
 
       const children = [] as (React.ReactNode | Hole)[]
@@ -170,9 +169,9 @@ export class ReactSerializer<S extends Schema = any> {
         children.push(rendered)
       }
       return !hasHole
-        ? React.createElement(type, props, ...children)
+        ? createElement(type, props, ...children)
         : (child?: React.ReactNode) =>
-            React.createElement(
+            createElement(
               type,
               props,
               ...children.map((rendered) =>

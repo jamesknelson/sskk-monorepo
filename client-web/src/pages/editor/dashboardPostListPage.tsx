@@ -1,21 +1,20 @@
-import { EditorState } from 'prosemirror-state'
-import * as React from 'react'
-import { css } from 'styled-components'
+// import { EditorState } from 'prosemirror-state'
+import { css } from '@emotion/react'
 
-import { LetterCard } from 'src/components/letter'
-import { DashboardPostListQuery } from 'src/generated/graphql'
-import { schema } from 'src/prose/schema'
+// import { LetterCard } from 'src/components/letter'
+// import { DashboardPostListQuery } from 'src/generated/graphql'
+// import { schema } from 'src/prose/schema'
 import { dimensions } from 'src/theme'
-import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
+// import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
 
 export interface Props {
-  query: PrecachedQuery<DashboardPostListQuery>
+  // query: PrecachedQuery<DashboardPostListQuery>
 }
 
-export function Page(props: Props) {
-  const { query } = props
-  const { data } = usePrecachedQuery(query)
-  const posts = data.posts
+export function Page(_props: Props) {
+  // const { query } = props
+  // const { data } = usePrecachedQuery(query)
+  // const posts = data.posts
 
   return (
     <div
@@ -38,7 +37,7 @@ export function Page(props: Props) {
         `}>
         Your Stories
       </h1>
-      {posts
+      {/* {posts
         .filter((post) => !post.deleted_at)
         .map((post) => {
           const version = post.versions[0]!
@@ -64,7 +63,7 @@ export function Page(props: Props) {
               `}
             />
           )
-        })}
+        })} */}
     </div>
   )
 }

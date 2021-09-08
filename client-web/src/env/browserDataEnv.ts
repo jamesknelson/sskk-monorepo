@@ -6,6 +6,8 @@ import { getDefaultHydrationEnvService } from 'retil-hydration'
 import { Source, constant, getSnapshot } from 'retil-source'
 
 import { graphqlURL } from 'src/config'
+import * as roles from 'src/constants/roles'
+import { Role } from 'src/constants/roles'
 import { PrecachedQuery } from 'src/utils/precachedQuery'
 
 import { DataEnv } from './appEnv'
@@ -28,7 +30,7 @@ export function getBrowserDataEnvSource(
   const precacheQuery = async <Result = any, Variables extends object = object>(
     document: DocumentNode<Result, Variables>,
     defaultVariables: Variables = {} as Variables,
-    role?: string,
+    role?: Role,
   ): Promise<PrecachedQuery<Result, Variables>> => {
     const cachedData = client.readQuery({
       query: document,
@@ -75,19 +77,17 @@ export function getBrowserDataEnvSource(
 
     if (authController && role && role !== 'anonymous') {
       const tokenInfo = await authController.getTokenInfo()
-      const userId =
-        tokenInfo?.['claims']?.['https://hasura.io/jwt/claims']?.[
-          'x-hasura-user-id'
-        ]
+      const customerId = tokenInfo?.['claims']?.customer_id
 
-      if (userId) {
+      if (customerId) {
         headers['Authorization'] = `Bearer ${tokenInfo!.token}`
-        headers['X-Hasura-Role'] = role || 'member'
+        headers['X-Hasura-Role'] = role || roles.customer
 
         // WARNING: in production this header will be set by hasura based on
         // the signed token's claims. However, in development mode, Hasura
         // requires us to set it manually.
-        headers['X-Hasura-User-Id'] = userId
+        headers['X-Hasura-Auth-Time'] = tokenInfo?.authTime!
+        headers['X-Hasura-Customer-Id'] = customerId
       }
     }
     if (!headers['X-Hasura-Role']) {

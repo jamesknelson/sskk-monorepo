@@ -1,7 +1,8 @@
 import * as CORS from 'cors'
-import * as functions from 'firebase-functions'
 
-const corsConfig = functions.config().cors
+import { config } from '../firebase'
+
+const corsConfig = config.cors
 const whitelist =
   corsConfig.origin === '*' ? true : corsConfig.origin.split(',')
 

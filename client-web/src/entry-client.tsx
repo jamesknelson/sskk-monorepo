@@ -1,10 +1,13 @@
-/// <reference types="styled-components/cssprop" />
 /// <reference types="react/experimental" />
 /// <reference types="react-dom/experimental" />
 /// <reference types="vite/client" />
 
 import createStyleCache from '@emotion/cache'
-import { CacheProvider as StyleCacheProvider } from '@emotion/react'
+import {
+  CacheProvider as StyleCacheProvider,
+  ThemeContext,
+  css,
+} from '@emotion/react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { cloneElement } from 'react'
@@ -12,7 +15,6 @@ import { createRoot } from 'react-dom'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { Mount } from 'retil-mount'
 import { CSSProvider } from 'retil-css'
-import { ThemeContext, css } from 'styled-components'
 
 import { App } from './components/app'
 import { firebase as firebaseConfig, firebaseEmulators } from 'src/config'

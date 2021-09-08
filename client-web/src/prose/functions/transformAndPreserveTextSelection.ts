@@ -1,7 +1,7 @@
 import { Fragment, Mark, Schema } from 'prosemirror-model'
 import { TextSelection, Transaction } from 'prosemirror-state'
 
-import { generateRandomUUID } from 'src/utils/uuid'
+import { v4 as generateRandomUUID } from 'uuid'
 
 import { MARK_TEXT_SELECTION } from '../markNames'
 import { PARAGRAPH, TEXT } from '../nodeNames'

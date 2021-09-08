@@ -26,6 +26,8 @@ const appLoader = loadNotFoundBoundary(
       () => import('./onboarding/onboardingLoader'),
     ),
 
+    [patternFor(urls.read)]: loadLazy(() => import('./read/readLoader')),
+
     [patternFor(urls.profile)]: loadLazy(
       () => import('./profile/profileLoader'),
     ),

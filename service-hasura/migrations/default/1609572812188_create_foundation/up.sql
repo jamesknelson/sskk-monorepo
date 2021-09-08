@@ -22,50 +22,33 @@ create table "customers" (
   "created_at" timestamptz not null DEFAULT CURRENT_TIMESTAMP
 );
 
--- Stores clients, distinguished via user agent, IP address, and a unique
--- token. A record will be created on login, both for customers and guests.
-create table "clients" (
-  "id" uuid not null primary key DEFAULT gen_random_uuid(),
-
-  -- A token stored by signed http-only cookie, which is created on the server
-  -- whenever the user records a new session.
-  "token" text not null unique,
-
-  "navigator_user_agent" text not null,
-  "navigator_languages" text[] not null,
-
-  "ip_address" inet not null,
-
-  "created_at" timestamptz not null DEFAULT CURRENT_TIMESTAMP
+-- User agent strings are normalized into a separate table because they're
+-- huge and repetitive.
+create table "user_agents" (
+  "id" uuid primary key DEFAULT gen_random_uuid(),
+  "user_agent" text not null unique
 );
 
--- A row should be inserted each time the customer opens a new instance of the
--- app, or an existing instance of the app changes its logged in customer.
-create table "logins" (
+-- TODO
+
+-- create a "firebase_tokens" table w/ the custid/auth_time as a unique key,
+-- w/ a "revoked_at" line and an id which we can use to reference it in "logins"
+
+create table "firebase_tokens" (
   "id" uuid primary key DEFAULT gen_random_uuid(),
 
-  "client_id" uuid not null REFERENCES clients ON DELETE cascade,
+  -- We use the combination of these two as a key to identify an individual
+  -- firebase login token.
+  "customer_id" uuid not null REFERENCES customers ON DELETE cascade,
+  "auth_time" timestamptz not null,
 
-  "customer_id" uuid REFERENCES customers ON DELETE cascade,
-  "auth_time" timestamptz,
-  -- We only allow one login at any auth_time, as this is how we distinguish
-  -- between different firebase tokens.
-  unique ("customer_id", "auth_time"),
   -- Either customer_id and auth_time are both specified, or neither are.
   check (
     (customer_id is null and auth_time is null) OR
     (customer_id is not null and auth_time is not null)
   ),
 
-  "url" text, -- the paged where the login occurred, as specified by http referer
-
-  -- The client can supply anything here. Keep in mind that as logins records
-  -- can be anonymous, a null customer_id doesn't necessarily mean that a
-  -- referral isn't associated with a customer – we'll also need to check for
-  -- future login records with the same client_id to know whether an anonymous
-  -- referral stays anonymous.
-  "referrer_code" text,
-  "referrer_source" text, -- a url where they came from
+  unique ("customer_id", "auth_time"),
 
   "created_at" timestamptz not null DEFAULT CURRENT_TIMESTAMP,
 
@@ -73,8 +56,34 @@ create table "logins" (
   -- from this login.
   "revoked_at" timestamptz
 );
+
+-- A row should be inserted each time the customer opens a new instance of the
+-- app, or an existing instance of the app changes its logged in customer.
+create table "logins" (
+  "id" uuid primary key DEFAULT gen_random_uuid(),
+
+  "firebase_token_id" uuid REFERENCES firebase_tokens ON DELETE set null,
+
+  -- The agent id can be set to anything; it's generate in a server-side
+  -- cookie.
+  "agent_id" uuid not null,
+  "ip_address" inet not null,
+  "user_agent_id" uuid not null REFERENCES user_agents ON DELETE restrict,
+
+  "url" text, -- the paged where the login occurred, as specified by http referer
+
+  -- The client can supply anything here. Keep in mind that as logins records
+  -- can be anonymous, a null customer_id doesn't necessarily mean that a
+  -- referral isn't associated with a customer – we'll also need to check for
+  -- future login records with the same agent_id to know whether an anonymous
+  -- referral stays anonymous.
+  "referrer_code" text,
+  "referrer_source" text, -- a url where they came from
+
+  "created_at" timestamptz not null DEFAULT CURRENT_TIMESTAMP
+);
 create index "logins_by_referrer_code_idx" on logins ("referrer_code");
-create index "logins_by_client_idx" on logins ("client_id");
+create index "logins_by_agent_idx" on logins ("agent_id");
 
 -- We sell memberships, not subscriptions. If someone is paying into our
 -- product, that means that they're also creating content for us. Our paying
@@ -87,7 +96,7 @@ insert into "membership_levels" (value) VALUES
   ('supporter'),
   ('patron');
 create table "memberships" (
-  "customer_id" uuid primary key references customers ON DELETE restrict,
+  "id" uuid primary key references customers ON DELETE restrict,
 
   "level" text not null references membership_levels ON DELETE restrict,
 
@@ -128,13 +137,6 @@ create table "personas" (
 
   "customer_id" uuid not null references customers ON DELETE restrict,
 
-  -- Indicates that this persona has membership privileges while the referenced
-  -- membership is active. If the membership is in a sabbatical period, then the
-  -- persona will have all membership priveleges except for posting new content.
-  "membership_id" uuid references memberships ON DELETE set null,
-
-  check (membership_id is null or membership_id = customer_id),
-
   -- Specify whether you want people to be able to see your highest priority
   -- address in your byline badge. If not, people won't have a way to reply to
   -- you.
@@ -150,7 +152,6 @@ create table "personas" (
   "updated_at" timestamptz
 );
 create index persona_customer_idx on personas (customer_id);
-create index persona_membership_idx on personas (membership_id);
 
 -- A list of personas that have been added to other customers' reading lists.
 -- This data, and its aggregates, is private to everyone except the reader.
@@ -314,7 +315,7 @@ create table "letters" (
 -- delivery time has not been passed, a record should be created containing
 -- the letter content.
 create table "sent_letters" (
-  "letter_id" uuid primary key REFERENCES letters ON DELETE cascade,
+  "id" uuid primary key REFERENCES letters ON DELETE cascade,
 
   -- Allows anybody to sign your letter, and become party to any further
   -- correspondence. Defaults to false, because anyone who signs this will be
@@ -331,7 +332,7 @@ create table "sent_letters" (
 
   -- For the fk enforcing signature consistency
   unique (
-    "letter_id",
+    "id",
     "allow_public_to_sign",
     "reserve_broadcast_slot"
   ),
@@ -653,7 +654,7 @@ create table "signatures" (
   "allow_public_to_sign" boolean not null,
   "reserve_broadcast_slot" boolean not null,
   foreign key (letter_id, allow_public_to_sign, reserve_broadcast_slot)
-    REFERENCES sent_letters (letter_id, allow_public_to_sign, reserve_broadcast_slot)
+    REFERENCES sent_letters (id, allow_public_to_sign, reserve_broadcast_slot)
     MATCH FULL
     ON DELETE CASCADE,
   

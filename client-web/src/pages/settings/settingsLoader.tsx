@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { loadMatch, loadRedirect } from 'retil-nav'
 
 import { patternFor } from 'src/utils/urls'

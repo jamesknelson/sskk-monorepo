@@ -2,13 +2,12 @@ import { loadAsync } from 'retil-mount'
 
 import { AppEnv } from 'src/env'
 import { loadWithLayoutOptions } from 'src/env/routing'
-import { HelloDocument } from 'src/generated/graphql'
 
 const asyncRouter = loadAsync(async (env: AppEnv) => {
   const pageModulePromise = import('./helloPage')
-  const query = await env.precacheQuery(HelloDocument, {
-    limit: 10,
-  })
+  // const query = await env.precacheQuery(HelloDocument, {
+  //   limit: 10,
+  // })
 
   const { Page } = await pageModulePromise
 
@@ -20,7 +19,7 @@ const asyncRouter = loadAsync(async (env: AppEnv) => {
     />,
   )
 
-  return <Page query={query} />
+  return <Page />
 })
 
 const loader = loadWithLayoutOptions(asyncRouter, {

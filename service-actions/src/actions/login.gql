@@ -1,0 +1,66 @@
+mutation InsertLogin(
+  $agent_id: uuid!
+  $ip_address: inet!
+  $referrer_source: String
+  $referrer_code: String
+  $url: String
+  $user_agent: String!
+) {
+  insert_logins_one(
+    object: {
+      user_agent: {
+        data: { user_agent: $user_agent }
+        on_conflict: { constraint: user_agents_user_agent_key }
+      }
+      referrer_source: $referrer_source
+      referrer_code: $referrer_code
+      ip_address: $ip_address
+      url: $url
+      agent_id: $agent_id
+    }
+  ) {
+    id
+    created_at
+  }
+}
+
+mutation InsertLoginWithToken(
+  $agent_id: uuid!
+  $auth_time: timestamptz!
+  $customer_id: uuid!
+  $ip_address: inet!
+  $referrer_source: String
+  $referrer_code: String
+  $url: String
+  $user_agent: String!
+) {
+  insert_logins_one(
+    object: {
+      firebase_token: {
+        data: {
+          auth_time: $auth_time
+          customer_id: $customer_id
+        }
+        on_conflict: {
+          constraint: firebase_tokens_customer_id_auth_time_key,
+          update_columns: [auth_time, customer_id],
+        }
+      }
+      user_agent: {
+        data: { user_agent: $user_agent }
+        on_conflict: { constraint: user_agents_user_agent_key, update_columns: [user_agent] }
+      }
+      referrer_source: $referrer_source
+      referrer_code: $referrer_code
+      ip_address: $ip_address
+      url: $url
+      agent_id: $agent_id
+    }
+  ) {
+    id
+    created_at
+    firebase_token {
+      customer_id
+    }
+  }
+}

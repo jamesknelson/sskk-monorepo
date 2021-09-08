@@ -1,55 +1,25 @@
+import { css } from '@emotion/react'
 import React from 'react'
-import { highStyle } from 'retil-css'
-import styled from 'styled-components'
+import { HighStyleValue, highStyle } from 'retil-css'
 
 const DEFAULT_ICON_SIZE = '24px'
 
-export type IconProps = React.ComponentProps<typeof StyledIconContainer> & {
-  display?: string
+export type IconProps = Omit<React.ComponentProps<'span'>, 'color' | 'size'> & {
+  display?: React.CSSProperties['display']
   glyph: React.ComponentType<any>
-  label: string | null
-  size?: number | string
-  color?: string
+  label?: string | null
+  size?: HighStyleValue<number | string>
+  color?: HighStyleValue<string>
   testID?: string
   transform?: string
 }
 
-interface StyledIconContainerProps {
-  display: string
-  size: string
-}
-
-function addDefaultRemUnits(value: number | string): string {
-  return typeof value === 'number' ? value + 'rem' : value
-}
-
-const StyledIconContainer = styled.span<StyledIconContainerProps>`
-  display: ${(props) => props.display};
-  height: ${(props) => props.size};
-  width: ${(props) => props.size};
-  text-align: center;
-`
-
-interface StyledIconProps {
-  styleFn: any
-  size: string
-}
-
-const StyledIcon = styled.span<StyledIconProps>`
-  display: block;
-  margin: 0 auto;
-  height: ${(props) => props.size};
-  width: ${(props) => props.size};
-
-  ${(props) => props.styleFn(props.theme)}
-`
-
 export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
   (
     {
-      display = 'inline-block',
-      glyph,
-      label,
+      display = 'inline-block' as const,
+      glyph: Glyph,
+      label = null,
       size = DEFAULT_ICON_SIZE,
       color = 'currentColor',
       testID,
@@ -58,25 +28,39 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
     },
     ref,
   ) => {
-    size = addDefaultRemUnits(size)
-
-    const styleFn = highStyle({
-      fill: color,
-    })
-
     return (
-      <StyledIconContainer ref={ref} display={display} size={size} {...props}>
-        <StyledIcon
-          size={size}
-          styleFn={styleFn}
+      <span
+        {...props}
+        ref={ref}
+        css={[
+          css`
+            display: ${display};
+            text-align: center;
+          `,
+          highStyle({
+            height: size,
+            width: size,
+          }),
+        ]}>
+        <Glyph
           data-testid={testID}
-          as={glyph}
           role="img"
-          title={label}
+          title={label || undefined}
           style={{ transform }}
-          aria-label={label}
+          aria-label={label || undefined}
+          css={[
+            css`
+              display: block;
+              margin: 0 auto;
+            `,
+            highStyle({
+              fill: color,
+              height: size,
+              width: size,
+            }),
+          ]}
         />
-      </StyledIconContainer>
+      </span>
     )
   },
 )

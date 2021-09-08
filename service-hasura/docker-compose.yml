@@ -32,11 +32,25 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES:
         startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_EXPERIMENTAL_FEATURES: inherited_roles
+
+      ACTION_BASE_URL: http://host.docker.internal:8000
+      ACTION_SECRET: test
+
       # HASURA_GRAPHQL_ADMIN_SECRET: local
       # HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
       # HASURA_GRAPHQL_JWT_SECRET:
-      #   '{"type":"RS256","jwk_url":
-      #   "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com","audience":
-      #   "sskk-dev","issuer": "https://securetoken.google.com/sskk-dev"}'
+      #   '{
+      #   "type":"RS256",
+      #   "jwk_url":"https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com",
+      #   "audience":"sskk-dev",
+      #   "issuer":"https://securetoken.google.com/sskk-dev",
+      #   "claims_map":{
+      #   "x-hasura-allowed-roles":["anonymous","customer"],
+      #   "x-hasura-default-role":"customer",
+      #   "x-hasura-auth-time":{"path":"$.auth_time"},
+      #   "x-hasura-customer-id":{"path":"$.customer_id"}
+      #   }
+      #   }'
 volumes:
   sskk_db_data:

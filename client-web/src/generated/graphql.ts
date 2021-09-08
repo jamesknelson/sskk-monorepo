@@ -10,206 +10,263 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  json: any;
-  timestamp: any;
+  inet: any;
+  time: any;
+  timestamptz: any;
   uuid: any;
 };
 
 
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
 export type Boolean_Comparison_Exp = {
-  _eq?: Maybe<Scalars['Boolean']>;
-  _gt?: Maybe<Scalars['Boolean']>;
-  _gte?: Maybe<Scalars['Boolean']>;
-  _in?: Maybe<Array<Scalars['Boolean']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['Boolean']>;
-  _lte?: Maybe<Scalars['Boolean']>;
-  _neq?: Maybe<Scalars['Boolean']>;
-  _nin?: Maybe<Array<Scalars['Boolean']>>;
+  _eq: Maybe<Scalars['Boolean']>;
+  _gt: Maybe<Scalars['Boolean']>;
+  _gte: Maybe<Scalars['Boolean']>;
+  _in: Maybe<Array<Scalars['Boolean']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['Boolean']>;
+  _lte: Maybe<Scalars['Boolean']>;
+  _neq: Maybe<Scalars['Boolean']>;
+  _nin: Maybe<Array<Scalars['Boolean']>>;
 };
 
-/** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
-export type Int_Comparison_Exp = {
-  _eq?: Maybe<Scalars['Int']>;
-  _gt?: Maybe<Scalars['Int']>;
-  _gte?: Maybe<Scalars['Int']>;
-  _in?: Maybe<Array<Scalars['Int']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['Int']>;
-  _lte?: Maybe<Scalars['Int']>;
-  _neq?: Maybe<Scalars['Int']>;
-  _nin?: Maybe<Array<Scalars['Int']>>;
+export type LoginOutput = {
+  __typename?: 'LoginOutput';
+  created_at: Scalars['timestamptz'];
+  /** An object relationship */
+  customer: Customers;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Scalars['uuid'];
 };
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
-  _eq?: Maybe<Scalars['String']>;
-  _gt?: Maybe<Scalars['String']>;
-  _gte?: Maybe<Scalars['String']>;
+  _eq: Maybe<Scalars['String']>;
+  _gt: Maybe<Scalars['String']>;
+  _gte: Maybe<Scalars['String']>;
   /** does the column match the given case-insensitive pattern */
-  _ilike?: Maybe<Scalars['String']>;
-  _in?: Maybe<Array<Scalars['String']>>;
+  _ilike: Maybe<Scalars['String']>;
+  _in: Maybe<Array<Scalars['String']>>;
   /** does the column match the given POSIX regular expression, case insensitive */
-  _iregex?: Maybe<Scalars['String']>;
-  _is_null?: Maybe<Scalars['Boolean']>;
+  _iregex: Maybe<Scalars['String']>;
+  _is_null: Maybe<Scalars['Boolean']>;
   /** does the column match the given pattern */
-  _like?: Maybe<Scalars['String']>;
-  _lt?: Maybe<Scalars['String']>;
-  _lte?: Maybe<Scalars['String']>;
-  _neq?: Maybe<Scalars['String']>;
+  _like: Maybe<Scalars['String']>;
+  _lt: Maybe<Scalars['String']>;
+  _lte: Maybe<Scalars['String']>;
+  _neq: Maybe<Scalars['String']>;
   /** does the column NOT match the given case-insensitive pattern */
-  _nilike?: Maybe<Scalars['String']>;
-  _nin?: Maybe<Array<Scalars['String']>>;
+  _nilike: Maybe<Scalars['String']>;
+  _nin: Maybe<Array<Scalars['String']>>;
   /** does the column NOT match the given POSIX regular expression, case insensitive */
-  _niregex?: Maybe<Scalars['String']>;
+  _niregex: Maybe<Scalars['String']>;
   /** does the column NOT match the given pattern */
-  _nlike?: Maybe<Scalars['String']>;
+  _nlike: Maybe<Scalars['String']>;
   /** does the column NOT match the given POSIX regular expression, case sensitive */
-  _nregex?: Maybe<Scalars['String']>;
+  _nregex: Maybe<Scalars['String']>;
   /** does the column NOT match the given SQL regular expression */
-  _nsimilar?: Maybe<Scalars['String']>;
+  _nsimilar: Maybe<Scalars['String']>;
   /** does the column match the given POSIX regular expression, case sensitive */
-  _regex?: Maybe<Scalars['String']>;
+  _regex: Maybe<Scalars['String']>;
   /** does the column match the given SQL regular expression */
-  _similar?: Maybe<Scalars['String']>;
+  _similar: Maybe<Scalars['String']>;
 };
 
-
-/** Boolean expression to compare columns of type "json". All fields are combined with logical 'AND'. */
-export type Json_Comparison_Exp = {
-  _eq?: Maybe<Scalars['json']>;
-  _gt?: Maybe<Scalars['json']>;
-  _gte?: Maybe<Scalars['json']>;
-  _in?: Maybe<Array<Scalars['json']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['json']>;
-  _lte?: Maybe<Scalars['json']>;
-  _neq?: Maybe<Scalars['json']>;
-  _nin?: Maybe<Array<Scalars['json']>>;
-};
-
-/** columns and relationships of "members" */
-export type Members = {
-  __typename?: 'members';
-  created_at: Scalars['timestamp'];
+/** columns and relationships of "customers" */
+export type Customers = {
+  __typename?: 'customers';
+  contact_name: Scalars['String'];
+  created_at: Scalars['timestamptz'];
+  /** An array relationship */
+  firebase_tokens: Array<Firebase_Tokens>;
+  /** An aggregate relationship */
+  firebase_tokens_aggregate: Firebase_Tokens_Aggregate;
   firebase_uid: Scalars['String'];
   id: Scalars['uuid'];
   /** An object relationship */
-  profile?: Maybe<Profiles>;
-  profile_id?: Maybe<Scalars['uuid']>;
+  membership: Maybe<Memberships>;
+  /** fetch data from the table: "personas" */
+  personas: Array<Personas>;
+  /** An aggregate relationship */
+  personas_aggregate: Personas_Aggregate;
+  stripe_customer_id: Maybe<Scalars['String']>;
+  unverified_email: Scalars['String'];
+  verified_email: Maybe<Scalars['String']>;
 };
 
-/** aggregated selection of "members" */
-export type Members_Aggregate = {
-  __typename?: 'members_aggregate';
-  aggregate?: Maybe<Members_Aggregate_Fields>;
-  nodes: Array<Members>;
+
+/** columns and relationships of "customers" */
+export type CustomersFirebase_TokensArgs = {
+  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
+  where: Maybe<Firebase_Tokens_Bool_Exp>;
 };
 
-/** aggregate fields of "members" */
-export type Members_Aggregate_Fields = {
-  __typename?: 'members_aggregate_fields';
+
+/** columns and relationships of "customers" */
+export type CustomersFirebase_Tokens_AggregateArgs = {
+  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
+  where: Maybe<Firebase_Tokens_Bool_Exp>;
+};
+
+
+/** columns and relationships of "customers" */
+export type CustomersPersonasArgs = {
+  distinct_on: Maybe<Array<Personas_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Personas_Order_By>>;
+  where: Maybe<Personas_Bool_Exp>;
+};
+
+
+/** columns and relationships of "customers" */
+export type CustomersPersonas_AggregateArgs = {
+  distinct_on: Maybe<Array<Personas_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Personas_Order_By>>;
+  where: Maybe<Personas_Bool_Exp>;
+};
+
+/** aggregated selection of "customers" */
+export type Customers_Aggregate = {
+  __typename?: 'customers_aggregate';
+  aggregate: Maybe<Customers_Aggregate_Fields>;
+  nodes: Array<Customers>;
+};
+
+/** aggregate fields of "customers" */
+export type Customers_Aggregate_Fields = {
+  __typename?: 'customers_aggregate_fields';
   count: Scalars['Int'];
-  max?: Maybe<Members_Max_Fields>;
-  min?: Maybe<Members_Min_Fields>;
+  max: Maybe<Customers_Max_Fields>;
+  min: Maybe<Customers_Min_Fields>;
 };
 
 
-/** aggregate fields of "members" */
-export type Members_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Members_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
+/** aggregate fields of "customers" */
+export type Customers_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Customers_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
 };
 
-/** Boolean expression to filter rows from the table "members". All fields are combined with a logical 'AND'. */
-export type Members_Bool_Exp = {
-  _and?: Maybe<Array<Members_Bool_Exp>>;
-  _not?: Maybe<Members_Bool_Exp>;
-  _or?: Maybe<Array<Members_Bool_Exp>>;
-  created_at?: Maybe<Timestamp_Comparison_Exp>;
-  firebase_uid?: Maybe<String_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
-  profile?: Maybe<Profiles_Bool_Exp>;
-  profile_id?: Maybe<Uuid_Comparison_Exp>;
+/** Boolean expression to filter rows from the table "customers". All fields are combined with a logical 'AND'. */
+export type Customers_Bool_Exp = {
+  _and: Maybe<Array<Customers_Bool_Exp>>;
+  _not: Maybe<Customers_Bool_Exp>;
+  _or: Maybe<Array<Customers_Bool_Exp>>;
+  contact_name: Maybe<String_Comparison_Exp>;
+  created_at: Maybe<Timestamptz_Comparison_Exp>;
+  firebase_tokens: Maybe<Firebase_Tokens_Bool_Exp>;
+  firebase_uid: Maybe<String_Comparison_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  membership: Maybe<Memberships_Bool_Exp>;
+  personas: Maybe<Personas_Bool_Exp>;
+  stripe_customer_id: Maybe<String_Comparison_Exp>;
+  unverified_email: Maybe<String_Comparison_Exp>;
+  verified_email: Maybe<String_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "members" */
-export enum Members_Constraint {
+/** unique or primary key constraints on table "customers" */
+export enum Customers_Constraint {
   /** unique or primary key constraint */
-  MembersFirebaseUidKey = 'members_firebase_uid_key',
+  CustomersFirebaseUidKey = 'customers_firebase_uid_key',
   /** unique or primary key constraint */
-  MembersPkey = 'members_pkey',
+  CustomersPkey = 'customers_pkey',
   /** unique or primary key constraint */
-  MembersProfileIdKey = 'members_profile_id_key'
+  CustomersVerifiedEmailKey = 'customers_verified_email_key'
 }
 
-/** input type for inserting data into table "members" */
-export type Members_Insert_Input = {
-  created_at?: Maybe<Scalars['timestamp']>;
-  firebase_uid?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-  profile?: Maybe<Profiles_Obj_Rel_Insert_Input>;
-  profile_id?: Maybe<Scalars['uuid']>;
+/** input type for inserting data into table "customers" */
+export type Customers_Insert_Input = {
+  contact_name: Maybe<Scalars['String']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_tokens: Maybe<Firebase_Tokens_Arr_Rel_Insert_Input>;
+  firebase_uid: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  membership: Maybe<Memberships_Obj_Rel_Insert_Input>;
+  personas: Maybe<Personas_Arr_Rel_Insert_Input>;
+  stripe_customer_id: Maybe<Scalars['String']>;
+  unverified_email: Maybe<Scalars['String']>;
+  verified_email: Maybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
-export type Members_Max_Fields = {
-  __typename?: 'members_max_fields';
-  created_at?: Maybe<Scalars['timestamp']>;
-  firebase_uid?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
+export type Customers_Max_Fields = {
+  __typename?: 'customers_max_fields';
+  contact_name: Maybe<Scalars['String']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_uid: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  stripe_customer_id: Maybe<Scalars['String']>;
+  unverified_email: Maybe<Scalars['String']>;
+  verified_email: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
-export type Members_Min_Fields = {
-  __typename?: 'members_min_fields';
-  created_at?: Maybe<Scalars['timestamp']>;
-  firebase_uid?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
+export type Customers_Min_Fields = {
+  __typename?: 'customers_min_fields';
+  contact_name: Maybe<Scalars['String']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_uid: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  stripe_customer_id: Maybe<Scalars['String']>;
+  unverified_email: Maybe<Scalars['String']>;
+  verified_email: Maybe<Scalars['String']>;
 };
 
-/** response of any mutation on the table "members" */
-export type Members_Mutation_Response = {
-  __typename?: 'members_mutation_response';
+/** response of any mutation on the table "customers" */
+export type Customers_Mutation_Response = {
+  __typename?: 'customers_mutation_response';
   /** number of rows affected by the mutation */
   affected_rows: Scalars['Int'];
   /** data from the rows affected by the mutation */
-  returning: Array<Members>;
+  returning: Array<Customers>;
 };
 
-/** input type for inserting object relation for remote table "members" */
-export type Members_Obj_Rel_Insert_Input = {
-  data: Members_Insert_Input;
+/** input type for inserting object relation for remote table "customers" */
+export type Customers_Obj_Rel_Insert_Input = {
+  data: Customers_Insert_Input;
   /** on conflict condition */
-  on_conflict?: Maybe<Members_On_Conflict>;
+  on_conflict: Maybe<Customers_On_Conflict>;
 };
 
-/** on conflict condition type for table "members" */
-export type Members_On_Conflict = {
-  constraint: Members_Constraint;
-  update_columns: Array<Members_Update_Column>;
-  where?: Maybe<Members_Bool_Exp>;
+/** on conflict condition type for table "customers" */
+export type Customers_On_Conflict = {
+  constraint: Customers_Constraint;
+  update_columns: Array<Customers_Update_Column>;
+  where: Maybe<Customers_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "members". */
-export type Members_Order_By = {
-  created_at?: Maybe<Order_By>;
-  firebase_uid?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  profile?: Maybe<Profiles_Order_By>;
-  profile_id?: Maybe<Order_By>;
+/** Ordering options when selecting data from "customers". */
+export type Customers_Order_By = {
+  contact_name: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  firebase_tokens_aggregate: Maybe<Firebase_Tokens_Aggregate_Order_By>;
+  firebase_uid: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  membership: Maybe<Memberships_Order_By>;
+  personas_aggregate: Maybe<Personas_Aggregate_Order_By>;
+  stripe_customer_id: Maybe<Order_By>;
+  unverified_email: Maybe<Order_By>;
+  verified_email: Maybe<Order_By>;
 };
 
-/** primary key columns input for table: members */
-export type Members_Pk_Columns_Input = {
+/** primary key columns input for table: customers */
+export type Customers_Pk_Columns_Input = {
   id: Scalars['uuid'];
 };
 
-/** select columns of table "members" */
-export enum Members_Select_Column {
+/** select columns of table "customers" */
+export enum Customers_Select_Column {
+  /** column name */
+  ContactName = 'contact_name',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -217,19 +274,28 @@ export enum Members_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  ProfileId = 'profile_id'
+  StripeCustomerId = 'stripe_customer_id',
+  /** column name */
+  UnverifiedEmail = 'unverified_email',
+  /** column name */
+  VerifiedEmail = 'verified_email'
 }
 
-/** input type for updating data in table "members" */
-export type Members_Set_Input = {
-  created_at?: Maybe<Scalars['timestamp']>;
-  firebase_uid?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
+/** input type for updating data in table "customers" */
+export type Customers_Set_Input = {
+  contact_name: Maybe<Scalars['String']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_uid: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  stripe_customer_id: Maybe<Scalars['String']>;
+  unverified_email: Maybe<Scalars['String']>;
+  verified_email: Maybe<Scalars['String']>;
 };
 
-/** update columns of table "members" */
-export enum Members_Update_Column {
+/** update columns of table "customers" */
+export enum Customers_Update_Column {
+  /** column name */
+  ContactName = 'contact_name',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -237,222 +303,1186 @@ export enum Members_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  ProfileId = 'profile_id'
+  StripeCustomerId = 'stripe_customer_id',
+  /** column name */
+  UnverifiedEmail = 'unverified_email',
+  /** column name */
+  VerifiedEmail = 'verified_email'
+}
+
+/** columns and relationships of "firebase_tokens" */
+export type Firebase_Tokens = {
+  __typename?: 'firebase_tokens';
+  auth_time: Scalars['timestamptz'];
+  created_at: Scalars['timestamptz'];
+  /** An object relationship */
+  customer: Customers;
+  customer_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+  /** An array relationship */
+  logins: Array<Logins>;
+  /** An aggregate relationship */
+  logins_aggregate: Logins_Aggregate;
+  revoked_at: Maybe<Scalars['timestamptz']>;
+};
+
+
+/** columns and relationships of "firebase_tokens" */
+export type Firebase_TokensLoginsArgs = {
+  distinct_on: Maybe<Array<Logins_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Logins_Order_By>>;
+  where: Maybe<Logins_Bool_Exp>;
+};
+
+
+/** columns and relationships of "firebase_tokens" */
+export type Firebase_TokensLogins_AggregateArgs = {
+  distinct_on: Maybe<Array<Logins_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Logins_Order_By>>;
+  where: Maybe<Logins_Bool_Exp>;
+};
+
+/** aggregated selection of "firebase_tokens" */
+export type Firebase_Tokens_Aggregate = {
+  __typename?: 'firebase_tokens_aggregate';
+  aggregate: Maybe<Firebase_Tokens_Aggregate_Fields>;
+  nodes: Array<Firebase_Tokens>;
+};
+
+/** aggregate fields of "firebase_tokens" */
+export type Firebase_Tokens_Aggregate_Fields = {
+  __typename?: 'firebase_tokens_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<Firebase_Tokens_Max_Fields>;
+  min: Maybe<Firebase_Tokens_Min_Fields>;
+};
+
+
+/** aggregate fields of "firebase_tokens" */
+export type Firebase_Tokens_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Firebase_Tokens_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "firebase_tokens" */
+export type Firebase_Tokens_Aggregate_Order_By = {
+  count: Maybe<Order_By>;
+  max: Maybe<Firebase_Tokens_Max_Order_By>;
+  min: Maybe<Firebase_Tokens_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "firebase_tokens" */
+export type Firebase_Tokens_Arr_Rel_Insert_Input = {
+  data: Array<Firebase_Tokens_Insert_Input>;
+  /** on conflict condition */
+  on_conflict: Maybe<Firebase_Tokens_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "firebase_tokens". All fields are combined with a logical 'AND'. */
+export type Firebase_Tokens_Bool_Exp = {
+  _and: Maybe<Array<Firebase_Tokens_Bool_Exp>>;
+  _not: Maybe<Firebase_Tokens_Bool_Exp>;
+  _or: Maybe<Array<Firebase_Tokens_Bool_Exp>>;
+  auth_time: Maybe<Timestamptz_Comparison_Exp>;
+  created_at: Maybe<Timestamptz_Comparison_Exp>;
+  customer: Maybe<Customers_Bool_Exp>;
+  customer_id: Maybe<Uuid_Comparison_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  logins: Maybe<Logins_Bool_Exp>;
+  revoked_at: Maybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "firebase_tokens" */
+export enum Firebase_Tokens_Constraint {
+  /** unique or primary key constraint */
+  FirebaseTokensCustomerIdAuthTimeKey = 'firebase_tokens_customer_id_auth_time_key',
+  /** unique or primary key constraint */
+  FirebaseTokensPkey = 'firebase_tokens_pkey'
+}
+
+/** input type for inserting data into table "firebase_tokens" */
+export type Firebase_Tokens_Insert_Input = {
+  auth_time: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer: Maybe<Customers_Obj_Rel_Insert_Input>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  logins: Maybe<Logins_Arr_Rel_Insert_Input>;
+  revoked_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Firebase_Tokens_Max_Fields = {
+  __typename?: 'firebase_tokens_max_fields';
+  auth_time: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  revoked_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "firebase_tokens" */
+export type Firebase_Tokens_Max_Order_By = {
+  auth_time: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  customer_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  revoked_at: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Firebase_Tokens_Min_Fields = {
+  __typename?: 'firebase_tokens_min_fields';
+  auth_time: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  revoked_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "firebase_tokens" */
+export type Firebase_Tokens_Min_Order_By = {
+  auth_time: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  customer_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  revoked_at: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "firebase_tokens" */
+export type Firebase_Tokens_Mutation_Response = {
+  __typename?: 'firebase_tokens_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Firebase_Tokens>;
+};
+
+/** input type for inserting object relation for remote table "firebase_tokens" */
+export type Firebase_Tokens_Obj_Rel_Insert_Input = {
+  data: Firebase_Tokens_Insert_Input;
+  /** on conflict condition */
+  on_conflict: Maybe<Firebase_Tokens_On_Conflict>;
+};
+
+/** on conflict condition type for table "firebase_tokens" */
+export type Firebase_Tokens_On_Conflict = {
+  constraint: Firebase_Tokens_Constraint;
+  update_columns: Array<Firebase_Tokens_Update_Column>;
+  where: Maybe<Firebase_Tokens_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "firebase_tokens". */
+export type Firebase_Tokens_Order_By = {
+  auth_time: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  customer: Maybe<Customers_Order_By>;
+  customer_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  logins_aggregate: Maybe<Logins_Aggregate_Order_By>;
+  revoked_at: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: firebase_tokens */
+export type Firebase_Tokens_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "firebase_tokens" */
+export enum Firebase_Tokens_Select_Column {
+  /** column name */
+  AuthTime = 'auth_time',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  CustomerId = 'customer_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  RevokedAt = 'revoked_at'
+}
+
+/** input type for updating data in table "firebase_tokens" */
+export type Firebase_Tokens_Set_Input = {
+  auth_time: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  revoked_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "firebase_tokens" */
+export enum Firebase_Tokens_Update_Column {
+  /** column name */
+  AuthTime = 'auth_time',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  CustomerId = 'customer_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  RevokedAt = 'revoked_at'
+}
+
+
+/** Boolean expression to compare columns of type "inet". All fields are combined with logical 'AND'. */
+export type Inet_Comparison_Exp = {
+  _eq: Maybe<Scalars['inet']>;
+  _gt: Maybe<Scalars['inet']>;
+  _gte: Maybe<Scalars['inet']>;
+  _in: Maybe<Array<Scalars['inet']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['inet']>;
+  _lte: Maybe<Scalars['inet']>;
+  _neq: Maybe<Scalars['inet']>;
+  _nin: Maybe<Array<Scalars['inet']>>;
+};
+
+/** columns and relationships of "logins" */
+export type Logins = {
+  __typename?: 'logins';
+  agent_id: Scalars['uuid'];
+  created_at: Scalars['timestamptz'];
+  /** An object relationship */
+  firebase_token: Maybe<Firebase_Tokens>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Scalars['uuid'];
+  ip_address: Scalars['inet'];
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  /** An object relationship */
+  user_agent: User_Agents;
+  user_agent_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "logins" */
+export type Logins_Aggregate = {
+  __typename?: 'logins_aggregate';
+  aggregate: Maybe<Logins_Aggregate_Fields>;
+  nodes: Array<Logins>;
+};
+
+/** aggregate fields of "logins" */
+export type Logins_Aggregate_Fields = {
+  __typename?: 'logins_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<Logins_Max_Fields>;
+  min: Maybe<Logins_Min_Fields>;
+};
+
+
+/** aggregate fields of "logins" */
+export type Logins_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Logins_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "logins" */
+export type Logins_Aggregate_Order_By = {
+  count: Maybe<Order_By>;
+  max: Maybe<Logins_Max_Order_By>;
+  min: Maybe<Logins_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "logins" */
+export type Logins_Arr_Rel_Insert_Input = {
+  data: Array<Logins_Insert_Input>;
+  /** on conflict condition */
+  on_conflict: Maybe<Logins_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "logins". All fields are combined with a logical 'AND'. */
+export type Logins_Bool_Exp = {
+  _and: Maybe<Array<Logins_Bool_Exp>>;
+  _not: Maybe<Logins_Bool_Exp>;
+  _or: Maybe<Array<Logins_Bool_Exp>>;
+  agent_id: Maybe<Uuid_Comparison_Exp>;
+  created_at: Maybe<Timestamptz_Comparison_Exp>;
+  firebase_token: Maybe<Firebase_Tokens_Bool_Exp>;
+  firebase_token_id: Maybe<Uuid_Comparison_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  ip_address: Maybe<Inet_Comparison_Exp>;
+  referrer_code: Maybe<String_Comparison_Exp>;
+  referrer_source: Maybe<String_Comparison_Exp>;
+  url: Maybe<String_Comparison_Exp>;
+  user_agent: Maybe<User_Agents_Bool_Exp>;
+  user_agent_id: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "logins" */
+export enum Logins_Constraint {
+  /** unique or primary key constraint */
+  LoginsPkey = 'logins_pkey'
+}
+
+/** input type for inserting data into table "logins" */
+export type Logins_Insert_Input = {
+  agent_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_token: Maybe<Firebase_Tokens_Obj_Rel_Insert_Input>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  ip_address: Maybe<Scalars['inet']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent: Maybe<User_Agents_Obj_Rel_Insert_Input>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Logins_Max_Fields = {
+  __typename?: 'logins_max_fields';
+  agent_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "logins" */
+export type Logins_Max_Order_By = {
+  agent_id: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  firebase_token_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  referrer_code: Maybe<Order_By>;
+  referrer_source: Maybe<Order_By>;
+  url: Maybe<Order_By>;
+  user_agent_id: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Logins_Min_Fields = {
+  __typename?: 'logins_min_fields';
+  agent_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "logins" */
+export type Logins_Min_Order_By = {
+  agent_id: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  firebase_token_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  referrer_code: Maybe<Order_By>;
+  referrer_source: Maybe<Order_By>;
+  url: Maybe<Order_By>;
+  user_agent_id: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "logins" */
+export type Logins_Mutation_Response = {
+  __typename?: 'logins_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Logins>;
+};
+
+/** on conflict condition type for table "logins" */
+export type Logins_On_Conflict = {
+  constraint: Logins_Constraint;
+  update_columns: Array<Logins_Update_Column>;
+  where: Maybe<Logins_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "logins". */
+export type Logins_Order_By = {
+  agent_id: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  firebase_token: Maybe<Firebase_Tokens_Order_By>;
+  firebase_token_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  ip_address: Maybe<Order_By>;
+  referrer_code: Maybe<Order_By>;
+  referrer_source: Maybe<Order_By>;
+  url: Maybe<Order_By>;
+  user_agent: Maybe<User_Agents_Order_By>;
+  user_agent_id: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: logins */
+export type Logins_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "logins" */
+export enum Logins_Select_Column {
+  /** column name */
+  AgentId = 'agent_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  FirebaseTokenId = 'firebase_token_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IpAddress = 'ip_address',
+  /** column name */
+  ReferrerCode = 'referrer_code',
+  /** column name */
+  ReferrerSource = 'referrer_source',
+  /** column name */
+  Url = 'url',
+  /** column name */
+  UserAgentId = 'user_agent_id'
+}
+
+/** input type for updating data in table "logins" */
+export type Logins_Set_Input = {
+  agent_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  ip_address: Maybe<Scalars['inet']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** update columns of table "logins" */
+export enum Logins_Update_Column {
+  /** column name */
+  AgentId = 'agent_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  FirebaseTokenId = 'firebase_token_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IpAddress = 'ip_address',
+  /** column name */
+  ReferrerCode = 'referrer_code',
+  /** column name */
+  ReferrerSource = 'referrer_source',
+  /** column name */
+  Url = 'url',
+  /** column name */
+  UserAgentId = 'user_agent_id'
+}
+
+/** columns and relationships of "membership_levels" */
+export type Membership_Levels = {
+  __typename?: 'membership_levels';
+  value: Scalars['String'];
+};
+
+/** aggregated selection of "membership_levels" */
+export type Membership_Levels_Aggregate = {
+  __typename?: 'membership_levels_aggregate';
+  aggregate: Maybe<Membership_Levels_Aggregate_Fields>;
+  nodes: Array<Membership_Levels>;
+};
+
+/** aggregate fields of "membership_levels" */
+export type Membership_Levels_Aggregate_Fields = {
+  __typename?: 'membership_levels_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<Membership_Levels_Max_Fields>;
+  min: Maybe<Membership_Levels_Min_Fields>;
+};
+
+
+/** aggregate fields of "membership_levels" */
+export type Membership_Levels_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Membership_Levels_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "membership_levels". All fields are combined with a logical 'AND'. */
+export type Membership_Levels_Bool_Exp = {
+  _and: Maybe<Array<Membership_Levels_Bool_Exp>>;
+  _not: Maybe<Membership_Levels_Bool_Exp>;
+  _or: Maybe<Array<Membership_Levels_Bool_Exp>>;
+  value: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "membership_levels" */
+export enum Membership_Levels_Constraint {
+  /** unique or primary key constraint */
+  MembershipLevelsPkey = 'membership_levels_pkey'
+}
+
+export enum Membership_Levels_Enum {
+  Basic = 'basic',
+  Patron = 'patron',
+  Supporter = 'supporter'
+}
+
+/** Boolean expression to compare columns of type "membership_levels_enum". All fields are combined with logical 'AND'. */
+export type Membership_Levels_Enum_Comparison_Exp = {
+  _eq: Maybe<Membership_Levels_Enum>;
+  _in: Maybe<Array<Membership_Levels_Enum>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _neq: Maybe<Membership_Levels_Enum>;
+  _nin: Maybe<Array<Membership_Levels_Enum>>;
+};
+
+/** input type for inserting data into table "membership_levels" */
+export type Membership_Levels_Insert_Input = {
+  value: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Membership_Levels_Max_Fields = {
+  __typename?: 'membership_levels_max_fields';
+  value: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Membership_Levels_Min_Fields = {
+  __typename?: 'membership_levels_min_fields';
+  value: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "membership_levels" */
+export type Membership_Levels_Mutation_Response = {
+  __typename?: 'membership_levels_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Membership_Levels>;
+};
+
+/** input type for inserting object relation for remote table "membership_levels" */
+export type Membership_Levels_Obj_Rel_Insert_Input = {
+  data: Membership_Levels_Insert_Input;
+  /** on conflict condition */
+  on_conflict: Maybe<Membership_Levels_On_Conflict>;
+};
+
+/** on conflict condition type for table "membership_levels" */
+export type Membership_Levels_On_Conflict = {
+  constraint: Membership_Levels_Constraint;
+  update_columns: Array<Membership_Levels_Update_Column>;
+  where: Maybe<Membership_Levels_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "membership_levels". */
+export type Membership_Levels_Order_By = {
+  value: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: membership_levels */
+export type Membership_Levels_Pk_Columns_Input = {
+  value: Scalars['String'];
+};
+
+/** select columns of table "membership_levels" */
+export enum Membership_Levels_Select_Column {
+  /** column name */
+  Value = 'value'
+}
+
+/** input type for updating data in table "membership_levels" */
+export type Membership_Levels_Set_Input = {
+  value: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "membership_levels" */
+export enum Membership_Levels_Update_Column {
+  /** column name */
+  Value = 'value'
+}
+
+/** columns and relationships of "memberships" */
+export type Memberships = {
+  __typename?: 'memberships';
+  active_until: Maybe<Scalars['timestamptz']>;
+  created_at: Scalars['timestamptz'];
+  /** An object relationship */
+  customer: Customers;
+  id: Scalars['uuid'];
+  level: Membership_Levels_Enum;
+  lifetime: Scalars['Boolean'];
+  /** An object relationship */
+  membership_level: Membership_Levels;
+  sabbatical_available_until: Maybe<Scalars['timestamptz']>;
+  stripe_subscription_id: Maybe<Scalars['String']>;
+  stripe_subscription_status: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregated selection of "memberships" */
+export type Memberships_Aggregate = {
+  __typename?: 'memberships_aggregate';
+  aggregate: Maybe<Memberships_Aggregate_Fields>;
+  nodes: Array<Memberships>;
+};
+
+/** aggregate fields of "memberships" */
+export type Memberships_Aggregate_Fields = {
+  __typename?: 'memberships_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<Memberships_Max_Fields>;
+  min: Maybe<Memberships_Min_Fields>;
+};
+
+
+/** aggregate fields of "memberships" */
+export type Memberships_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Memberships_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "memberships". All fields are combined with a logical 'AND'. */
+export type Memberships_Bool_Exp = {
+  _and: Maybe<Array<Memberships_Bool_Exp>>;
+  _not: Maybe<Memberships_Bool_Exp>;
+  _or: Maybe<Array<Memberships_Bool_Exp>>;
+  active_until: Maybe<Timestamptz_Comparison_Exp>;
+  created_at: Maybe<Timestamptz_Comparison_Exp>;
+  customer: Maybe<Customers_Bool_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  level: Maybe<Membership_Levels_Enum_Comparison_Exp>;
+  lifetime: Maybe<Boolean_Comparison_Exp>;
+  membership_level: Maybe<Membership_Levels_Bool_Exp>;
+  sabbatical_available_until: Maybe<Timestamptz_Comparison_Exp>;
+  stripe_subscription_id: Maybe<String_Comparison_Exp>;
+  stripe_subscription_status: Maybe<String_Comparison_Exp>;
+  updated_at: Maybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "memberships" */
+export enum Memberships_Constraint {
+  /** unique or primary key constraint */
+  MembershipsPkey = 'memberships_pkey',
+  /** unique or primary key constraint */
+  MembershipsStripeSubscriptionIdKey = 'memberships_stripe_subscription_id_key'
+}
+
+/** input type for inserting data into table "memberships" */
+export type Memberships_Insert_Input = {
+  active_until: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer: Maybe<Customers_Obj_Rel_Insert_Input>;
+  id: Maybe<Scalars['uuid']>;
+  level: Maybe<Membership_Levels_Enum>;
+  lifetime: Maybe<Scalars['Boolean']>;
+  membership_level: Maybe<Membership_Levels_Obj_Rel_Insert_Input>;
+  sabbatical_available_until: Maybe<Scalars['timestamptz']>;
+  stripe_subscription_id: Maybe<Scalars['String']>;
+  stripe_subscription_status: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Memberships_Max_Fields = {
+  __typename?: 'memberships_max_fields';
+  active_until: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  id: Maybe<Scalars['uuid']>;
+  sabbatical_available_until: Maybe<Scalars['timestamptz']>;
+  stripe_subscription_id: Maybe<Scalars['String']>;
+  stripe_subscription_status: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Memberships_Min_Fields = {
+  __typename?: 'memberships_min_fields';
+  active_until: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  id: Maybe<Scalars['uuid']>;
+  sabbatical_available_until: Maybe<Scalars['timestamptz']>;
+  stripe_subscription_id: Maybe<Scalars['String']>;
+  stripe_subscription_status: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "memberships" */
+export type Memberships_Mutation_Response = {
+  __typename?: 'memberships_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Memberships>;
+};
+
+/** input type for inserting object relation for remote table "memberships" */
+export type Memberships_Obj_Rel_Insert_Input = {
+  data: Memberships_Insert_Input;
+  /** on conflict condition */
+  on_conflict: Maybe<Memberships_On_Conflict>;
+};
+
+/** on conflict condition type for table "memberships" */
+export type Memberships_On_Conflict = {
+  constraint: Memberships_Constraint;
+  update_columns: Array<Memberships_Update_Column>;
+  where: Maybe<Memberships_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "memberships". */
+export type Memberships_Order_By = {
+  active_until: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  customer: Maybe<Customers_Order_By>;
+  id: Maybe<Order_By>;
+  level: Maybe<Order_By>;
+  lifetime: Maybe<Order_By>;
+  membership_level: Maybe<Membership_Levels_Order_By>;
+  sabbatical_available_until: Maybe<Order_By>;
+  stripe_subscription_id: Maybe<Order_By>;
+  stripe_subscription_status: Maybe<Order_By>;
+  updated_at: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: memberships */
+export type Memberships_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "memberships" */
+export enum Memberships_Select_Column {
+  /** column name */
+  ActiveUntil = 'active_until',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Level = 'level',
+  /** column name */
+  Lifetime = 'lifetime',
+  /** column name */
+  SabbaticalAvailableUntil = 'sabbatical_available_until',
+  /** column name */
+  StripeSubscriptionId = 'stripe_subscription_id',
+  /** column name */
+  StripeSubscriptionStatus = 'stripe_subscription_status',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "memberships" */
+export type Memberships_Set_Input = {
+  active_until: Maybe<Scalars['timestamptz']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  id: Maybe<Scalars['uuid']>;
+  level: Maybe<Membership_Levels_Enum>;
+  lifetime: Maybe<Scalars['Boolean']>;
+  sabbatical_available_until: Maybe<Scalars['timestamptz']>;
+  stripe_subscription_id: Maybe<Scalars['String']>;
+  stripe_subscription_status: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "memberships" */
+export enum Memberships_Update_Column {
+  /** column name */
+  ActiveUntil = 'active_until',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Level = 'level',
+  /** column name */
+  Lifetime = 'lifetime',
+  /** column name */
+  SabbaticalAvailableUntil = 'sabbatical_available_until',
+  /** column name */
+  StripeSubscriptionId = 'stripe_subscription_id',
+  /** column name */
+  StripeSubscriptionStatus = 'stripe_subscription_status',
+  /** column name */
+  UpdatedAt = 'updated_at'
 }
 
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
-  /** delete data from the table: "members" */
-  delete_members?: Maybe<Members_Mutation_Response>;
-  /** delete single row from the table: "members" */
-  delete_members_by_pk?: Maybe<Members>;
-  /** delete data from the table: "post_versions" */
-  delete_post_versions?: Maybe<Post_Versions_Mutation_Response>;
-  /** delete single row from the table: "post_versions" */
-  delete_post_versions_by_pk?: Maybe<Post_Versions>;
-  /** delete data from the table: "posts" */
-  delete_posts?: Maybe<Posts_Mutation_Response>;
-  /** delete single row from the table: "posts" */
-  delete_posts_by_pk?: Maybe<Posts>;
-  /** delete data from the table: "profiles" */
-  delete_profiles?: Maybe<Profiles_Mutation_Response>;
-  /** delete single row from the table: "profiles" */
-  delete_profiles_by_pk?: Maybe<Profiles>;
-  /** insert data into the table: "members" */
-  insert_members?: Maybe<Members_Mutation_Response>;
-  /** insert a single row into the table: "members" */
-  insert_members_one?: Maybe<Members>;
-  /** insert data into the table: "post_versions" */
-  insert_post_versions?: Maybe<Post_Versions_Mutation_Response>;
-  /** insert a single row into the table: "post_versions" */
-  insert_post_versions_one?: Maybe<Post_Versions>;
-  /** insert data into the table: "posts" */
-  insert_posts?: Maybe<Posts_Mutation_Response>;
-  /** insert a single row into the table: "posts" */
-  insert_posts_one?: Maybe<Posts>;
-  /** insert data into the table: "profiles" */
-  insert_profiles?: Maybe<Profiles_Mutation_Response>;
-  /** insert a single row into the table: "profiles" */
-  insert_profiles_one?: Maybe<Profiles>;
-  /** update data of the table: "members" */
-  update_members?: Maybe<Members_Mutation_Response>;
-  /** update single row of the table: "members" */
-  update_members_by_pk?: Maybe<Members>;
-  /** update data of the table: "post_versions" */
-  update_post_versions?: Maybe<Post_Versions_Mutation_Response>;
-  /** update single row of the table: "post_versions" */
-  update_post_versions_by_pk?: Maybe<Post_Versions>;
-  /** update data of the table: "posts" */
-  update_posts?: Maybe<Posts_Mutation_Response>;
-  /** update single row of the table: "posts" */
-  update_posts_by_pk?: Maybe<Posts>;
-  /** update data of the table: "profiles" */
-  update_profiles?: Maybe<Profiles_Mutation_Response>;
-  /** update single row of the table: "profiles" */
-  update_profiles_by_pk?: Maybe<Profiles>;
+  /** delete data from the table: "customers" */
+  delete_customers: Maybe<Customers_Mutation_Response>;
+  /** delete single row from the table: "customers" */
+  delete_customers_by_pk: Maybe<Customers>;
+  /** delete data from the table: "firebase_tokens" */
+  delete_firebase_tokens: Maybe<Firebase_Tokens_Mutation_Response>;
+  /** delete single row from the table: "firebase_tokens" */
+  delete_firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
+  /** delete data from the table: "logins" */
+  delete_logins: Maybe<Logins_Mutation_Response>;
+  /** delete single row from the table: "logins" */
+  delete_logins_by_pk: Maybe<Logins>;
+  /** delete data from the table: "membership_levels" */
+  delete_membership_levels: Maybe<Membership_Levels_Mutation_Response>;
+  /** delete single row from the table: "membership_levels" */
+  delete_membership_levels_by_pk: Maybe<Membership_Levels>;
+  /** delete data from the table: "memberships" */
+  delete_memberships: Maybe<Memberships_Mutation_Response>;
+  /** delete single row from the table: "memberships" */
+  delete_memberships_by_pk: Maybe<Memberships>;
+  /** delete data from the table: "personas" */
+  delete_personas: Maybe<Personas_Mutation_Response>;
+  /** delete single row from the table: "personas" */
+  delete_personas_by_pk: Maybe<Personas>;
+  /** delete data from the table: "user_agents" */
+  delete_user_agents: Maybe<User_Agents_Mutation_Response>;
+  /** delete single row from the table: "user_agents" */
+  delete_user_agents_by_pk: Maybe<User_Agents>;
+  /** insert data into the table: "customers" */
+  insert_customers: Maybe<Customers_Mutation_Response>;
+  /** insert a single row into the table: "customers" */
+  insert_customers_one: Maybe<Customers>;
+  /** insert data into the table: "firebase_tokens" */
+  insert_firebase_tokens: Maybe<Firebase_Tokens_Mutation_Response>;
+  /** insert a single row into the table: "firebase_tokens" */
+  insert_firebase_tokens_one: Maybe<Firebase_Tokens>;
+  /** insert data into the table: "logins" */
+  insert_logins: Maybe<Logins_Mutation_Response>;
+  /** insert a single row into the table: "logins" */
+  insert_logins_one: Maybe<Logins>;
+  /** insert data into the table: "membership_levels" */
+  insert_membership_levels: Maybe<Membership_Levels_Mutation_Response>;
+  /** insert a single row into the table: "membership_levels" */
+  insert_membership_levels_one: Maybe<Membership_Levels>;
+  /** insert data into the table: "memberships" */
+  insert_memberships: Maybe<Memberships_Mutation_Response>;
+  /** insert a single row into the table: "memberships" */
+  insert_memberships_one: Maybe<Memberships>;
+  /** insert data into the table: "personas" */
+  insert_personas: Maybe<Personas_Mutation_Response>;
+  /** insert a single row into the table: "personas" */
+  insert_personas_one: Maybe<Personas>;
+  /** insert data into the table: "user_agents" */
+  insert_user_agents: Maybe<User_Agents_Mutation_Response>;
+  /** insert a single row into the table: "user_agents" */
+  insert_user_agents_one: Maybe<User_Agents>;
+  login: Maybe<LoginOutput>;
+  /** update data of the table: "customers" */
+  update_customers: Maybe<Customers_Mutation_Response>;
+  /** update single row of the table: "customers" */
+  update_customers_by_pk: Maybe<Customers>;
+  /** update data of the table: "firebase_tokens" */
+  update_firebase_tokens: Maybe<Firebase_Tokens_Mutation_Response>;
+  /** update single row of the table: "firebase_tokens" */
+  update_firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
+  /** update data of the table: "logins" */
+  update_logins: Maybe<Logins_Mutation_Response>;
+  /** update single row of the table: "logins" */
+  update_logins_by_pk: Maybe<Logins>;
+  /** update data of the table: "membership_levels" */
+  update_membership_levels: Maybe<Membership_Levels_Mutation_Response>;
+  /** update single row of the table: "membership_levels" */
+  update_membership_levels_by_pk: Maybe<Membership_Levels>;
+  /** update data of the table: "memberships" */
+  update_memberships: Maybe<Memberships_Mutation_Response>;
+  /** update single row of the table: "memberships" */
+  update_memberships_by_pk: Maybe<Memberships>;
+  /** update data of the table: "personas" */
+  update_personas: Maybe<Personas_Mutation_Response>;
+  /** update single row of the table: "personas" */
+  update_personas_by_pk: Maybe<Personas>;
+  /** update data of the table: "user_agents" */
+  update_user_agents: Maybe<User_Agents_Mutation_Response>;
+  /** update single row of the table: "user_agents" */
+  update_user_agents_by_pk: Maybe<User_Agents>;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_MembersArgs = {
-  where: Members_Bool_Exp;
+export type Mutation_RootDelete_CustomersArgs = {
+  where: Customers_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Members_By_PkArgs = {
+export type Mutation_RootDelete_Customers_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Post_VersionsArgs = {
-  where: Post_Versions_Bool_Exp;
+export type Mutation_RootDelete_Firebase_TokensArgs = {
+  where: Firebase_Tokens_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Post_Versions_By_PkArgs = {
+export type Mutation_RootDelete_Firebase_Tokens_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_PostsArgs = {
-  where: Posts_Bool_Exp;
+export type Mutation_RootDelete_LoginsArgs = {
+  where: Logins_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Posts_By_PkArgs = {
+export type Mutation_RootDelete_Logins_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_ProfilesArgs = {
-  where: Profiles_Bool_Exp;
+export type Mutation_RootDelete_Membership_LevelsArgs = {
+  where: Membership_Levels_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Profiles_By_PkArgs = {
+export type Mutation_RootDelete_Membership_Levels_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_MembershipsArgs = {
+  where: Memberships_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Memberships_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_MembersArgs = {
-  objects: Array<Members_Insert_Input>;
-  on_conflict?: Maybe<Members_On_Conflict>;
+export type Mutation_RootDelete_PersonasArgs = {
+  where: Personas_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Members_OneArgs = {
-  object: Members_Insert_Input;
-  on_conflict?: Maybe<Members_On_Conflict>;
+export type Mutation_RootDelete_Personas_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Post_VersionsArgs = {
-  objects: Array<Post_Versions_Insert_Input>;
-  on_conflict?: Maybe<Post_Versions_On_Conflict>;
+export type Mutation_RootDelete_User_AgentsArgs = {
+  where: User_Agents_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Post_Versions_OneArgs = {
-  object: Post_Versions_Insert_Input;
-  on_conflict?: Maybe<Post_Versions_On_Conflict>;
+export type Mutation_RootDelete_User_Agents_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_PostsArgs = {
-  objects: Array<Posts_Insert_Input>;
-  on_conflict?: Maybe<Posts_On_Conflict>;
+export type Mutation_RootInsert_CustomersArgs = {
+  objects: Array<Customers_Insert_Input>;
+  on_conflict: Maybe<Customers_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Posts_OneArgs = {
-  object: Posts_Insert_Input;
-  on_conflict?: Maybe<Posts_On_Conflict>;
+export type Mutation_RootInsert_Customers_OneArgs = {
+  object: Customers_Insert_Input;
+  on_conflict: Maybe<Customers_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_ProfilesArgs = {
-  objects: Array<Profiles_Insert_Input>;
-  on_conflict?: Maybe<Profiles_On_Conflict>;
+export type Mutation_RootInsert_Firebase_TokensArgs = {
+  objects: Array<Firebase_Tokens_Insert_Input>;
+  on_conflict: Maybe<Firebase_Tokens_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Profiles_OneArgs = {
-  object: Profiles_Insert_Input;
-  on_conflict?: Maybe<Profiles_On_Conflict>;
+export type Mutation_RootInsert_Firebase_Tokens_OneArgs = {
+  object: Firebase_Tokens_Insert_Input;
+  on_conflict: Maybe<Firebase_Tokens_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_MembersArgs = {
-  _set?: Maybe<Members_Set_Input>;
-  where: Members_Bool_Exp;
+export type Mutation_RootInsert_LoginsArgs = {
+  objects: Array<Logins_Insert_Input>;
+  on_conflict: Maybe<Logins_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Members_By_PkArgs = {
-  _set?: Maybe<Members_Set_Input>;
-  pk_columns: Members_Pk_Columns_Input;
+export type Mutation_RootInsert_Logins_OneArgs = {
+  object: Logins_Insert_Input;
+  on_conflict: Maybe<Logins_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Post_VersionsArgs = {
-  _set?: Maybe<Post_Versions_Set_Input>;
-  where: Post_Versions_Bool_Exp;
+export type Mutation_RootInsert_Membership_LevelsArgs = {
+  objects: Array<Membership_Levels_Insert_Input>;
+  on_conflict: Maybe<Membership_Levels_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Post_Versions_By_PkArgs = {
-  _set?: Maybe<Post_Versions_Set_Input>;
-  pk_columns: Post_Versions_Pk_Columns_Input;
+export type Mutation_RootInsert_Membership_Levels_OneArgs = {
+  object: Membership_Levels_Insert_Input;
+  on_conflict: Maybe<Membership_Levels_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_PostsArgs = {
-  _inc?: Maybe<Posts_Inc_Input>;
-  _set?: Maybe<Posts_Set_Input>;
-  where: Posts_Bool_Exp;
+export type Mutation_RootInsert_MembershipsArgs = {
+  objects: Array<Memberships_Insert_Input>;
+  on_conflict: Maybe<Memberships_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Posts_By_PkArgs = {
-  _inc?: Maybe<Posts_Inc_Input>;
-  _set?: Maybe<Posts_Set_Input>;
-  pk_columns: Posts_Pk_Columns_Input;
+export type Mutation_RootInsert_Memberships_OneArgs = {
+  object: Memberships_Insert_Input;
+  on_conflict: Maybe<Memberships_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_ProfilesArgs = {
-  _set?: Maybe<Profiles_Set_Input>;
-  where: Profiles_Bool_Exp;
+export type Mutation_RootInsert_PersonasArgs = {
+  objects: Array<Personas_Insert_Input>;
+  on_conflict: Maybe<Personas_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Profiles_By_PkArgs = {
-  _set?: Maybe<Profiles_Set_Input>;
-  pk_columns: Profiles_Pk_Columns_Input;
+export type Mutation_RootInsert_Personas_OneArgs = {
+  object: Personas_Insert_Input;
+  on_conflict: Maybe<Personas_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_User_AgentsArgs = {
+  objects: Array<User_Agents_Insert_Input>;
+  on_conflict: Maybe<User_Agents_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_User_Agents_OneArgs = {
+  object: User_Agents_Insert_Input;
+  on_conflict: Maybe<User_Agents_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootLoginArgs = {
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_CustomersArgs = {
+  _set: Maybe<Customers_Set_Input>;
+  where: Customers_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Customers_By_PkArgs = {
+  _set: Maybe<Customers_Set_Input>;
+  pk_columns: Customers_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Firebase_TokensArgs = {
+  _set: Maybe<Firebase_Tokens_Set_Input>;
+  where: Firebase_Tokens_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Firebase_Tokens_By_PkArgs = {
+  _set: Maybe<Firebase_Tokens_Set_Input>;
+  pk_columns: Firebase_Tokens_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_LoginsArgs = {
+  _set: Maybe<Logins_Set_Input>;
+  where: Logins_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Logins_By_PkArgs = {
+  _set: Maybe<Logins_Set_Input>;
+  pk_columns: Logins_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Membership_LevelsArgs = {
+  _set: Maybe<Membership_Levels_Set_Input>;
+  where: Membership_Levels_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Membership_Levels_By_PkArgs = {
+  _set: Maybe<Membership_Levels_Set_Input>;
+  pk_columns: Membership_Levels_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_MembershipsArgs = {
+  _set: Maybe<Memberships_Set_Input>;
+  where: Memberships_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Memberships_By_PkArgs = {
+  _set: Maybe<Memberships_Set_Input>;
+  pk_columns: Memberships_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_PersonasArgs = {
+  _set: Maybe<Personas_Set_Input>;
+  where: Personas_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Personas_By_PkArgs = {
+  _set: Maybe<Personas_Set_Input>;
+  pk_columns: Personas_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_AgentsArgs = {
+  _set: Maybe<User_Agents_Set_Input>;
+  where: User_Agents_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_User_Agents_By_PkArgs = {
+  _set: Maybe<User_Agents_Set_Input>;
+  pk_columns: User_Agents_Pk_Columns_Input;
 };
 
 /** column ordering options */
@@ -471,1504 +1501,838 @@ export enum Order_By {
   DescNullsLast = 'desc_nulls_last'
 }
 
-/** columns and relationships of "post_versions" */
-export type Post_Versions = {
-  __typename?: 'post_versions';
-  content?: Maybe<Scalars['json']>;
-  created_at: Scalars['timestamp'];
-  editor_state?: Maybe<Scalars['json']>;
-  id: Scalars['uuid'];
-  is_draft?: Maybe<Scalars['Boolean']>;
-  locked_for_publication: Scalars['Boolean'];
+/** columns and relationships of "personas" */
+export type Personas = {
+  __typename?: 'personas';
+  created_at: Scalars['timestamptz'];
   /** An object relationship */
-  post: Posts;
-  post_id: Scalars['uuid'];
-  slug?: Maybe<Scalars['String']>;
-  updated_at: Scalars['timestamp'];
+  customer: Customers;
+  customer_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+  list_address_with_byline: Scalars['Boolean'];
+  name: Scalars['String'];
+  photo_url: Maybe<Scalars['String']>;
+  preferred_broadcast_time: Scalars['time'];
+  updated_at: Maybe<Scalars['timestamptz']>;
 };
 
-
-/** columns and relationships of "post_versions" */
-export type Post_VersionsContentArgs = {
-  path?: Maybe<Scalars['String']>;
+/** aggregated selection of "personas" */
+export type Personas_Aggregate = {
+  __typename?: 'personas_aggregate';
+  aggregate: Maybe<Personas_Aggregate_Fields>;
+  nodes: Array<Personas>;
 };
 
-
-/** columns and relationships of "post_versions" */
-export type Post_VersionsEditor_StateArgs = {
-  path?: Maybe<Scalars['String']>;
-};
-
-/** aggregated selection of "post_versions" */
-export type Post_Versions_Aggregate = {
-  __typename?: 'post_versions_aggregate';
-  aggregate?: Maybe<Post_Versions_Aggregate_Fields>;
-  nodes: Array<Post_Versions>;
-};
-
-/** aggregate fields of "post_versions" */
-export type Post_Versions_Aggregate_Fields = {
-  __typename?: 'post_versions_aggregate_fields';
+/** aggregate fields of "personas" */
+export type Personas_Aggregate_Fields = {
+  __typename?: 'personas_aggregate_fields';
   count: Scalars['Int'];
-  max?: Maybe<Post_Versions_Max_Fields>;
-  min?: Maybe<Post_Versions_Min_Fields>;
+  max: Maybe<Personas_Max_Fields>;
+  min: Maybe<Personas_Min_Fields>;
 };
 
 
-/** aggregate fields of "post_versions" */
-export type Post_Versions_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Post_Versions_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
+/** aggregate fields of "personas" */
+export type Personas_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Personas_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
 };
 
-/** order by aggregate values of table "post_versions" */
-export type Post_Versions_Aggregate_Order_By = {
-  count?: Maybe<Order_By>;
-  max?: Maybe<Post_Versions_Max_Order_By>;
-  min?: Maybe<Post_Versions_Min_Order_By>;
+/** order by aggregate values of table "personas" */
+export type Personas_Aggregate_Order_By = {
+  count: Maybe<Order_By>;
+  max: Maybe<Personas_Max_Order_By>;
+  min: Maybe<Personas_Min_Order_By>;
 };
 
-/** input type for inserting array relation for remote table "post_versions" */
-export type Post_Versions_Arr_Rel_Insert_Input = {
-  data: Array<Post_Versions_Insert_Input>;
+/** input type for inserting array relation for remote table "personas" */
+export type Personas_Arr_Rel_Insert_Input = {
+  data: Array<Personas_Insert_Input>;
   /** on conflict condition */
-  on_conflict?: Maybe<Post_Versions_On_Conflict>;
+  on_conflict: Maybe<Personas_On_Conflict>;
 };
 
-/** Boolean expression to filter rows from the table "post_versions". All fields are combined with a logical 'AND'. */
-export type Post_Versions_Bool_Exp = {
-  _and?: Maybe<Array<Post_Versions_Bool_Exp>>;
-  _not?: Maybe<Post_Versions_Bool_Exp>;
-  _or?: Maybe<Array<Post_Versions_Bool_Exp>>;
-  content?: Maybe<Json_Comparison_Exp>;
-  created_at?: Maybe<Timestamp_Comparison_Exp>;
-  editor_state?: Maybe<Json_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
-  is_draft?: Maybe<Boolean_Comparison_Exp>;
-  locked_for_publication?: Maybe<Boolean_Comparison_Exp>;
-  post?: Maybe<Posts_Bool_Exp>;
-  post_id?: Maybe<Uuid_Comparison_Exp>;
-  slug?: Maybe<String_Comparison_Exp>;
-  updated_at?: Maybe<Timestamp_Comparison_Exp>;
+/** Boolean expression to filter rows from the table "personas". All fields are combined with a logical 'AND'. */
+export type Personas_Bool_Exp = {
+  _and: Maybe<Array<Personas_Bool_Exp>>;
+  _not: Maybe<Personas_Bool_Exp>;
+  _or: Maybe<Array<Personas_Bool_Exp>>;
+  created_at: Maybe<Timestamptz_Comparison_Exp>;
+  customer: Maybe<Customers_Bool_Exp>;
+  customer_id: Maybe<Uuid_Comparison_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  list_address_with_byline: Maybe<Boolean_Comparison_Exp>;
+  name: Maybe<String_Comparison_Exp>;
+  photo_url: Maybe<String_Comparison_Exp>;
+  preferred_broadcast_time: Maybe<Time_Comparison_Exp>;
+  updated_at: Maybe<Timestamptz_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "post_versions" */
-export enum Post_Versions_Constraint {
+/** unique or primary key constraints on table "personas" */
+export enum Personas_Constraint {
   /** unique or primary key constraint */
-  PostVersionFkIndex_1 = 'post_version_fk_index_1',
-  /** unique or primary key constraint */
-  PostVersionFkIndex_2 = 'post_version_fk_index_2',
-  /** unique or primary key constraint */
-  PostVersionsLockedForPublication = 'post_versions_locked_for_publication',
-  /** unique or primary key constraint */
-  PostVersionsPkey = 'post_versions_pkey'
+  PersonasPkey = 'personas_pkey'
 }
 
-/** input type for inserting data into table "post_versions" */
-export type Post_Versions_Insert_Input = {
-  content?: Maybe<Scalars['json']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  editor_state?: Maybe<Scalars['json']>;
-  id?: Maybe<Scalars['uuid']>;
-  is_draft?: Maybe<Scalars['Boolean']>;
-  locked_for_publication?: Maybe<Scalars['Boolean']>;
-  post?: Maybe<Posts_Obj_Rel_Insert_Input>;
-  post_id?: Maybe<Scalars['uuid']>;
-  slug?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
+/** input type for inserting data into table "personas" */
+export type Personas_Insert_Input = {
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer: Maybe<Customers_Obj_Rel_Insert_Input>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  list_address_with_byline: Maybe<Scalars['Boolean']>;
+  name: Maybe<Scalars['String']>;
+  photo_url: Maybe<Scalars['String']>;
+  preferred_broadcast_time: Maybe<Scalars['time']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
 };
 
 /** aggregate max on columns */
-export type Post_Versions_Max_Fields = {
-  __typename?: 'post_versions_max_fields';
-  created_at?: Maybe<Scalars['timestamp']>;
-  id?: Maybe<Scalars['uuid']>;
-  post_id?: Maybe<Scalars['uuid']>;
-  slug?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
+export type Personas_Max_Fields = {
+  __typename?: 'personas_max_fields';
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  name: Maybe<Scalars['String']>;
+  photo_url: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
 };
 
-/** order by max() on columns of table "post_versions" */
-export type Post_Versions_Max_Order_By = {
-  created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  post_id?: Maybe<Order_By>;
-  slug?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
+/** order by max() on columns of table "personas" */
+export type Personas_Max_Order_By = {
+  created_at: Maybe<Order_By>;
+  customer_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  name: Maybe<Order_By>;
+  photo_url: Maybe<Order_By>;
+  updated_at: Maybe<Order_By>;
 };
 
 /** aggregate min on columns */
-export type Post_Versions_Min_Fields = {
-  __typename?: 'post_versions_min_fields';
-  created_at?: Maybe<Scalars['timestamp']>;
-  id?: Maybe<Scalars['uuid']>;
-  post_id?: Maybe<Scalars['uuid']>;
-  slug?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
+export type Personas_Min_Fields = {
+  __typename?: 'personas_min_fields';
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  name: Maybe<Scalars['String']>;
+  photo_url: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
 };
 
-/** order by min() on columns of table "post_versions" */
-export type Post_Versions_Min_Order_By = {
-  created_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  post_id?: Maybe<Order_By>;
-  slug?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
+/** order by min() on columns of table "personas" */
+export type Personas_Min_Order_By = {
+  created_at: Maybe<Order_By>;
+  customer_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  name: Maybe<Order_By>;
+  photo_url: Maybe<Order_By>;
+  updated_at: Maybe<Order_By>;
 };
 
-/** response of any mutation on the table "post_versions" */
-export type Post_Versions_Mutation_Response = {
-  __typename?: 'post_versions_mutation_response';
+/** response of any mutation on the table "personas" */
+export type Personas_Mutation_Response = {
+  __typename?: 'personas_mutation_response';
   /** number of rows affected by the mutation */
   affected_rows: Scalars['Int'];
   /** data from the rows affected by the mutation */
-  returning: Array<Post_Versions>;
+  returning: Array<Personas>;
 };
 
-/** on conflict condition type for table "post_versions" */
-export type Post_Versions_On_Conflict = {
-  constraint: Post_Versions_Constraint;
-  update_columns: Array<Post_Versions_Update_Column>;
-  where?: Maybe<Post_Versions_Bool_Exp>;
+/** on conflict condition type for table "personas" */
+export type Personas_On_Conflict = {
+  constraint: Personas_Constraint;
+  update_columns: Array<Personas_Update_Column>;
+  where: Maybe<Personas_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "post_versions". */
-export type Post_Versions_Order_By = {
-  content?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  editor_state?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  is_draft?: Maybe<Order_By>;
-  locked_for_publication?: Maybe<Order_By>;
-  post?: Maybe<Posts_Order_By>;
-  post_id?: Maybe<Order_By>;
-  slug?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
+/** Ordering options when selecting data from "personas". */
+export type Personas_Order_By = {
+  created_at: Maybe<Order_By>;
+  customer: Maybe<Customers_Order_By>;
+  customer_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  list_address_with_byline: Maybe<Order_By>;
+  name: Maybe<Order_By>;
+  photo_url: Maybe<Order_By>;
+  preferred_broadcast_time: Maybe<Order_By>;
+  updated_at: Maybe<Order_By>;
 };
 
-/** primary key columns input for table: post_versions */
-export type Post_Versions_Pk_Columns_Input = {
+/** primary key columns input for table: personas */
+export type Personas_Pk_Columns_Input = {
   id: Scalars['uuid'];
 };
 
-/** select columns of table "post_versions" */
-export enum Post_Versions_Select_Column {
-  /** column name */
-  Content = 'content',
+/** select columns of table "personas" */
+export enum Personas_Select_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  EditorState = 'editor_state',
+  CustomerId = 'customer_id',
   /** column name */
   Id = 'id',
   /** column name */
-  IsDraft = 'is_draft',
+  ListAddressWithByline = 'list_address_with_byline',
   /** column name */
-  LockedForPublication = 'locked_for_publication',
+  Name = 'name',
   /** column name */
-  PostId = 'post_id',
+  PhotoUrl = 'photo_url',
   /** column name */
-  Slug = 'slug',
+  PreferredBroadcastTime = 'preferred_broadcast_time',
   /** column name */
   UpdatedAt = 'updated_at'
 }
 
-/** input type for updating data in table "post_versions" */
-export type Post_Versions_Set_Input = {
-  content?: Maybe<Scalars['json']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  editor_state?: Maybe<Scalars['json']>;
-  id?: Maybe<Scalars['uuid']>;
-  is_draft?: Maybe<Scalars['Boolean']>;
-  locked_for_publication?: Maybe<Scalars['Boolean']>;
-  post_id?: Maybe<Scalars['uuid']>;
-  slug?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
+/** input type for updating data in table "personas" */
+export type Personas_Set_Input = {
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  list_address_with_byline: Maybe<Scalars['Boolean']>;
+  name: Maybe<Scalars['String']>;
+  photo_url: Maybe<Scalars['String']>;
+  preferred_broadcast_time: Maybe<Scalars['time']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
 };
 
-/** update columns of table "post_versions" */
-export enum Post_Versions_Update_Column {
-  /** column name */
-  Content = 'content',
+/** update columns of table "personas" */
+export enum Personas_Update_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  EditorState = 'editor_state',
+  CustomerId = 'customer_id',
   /** column name */
   Id = 'id',
   /** column name */
-  IsDraft = 'is_draft',
+  ListAddressWithByline = 'list_address_with_byline',
   /** column name */
-  LockedForPublication = 'locked_for_publication',
+  Name = 'name',
   /** column name */
-  PostId = 'post_id',
+  PhotoUrl = 'photo_url',
   /** column name */
-  Slug = 'slug',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
-
-/** columns and relationships of "posts" */
-export type Posts = {
-  __typename?: 'posts';
-  created_at: Scalars['timestamp'];
-  deleted_at?: Maybe<Scalars['timestamp']>;
-  id: Scalars['uuid'];
-  latest_version_id?: Maybe<Scalars['uuid']>;
-  latest_version_locked_for_publication?: Maybe<Scalars['Boolean']>;
-  latest_version_slug?: Maybe<Scalars['String']>;
-  /** An array relationship */
-  post_versions: Array<Post_Versions>;
-  /** An aggregate relationship */
-  post_versions_aggregate: Post_Versions_Aggregate;
-  /** An object relationship */
-  profile: Profiles;
-  profile_id: Scalars['uuid'];
-  published_at?: Maybe<Scalars['timestamp']>;
-  ranking?: Maybe<Scalars['Int']>;
-};
-
-
-/** columns and relationships of "posts" */
-export type PostsPost_VersionsArgs = {
-  distinct_on?: Maybe<Array<Post_Versions_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Post_Versions_Order_By>>;
-  where?: Maybe<Post_Versions_Bool_Exp>;
-};
-
-
-/** columns and relationships of "posts" */
-export type PostsPost_Versions_AggregateArgs = {
-  distinct_on?: Maybe<Array<Post_Versions_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Post_Versions_Order_By>>;
-  where?: Maybe<Post_Versions_Bool_Exp>;
-};
-
-/** aggregated selection of "posts" */
-export type Posts_Aggregate = {
-  __typename?: 'posts_aggregate';
-  aggregate?: Maybe<Posts_Aggregate_Fields>;
-  nodes: Array<Posts>;
-};
-
-/** aggregate fields of "posts" */
-export type Posts_Aggregate_Fields = {
-  __typename?: 'posts_aggregate_fields';
-  avg?: Maybe<Posts_Avg_Fields>;
-  count: Scalars['Int'];
-  max?: Maybe<Posts_Max_Fields>;
-  min?: Maybe<Posts_Min_Fields>;
-  stddev?: Maybe<Posts_Stddev_Fields>;
-  stddev_pop?: Maybe<Posts_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Posts_Stddev_Samp_Fields>;
-  sum?: Maybe<Posts_Sum_Fields>;
-  var_pop?: Maybe<Posts_Var_Pop_Fields>;
-  var_samp?: Maybe<Posts_Var_Samp_Fields>;
-  variance?: Maybe<Posts_Variance_Fields>;
-};
-
-
-/** aggregate fields of "posts" */
-export type Posts_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Posts_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "posts" */
-export type Posts_Aggregate_Order_By = {
-  avg?: Maybe<Posts_Avg_Order_By>;
-  count?: Maybe<Order_By>;
-  max?: Maybe<Posts_Max_Order_By>;
-  min?: Maybe<Posts_Min_Order_By>;
-  stddev?: Maybe<Posts_Stddev_Order_By>;
-  stddev_pop?: Maybe<Posts_Stddev_Pop_Order_By>;
-  stddev_samp?: Maybe<Posts_Stddev_Samp_Order_By>;
-  sum?: Maybe<Posts_Sum_Order_By>;
-  var_pop?: Maybe<Posts_Var_Pop_Order_By>;
-  var_samp?: Maybe<Posts_Var_Samp_Order_By>;
-  variance?: Maybe<Posts_Variance_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "posts" */
-export type Posts_Arr_Rel_Insert_Input = {
-  data: Array<Posts_Insert_Input>;
-  /** on conflict condition */
-  on_conflict?: Maybe<Posts_On_Conflict>;
-};
-
-/** aggregate avg on columns */
-export type Posts_Avg_Fields = {
-  __typename?: 'posts_avg_fields';
-  ranking?: Maybe<Scalars['Float']>;
-};
-
-/** order by avg() on columns of table "posts" */
-export type Posts_Avg_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "posts". All fields are combined with a logical 'AND'. */
-export type Posts_Bool_Exp = {
-  _and?: Maybe<Array<Posts_Bool_Exp>>;
-  _not?: Maybe<Posts_Bool_Exp>;
-  _or?: Maybe<Array<Posts_Bool_Exp>>;
-  created_at?: Maybe<Timestamp_Comparison_Exp>;
-  deleted_at?: Maybe<Timestamp_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
-  latest_version_id?: Maybe<Uuid_Comparison_Exp>;
-  latest_version_locked_for_publication?: Maybe<Boolean_Comparison_Exp>;
-  latest_version_slug?: Maybe<String_Comparison_Exp>;
-  post_versions?: Maybe<Post_Versions_Bool_Exp>;
-  profile?: Maybe<Profiles_Bool_Exp>;
-  profile_id?: Maybe<Uuid_Comparison_Exp>;
-  published_at?: Maybe<Timestamp_Comparison_Exp>;
-  ranking?: Maybe<Int_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "posts" */
-export enum Posts_Constraint {
-  /** unique or primary key constraint */
-  PostsByProfileAndDateIdx = 'posts_by_profile_and_date_idx',
-  /** unique or primary key constraint */
-  PostsByProfileAndSlugIdx = 'posts_by_profile_and_slug_idx',
-  /** unique or primary key constraint */
-  PostsPkey = 'posts_pkey'
-}
-
-/** input type for incrementing numeric columns in table "posts" */
-export type Posts_Inc_Input = {
-  ranking?: Maybe<Scalars['Int']>;
-};
-
-/** input type for inserting data into table "posts" */
-export type Posts_Insert_Input = {
-  created_at?: Maybe<Scalars['timestamp']>;
-  deleted_at?: Maybe<Scalars['timestamp']>;
-  id?: Maybe<Scalars['uuid']>;
-  latest_version_id?: Maybe<Scalars['uuid']>;
-  latest_version_locked_for_publication?: Maybe<Scalars['Boolean']>;
-  latest_version_slug?: Maybe<Scalars['String']>;
-  post_versions?: Maybe<Post_Versions_Arr_Rel_Insert_Input>;
-  profile?: Maybe<Profiles_Obj_Rel_Insert_Input>;
-  profile_id?: Maybe<Scalars['uuid']>;
-  published_at?: Maybe<Scalars['timestamp']>;
-  ranking?: Maybe<Scalars['Int']>;
-};
-
-/** aggregate max on columns */
-export type Posts_Max_Fields = {
-  __typename?: 'posts_max_fields';
-  created_at?: Maybe<Scalars['timestamp']>;
-  deleted_at?: Maybe<Scalars['timestamp']>;
-  id?: Maybe<Scalars['uuid']>;
-  latest_version_id?: Maybe<Scalars['uuid']>;
-  latest_version_slug?: Maybe<Scalars['String']>;
-  profile_id?: Maybe<Scalars['uuid']>;
-  published_at?: Maybe<Scalars['timestamp']>;
-  ranking?: Maybe<Scalars['Int']>;
-};
-
-/** order by max() on columns of table "posts" */
-export type Posts_Max_Order_By = {
-  created_at?: Maybe<Order_By>;
-  deleted_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  latest_version_id?: Maybe<Order_By>;
-  latest_version_slug?: Maybe<Order_By>;
-  profile_id?: Maybe<Order_By>;
-  published_at?: Maybe<Order_By>;
-  ranking?: Maybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Posts_Min_Fields = {
-  __typename?: 'posts_min_fields';
-  created_at?: Maybe<Scalars['timestamp']>;
-  deleted_at?: Maybe<Scalars['timestamp']>;
-  id?: Maybe<Scalars['uuid']>;
-  latest_version_id?: Maybe<Scalars['uuid']>;
-  latest_version_slug?: Maybe<Scalars['String']>;
-  profile_id?: Maybe<Scalars['uuid']>;
-  published_at?: Maybe<Scalars['timestamp']>;
-  ranking?: Maybe<Scalars['Int']>;
-};
-
-/** order by min() on columns of table "posts" */
-export type Posts_Min_Order_By = {
-  created_at?: Maybe<Order_By>;
-  deleted_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  latest_version_id?: Maybe<Order_By>;
-  latest_version_slug?: Maybe<Order_By>;
-  profile_id?: Maybe<Order_By>;
-  published_at?: Maybe<Order_By>;
-  ranking?: Maybe<Order_By>;
-};
-
-/** response of any mutation on the table "posts" */
-export type Posts_Mutation_Response = {
-  __typename?: 'posts_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Posts>;
-};
-
-/** input type for inserting object relation for remote table "posts" */
-export type Posts_Obj_Rel_Insert_Input = {
-  data: Posts_Insert_Input;
-  /** on conflict condition */
-  on_conflict?: Maybe<Posts_On_Conflict>;
-};
-
-/** on conflict condition type for table "posts" */
-export type Posts_On_Conflict = {
-  constraint: Posts_Constraint;
-  update_columns: Array<Posts_Update_Column>;
-  where?: Maybe<Posts_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "posts". */
-export type Posts_Order_By = {
-  created_at?: Maybe<Order_By>;
-  deleted_at?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  latest_version_id?: Maybe<Order_By>;
-  latest_version_locked_for_publication?: Maybe<Order_By>;
-  latest_version_slug?: Maybe<Order_By>;
-  post_versions_aggregate?: Maybe<Post_Versions_Aggregate_Order_By>;
-  profile?: Maybe<Profiles_Order_By>;
-  profile_id?: Maybe<Order_By>;
-  published_at?: Maybe<Order_By>;
-  ranking?: Maybe<Order_By>;
-};
-
-/** primary key columns input for table: posts */
-export type Posts_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "posts" */
-export enum Posts_Select_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  DeletedAt = 'deleted_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  LatestVersionId = 'latest_version_id',
-  /** column name */
-  LatestVersionLockedForPublication = 'latest_version_locked_for_publication',
-  /** column name */
-  LatestVersionSlug = 'latest_version_slug',
-  /** column name */
-  ProfileId = 'profile_id',
-  /** column name */
-  PublishedAt = 'published_at',
-  /** column name */
-  Ranking = 'ranking'
-}
-
-/** input type for updating data in table "posts" */
-export type Posts_Set_Input = {
-  created_at?: Maybe<Scalars['timestamp']>;
-  deleted_at?: Maybe<Scalars['timestamp']>;
-  id?: Maybe<Scalars['uuid']>;
-  latest_version_id?: Maybe<Scalars['uuid']>;
-  latest_version_locked_for_publication?: Maybe<Scalars['Boolean']>;
-  latest_version_slug?: Maybe<Scalars['String']>;
-  profile_id?: Maybe<Scalars['uuid']>;
-  published_at?: Maybe<Scalars['timestamp']>;
-  ranking?: Maybe<Scalars['Int']>;
-};
-
-/** aggregate stddev on columns */
-export type Posts_Stddev_Fields = {
-  __typename?: 'posts_stddev_fields';
-  ranking?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev() on columns of table "posts" */
-export type Posts_Stddev_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Posts_Stddev_Pop_Fields = {
-  __typename?: 'posts_stddev_pop_fields';
-  ranking?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_pop() on columns of table "posts" */
-export type Posts_Stddev_Pop_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Posts_Stddev_Samp_Fields = {
-  __typename?: 'posts_stddev_samp_fields';
-  ranking?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev_samp() on columns of table "posts" */
-export type Posts_Stddev_Samp_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** aggregate sum on columns */
-export type Posts_Sum_Fields = {
-  __typename?: 'posts_sum_fields';
-  ranking?: Maybe<Scalars['Int']>;
-};
-
-/** order by sum() on columns of table "posts" */
-export type Posts_Sum_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** update columns of table "posts" */
-export enum Posts_Update_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  DeletedAt = 'deleted_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  LatestVersionId = 'latest_version_id',
-  /** column name */
-  LatestVersionLockedForPublication = 'latest_version_locked_for_publication',
-  /** column name */
-  LatestVersionSlug = 'latest_version_slug',
-  /** column name */
-  ProfileId = 'profile_id',
-  /** column name */
-  PublishedAt = 'published_at',
-  /** column name */
-  Ranking = 'ranking'
-}
-
-/** aggregate var_pop on columns */
-export type Posts_Var_Pop_Fields = {
-  __typename?: 'posts_var_pop_fields';
-  ranking?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_pop() on columns of table "posts" */
-export type Posts_Var_Pop_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** aggregate var_samp on columns */
-export type Posts_Var_Samp_Fields = {
-  __typename?: 'posts_var_samp_fields';
-  ranking?: Maybe<Scalars['Float']>;
-};
-
-/** order by var_samp() on columns of table "posts" */
-export type Posts_Var_Samp_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** aggregate variance on columns */
-export type Posts_Variance_Fields = {
-  __typename?: 'posts_variance_fields';
-  ranking?: Maybe<Scalars['Float']>;
-};
-
-/** order by variance() on columns of table "posts" */
-export type Posts_Variance_Order_By = {
-  ranking?: Maybe<Order_By>;
-};
-
-/** columns and relationships of "profiles" */
-export type Profiles = {
-  __typename?: 'profiles';
-  avatar_url?: Maybe<Scalars['String']>;
-  created_at: Scalars['timestamp'];
-  display_name: Scalars['String'];
-  handle?: Maybe<Scalars['String']>;
-  id: Scalars['uuid'];
-  /** An object relationship */
-  member?: Maybe<Members>;
-  /** An array relationship */
-  posts: Array<Posts>;
-  /** An aggregate relationship */
-  posts_aggregate: Posts_Aggregate;
-  /** A computed field, executes function "profile_published_posts" */
-  published_posts?: Maybe<Array<Published_Posts>>;
-  /** A computed field, executes function "profile_published_posts_by_slug" */
-  published_posts_by_slug?: Maybe<Array<Published_Posts>>;
-};
-
-
-/** columns and relationships of "profiles" */
-export type ProfilesPostsArgs = {
-  distinct_on?: Maybe<Array<Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Posts_Order_By>>;
-  where?: Maybe<Posts_Bool_Exp>;
-};
-
-
-/** columns and relationships of "profiles" */
-export type ProfilesPosts_AggregateArgs = {
-  distinct_on?: Maybe<Array<Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Posts_Order_By>>;
-  where?: Maybe<Posts_Bool_Exp>;
-};
-
-
-/** columns and relationships of "profiles" */
-export type ProfilesPublished_PostsArgs = {
-  distinct_on?: Maybe<Array<Published_Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Published_Posts_Order_By>>;
-  where?: Maybe<Published_Posts_Bool_Exp>;
-};
-
-
-/** columns and relationships of "profiles" */
-export type ProfilesPublished_Posts_By_SlugArgs = {
-  args: Published_Posts_By_Slug_Profiles_Args;
-  distinct_on?: Maybe<Array<Published_Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Published_Posts_Order_By>>;
-  where?: Maybe<Published_Posts_Bool_Exp>;
-};
-
-/** aggregated selection of "profiles" */
-export type Profiles_Aggregate = {
-  __typename?: 'profiles_aggregate';
-  aggregate?: Maybe<Profiles_Aggregate_Fields>;
-  nodes: Array<Profiles>;
-};
-
-/** aggregate fields of "profiles" */
-export type Profiles_Aggregate_Fields = {
-  __typename?: 'profiles_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Profiles_Max_Fields>;
-  min?: Maybe<Profiles_Min_Fields>;
-};
-
-
-/** aggregate fields of "profiles" */
-export type Profiles_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Profiles_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
-};
-
-/** Boolean expression to filter rows from the table "profiles". All fields are combined with a logical 'AND'. */
-export type Profiles_Bool_Exp = {
-  _and?: Maybe<Array<Profiles_Bool_Exp>>;
-  _not?: Maybe<Profiles_Bool_Exp>;
-  _or?: Maybe<Array<Profiles_Bool_Exp>>;
-  avatar_url?: Maybe<String_Comparison_Exp>;
-  created_at?: Maybe<Timestamp_Comparison_Exp>;
-  display_name?: Maybe<String_Comparison_Exp>;
-  handle?: Maybe<String_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
-  member?: Maybe<Members_Bool_Exp>;
-  posts?: Maybe<Posts_Bool_Exp>;
-  published_posts?: Maybe<Published_Posts_Bool_Exp>;
-};
-
-/** unique or primary key constraints on table "profiles" */
-export enum Profiles_Constraint {
-  /** unique or primary key constraint */
-  ProfilesHandleKey = 'profiles_handle_key',
-  /** unique or primary key constraint */
-  ProfilesPkey = 'profiles_pkey'
-}
-
-/** input type for inserting data into table "profiles" */
-export type Profiles_Insert_Input = {
-  avatar_url?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  display_name?: Maybe<Scalars['String']>;
-  handle?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-  member?: Maybe<Members_Obj_Rel_Insert_Input>;
-  posts?: Maybe<Posts_Arr_Rel_Insert_Input>;
-};
-
-/** aggregate max on columns */
-export type Profiles_Max_Fields = {
-  __typename?: 'profiles_max_fields';
-  avatar_url?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  display_name?: Maybe<Scalars['String']>;
-  handle?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-};
-
-/** aggregate min on columns */
-export type Profiles_Min_Fields = {
-  __typename?: 'profiles_min_fields';
-  avatar_url?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  display_name?: Maybe<Scalars['String']>;
-  handle?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-};
-
-/** response of any mutation on the table "profiles" */
-export type Profiles_Mutation_Response = {
-  __typename?: 'profiles_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Profiles>;
-};
-
-/** input type for inserting object relation for remote table "profiles" */
-export type Profiles_Obj_Rel_Insert_Input = {
-  data: Profiles_Insert_Input;
-  /** on conflict condition */
-  on_conflict?: Maybe<Profiles_On_Conflict>;
-};
-
-/** on conflict condition type for table "profiles" */
-export type Profiles_On_Conflict = {
-  constraint: Profiles_Constraint;
-  update_columns: Array<Profiles_Update_Column>;
-  where?: Maybe<Profiles_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "profiles". */
-export type Profiles_Order_By = {
-  avatar_url?: Maybe<Order_By>;
-  created_at?: Maybe<Order_By>;
-  display_name?: Maybe<Order_By>;
-  handle?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  member?: Maybe<Members_Order_By>;
-  posts_aggregate?: Maybe<Posts_Aggregate_Order_By>;
-  published_posts_aggregate?: Maybe<Published_Posts_Aggregate_Order_By>;
-};
-
-/** primary key columns input for table: profiles */
-export type Profiles_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "profiles" */
-export enum Profiles_Select_Column {
-  /** column name */
-  AvatarUrl = 'avatar_url',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  DisplayName = 'display_name',
-  /** column name */
-  Handle = 'handle',
-  /** column name */
-  Id = 'id'
-}
-
-/** input type for updating data in table "profiles" */
-export type Profiles_Set_Input = {
-  avatar_url?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  display_name?: Maybe<Scalars['String']>;
-  handle?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['uuid']>;
-};
-
-/** update columns of table "profiles" */
-export enum Profiles_Update_Column {
-  /** column name */
-  AvatarUrl = 'avatar_url',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  DisplayName = 'display_name',
-  /** column name */
-  Handle = 'handle',
-  /** column name */
-  Id = 'id'
-}
-
-/** columns and relationships of "published_posts" */
-export type Published_Posts = {
-  __typename?: 'published_posts';
-  content?: Maybe<Scalars['json']>;
-  id?: Maybe<Scalars['uuid']>;
-  /** An object relationship */
-  profile?: Maybe<Profiles>;
-  profile_id?: Maybe<Scalars['uuid']>;
-  published_at?: Maybe<Scalars['timestamp']>;
-  slug?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-};
-
-
-/** columns and relationships of "published_posts" */
-export type Published_PostsContentArgs = {
-  path?: Maybe<Scalars['String']>;
-};
-
-/** aggregated selection of "published_posts" */
-export type Published_Posts_Aggregate = {
-  __typename?: 'published_posts_aggregate';
-  aggregate?: Maybe<Published_Posts_Aggregate_Fields>;
-  nodes: Array<Published_Posts>;
-};
-
-/** aggregate fields of "published_posts" */
-export type Published_Posts_Aggregate_Fields = {
-  __typename?: 'published_posts_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Published_Posts_Max_Fields>;
-  min?: Maybe<Published_Posts_Min_Fields>;
-};
-
-
-/** aggregate fields of "published_posts" */
-export type Published_Posts_Aggregate_FieldsCountArgs = {
-  columns?: Maybe<Array<Published_Posts_Select_Column>>;
-  distinct?: Maybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "published_posts" */
-export type Published_Posts_Aggregate_Order_By = {
-  count?: Maybe<Order_By>;
-  max?: Maybe<Published_Posts_Max_Order_By>;
-  min?: Maybe<Published_Posts_Min_Order_By>;
-};
-
-/** Boolean expression to filter rows from the table "published_posts". All fields are combined with a logical 'AND'. */
-export type Published_Posts_Bool_Exp = {
-  _and?: Maybe<Array<Published_Posts_Bool_Exp>>;
-  _not?: Maybe<Published_Posts_Bool_Exp>;
-  _or?: Maybe<Array<Published_Posts_Bool_Exp>>;
-  content?: Maybe<Json_Comparison_Exp>;
-  id?: Maybe<Uuid_Comparison_Exp>;
-  profile?: Maybe<Profiles_Bool_Exp>;
-  profile_id?: Maybe<Uuid_Comparison_Exp>;
-  published_at?: Maybe<Timestamp_Comparison_Exp>;
-  slug?: Maybe<String_Comparison_Exp>;
-  updated_at?: Maybe<Timestamp_Comparison_Exp>;
-};
-
-export type Published_Posts_By_Slug_Profiles_Args = {
-  p_slug?: Maybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Published_Posts_Max_Fields = {
-  __typename?: 'published_posts_max_fields';
-  id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
-  published_at?: Maybe<Scalars['timestamp']>;
-  slug?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-};
-
-/** order by max() on columns of table "published_posts" */
-export type Published_Posts_Max_Order_By = {
-  id?: Maybe<Order_By>;
-  profile_id?: Maybe<Order_By>;
-  published_at?: Maybe<Order_By>;
-  slug?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Published_Posts_Min_Fields = {
-  __typename?: 'published_posts_min_fields';
-  id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
-  published_at?: Maybe<Scalars['timestamp']>;
-  slug?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamp']>;
-};
-
-/** order by min() on columns of table "published_posts" */
-export type Published_Posts_Min_Order_By = {
-  id?: Maybe<Order_By>;
-  profile_id?: Maybe<Order_By>;
-  published_at?: Maybe<Order_By>;
-  slug?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
-};
-
-/** Ordering options when selecting data from "published_posts". */
-export type Published_Posts_Order_By = {
-  content?: Maybe<Order_By>;
-  id?: Maybe<Order_By>;
-  profile?: Maybe<Profiles_Order_By>;
-  profile_id?: Maybe<Order_By>;
-  published_at?: Maybe<Order_By>;
-  slug?: Maybe<Order_By>;
-  updated_at?: Maybe<Order_By>;
-};
-
-/** select columns of table "published_posts" */
-export enum Published_Posts_Select_Column {
-  /** column name */
-  Content = 'content',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  ProfileId = 'profile_id',
-  /** column name */
-  PublishedAt = 'published_at',
-  /** column name */
-  Slug = 'slug',
+  PreferredBroadcastTime = 'preferred_broadcast_time',
   /** column name */
   UpdatedAt = 'updated_at'
 }
 
 export type Query_Root = {
   __typename?: 'query_root';
-  /** fetch data from the table: "members" */
-  members: Array<Members>;
-  /** fetch aggregated fields from the table: "members" */
-  members_aggregate: Members_Aggregate;
-  /** fetch data from the table: "members" using primary key columns */
-  members_by_pk?: Maybe<Members>;
+  /** fetch data from the table: "customers" */
+  customers: Array<Customers>;
+  /** fetch aggregated fields from the table: "customers" */
+  customers_aggregate: Customers_Aggregate;
+  /** fetch data from the table: "customers" using primary key columns */
+  customers_by_pk: Maybe<Customers>;
   /** An array relationship */
-  post_versions: Array<Post_Versions>;
+  firebase_tokens: Array<Firebase_Tokens>;
   /** An aggregate relationship */
-  post_versions_aggregate: Post_Versions_Aggregate;
-  /** fetch data from the table: "post_versions" using primary key columns */
-  post_versions_by_pk?: Maybe<Post_Versions>;
+  firebase_tokens_aggregate: Firebase_Tokens_Aggregate;
+  /** fetch data from the table: "firebase_tokens" using primary key columns */
+  firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
   /** An array relationship */
-  posts: Array<Posts>;
+  logins: Array<Logins>;
   /** An aggregate relationship */
-  posts_aggregate: Posts_Aggregate;
-  /** fetch data from the table: "posts" using primary key columns */
-  posts_by_pk?: Maybe<Posts>;
-  /** fetch data from the table: "profiles" */
-  profiles: Array<Profiles>;
-  /** fetch aggregated fields from the table: "profiles" */
-  profiles_aggregate: Profiles_Aggregate;
-  /** fetch data from the table: "profiles" using primary key columns */
-  profiles_by_pk?: Maybe<Profiles>;
-  /** fetch data from the table: "published_posts" */
-  published_posts: Array<Published_Posts>;
-  /** fetch aggregated fields from the table: "published_posts" */
-  published_posts_aggregate: Published_Posts_Aggregate;
+  logins_aggregate: Logins_Aggregate;
+  /** fetch data from the table: "logins" using primary key columns */
+  logins_by_pk: Maybe<Logins>;
+  /** fetch data from the table: "membership_levels" */
+  membership_levels: Array<Membership_Levels>;
+  /** fetch aggregated fields from the table: "membership_levels" */
+  membership_levels_aggregate: Membership_Levels_Aggregate;
+  /** fetch data from the table: "membership_levels" using primary key columns */
+  membership_levels_by_pk: Maybe<Membership_Levels>;
+  /** fetch data from the table: "memberships" */
+  memberships: Array<Memberships>;
+  /** fetch aggregated fields from the table: "memberships" */
+  memberships_aggregate: Memberships_Aggregate;
+  /** fetch data from the table: "memberships" using primary key columns */
+  memberships_by_pk: Maybe<Memberships>;
+  /** fetch data from the table: "personas" */
+  personas: Array<Personas>;
+  /** An aggregate relationship */
+  personas_aggregate: Personas_Aggregate;
+  /** fetch data from the table: "personas" using primary key columns */
+  personas_by_pk: Maybe<Personas>;
+  /** fetch data from the table: "user_agents" */
+  user_agents: Array<User_Agents>;
+  /** fetch aggregated fields from the table: "user_agents" */
+  user_agents_aggregate: User_Agents_Aggregate;
+  /** fetch data from the table: "user_agents" using primary key columns */
+  user_agents_by_pk: Maybe<User_Agents>;
 };
 
 
-export type Query_RootMembersArgs = {
-  distinct_on?: Maybe<Array<Members_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Members_Order_By>>;
-  where?: Maybe<Members_Bool_Exp>;
+export type Query_RootCustomersArgs = {
+  distinct_on: Maybe<Array<Customers_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customers_Order_By>>;
+  where: Maybe<Customers_Bool_Exp>;
 };
 
 
-export type Query_RootMembers_AggregateArgs = {
-  distinct_on?: Maybe<Array<Members_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Members_Order_By>>;
-  where?: Maybe<Members_Bool_Exp>;
+export type Query_RootCustomers_AggregateArgs = {
+  distinct_on: Maybe<Array<Customers_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customers_Order_By>>;
+  where: Maybe<Customers_Bool_Exp>;
 };
 
 
-export type Query_RootMembers_By_PkArgs = {
+export type Query_RootCustomers_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Query_RootPost_VersionsArgs = {
-  distinct_on?: Maybe<Array<Post_Versions_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Post_Versions_Order_By>>;
-  where?: Maybe<Post_Versions_Bool_Exp>;
+export type Query_RootFirebase_TokensArgs = {
+  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
+  where: Maybe<Firebase_Tokens_Bool_Exp>;
 };
 
 
-export type Query_RootPost_Versions_AggregateArgs = {
-  distinct_on?: Maybe<Array<Post_Versions_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Post_Versions_Order_By>>;
-  where?: Maybe<Post_Versions_Bool_Exp>;
+export type Query_RootFirebase_Tokens_AggregateArgs = {
+  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
+  where: Maybe<Firebase_Tokens_Bool_Exp>;
 };
 
 
-export type Query_RootPost_Versions_By_PkArgs = {
+export type Query_RootFirebase_Tokens_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Query_RootPostsArgs = {
-  distinct_on?: Maybe<Array<Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Posts_Order_By>>;
-  where?: Maybe<Posts_Bool_Exp>;
+export type Query_RootLoginsArgs = {
+  distinct_on: Maybe<Array<Logins_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Logins_Order_By>>;
+  where: Maybe<Logins_Bool_Exp>;
 };
 
 
-export type Query_RootPosts_AggregateArgs = {
-  distinct_on?: Maybe<Array<Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Posts_Order_By>>;
-  where?: Maybe<Posts_Bool_Exp>;
+export type Query_RootLogins_AggregateArgs = {
+  distinct_on: Maybe<Array<Logins_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Logins_Order_By>>;
+  where: Maybe<Logins_Bool_Exp>;
 };
 
 
-export type Query_RootPosts_By_PkArgs = {
+export type Query_RootLogins_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Query_RootProfilesArgs = {
-  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Profiles_Order_By>>;
-  where?: Maybe<Profiles_Bool_Exp>;
+export type Query_RootMembership_LevelsArgs = {
+  distinct_on: Maybe<Array<Membership_Levels_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Membership_Levels_Order_By>>;
+  where: Maybe<Membership_Levels_Bool_Exp>;
 };
 
 
-export type Query_RootProfiles_AggregateArgs = {
-  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Profiles_Order_By>>;
-  where?: Maybe<Profiles_Bool_Exp>;
+export type Query_RootMembership_Levels_AggregateArgs = {
+  distinct_on: Maybe<Array<Membership_Levels_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Membership_Levels_Order_By>>;
+  where: Maybe<Membership_Levels_Bool_Exp>;
 };
 
 
-export type Query_RootProfiles_By_PkArgs = {
+export type Query_RootMembership_Levels_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+export type Query_RootMembershipsArgs = {
+  distinct_on: Maybe<Array<Memberships_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Memberships_Order_By>>;
+  where: Maybe<Memberships_Bool_Exp>;
+};
+
+
+export type Query_RootMemberships_AggregateArgs = {
+  distinct_on: Maybe<Array<Memberships_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Memberships_Order_By>>;
+  where: Maybe<Memberships_Bool_Exp>;
+};
+
+
+export type Query_RootMemberships_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Query_RootPublished_PostsArgs = {
-  distinct_on?: Maybe<Array<Published_Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Published_Posts_Order_By>>;
-  where?: Maybe<Published_Posts_Bool_Exp>;
+export type Query_RootPersonasArgs = {
+  distinct_on: Maybe<Array<Personas_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Personas_Order_By>>;
+  where: Maybe<Personas_Bool_Exp>;
 };
 
 
-export type Query_RootPublished_Posts_AggregateArgs = {
-  distinct_on?: Maybe<Array<Published_Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Published_Posts_Order_By>>;
-  where?: Maybe<Published_Posts_Bool_Exp>;
+export type Query_RootPersonas_AggregateArgs = {
+  distinct_on: Maybe<Array<Personas_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Personas_Order_By>>;
+  where: Maybe<Personas_Bool_Exp>;
+};
+
+
+export type Query_RootPersonas_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootUser_AgentsArgs = {
+  distinct_on: Maybe<Array<User_Agents_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<User_Agents_Order_By>>;
+  where: Maybe<User_Agents_Bool_Exp>;
+};
+
+
+export type Query_RootUser_Agents_AggregateArgs = {
+  distinct_on: Maybe<Array<User_Agents_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<User_Agents_Order_By>>;
+  where: Maybe<User_Agents_Bool_Exp>;
+};
+
+
+export type Query_RootUser_Agents_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
-  /** fetch data from the table: "members" */
-  members: Array<Members>;
-  /** fetch aggregated fields from the table: "members" */
-  members_aggregate: Members_Aggregate;
-  /** fetch data from the table: "members" using primary key columns */
-  members_by_pk?: Maybe<Members>;
+  /** fetch data from the table: "customers" */
+  customers: Array<Customers>;
+  /** fetch aggregated fields from the table: "customers" */
+  customers_aggregate: Customers_Aggregate;
+  /** fetch data from the table: "customers" using primary key columns */
+  customers_by_pk: Maybe<Customers>;
   /** An array relationship */
-  post_versions: Array<Post_Versions>;
+  firebase_tokens: Array<Firebase_Tokens>;
   /** An aggregate relationship */
-  post_versions_aggregate: Post_Versions_Aggregate;
-  /** fetch data from the table: "post_versions" using primary key columns */
-  post_versions_by_pk?: Maybe<Post_Versions>;
+  firebase_tokens_aggregate: Firebase_Tokens_Aggregate;
+  /** fetch data from the table: "firebase_tokens" using primary key columns */
+  firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
   /** An array relationship */
-  posts: Array<Posts>;
+  logins: Array<Logins>;
   /** An aggregate relationship */
-  posts_aggregate: Posts_Aggregate;
-  /** fetch data from the table: "posts" using primary key columns */
-  posts_by_pk?: Maybe<Posts>;
-  /** fetch data from the table: "profiles" */
-  profiles: Array<Profiles>;
-  /** fetch aggregated fields from the table: "profiles" */
-  profiles_aggregate: Profiles_Aggregate;
-  /** fetch data from the table: "profiles" using primary key columns */
-  profiles_by_pk?: Maybe<Profiles>;
-  /** fetch data from the table: "published_posts" */
-  published_posts: Array<Published_Posts>;
-  /** fetch aggregated fields from the table: "published_posts" */
-  published_posts_aggregate: Published_Posts_Aggregate;
+  logins_aggregate: Logins_Aggregate;
+  /** fetch data from the table: "logins" using primary key columns */
+  logins_by_pk: Maybe<Logins>;
+  /** fetch data from the table: "membership_levels" */
+  membership_levels: Array<Membership_Levels>;
+  /** fetch aggregated fields from the table: "membership_levels" */
+  membership_levels_aggregate: Membership_Levels_Aggregate;
+  /** fetch data from the table: "membership_levels" using primary key columns */
+  membership_levels_by_pk: Maybe<Membership_Levels>;
+  /** fetch data from the table: "memberships" */
+  memberships: Array<Memberships>;
+  /** fetch aggregated fields from the table: "memberships" */
+  memberships_aggregate: Memberships_Aggregate;
+  /** fetch data from the table: "memberships" using primary key columns */
+  memberships_by_pk: Maybe<Memberships>;
+  /** fetch data from the table: "personas" */
+  personas: Array<Personas>;
+  /** An aggregate relationship */
+  personas_aggregate: Personas_Aggregate;
+  /** fetch data from the table: "personas" using primary key columns */
+  personas_by_pk: Maybe<Personas>;
+  /** fetch data from the table: "user_agents" */
+  user_agents: Array<User_Agents>;
+  /** fetch aggregated fields from the table: "user_agents" */
+  user_agents_aggregate: User_Agents_Aggregate;
+  /** fetch data from the table: "user_agents" using primary key columns */
+  user_agents_by_pk: Maybe<User_Agents>;
 };
 
 
-export type Subscription_RootMembersArgs = {
-  distinct_on?: Maybe<Array<Members_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Members_Order_By>>;
-  where?: Maybe<Members_Bool_Exp>;
+export type Subscription_RootCustomersArgs = {
+  distinct_on: Maybe<Array<Customers_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customers_Order_By>>;
+  where: Maybe<Customers_Bool_Exp>;
 };
 
 
-export type Subscription_RootMembers_AggregateArgs = {
-  distinct_on?: Maybe<Array<Members_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Members_Order_By>>;
-  where?: Maybe<Members_Bool_Exp>;
+export type Subscription_RootCustomers_AggregateArgs = {
+  distinct_on: Maybe<Array<Customers_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customers_Order_By>>;
+  where: Maybe<Customers_Bool_Exp>;
 };
 
 
-export type Subscription_RootMembers_By_PkArgs = {
+export type Subscription_RootCustomers_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Subscription_RootPost_VersionsArgs = {
-  distinct_on?: Maybe<Array<Post_Versions_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Post_Versions_Order_By>>;
-  where?: Maybe<Post_Versions_Bool_Exp>;
+export type Subscription_RootFirebase_TokensArgs = {
+  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
+  where: Maybe<Firebase_Tokens_Bool_Exp>;
 };
 
 
-export type Subscription_RootPost_Versions_AggregateArgs = {
-  distinct_on?: Maybe<Array<Post_Versions_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Post_Versions_Order_By>>;
-  where?: Maybe<Post_Versions_Bool_Exp>;
+export type Subscription_RootFirebase_Tokens_AggregateArgs = {
+  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
+  where: Maybe<Firebase_Tokens_Bool_Exp>;
 };
 
 
-export type Subscription_RootPost_Versions_By_PkArgs = {
+export type Subscription_RootFirebase_Tokens_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Subscription_RootPostsArgs = {
-  distinct_on?: Maybe<Array<Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Posts_Order_By>>;
-  where?: Maybe<Posts_Bool_Exp>;
+export type Subscription_RootLoginsArgs = {
+  distinct_on: Maybe<Array<Logins_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Logins_Order_By>>;
+  where: Maybe<Logins_Bool_Exp>;
 };
 
 
-export type Subscription_RootPosts_AggregateArgs = {
-  distinct_on?: Maybe<Array<Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Posts_Order_By>>;
-  where?: Maybe<Posts_Bool_Exp>;
+export type Subscription_RootLogins_AggregateArgs = {
+  distinct_on: Maybe<Array<Logins_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Logins_Order_By>>;
+  where: Maybe<Logins_Bool_Exp>;
 };
 
 
-export type Subscription_RootPosts_By_PkArgs = {
+export type Subscription_RootLogins_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Subscription_RootProfilesArgs = {
-  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Profiles_Order_By>>;
-  where?: Maybe<Profiles_Bool_Exp>;
+export type Subscription_RootMembership_LevelsArgs = {
+  distinct_on: Maybe<Array<Membership_Levels_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Membership_Levels_Order_By>>;
+  where: Maybe<Membership_Levels_Bool_Exp>;
 };
 
 
-export type Subscription_RootProfiles_AggregateArgs = {
-  distinct_on?: Maybe<Array<Profiles_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Profiles_Order_By>>;
-  where?: Maybe<Profiles_Bool_Exp>;
+export type Subscription_RootMembership_Levels_AggregateArgs = {
+  distinct_on: Maybe<Array<Membership_Levels_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Membership_Levels_Order_By>>;
+  where: Maybe<Membership_Levels_Bool_Exp>;
 };
 
 
-export type Subscription_RootProfiles_By_PkArgs = {
+export type Subscription_RootMembership_Levels_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+export type Subscription_RootMembershipsArgs = {
+  distinct_on: Maybe<Array<Memberships_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Memberships_Order_By>>;
+  where: Maybe<Memberships_Bool_Exp>;
+};
+
+
+export type Subscription_RootMemberships_AggregateArgs = {
+  distinct_on: Maybe<Array<Memberships_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Memberships_Order_By>>;
+  where: Maybe<Memberships_Bool_Exp>;
+};
+
+
+export type Subscription_RootMemberships_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
 
-export type Subscription_RootPublished_PostsArgs = {
-  distinct_on?: Maybe<Array<Published_Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Published_Posts_Order_By>>;
-  where?: Maybe<Published_Posts_Bool_Exp>;
+export type Subscription_RootPersonasArgs = {
+  distinct_on: Maybe<Array<Personas_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Personas_Order_By>>;
+  where: Maybe<Personas_Bool_Exp>;
 };
 
 
-export type Subscription_RootPublished_Posts_AggregateArgs = {
-  distinct_on?: Maybe<Array<Published_Posts_Select_Column>>;
-  limit?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  order_by?: Maybe<Array<Published_Posts_Order_By>>;
-  where?: Maybe<Published_Posts_Bool_Exp>;
+export type Subscription_RootPersonas_AggregateArgs = {
+  distinct_on: Maybe<Array<Personas_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Personas_Order_By>>;
+  where: Maybe<Personas_Bool_Exp>;
 };
 
 
-/** Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'. */
-export type Timestamp_Comparison_Exp = {
-  _eq?: Maybe<Scalars['timestamp']>;
-  _gt?: Maybe<Scalars['timestamp']>;
-  _gte?: Maybe<Scalars['timestamp']>;
-  _in?: Maybe<Array<Scalars['timestamp']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['timestamp']>;
-  _lte?: Maybe<Scalars['timestamp']>;
-  _neq?: Maybe<Scalars['timestamp']>;
-  _nin?: Maybe<Array<Scalars['timestamp']>>;
+export type Subscription_RootPersonas_By_PkArgs = {
+  id: Scalars['uuid'];
 };
+
+
+export type Subscription_RootUser_AgentsArgs = {
+  distinct_on: Maybe<Array<User_Agents_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<User_Agents_Order_By>>;
+  where: Maybe<User_Agents_Bool_Exp>;
+};
+
+
+export type Subscription_RootUser_Agents_AggregateArgs = {
+  distinct_on: Maybe<Array<User_Agents_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<User_Agents_Order_By>>;
+  where: Maybe<User_Agents_Bool_Exp>;
+};
+
+
+export type Subscription_RootUser_Agents_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** Boolean expression to compare columns of type "time". All fields are combined with logical 'AND'. */
+export type Time_Comparison_Exp = {
+  _eq: Maybe<Scalars['time']>;
+  _gt: Maybe<Scalars['time']>;
+  _gte: Maybe<Scalars['time']>;
+  _in: Maybe<Array<Scalars['time']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['time']>;
+  _lte: Maybe<Scalars['time']>;
+  _neq: Maybe<Scalars['time']>;
+  _nin: Maybe<Array<Scalars['time']>>;
+};
+
+
+/** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
+export type Timestamptz_Comparison_Exp = {
+  _eq: Maybe<Scalars['timestamptz']>;
+  _gt: Maybe<Scalars['timestamptz']>;
+  _gte: Maybe<Scalars['timestamptz']>;
+  _in: Maybe<Array<Scalars['timestamptz']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['timestamptz']>;
+  _lte: Maybe<Scalars['timestamptz']>;
+  _neq: Maybe<Scalars['timestamptz']>;
+  _nin: Maybe<Array<Scalars['timestamptz']>>;
+};
+
+/** columns and relationships of "user_agents" */
+export type User_Agents = {
+  __typename?: 'user_agents';
+  id: Scalars['uuid'];
+  user_agent: Scalars['String'];
+};
+
+/** aggregated selection of "user_agents" */
+export type User_Agents_Aggregate = {
+  __typename?: 'user_agents_aggregate';
+  aggregate: Maybe<User_Agents_Aggregate_Fields>;
+  nodes: Array<User_Agents>;
+};
+
+/** aggregate fields of "user_agents" */
+export type User_Agents_Aggregate_Fields = {
+  __typename?: 'user_agents_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<User_Agents_Max_Fields>;
+  min: Maybe<User_Agents_Min_Fields>;
+};
+
+
+/** aggregate fields of "user_agents" */
+export type User_Agents_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<User_Agents_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "user_agents". All fields are combined with a logical 'AND'. */
+export type User_Agents_Bool_Exp = {
+  _and: Maybe<Array<User_Agents_Bool_Exp>>;
+  _not: Maybe<User_Agents_Bool_Exp>;
+  _or: Maybe<Array<User_Agents_Bool_Exp>>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  user_agent: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "user_agents" */
+export enum User_Agents_Constraint {
+  /** unique or primary key constraint */
+  UserAgentsPkey = 'user_agents_pkey',
+  /** unique or primary key constraint */
+  UserAgentsUserAgentKey = 'user_agents_user_agent_key'
+}
+
+/** input type for inserting data into table "user_agents" */
+export type User_Agents_Insert_Input = {
+  id: Maybe<Scalars['uuid']>;
+  user_agent: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type User_Agents_Max_Fields = {
+  __typename?: 'user_agents_max_fields';
+  id: Maybe<Scalars['uuid']>;
+  user_agent: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type User_Agents_Min_Fields = {
+  __typename?: 'user_agents_min_fields';
+  id: Maybe<Scalars['uuid']>;
+  user_agent: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "user_agents" */
+export type User_Agents_Mutation_Response = {
+  __typename?: 'user_agents_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<User_Agents>;
+};
+
+/** input type for inserting object relation for remote table "user_agents" */
+export type User_Agents_Obj_Rel_Insert_Input = {
+  data: User_Agents_Insert_Input;
+  /** on conflict condition */
+  on_conflict: Maybe<User_Agents_On_Conflict>;
+};
+
+/** on conflict condition type for table "user_agents" */
+export type User_Agents_On_Conflict = {
+  constraint: User_Agents_Constraint;
+  update_columns: Array<User_Agents_Update_Column>;
+  where: Maybe<User_Agents_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "user_agents". */
+export type User_Agents_Order_By = {
+  id: Maybe<Order_By>;
+  user_agent: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: user_agents */
+export type User_Agents_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "user_agents" */
+export enum User_Agents_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UserAgent = 'user_agent'
+}
+
+/** input type for updating data in table "user_agents" */
+export type User_Agents_Set_Input = {
+  id: Maybe<Scalars['uuid']>;
+  user_agent: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "user_agents" */
+export enum User_Agents_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  UserAgent = 'user_agent'
+}
 
 
 /** Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'. */
 export type Uuid_Comparison_Exp = {
-  _eq?: Maybe<Scalars['uuid']>;
-  _gt?: Maybe<Scalars['uuid']>;
-  _gte?: Maybe<Scalars['uuid']>;
-  _in?: Maybe<Array<Scalars['uuid']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['uuid']>;
-  _lte?: Maybe<Scalars['uuid']>;
-  _neq?: Maybe<Scalars['uuid']>;
-  _nin?: Maybe<Array<Scalars['uuid']>>;
+  _eq: Maybe<Scalars['uuid']>;
+  _gt: Maybe<Scalars['uuid']>;
+  _gte: Maybe<Scalars['uuid']>;
+  _in: Maybe<Array<Scalars['uuid']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['uuid']>;
+  _lte: Maybe<Scalars['uuid']>;
+  _neq: Maybe<Scalars['uuid']>;
+  _nin: Maybe<Array<Scalars['uuid']>>;
 };
 
-export type MemberProfileQueryVariables = Exact<{
-  memberId: Scalars['uuid'];
-}>;
+export type CustomerLoginMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MemberProfileQuery = (
-  { __typename?: 'query_root' }
-  & { member?: Maybe<(
-    { __typename?: 'members' }
-    & Pick<Members, 'id'>
-    & { profile?: Maybe<(
-      { __typename?: 'profiles' }
-      & Pick<Profiles, 'id' | 'display_name' | 'avatar_url' | 'handle'>
-    )> }
-  )> }
-);
-
-export type DashboardPostListQueryVariables = Exact<{
-  profile_id: Scalars['uuid'];
-}>;
-
-
-export type DashboardPostListQuery = (
-  { __typename?: 'query_root' }
-  & { posts: Array<(
-    { __typename?: 'posts' }
-    & Pick<Posts, 'created_at' | 'deleted_at' | 'published_at'>
-    & { profile: (
-      { __typename?: 'profiles' }
-      & Pick<Profiles, 'id' | 'avatar_url' | 'display_name' | 'handle'>
+export type CustomerLoginMutation = (
+  { __typename?: 'mutation_root' }
+  & { login: Maybe<(
+    { __typename?: 'LoginOutput' }
+    & Pick<LoginOutput, 'id'>
+    & { customer: (
+      { __typename?: 'customers' }
+      & CustomerDetailsFragment
     ) }
-    & PostVersionsFragment
   )> }
 );
 
-export type DashboardPostEditorQueryVariables = Exact<{
-  post_id?: Maybe<Scalars['uuid']>;
-  is_new?: Maybe<Scalars['Boolean']>;
+export type CustomerDetailsQueryVariables = Exact<{
+  customerId: Scalars['uuid'];
 }>;
 
 
-export type DashboardPostEditorQuery = (
+export type CustomerDetailsQuery = (
   { __typename?: 'query_root' }
-  & { post?: Maybe<(
-    { __typename?: 'posts' }
-    & Pick<Posts, 'created_at' | 'deleted_at' | 'published_at'>
-    & PostVersionsFragment
-  )>, queued_posts: Array<(
-    { __typename?: 'posts' }
-    & Pick<Posts, 'id' | 'published_at'>
+  & { customer: Maybe<(
+    { __typename?: 'customers' }
+    & CustomerDetailsFragment
   )> }
 );
 
-export type CreatePostMutationVariables = Exact<{
-  profile_id: Scalars['uuid'];
-  version: Post_Versions_Insert_Input;
-}>;
-
-
-export type CreatePostMutation = (
-  { __typename?: 'mutation_root' }
-  & { insert_posts_one?: Maybe<(
-    { __typename?: 'posts' }
-    & Pick<Posts, 'created_at' | 'deleted_at' | 'published_at'>
-    & PostVersionsFragment
+export type CustomerDetailsFragment = (
+  { __typename?: 'customers' }
+  & Pick<Customers, 'id' | 'contact_name' | 'unverified_email' | 'verified_email'>
+  & { membership: Maybe<(
+    { __typename?: 'memberships' }
+    & Pick<Memberships, 'id' | 'active_until' | 'level' | 'lifetime' | 'sabbatical_available_until'>
+  )>, personas: Array<(
+    { __typename?: 'personas' }
+    & Pick<Personas, 'id' | 'list_address_with_byline' | 'name' | 'photo_url' | 'preferred_broadcast_time'>
   )> }
 );
 
-export type SavePostDraftMutationVariables = Exact<{
-  version: Post_Versions_Insert_Input;
-}>;
-
-
-export type SavePostDraftMutation = (
-  { __typename?: 'mutation_root' }
-  & { insert_post_versions?: Maybe<(
-    { __typename?: 'post_versions_mutation_response' }
-    & { returning: Array<(
-      { __typename?: 'post_versions' }
-      & { post: (
-        { __typename?: 'posts' }
-        & PostVersionsFragment
-      ) }
-    )> }
-  )> }
-);
-
-export type PublishPostMutationVariables = Exact<{
-  post_id: Scalars['uuid'];
-  post?: Maybe<Posts_Set_Input>;
-}>;
-
-
-export type PublishPostMutation = (
-  { __typename?: 'mutation_root' }
-  & { update_post_versions?: Maybe<(
-    { __typename?: 'post_versions_mutation_response' }
-    & { returning: Array<(
-      { __typename?: 'post_versions' }
-      & { post: (
-        { __typename?: 'posts' }
-        & PostVersionsFragment
-      ) }
-    )> }
-  )>, update_posts_by_pk?: Maybe<(
-    { __typename?: 'posts' }
-    & Pick<Posts, 'id' | 'latest_version_id' | 'latest_version_locked_for_publication' | 'latest_version_slug' | 'published_at'>
-  )> }
-);
-
-export type CancelPostPublishMutationVariables = Exact<{
-  post_id: Scalars['uuid'];
-}>;
-
-
-export type CancelPostPublishMutation = (
-  { __typename?: 'mutation_root' }
-  & { update_posts_by_pk?: Maybe<(
-    { __typename?: 'posts' }
-    & Pick<Posts, 'id' | 'published_at'>
-  )> }
-);
-
-export type DeletePostMutationVariables = Exact<{
-  post_id: Scalars['uuid'];
-}>;
-
-
-export type DeletePostMutation = (
-  { __typename?: 'mutation_root' }
-  & { update_posts_by_pk?: Maybe<(
-    { __typename?: 'posts' }
-    & Pick<Posts, 'id' | 'deleted_at'>
-  )> }
-);
-
-export type PostVersionsFragment = (
-  { __typename?: 'posts' }
-  & Pick<Posts, 'id'>
-  & { versions: Array<(
-    { __typename?: 'post_versions' }
-    & Pick<Post_Versions, 'id' | 'editor_state' | 'locked_for_publication' | 'slug' | 'updated_at'>
-  )> }
-);
-
-export type HelloQueryVariables = Exact<{
-  limit?: Maybe<Scalars['Int']>;
-}>;
-
-
-export type HelloQuery = (
-  { __typename?: 'query_root' }
-  & { published_posts: Array<(
-    { __typename?: 'published_posts' }
-    & Pick<Published_Posts, 'id' | 'content' | 'published_at' | 'slug' | 'updated_at'>
-    & { profile?: Maybe<(
-      { __typename?: 'profiles' }
-      & Pick<Profiles, 'id' | 'display_name' | 'avatar_url' | 'handle'>
-    )> }
-  )> }
-);
-
-export type LetterByIdQueryVariables = Exact<{
-  post_id: Scalars['uuid'];
-}>;
-
-
-export type LetterByIdQuery = (
-  { __typename?: 'query_root' }
-  & { letters: Array<(
-    { __typename?: 'published_posts' }
-    & LetterFieldsFragment
-  )> }
-);
-
-export type LetterByHandleAndSlugQueryVariables = Exact<{
-  handle: Scalars['String'];
-  slug: Scalars['String'];
-}>;
-
-
-export type LetterByHandleAndSlugQuery = (
-  { __typename?: 'query_root' }
-  & { letters: Array<(
-    { __typename?: 'published_posts' }
-    & LetterFieldsFragment
-  )> }
-);
-
-export type LetterFieldsFragment = (
-  { __typename?: 'published_posts' }
-  & Pick<Published_Posts, 'id' | 'content' | 'published_at' | 'slug' | 'updated_at'>
-  & { profile?: Maybe<(
-    { __typename?: 'profiles' }
-    & Pick<Profiles, 'id' | 'display_name' | 'avatar_url' | 'handle'>
-  )> }
-);
-
-export type ProfileByHandleQueryVariables = Exact<{
-  handle: Scalars['String'];
-  limit?: Maybe<Scalars['Int']>;
-}>;
-
-
-export type ProfileByHandleQuery = (
-  { __typename?: 'query_root' }
-  & { profiles: Array<(
-    { __typename?: 'profiles' }
-    & Pick<Profiles, 'id' | 'display_name' | 'avatar_url' | 'handle'>
-  )>, published_posts: Array<(
-    { __typename?: 'published_posts' }
-    & Pick<Published_Posts, 'id' | 'content' | 'published_at' | 'slug' | 'updated_at'>
-  )> }
-);
-
-export const PostVersionsFragmentDoc: DocumentNode<PostVersionsFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"postVersions"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"posts"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","alias":{"kind":"Name","value":"versions"},"name":{"kind":"Name","value":"post_versions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"updated_at"},"value":{"kind":"EnumValue","value":"desc"}}]}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"IntValue","value":"1"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"editor_state"}},{"kind":"Field","name":{"kind":"Name","value":"locked_for_publication"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}}]}}]}}]};
-export const LetterFieldsFragmentDoc: DocumentNode<LetterFieldsFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"letterFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"published_posts"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}}]}}]};
-export const MemberProfileDocument: DocumentNode<MemberProfileQuery, MemberProfileQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MemberProfile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"member"},"name":{"kind":"Name","value":"members_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]}}]};
-export const DashboardPostListDocument: DocumentNode<DashboardPostListQuery, DashboardPostListQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DashboardPostList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"profile_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"profile_id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"profile_id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"deleted_at"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_is_null"},"value":{"kind":"BooleanValue","value":true}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"published_at"},"value":{"kind":"EnumValue","value":"desc_nulls_first"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"postVersions"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"deleted_at"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}}]}}]}},...PostVersionsFragmentDoc.definitions]};
-export const DashboardPostEditorDocument: DocumentNode<DashboardPostEditorQuery, DashboardPostEditorQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DashboardPostEditor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}},"defaultValue":{"kind":"StringValue","value":"","block":false}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"is_new"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}},"defaultValue":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"post"},"name":{"kind":"Name","value":"posts_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"skip"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"if"},"value":{"kind":"Variable","name":{"kind":"Name","value":"is_new"}}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"deleted_at"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"postVersions"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"queued_posts"},"name":{"kind":"Name","value":"posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"published_at"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_gt"},"value":{"kind":"StringValue","value":"now()","block":false}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}}]}}]}},...PostVersionsFragmentDoc.definitions]};
-export const CreatePostDocument: DocumentNode<CreatePostMutation, CreatePostMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"profile_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"post_versions_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_posts_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"profile_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"profile_id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"post_versions"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"data"},"value":{"kind":"ListValue","values":[{"kind":"Variable","name":{"kind":"Name","value":"version"}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"deleted_at"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"postVersions"}}]}}]}},...PostVersionsFragmentDoc.definitions]};
-export const SavePostDraftDocument: DocumentNode<SavePostDraftMutation, SavePostDraftMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SavePostDraft"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"version"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"post_versions_insert_input"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_post_versions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"objects"},"value":{"kind":"ListValue","values":[{"kind":"Variable","name":{"kind":"Name","value":"version"}}]}},{"kind":"Argument","name":{"kind":"Name","value":"on_conflict"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"constraint"},"value":{"kind":"EnumValue","value":"post_versions_locked_for_publication"}},{"kind":"ObjectField","name":{"kind":"Name","value":"update_columns"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"editor_state"},{"kind":"EnumValue","value":"content"},{"kind":"EnumValue","value":"slug"}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"locked_for_publication"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"BooleanValue","value":false}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"returning"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"postVersions"}}]}}]}}]}}]}},...PostVersionsFragmentDoc.definitions]};
-export const PublishPostDocument: DocumentNode<PublishPostMutation, PublishPostMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PublishPost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"post"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"posts_set_input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_post_versions"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"post_id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"locked_for_publication"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"BooleanValue","value":false}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"locked_for_publication"},"value":{"kind":"BooleanValue","value":true}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"returning"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"postVersions"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"update_posts_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"Variable","name":{"kind":"Name","value":"post"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"latest_version_id"}},{"kind":"Field","name":{"kind":"Name","value":"latest_version_locked_for_publication"}},{"kind":"Field","name":{"kind":"Name","value":"latest_version_slug"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}}]}}]}},...PostVersionsFragmentDoc.definitions]};
-export const CancelPostPublishDocument: DocumentNode<CancelPostPublishMutation, CancelPostPublishMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CancelPostPublish"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_posts_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"published_at"},"value":{"kind":"NullValue"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}}]}}]}}]};
-export const DeletePostDocument: DocumentNode<DeletePostMutation, DeletePostMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePost"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"update_posts_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk_columns"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"_set"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"deleted_at"},"value":{"kind":"StringValue","value":"now()","block":false}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"deleted_at"}}]}}]}}]};
-export const HelloDocument: DocumentNode<HelloQuery, HelloQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Hello"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"published_posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"published_at"},"value":{"kind":"EnumValue","value":"desc"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}},{"kind":"Field","name":{"kind":"Name","value":"profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}}]}}]}}]};
-export const LetterByIdDocument: DocumentNode<LetterByIdQuery, LetterByIdQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LetterById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"letters"},"name":{"kind":"Name","value":"published_posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"post_id"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"letterFields"}}]}}]}},...LetterFieldsFragmentDoc.definitions]};
-export const LetterByHandleAndSlugDocument: DocumentNode<LetterByHandleAndSlugQuery, LetterByHandleAndSlugQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LetterByHandleAndSlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"handle"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"letters"},"name":{"kind":"Name","value":"published_posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"profile"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"handle"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"handle"}}}]}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"slug"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"letterFields"}}]}}]}},...LetterFieldsFragmentDoc.definitions]};
-export const ProfileByHandleDocument: DocumentNode<ProfileByHandleQuery, ProfileByHandleQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ProfileByHandle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"handle"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"31"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profiles"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"handle"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"handle"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"display_name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"handle"}}]}},{"kind":"Field","name":{"kind":"Name","value":"published_posts"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"order_by"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"published_at"},"value":{"kind":"EnumValue","value":"desc"}}]}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"profile"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"handle"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"_eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"handle"}}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"published_at"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}}]}}]}}]};
+export const CustomerDetailsFragmentDoc: DocumentNode<CustomerDetailsFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"customerDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"customers"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contact_name"}},{"kind":"Field","name":{"kind":"Name","value":"membership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"active_until"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"lifetime"}},{"kind":"Field","name":{"kind":"Name","value":"sabbatical_available_until"}}]}},{"kind":"Field","name":{"kind":"Name","value":"personas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"list_address_with_byline"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"photo_url"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_broadcast_time"}}]}},{"kind":"Field","name":{"kind":"Name","value":"unverified_email"}},{"kind":"Field","name":{"kind":"Name","value":"verified_email"}}]}}]};
+export const CustomerLoginDocument: DocumentNode<CustomerLoginMutation, CustomerLoginMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CustomerLogin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"customerDetails"}}]}}]}}]}},...CustomerDetailsFragmentDoc.definitions]};
+export const CustomerDetailsDocument: DocumentNode<CustomerDetailsQuery, CustomerDetailsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CustomerDetails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"customer"},"name":{"kind":"Name","value":"customers_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"customerDetails"}}]}}]}},...CustomerDetailsFragmentDoc.definitions]};

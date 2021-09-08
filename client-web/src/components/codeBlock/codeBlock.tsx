@@ -1,7 +1,8 @@
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import { darken, desaturate, lighten } from 'polished'
 import React, { useMemo } from 'react'
 import Prism from 'prismjs'
-import styled, { css } from 'styled-components'
 
 const green = '#12c8ba'
 const red = '#dd3c6f'

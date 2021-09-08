@@ -1,5 +1,6 @@
-import * as React from 'react'
-import styled, { css } from 'styled-components'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import React from 'react'
 
 import { LargeCardLayout } from 'src/components/largeCardLayout'
 import { colors } from 'src/theme'

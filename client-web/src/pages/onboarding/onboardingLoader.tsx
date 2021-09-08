@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { FormEvent } from 'react'
 import { useState } from 'react'
 import { LinkSurface } from 'retil-interaction'
 import { loadMatch } from 'retil-nav'
@@ -17,7 +17,7 @@ function Join() {
   //   operations to the hook -- I want it to return a function that
   //   I can call or something.
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
     createUserWithPassword({
       displayName,

@@ -4,7 +4,7 @@ import editorURLs from './editor/editorURLs'
 import onboardingURLs from './onboarding/onboardingURLs'
 import { LetterParams, LetterQuery } from './letter/letterURLs'
 import profileURLs, { ProfileParams } from './profile/profileURLs'
-import readerURLs from './reader/readerURLs'
+import readURLs from './read/readURLs'
 import settingsURLs from './settings/settingsURLs'
 
 const urls = urlSchema({
@@ -20,13 +20,13 @@ const urls = urlSchema({
    * out.
    */
   letter: ({
-    profileNametag,
+    personaAddress,
     letterId,
     letterSlug,
     ...query
   }: LetterParams & LetterQuery) => ({
     query: { ...query },
-    pathname: `/@${profileNametag}/${letterSlug || ''}~${encodeUUID(letterId)}`,
+    pathname: `/@${personaAddress}/${letterSlug || ''}~${encodeUUID(letterId)}`,
   }),
 
   login: () => `/login`,
@@ -41,7 +41,7 @@ const urls = urlSchema({
     profileURLs,
   ),
 
-  read: nestURLSchema('/read', readerURLs),
+  read: nestURLSchema('/read', readURLs),
 
   recoverAccount: () => `/recover-account`,
 

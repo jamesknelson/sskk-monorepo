@@ -1,6 +1,7 @@
+import { css } from '@emotion/react'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { EditorView, EditorProps as ProsemirrorProps } from 'prosemirror-view'
-import React, {
+import {
   CSSProperties,
   forwardRef,
   useCallback,
@@ -8,7 +9,6 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { css } from 'styled-components'
 
 import { CodeBlockView } from 'src/prose/codeBlockView'
 import { Schema } from 'src/prose/schema'
@@ -46,8 +46,6 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
   const applyTransactionRef = useRef(applyTransaction)
   const restPropKeys = Object.keys(restProps)
 
-  const setFocusTarget = useControlFocusTargetRef()
-
   const wrapperRef = useCallback((root: HTMLDivElement | null) => {
     if (root) {
       const view = new EditorView(root, {
@@ -70,8 +68,6 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
         },
       })
 
-      setFocusTarget(view)
-
       viewRef.current = view
 
       if (typeof ref === 'function') {
@@ -86,8 +82,6 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
         }
       }
     } else {
-      setFocusTarget(null)
-
       if (typeof ref === 'function') {
         ref(null)
       } else if (ref) {

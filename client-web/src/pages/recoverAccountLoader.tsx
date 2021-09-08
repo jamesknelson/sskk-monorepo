@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { LinkSurface } from 'retil-interaction'
 
 import { AuthLayout } from 'src/components/authLayout'

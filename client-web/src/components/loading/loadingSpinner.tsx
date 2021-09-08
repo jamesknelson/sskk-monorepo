@@ -1,5 +1,4 @@
-import React from 'react'
-import { css, keyframes } from 'styled-components'
+import { css, keyframes } from '@emotion/react'
 
 const spinnerDashAnimation = keyframes`
 0%,

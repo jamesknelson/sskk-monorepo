@@ -1,9 +1,7 @@
 import { EditorState, Transaction } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
-import React from 'react'
 import { ButtonSurface, inHoveredSurface } from 'retil-interaction'
 
-import { Icon } from 'src/components/icon'
 import { FormatBold } from 'src/constants/glyphs'
 import { createToggleMarkCommand } from 'src/prose/commands/toggleMarkCommand'
 import { MARK_STRONG } from 'src/prose/markNames'

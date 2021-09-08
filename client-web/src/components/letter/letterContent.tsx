@@ -1,5 +1,5 @@
+import styled from '@emotion/styled'
 import { EditorState } from 'prosemirror-state'
-import styled from 'styled-components'
 import React from 'react'
 import { LinkSurface } from 'retil-interaction'
 

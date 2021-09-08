@@ -104,9 +104,10 @@ export function urlSchema<TConfig extends URLSchemaConfig>(
   for (const key of keys) {
     const value = config[key]
     schema[key] =
-      typeof value !== 'function'
-        ? value
-        : (params: URLParams = {}) => parseLocation(value(params))
+      nestedSchemaSymbol in value
+        ? (value as URLSchema)
+        : (params: URLParams = {}) =>
+            parseLocation((value as URLConfig)(params))
   }
   return schema as URLSchemaFromConfig<TConfig>
 }
@@ -146,6 +147,9 @@ export function nestURLSchema<
       return Reflect.get(target, key)
     },
     has: (target, key) => {
+      if (key === nestedSchemaSymbol) {
+        return true
+      }
       return Reflect.has(schema, key) || Reflect.has(target, key)
     },
     ownKeys: (target) =>
@@ -176,7 +180,7 @@ export function patternFor<TParams extends URLParams>(
           : String(prop)),
     }),
   )
-  const wildcard = getter[nestedSchemaSymbol] === true ? '*' : ''
+  const wildcard = nestedSchemaSymbol in getter ? '*' : ''
   return pathname + wildcard
 }
 

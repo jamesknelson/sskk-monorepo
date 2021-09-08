@@ -1,4 +1,5 @@
-import styled, { css, keyframes } from 'styled-components'
+import { css, keyframes } from '@emotion/react'
+import styled from '@emotion/styled'
 
 import { colors } from 'src/theme'
 

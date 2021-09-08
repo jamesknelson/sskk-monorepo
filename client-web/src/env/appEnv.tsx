@@ -6,7 +6,7 @@ import { useEnv } from 'retil-mount'
 import type { NavEnv, NavParams, NavQuery } from 'retil-nav'
 
 import { AuthUser } from './auth'
-import { MemberProfile } from './memberProfile'
+import { CustomerDetails } from './customerDetails'
 
 import { QueryPrecacher } from 'src/utils/precachedQuery'
 
@@ -45,7 +45,7 @@ export interface AppEnv<
   }
 
   authUser?: null | AppAuthUser
-  profile?: null | MemberProfile
+  customer?: null | CustomerDetails
 
   doNotTrack?: boolean
   hasHydrated: boolean

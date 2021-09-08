@@ -1,11 +1,12 @@
-import * as functions from 'firebase-functions'
 import fetch from 'node-fetch'
+
+import { config, logger } from '../firebase'
 
 // Not necessary at runtime, but added as a hint to tooling that these
 // are in fact GraphQL queries.
 const gql = (x: TemplateStringsArray) => x.join('')
 
-const graphqlConfig = functions.config().graphql
+const graphqlConfig = config.graphql
 
 interface PostQueryOptions<Variables extends object> {
   errorMessage: string
@@ -29,7 +30,7 @@ async function postQuery<Variables extends object>(
   const { data, errors } = await result.json()
 
   if (errors || !data) {
-    functions.logger.error(options.errorMessage, '|', errors)
+    logger.error(options.errorMessage, '|', errors)
     throw errors
   }
 
@@ -38,16 +39,22 @@ async function postQuery<Variables extends object>(
 
 // ---
 
-interface CreateHasuraMemberOptions {
+interface CreateHasuraCustomerOptions {
   displayName?: string
-  photoURL?: string
+  // photoURL?: string
   uid: string
+  unverifiedEmail: string
 }
 
-const InsertMemberOnly = gql`
-  mutation InsertMember($firebase_uid: String!, $unverified_email: String!) {
-    insert_members_one(
+const InsertCustomer = gql`
+  mutation InsertCustomer(
+    $firebase_uid: String!
+    $unverified_email: String!
+    $display_name: String
+  ) {
+    insert_customers_one(
       object: {
+        contact_name: $display_name
         firebase_uid: $firebase_uid
         unverified_email: $unverified_email
       }
@@ -57,84 +64,51 @@ const InsertMemberOnly = gql`
   }
 `
 
-const InsertMemberAndProfile = gql`
-  mutation InsertMemberAndProfile(
-    $firebase_uid: String!
-    $unverified_email: String!
-    $avatar_url: String
-    $display_name: String
-  ) {
-    insert_profiles_one(
-      object: {
-        user: {
-          data: {
-            firebase_uid: $firebase_uid
-            unverified_email: $unverified_email
-          }
-        }
-        display_name: $display_name
-        avatar_url: $avatar_url
-      }
-    ) {
-      id
-      guesttag
-      nametag
-      user {
-        id
-      }
-    }
-  }
-`
-
-export async function createHasuraMember({
+export async function createHasuraCustomer({
   displayName,
-  photoURL,
   uid,
-}: CreateHasuraMemberOptions): Promise<string> {
-  const hasProfile = displayName || photoURL
-
+  unverifiedEmail,
+}: CreateHasuraCustomerOptions): Promise<string> {
   const variables: Record<string, string> = {
     firebase_uid: uid,
+    unverified_email: unverifiedEmail,
   }
   if (displayName) {
     variables['display_name'] = displayName
   }
-  if (photoURL) {
-    variables['avatar_url'] = photoURL
-  }
 
   const data = await postQuery({
-    query: hasProfile ? InsertMemberAndProfile : InsertMemberOnly,
+    query: InsertCustomer,
     variables,
-    errorMessage: "Couldn't create hasura member",
+    errorMessage: "Couldn't create hasura customer",
   })
 
-  const hasuraMemberId =
-    data?.insert_profiles_one?.user?.id || data?.insert_members_one?.id
+  const hasuraCustomerId =
+    data?.insert_profiles_one?.user?.id || data?.insert_customers_one?.id
 
-  if (!hasuraMemberId) {
+  if (!hasuraCustomerId) {
     throw new Error(data.error)
   }
 
-  return hasuraMemberId
+  return hasuraCustomerId
 }
 
 // ---
 
-export const DeleteMember = gql`
-  mutation DeleteUser($member_id: uuid!) {
-    delete_members_by_pk(id: $member_id) {
+export const DeleteCustomer = gql`
+  mutation DeleteUser($customer_id: uuid!) {
+    delete_customers_by_pk(id: $customer_id) {
       id
     }
   }
 `
 
-export async function deleteHasuraMember(memberId: string): Promise<void> {
+export async function deleteHasuraCustomer(customerId: string): Promise<void> {
   await postQuery({
-    errorMessage: "Couldn't delete member from hasura",
-    query: DeleteMember,
+    errorMessage: "Couldn't delete customer from hasura",
+    query: DeleteCustomer,
     variables: {
-      member_id: memberId,
+      customer_id: customerId,
     },
   })
 }

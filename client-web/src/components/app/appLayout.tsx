@@ -1,19 +1,20 @@
 import { BasicScroll, create as createBasicScroll } from 'basicscroll'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import { rgba } from 'polished'
 import React, { useEffect, useRef } from 'react'
-import { Boundary } from 'retil-boundary'
 import {
   LinkSurface,
   PopupProvider,
   PopupTriggerSurface,
 } from 'retil-interaction'
 import { useMediaRenderer } from 'retil-media'
-import styled, { css } from 'styled-components'
 
 import { ButtonBody } from 'src/components/buttons'
-import { Menu, MenuDivider, MenuItem, MenuLinkItem } from 'src/components/menu'
-import { PopupDialog } from 'src/components/popup'
-import { MemberProfile, useAppEnv, useAuthController } from 'src/env'
+import { Menu, MenuItem } from 'src/components/menu'
+import { PopupDialogSurface } from 'src/components/popup'
+import { CustomerDetails, useAppEnv, useAuthController } from 'src/env'
+import appURLs from 'src/pages/appURLs'
 import {
   colors,
   dimensions,
@@ -37,7 +38,7 @@ const Caret = styled.div`
 `
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const { layoutOptions = {}, profile } = useAppEnv()
+  const { layoutOptions = {}, customer } = useAppEnv()
   const headerRef = useRef<HTMLDivElement>(null!)
 
   const scrollingHeader = layoutOptions.scrollingHeader
@@ -150,9 +151,9 @@ export function AppLayout({ children }: AppLayoutProps) {
             padding: 0 1rem 0 1.5rem;
           `}
         `}>
-        {profile !== undefined &&
-          (profile ? (
-            <UserMenu profile={profile} />
+        {customer !== undefined &&
+          (customer ? (
+            <UserMenu customer={customer} />
           ) : (
             <>
               <LinkSurface href="/login">
@@ -169,7 +170,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           flex-grow: 1;
           z-index: 0;
         `}>
-        <Boundary fallback={<LoadingFallback />}>{children}</Boundary>
+        {children}
       </main>
       <footer
         css={css`
@@ -183,7 +184,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             font-size: 90%;
             text-decoration: underline;
           `}
-          href="/legal">
+          href={appURLs.policies()}>
           Legal
         </LinkSurface>
       </footer>
@@ -192,11 +193,11 @@ export function AppLayout({ children }: AppLayoutProps) {
 }
 
 interface UserMenuProps {
-  profile: MemberProfile
+  customer: CustomerDetails
 }
 
 function UserMenu(props: UserMenuProps) {
-  const { profile } = props
+  const { customer } = props
   const { signOut } = useAuthController()
   const renderOnPhoneOnly = useMediaRenderer(mediaSelectors.phoneOnly)
   const renderOnTabletPlus = useMediaRenderer(mediaSelectors.tabletPlus)
@@ -207,7 +208,7 @@ function UserMenu(props: UserMenuProps) {
         <ButtonBody outline>Start a story</ButtonBody>
       </LinkSurface>
       <PopupProvider>
-        <PopupTriggerSurface triggerOnFocus triggerOnPress>
+        <PopupTriggerSurface triggerOnPress>
           {renderOnTabletPlus((hideCSS) => (
             <div
               tabIndex={-1}
@@ -249,26 +250,25 @@ function UserMenu(props: UserMenuProps) {
                   text-shadow: 0 0 8px ${rgba(colors.ink.black, 0.15)};
                 }
               `}>
-              {profile.avatarURL && (
+              {/* {customer.avatarURL && (
                 <div
                   css={css`
                     position: relative;
                     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.03) inset;
-                    /* background-color: #f6f8fa; */
                     background-color: white;
                     border-radius: 99px;
                     height: 24px;
                     width: 24px;
                     overflow: hidden;
                   `}>
-                  {<img src={profile.avatarURL} width={30} height={30} />}
+                  {<img src={customer.avatarURL} width={30} height={30} />}
                 </div>
-              )}
+              )} */}
               <span
                 css={css`
                   margin: 0 0.5rem;
                 `}>
-                {profile.displayName}
+                {customer.contact_name}
               </span>
               <Caret
                 css={css`
@@ -299,7 +299,7 @@ function UserMenu(props: UserMenuProps) {
                   width: 28px;
                   overflow: hidden;
                 `}>
-                <img src={profile.avatarURL!} width={28} height={28} />
+                {/* <img src={customer.avatarURL!} width={28} height={28} /> */}
               </div>
               <Caret
                 css={css`
@@ -309,18 +309,12 @@ function UserMenu(props: UserMenuProps) {
             </div>
           ))}
         </PopupTriggerSurface>
-        <PopupDialog placement="bottom-end">
+        <PopupDialogSurface placement="bottom-end">
           <Menu>
-            <MenuLinkItem to="/dashboard">Your Stories</MenuLinkItem>
-            <MenuDivider />
             <MenuItem onClick={signOut}>Log Out</MenuItem>
           </Menu>
-        </PopupDialog>
+        </PopupDialogSurface>
       </PopupProvider>
     </>
   )
-}
-
-function LoadingFallback() {
-  return <div>Loading...</div>
 }

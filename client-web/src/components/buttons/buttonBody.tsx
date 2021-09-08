@@ -1,3 +1,5 @@
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import { rgba } from 'polished'
 import React, { forwardRef } from 'react'
 import {
@@ -6,7 +8,6 @@ import {
   useTransition,
   to as interpolate,
 } from 'react-spring'
-import styled, { css } from 'styled-components'
 
 import { Icon } from 'src/components/icon'
 import { LoadingSpinner } from 'src/components/loading'
@@ -26,12 +27,13 @@ const StyledButtonLabel = styled.span`
 const AnimatedStyledButtonLabel = animated(StyledButtonLabel)
 
 interface StyledButtonBaseProps {
+  disabled?: boolean
   inline?: boolean
   leaveGlyphSpace?: boolean
   size?: 'small'
 }
 
-const StyledButtonBase = styled.button<StyledButtonBaseProps>`
+const StyledButtonBase = styled.div<StyledButtonBaseProps>`
   align-items: center;
   border-radius: 9999px;
   cursor: pointer;
@@ -139,12 +141,18 @@ export interface ButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   text?: boolean
 }
 
+// FIXME: there's a bug where putting this directly into the defaults via
+// destructuring causes it to be undefined during server rendering in some
+// cases, which in turn causes some pages to briefly show the loading page
+// on the client after initial load. For some reason.
+const black = colors.ink.black
+
 export const ButtonBody = forwardRef<HTMLDivElement, ButtonProps>(
   (
     {
       busy,
       children,
-      color = colors.ink.black,
+      color = black,
       glyph,
       glyphColor,
       spinnerColor,
@@ -226,6 +234,7 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonProps>(
                     color={glyphColor}
                     display="block"
                     size="1rem"
+                    label={null}
                     glyph={item}
                   />
                 )}

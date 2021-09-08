@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { css } from '@emotion/react'
+import { useState } from 'react'
 import { LinkSurface, SubmitButtonSurface } from 'retil-interaction'
 import { Validator, useIssues, useValidator } from 'retil-issues'
 import { useNavController } from 'retil-nav'
 import { useOperation } from 'retil-operation'
-import { css } from 'styled-components'
 
 import { AuthLayout } from 'src/components/authLayout'
 import { ButtonBody } from 'src/components/buttons'
@@ -48,7 +48,7 @@ export function LoginPage() {
       clearIssues()
       const signInIssues = await authController.signInWithPassword(value)
       if (signInIssues) {
-        addIssues(signInIssues)
+        addIssues(signInIssues as any)
       } else {
         await navigate(appURLs.read.summary())
       }

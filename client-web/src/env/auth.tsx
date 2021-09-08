@@ -1,5 +1,5 @@
 // import { NextilRequest } from 'nextil'
-import * as React from 'react'
+import { ReactNode } from 'react'
 import { createContext, useContext } from 'react'
 // import { useRouterRequest } from 'retil-router'
 import { createState } from 'retil-source'
@@ -29,7 +29,7 @@ export function getAuthService(): AuthService {
       automaticallySignInAsAnonymous: false,
 
       shouldRefreshToken: async (tokenInfo, user) => {
-        if (tokenInfo.claims['https://hasura.io/jwt/claims']) {
+        if (tokenInfo.claims.customer_id) {
           return false
         }
 
@@ -45,7 +45,7 @@ export function getAuthService(): AuthService {
 const AuthControllerContext = createContext<AuthController>(null as any)
 
 export interface AuthProviderProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {

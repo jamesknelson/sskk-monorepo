@@ -1,7 +1,7 @@
 export type LetterParams = {
   letterId: string
   letterSlug?: string
-  profileNametag: string
+  personaAddress: string
 }
 
 export type LetterQuery = {

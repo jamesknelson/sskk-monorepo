@@ -6,7 +6,7 @@ import { createMemo } from 'retil-support'
 import { AppEnv } from './appEnv'
 import { AuthUser, getAuthService } from './auth'
 import { getBrowserDataEnvSource } from './browserDataEnv'
-import { getMemberProfileSource } from './memberProfile'
+import { getCustomerDetailsSource } from './customerDetails'
 
 const authMemo = createMemo()
 const defaultLayoutOptions = {}
@@ -34,20 +34,17 @@ export function createBrowserAppEnvSource(dataCache: any) {
     const env: AppEnv = {
       ...navEnv,
       ...dataEnv,
+      ...hydrationEnv,
       authUser: undefined,
+      customer: undefined,
       hasHydrated,
       head: [],
       layoutOptions: { ...defaultLayoutOptions },
-      profile: undefined,
     }
 
     if (hasHydrated && auth !== undefined) {
-      const memberId =
-        auth === undefined
-          ? undefined
-          : auth?.user?.claims?.['https://hasura.io/jwt/claims']?.[
-              'x-hasura-user-id'
-            ] || null
+      const customerId =
+        auth === undefined ? undefined : auth?.user?.claims?.customer_id || null
       const authUser =
         !auth || !auth.user
           ? (auth?.user as null | undefined)
@@ -55,17 +52,17 @@ export function createBrowserAppEnvSource(dataCache: any) {
               () => ({
                 ...(auth.user as AuthUser),
                 id: undefined,
-                memberId,
+                customerId,
               }),
-              [auth.user, memberId],
+              [auth.user, customerId],
             )
-      const profileSource =
+      const customerSource =
         authUser &&
-        getMemberProfileSource(hydrationEnv, dataEnv.client, memberId)
+        getCustomerDetailsSource(hydrationEnv, dataEnv.client, customerId)
 
       Object.assign(env, {
-        user: authUser,
-        profile: profileSource && use(profileSource),
+        authUser: authUser,
+        customer: customerSource && use(customerSource),
       })
     }
 

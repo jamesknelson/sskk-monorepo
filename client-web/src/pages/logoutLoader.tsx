@@ -1,5 +1,5 @@
+import { css } from '@emotion/react'
 import React, { useEffect } from 'react'
-import { css } from 'styled-components'
 
 import { AuthLayout } from 'src/components/authLayout'
 import { useAuthController } from 'src/env/auth'

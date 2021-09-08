@@ -53,11 +53,11 @@ export function createServerAppEnv(
     authUser: undefined,
     cache,
     client,
+    customer: undefined,
     hasHydrated: false,
     head: [] as ReactElement[],
     layoutOptions: {},
     precacheQuery,
-    profile: undefined,
   }
 
   return env

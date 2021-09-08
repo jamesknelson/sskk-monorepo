@@ -2,14 +2,14 @@
   "name": "functions",
   "scripts": {
     "build": "tsc",
-    "dev": "npm run build && firebase emulators:start --only functions",
+    "dev": "npm run build && firebase emulators:start",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "firebase deploy",
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "12"
+    "node": "14"
   },
   "main": "lib/index.js",
   "dependencies": {

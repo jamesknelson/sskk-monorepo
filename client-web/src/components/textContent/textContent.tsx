@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 import { StyledCodeBlock } from 'src/components/codeBlock'
 import { colors, media } from 'src/theme'

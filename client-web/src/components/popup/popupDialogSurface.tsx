@@ -9,20 +9,19 @@ import {
   usePopupActive,
 } from 'retil-interaction'
 
-import { PopupArrow } from './popupArrowStyles'
-import { AnimatedPopupCard, createMergeStyle } from './popupStyles'
+import { StyledPopupAnimatedDiv, createMergeStyle } from './popupStyles'
 
 export interface PopupDialogProps
   extends Omit<
       RetilPopupDialogSurfaceProps,
-      'adaptive' | 'gpuAcceleration' | 'mergeStyle' | 'placement'
+      'adaptive' | 'gpuAcceleration' | 'mergeStyle' | 'placement' | 'strategy'
     >,
     Omit<React.HTMLAttributes<HTMLDivElement>, 'id'> {
   children: React.ReactNode
   placement?: PopupPlacement
 }
 
-export function PopupDialog({
+export function PopupDialogSurface({
   children,
   placement = 'bottom',
   ...restProps
@@ -46,13 +45,13 @@ export function PopupDialog({
                 {...restProps}
                 active={active}
                 adaptive={false}
-                as={AnimatedPopupCard as any}
+                as={StyledPopupAnimatedDiv as any}
                 gpuAcceleration={false}
                 key={key}
                 mergeStyle={createMergeStyle(transitionProps)}
-                placement={placement}>
+                placement={placement}
+                strategy="absolute">
                 {children}
-                <PopupArrow />
               </RetilPopupDialogSurface>
             ),
         ),
