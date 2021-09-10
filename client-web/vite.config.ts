@@ -1,6 +1,6 @@
 import { join, resolve } from 'path'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths-alt'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 import reactEmotion from './vite/reactEmotion'
 

@@ -18,7 +18,9 @@ o get things rendering without a flash of "loading"
 o get logout dropdown working
 
 - deploy to "dev"
-  * ensure "audience" is set in "dev" auth configuration
+  o ensure "audience" is set in "dev" auth configuration
+  o FIGURE OUT WHY migration doesn't seem to be working on the render hasura
+    service. it says migration has occurred, but it appears nothing has changed.
   * get login screen working on dev
   * ensure X-Forwarded-For works as expected, and ip address appears in logins:
     https://github.com/hasura/graphql-engine/issues/4770
