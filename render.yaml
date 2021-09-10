@@ -77,7 +77,6 @@ services:
     env: docker
     dockerfilePath: ./service-hasura/Dockerfile
     dockerContext: ./service-hasura
-    initialDeployHook: ./service-hasura/seed-database.sh
     branch: main
     region: oregon
     healthCheckPath: /healthz
