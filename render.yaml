@@ -19,11 +19,6 @@ services:
         destination: https://sskk-web-server.onrender.com/*
     envVars:
       - fromGroup: vite-vars
-      - key: VITE_GRAPHQL_HOST_AND_PORT
-        fromService:
-          name: sskk-service-hasura
-          type: web
-          property: hostport
   # Web app renderer
   - type: web
     name: sskk-client-web-renderer
@@ -36,11 +31,6 @@ services:
     healthCheckPath: /
     envVars:
       - fromGroup: vite-vars
-      - key: VITE_GRAPHQL_HOST_AND_PORT
-        fromService:
-          name: sskk-service-hasura
-          type: web
-          property: hostport
   # Actions service, for hasura
   - type: pserv
     name: sskk-service-actions
@@ -128,6 +118,8 @@ databases:
 envVarGroups:
   - name: vite-vars
     envVars:
+      - key: VITE_GRAPHQL_HOST_AND_PORT
+        value: sskk-service-hasura.onrender.com
       - key: VITE_GRAPHQL_PROTOCOL
         value: https
       - key: VITE_REFRESH_TOKEN_ENDPOINT

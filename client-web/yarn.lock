@@ -6508,10 +6508,10 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-tsconfig-paths-alt@3.3.13:
-  version "3.3.13"
-  resolved "https://registry.yarnpkg.com/vite-tsconfig-paths-alt/-/vite-tsconfig-paths-alt-3.3.13.tgz#81cd780fb01e20418e8112fc0f281120cbe9dfa1"
-  integrity sha512-o3+74deHJh8dY/FVO9iiMjIIMvPlVyN8Dtx6Cw7AZGrWVXPXkdg1M4StNG8UumYVfme+ukWYFTDAHmg6KXq/Dw==
+vite-tsconfig-paths@3.3.14:
+  version "3.3.14"
+  resolved "https://registry.yarnpkg.com/vite-tsconfig-paths/-/vite-tsconfig-paths-3.3.14.tgz#4f1e099e04105952dbdef1c70f72fc5ae9047575"
+  integrity sha512-Z501YCOTTwBk+zDq0furrD+O+X/zawKIo8L3eE0GVSr700AvWAArnlUHOzoRJQw0fJLfd+61rD7jkT20Jh8gtA==
   dependencies:
     debug "^4.1.1"
     globrex "^0.1.2"

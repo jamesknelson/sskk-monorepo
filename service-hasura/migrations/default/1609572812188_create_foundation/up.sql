@@ -14,7 +14,7 @@ create table "customers" (
   -- perogative. Similarly, it can be the case that a customer is an entire
   -- organization. Either way, it makes more sense for this to be
   -- "contact_name" than "name".
-  "contact_name" text not null,
+  "contact_name" text,
 
   "firebase_uid" text unique not null,
   "stripe_customer_id" text,
