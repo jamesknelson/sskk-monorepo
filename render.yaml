@@ -60,12 +60,9 @@ services:
           type: web
           envVarKey: SSR_SECRET
       - key: HASURA_GRAPHQL_PROTOCOL
-        value: http
+        value: https
       - key: HASURA_GRAPHQL_HOST_AND_PORT
-        fromService:
-          type: web
-          name: sskk-service-hasura
-          property: hostport
+        value: sskk-service-hasura.onrender.com
       - key: HASURA_ADMIN_SECRET
         fromService:
           name: sskk-service-hasura

@@ -105,7 +105,7 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
         return res.sendStatus(400)
       }
 
-      const tokenBufferPromise = randomBytes(48)
+      const tokenBufferPromise = randomBytes(16)
       const ipAddress = forwardedForHeader
         ? forwardedForHeader.split(',')[0]
         : hostHeader && (await lookup(hostHeader.split(':')[0])).address
@@ -125,7 +125,6 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
 
       let result: InsertSessionAsCustomerMutation
       try {
-        console.log('inserting session', loginVariables)
         result = await (!!firebaseToken
           ? gqlFetch(InsertSessionAsCustomerDocument, {
               ...loginVariables,
