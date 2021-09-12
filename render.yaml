@@ -118,8 +118,6 @@ databases:
     ipAllowList: [] # only allow internal connections
 
 envVarGroups:
-  - name: hasura-auth
-
   - name: firebase-secrets
     envVars:
       - key: FIREBASE_SERVICE_ACCOUNT

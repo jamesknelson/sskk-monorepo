@@ -2,6 +2,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import express from 'express'
 import admin from 'firebase-admin'
+import morgan from 'morgan'
 
 import { cookieSigningSecret, firebaseServiceAccount } from './config'
 import { createLazyHandler } from './utils/lazyHandler'
@@ -17,6 +18,8 @@ const lazy = createLazyHandler({
 })
 
 const app = express()
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.use(bodyParser.json())
 app.use(cookieParser(cookieSigningSecret))
