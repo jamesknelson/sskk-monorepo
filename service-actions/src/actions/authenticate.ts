@@ -125,6 +125,7 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
 
       let result: InsertSessionAsCustomerMutation
       try {
+        console.log('inserting session', loginVariables)
         result = await (!!firebaseToken
           ? gqlFetch(InsertSessionAsCustomerDocument, {
               ...loginVariables,
@@ -135,13 +136,14 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
               loginVariables,
             ) as Promise<InsertSessionAsCustomerMutation>))
       } catch (e) {
-        console.error('Error inserting session', e, loginVariables)
+        console.error('Error inserting session', e)
         // Either the db is down, or the user is trying to login against a
         // revoked firebase token.
         return res.sendStatus(401)
       }
 
       if (!result.insert_sessions_one) {
+        console.error('Missing session from hasura response')
         return res.sendStatus(500)
       }
 
@@ -166,6 +168,9 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
       })
 
       if (!session || session.customer_id !== customerId) {
+        console.error(
+          "Missing session, or specified session doesn't match customer id",
+        )
         return res.sendStatus(401)
       }
 
@@ -188,6 +193,7 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
         ...sessionVariablesWithoutRole,
       })
     } else {
+      console.error('Requested unavailable role', requestedRole)
       return res.sendStatus(401)
     }
   } catch (error) {
