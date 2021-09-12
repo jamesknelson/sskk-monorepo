@@ -6,10 +6,12 @@ object_relationships:
   using:
     foreign_key_constraint_on: customer_id
 array_relationships:
-- name: logins
+- name: sessions
   using:
-    foreign_key_constraint_on:
-      column: firebase_token_id
-      table:
-        name: logins
+    manual_configuration:
+      column_mapping:
+        id: firebase_token_id
+      insertion_order: null
+      remote_table:
+        name: sessions
         schema: public

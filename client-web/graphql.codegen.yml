@@ -1,5 +1,7 @@
 schema:
-  - "http://localhost:3711/v1/graphql"
+  - "http://localhost:3711/v1/graphql":
+      headers:
+        x-hasura-admin-secret: local
 documents: "./src/**/*.gql"
 overwrite: true
 config:

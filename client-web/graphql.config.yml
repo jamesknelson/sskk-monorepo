@@ -1,4 +1,7 @@
-schema: "http://localhost:3711/v1/graphql"
+schema:
+  - "http://localhost:3711/v1/graphql":
+      headers:
+        x-hasura-admin-secret: local
 documents: ./src/**/*.graphql
 extensions:
   endpoints:

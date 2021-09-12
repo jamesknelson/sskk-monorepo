@@ -1,0 +1,85 @@
+query GetSession(
+  $session_token: String!
+  $customer_id: uuid
+) {
+  sessions(
+    where: {
+      token: { _eq: $session_token },
+      customer_id: { _eq: $customer_id },
+      revoked: { _eq: false }
+    }
+  ) {
+    id
+    customer_id
+  }
+}
+
+mutation InsertSession(
+  $browser_or_device_id: uuid!
+  $ip_address: inet!
+  $referrer_source: String
+  $referrer_code: String
+  $token: String!
+  $url: String
+  $user_agent: String!
+) {
+  insert_sessions_one(
+    object: {
+      browser_or_device_id: $browser_or_device_id
+      ip_address: $ip_address
+      referrer_source: $referrer_source
+      referrer_code: $referrer_code
+      token: $token
+      url: $url
+      user_agent: {
+        data: { user_agent: $user_agent }
+        on_conflict: { constraint: user_agents_user_agent_key, update_columns: [last_logged_in_at] }
+      }
+    }
+  ) {
+    id
+  }
+}
+
+mutation InsertSessionAsCustomer(
+  $auth_time: timestamptz!
+  $browser_or_device_id: uuid!
+  $customer_id: uuid!
+  $ip_address: inet!
+  $referrer_source: String
+  $referrer_code: String
+  $token: String!
+  $url: String
+  $user_agent: String!
+) {
+  insert_sessions_one(
+    object: {
+      browser_or_device_id: $browser_or_device_id
+      customer_id: $customer_id
+      firebase_token: {
+        data: {
+          auth_time: $auth_time
+          customer_id: $customer_id
+        }
+        on_conflict: {
+          constraint: firebase_tokens_customer_id_auth_time_key,
+          update_columns: [last_logged_in_at],
+        }
+      }
+      ip_address: $ip_address
+      referrer_source: $referrer_source
+      referrer_code: $referrer_code
+      token: $token
+      url: $url
+      user_agent: {
+        data: { user_agent: $user_agent }
+        on_conflict: { constraint: user_agents_user_agent_key, update_columns: [last_logged_in_at] }
+      }
+    }
+  ) {
+    id
+    firebase_token {
+      customer_id
+    }
+  }
+}

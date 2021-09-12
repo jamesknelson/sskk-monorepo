@@ -1,27 +1,26 @@
 actions:
-  - name: login
-    definition:
-      kind: synchronous
-      handler: "{{ACTION_BASE_PROTOCOL}}://{{ACTION_BASE_HOST_AND_PORT}}/login"
-      forward_client_headers: true
-      headers:
-        - name: action-secret
-          value_from_env: ACTION_SECRET
-    permissions:
-      - role: customer
+- name: login
+  definition:
+    kind: synchronous
+    handler: '{{ACTION_BASE_PROTOCOL}}://{{ACTION_BASE_HOST_AND_PORT}}/login'
+    forward_client_headers: true
+    headers:
+    - name: action-secret
+      value_from_env: ACTION_SECRET
+  permissions:
+  - role: customer
 custom_types:
   enums: []
-  input_objects:
-    - name: LoginInput
+  input_objects: []
   objects:
-    - name: LoginOutput
-      relationships:
-        - remote_table:
-            schema: public
-            name: customers
-          name: customer
-          source: default
-          type: object
-          field_mapping:
-            customer_id: id
+  - name: LoginOutput
+    relationships:
+    - remote_table:
+        schema: public
+        name: customers
+      name: customer
+      source: default
+      type: object
+      field_mapping:
+        customer_id: id
   scalars: []

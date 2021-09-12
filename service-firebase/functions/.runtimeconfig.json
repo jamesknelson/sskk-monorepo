@@ -1,7 +1,7 @@
 {
   "graphql": {
     "url": "http://localhost:3711/v1/graphql",
-    "admin_secret": null
+    "admin_secret": "local"
   },
   "cors": {
     "origin": "*"

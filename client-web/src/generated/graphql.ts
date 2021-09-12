@@ -32,11 +32,10 @@ export type Boolean_Comparison_Exp = {
 
 export type LoginOutput = {
   __typename?: 'LoginOutput';
-  created_at: Scalars['timestamptz'];
   /** An object relationship */
   customer: Customers;
   customer_id: Maybe<Scalars['uuid']>;
-  id: Scalars['uuid'];
+  session_token: Scalars['String'];
 };
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
@@ -75,43 +74,19 @@ export type String_Comparison_Exp = {
 /** columns and relationships of "customers" */
 export type Customers = {
   __typename?: 'customers';
-  contact_name: Scalars['String'];
+  contact_name: Maybe<Scalars['String']>;
   created_at: Scalars['timestamptz'];
-  /** An array relationship */
-  firebase_tokens: Array<Firebase_Tokens>;
-  /** An aggregate relationship */
-  firebase_tokens_aggregate: Firebase_Tokens_Aggregate;
   firebase_uid: Scalars['String'];
   id: Scalars['uuid'];
   /** An object relationship */
   membership: Maybe<Memberships>;
-  /** fetch data from the table: "personas" */
+  /** An array relationship */
   personas: Array<Personas>;
   /** An aggregate relationship */
   personas_aggregate: Personas_Aggregate;
   stripe_customer_id: Maybe<Scalars['String']>;
   unverified_email: Scalars['String'];
   verified_email: Maybe<Scalars['String']>;
-};
-
-
-/** columns and relationships of "customers" */
-export type CustomersFirebase_TokensArgs = {
-  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
-  limit: Maybe<Scalars['Int']>;
-  offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
-  where: Maybe<Firebase_Tokens_Bool_Exp>;
-};
-
-
-/** columns and relationships of "customers" */
-export type CustomersFirebase_Tokens_AggregateArgs = {
-  distinct_on: Maybe<Array<Firebase_Tokens_Select_Column>>;
-  limit: Maybe<Scalars['Int']>;
-  offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Firebase_Tokens_Order_By>>;
-  where: Maybe<Firebase_Tokens_Bool_Exp>;
 };
 
 
@@ -163,7 +138,6 @@ export type Customers_Bool_Exp = {
   _or: Maybe<Array<Customers_Bool_Exp>>;
   contact_name: Maybe<String_Comparison_Exp>;
   created_at: Maybe<Timestamptz_Comparison_Exp>;
-  firebase_tokens: Maybe<Firebase_Tokens_Bool_Exp>;
   firebase_uid: Maybe<String_Comparison_Exp>;
   id: Maybe<Uuid_Comparison_Exp>;
   membership: Maybe<Memberships_Bool_Exp>;
@@ -187,7 +161,6 @@ export enum Customers_Constraint {
 export type Customers_Insert_Input = {
   contact_name: Maybe<Scalars['String']>;
   created_at: Maybe<Scalars['timestamptz']>;
-  firebase_tokens: Maybe<Firebase_Tokens_Arr_Rel_Insert_Input>;
   firebase_uid: Maybe<Scalars['String']>;
   id: Maybe<Scalars['uuid']>;
   membership: Maybe<Memberships_Obj_Rel_Insert_Input>;
@@ -248,7 +221,6 @@ export type Customers_On_Conflict = {
 export type Customers_Order_By = {
   contact_name: Maybe<Order_By>;
   created_at: Maybe<Order_By>;
-  firebase_tokens_aggregate: Maybe<Firebase_Tokens_Aggregate_Order_By>;
   firebase_uid: Maybe<Order_By>;
   id: Maybe<Order_By>;
   membership: Maybe<Memberships_Order_By>;
@@ -319,31 +291,32 @@ export type Firebase_Tokens = {
   customer: Customers;
   customer_id: Scalars['uuid'];
   id: Scalars['uuid'];
-  /** An array relationship */
-  logins: Array<Logins>;
+  last_logged_in_at: Scalars['timestamptz'];
+  revoked: Scalars['Boolean'];
+  /** fetch data from the table: "sessions" */
+  sessions: Array<Sessions>;
   /** An aggregate relationship */
-  logins_aggregate: Logins_Aggregate;
-  revoked_at: Maybe<Scalars['timestamptz']>;
+  sessions_aggregate: Sessions_Aggregate;
 };
 
 
 /** columns and relationships of "firebase_tokens" */
-export type Firebase_TokensLoginsArgs = {
-  distinct_on: Maybe<Array<Logins_Select_Column>>;
+export type Firebase_TokensSessionsArgs = {
+  distinct_on: Maybe<Array<Sessions_Select_Column>>;
   limit: Maybe<Scalars['Int']>;
   offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Logins_Order_By>>;
-  where: Maybe<Logins_Bool_Exp>;
+  order_by: Maybe<Array<Sessions_Order_By>>;
+  where: Maybe<Sessions_Bool_Exp>;
 };
 
 
 /** columns and relationships of "firebase_tokens" */
-export type Firebase_TokensLogins_AggregateArgs = {
-  distinct_on: Maybe<Array<Logins_Select_Column>>;
+export type Firebase_TokensSessions_AggregateArgs = {
+  distinct_on: Maybe<Array<Sessions_Select_Column>>;
   limit: Maybe<Scalars['Int']>;
   offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Logins_Order_By>>;
-  where: Maybe<Logins_Bool_Exp>;
+  order_by: Maybe<Array<Sessions_Order_By>>;
+  where: Maybe<Sessions_Bool_Exp>;
 };
 
 /** aggregated selection of "firebase_tokens" */
@@ -368,20 +341,6 @@ export type Firebase_Tokens_Aggregate_FieldsCountArgs = {
   distinct: Maybe<Scalars['Boolean']>;
 };
 
-/** order by aggregate values of table "firebase_tokens" */
-export type Firebase_Tokens_Aggregate_Order_By = {
-  count: Maybe<Order_By>;
-  max: Maybe<Firebase_Tokens_Max_Order_By>;
-  min: Maybe<Firebase_Tokens_Min_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "firebase_tokens" */
-export type Firebase_Tokens_Arr_Rel_Insert_Input = {
-  data: Array<Firebase_Tokens_Insert_Input>;
-  /** on conflict condition */
-  on_conflict: Maybe<Firebase_Tokens_On_Conflict>;
-};
-
 /** Boolean expression to filter rows from the table "firebase_tokens". All fields are combined with a logical 'AND'. */
 export type Firebase_Tokens_Bool_Exp = {
   _and: Maybe<Array<Firebase_Tokens_Bool_Exp>>;
@@ -392,14 +351,17 @@ export type Firebase_Tokens_Bool_Exp = {
   customer: Maybe<Customers_Bool_Exp>;
   customer_id: Maybe<Uuid_Comparison_Exp>;
   id: Maybe<Uuid_Comparison_Exp>;
-  logins: Maybe<Logins_Bool_Exp>;
-  revoked_at: Maybe<Timestamptz_Comparison_Exp>;
+  last_logged_in_at: Maybe<Timestamptz_Comparison_Exp>;
+  revoked: Maybe<Boolean_Comparison_Exp>;
+  sessions: Maybe<Sessions_Bool_Exp>;
 };
 
 /** unique or primary key constraints on table "firebase_tokens" */
 export enum Firebase_Tokens_Constraint {
   /** unique or primary key constraint */
   FirebaseTokensCustomerIdAuthTimeKey = 'firebase_tokens_customer_id_auth_time_key',
+  /** unique or primary key constraint */
+  FirebaseTokensIdRevokedKey = 'firebase_tokens_id_revoked_key',
   /** unique or primary key constraint */
   FirebaseTokensPkey = 'firebase_tokens_pkey'
 }
@@ -411,8 +373,9 @@ export type Firebase_Tokens_Insert_Input = {
   customer: Maybe<Customers_Obj_Rel_Insert_Input>;
   customer_id: Maybe<Scalars['uuid']>;
   id: Maybe<Scalars['uuid']>;
-  logins: Maybe<Logins_Arr_Rel_Insert_Input>;
-  revoked_at: Maybe<Scalars['timestamptz']>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
+  revoked: Maybe<Scalars['Boolean']>;
+  sessions: Maybe<Sessions_Arr_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
@@ -422,16 +385,7 @@ export type Firebase_Tokens_Max_Fields = {
   created_at: Maybe<Scalars['timestamptz']>;
   customer_id: Maybe<Scalars['uuid']>;
   id: Maybe<Scalars['uuid']>;
-  revoked_at: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by max() on columns of table "firebase_tokens" */
-export type Firebase_Tokens_Max_Order_By = {
-  auth_time: Maybe<Order_By>;
-  created_at: Maybe<Order_By>;
-  customer_id: Maybe<Order_By>;
-  id: Maybe<Order_By>;
-  revoked_at: Maybe<Order_By>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
 };
 
 /** aggregate min on columns */
@@ -441,16 +395,7 @@ export type Firebase_Tokens_Min_Fields = {
   created_at: Maybe<Scalars['timestamptz']>;
   customer_id: Maybe<Scalars['uuid']>;
   id: Maybe<Scalars['uuid']>;
-  revoked_at: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by min() on columns of table "firebase_tokens" */
-export type Firebase_Tokens_Min_Order_By = {
-  auth_time: Maybe<Order_By>;
-  created_at: Maybe<Order_By>;
-  customer_id: Maybe<Order_By>;
-  id: Maybe<Order_By>;
-  revoked_at: Maybe<Order_By>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
 };
 
 /** response of any mutation on the table "firebase_tokens" */
@@ -483,8 +428,9 @@ export type Firebase_Tokens_Order_By = {
   customer: Maybe<Customers_Order_By>;
   customer_id: Maybe<Order_By>;
   id: Maybe<Order_By>;
-  logins_aggregate: Maybe<Logins_Aggregate_Order_By>;
-  revoked_at: Maybe<Order_By>;
+  last_logged_in_at: Maybe<Order_By>;
+  revoked: Maybe<Order_By>;
+  sessions_aggregate: Maybe<Sessions_Aggregate_Order_By>;
 };
 
 /** primary key columns input for table: firebase_tokens */
@@ -503,7 +449,9 @@ export enum Firebase_Tokens_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  RevokedAt = 'revoked_at'
+  LastLoggedInAt = 'last_logged_in_at',
+  /** column name */
+  Revoked = 'revoked'
 }
 
 /** input type for updating data in table "firebase_tokens" */
@@ -512,7 +460,8 @@ export type Firebase_Tokens_Set_Input = {
   created_at: Maybe<Scalars['timestamptz']>;
   customer_id: Maybe<Scalars['uuid']>;
   id: Maybe<Scalars['uuid']>;
-  revoked_at: Maybe<Scalars['timestamptz']>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
+  revoked: Maybe<Scalars['Boolean']>;
 };
 
 /** update columns of table "firebase_tokens" */
@@ -526,7 +475,9 @@ export enum Firebase_Tokens_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  RevokedAt = 'revoked_at'
+  LastLoggedInAt = 'last_logged_in_at',
+  /** column name */
+  Revoked = 'revoked'
 }
 
 
@@ -542,242 +493,6 @@ export type Inet_Comparison_Exp = {
   _neq: Maybe<Scalars['inet']>;
   _nin: Maybe<Array<Scalars['inet']>>;
 };
-
-/** columns and relationships of "logins" */
-export type Logins = {
-  __typename?: 'logins';
-  agent_id: Scalars['uuid'];
-  created_at: Scalars['timestamptz'];
-  /** An object relationship */
-  firebase_token: Maybe<Firebase_Tokens>;
-  firebase_token_id: Maybe<Scalars['uuid']>;
-  id: Scalars['uuid'];
-  ip_address: Scalars['inet'];
-  referrer_code: Maybe<Scalars['String']>;
-  referrer_source: Maybe<Scalars['String']>;
-  url: Maybe<Scalars['String']>;
-  /** An object relationship */
-  user_agent: User_Agents;
-  user_agent_id: Scalars['uuid'];
-};
-
-/** aggregated selection of "logins" */
-export type Logins_Aggregate = {
-  __typename?: 'logins_aggregate';
-  aggregate: Maybe<Logins_Aggregate_Fields>;
-  nodes: Array<Logins>;
-};
-
-/** aggregate fields of "logins" */
-export type Logins_Aggregate_Fields = {
-  __typename?: 'logins_aggregate_fields';
-  count: Scalars['Int'];
-  max: Maybe<Logins_Max_Fields>;
-  min: Maybe<Logins_Min_Fields>;
-};
-
-
-/** aggregate fields of "logins" */
-export type Logins_Aggregate_FieldsCountArgs = {
-  columns: Maybe<Array<Logins_Select_Column>>;
-  distinct: Maybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "logins" */
-export type Logins_Aggregate_Order_By = {
-  count: Maybe<Order_By>;
-  max: Maybe<Logins_Max_Order_By>;
-  min: Maybe<Logins_Min_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "logins" */
-export type Logins_Arr_Rel_Insert_Input = {
-  data: Array<Logins_Insert_Input>;
-  /** on conflict condition */
-  on_conflict: Maybe<Logins_On_Conflict>;
-};
-
-/** Boolean expression to filter rows from the table "logins". All fields are combined with a logical 'AND'. */
-export type Logins_Bool_Exp = {
-  _and: Maybe<Array<Logins_Bool_Exp>>;
-  _not: Maybe<Logins_Bool_Exp>;
-  _or: Maybe<Array<Logins_Bool_Exp>>;
-  agent_id: Maybe<Uuid_Comparison_Exp>;
-  created_at: Maybe<Timestamptz_Comparison_Exp>;
-  firebase_token: Maybe<Firebase_Tokens_Bool_Exp>;
-  firebase_token_id: Maybe<Uuid_Comparison_Exp>;
-  id: Maybe<Uuid_Comparison_Exp>;
-  ip_address: Maybe<Inet_Comparison_Exp>;
-  referrer_code: Maybe<String_Comparison_Exp>;
-  referrer_source: Maybe<String_Comparison_Exp>;
-  url: Maybe<String_Comparison_Exp>;
-  user_agent: Maybe<User_Agents_Bool_Exp>;
-  user_agent_id: Maybe<Uuid_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "logins" */
-export enum Logins_Constraint {
-  /** unique or primary key constraint */
-  LoginsPkey = 'logins_pkey'
-}
-
-/** input type for inserting data into table "logins" */
-export type Logins_Insert_Input = {
-  agent_id: Maybe<Scalars['uuid']>;
-  created_at: Maybe<Scalars['timestamptz']>;
-  firebase_token: Maybe<Firebase_Tokens_Obj_Rel_Insert_Input>;
-  firebase_token_id: Maybe<Scalars['uuid']>;
-  id: Maybe<Scalars['uuid']>;
-  ip_address: Maybe<Scalars['inet']>;
-  referrer_code: Maybe<Scalars['String']>;
-  referrer_source: Maybe<Scalars['String']>;
-  url: Maybe<Scalars['String']>;
-  user_agent: Maybe<User_Agents_Obj_Rel_Insert_Input>;
-  user_agent_id: Maybe<Scalars['uuid']>;
-};
-
-/** aggregate max on columns */
-export type Logins_Max_Fields = {
-  __typename?: 'logins_max_fields';
-  agent_id: Maybe<Scalars['uuid']>;
-  created_at: Maybe<Scalars['timestamptz']>;
-  firebase_token_id: Maybe<Scalars['uuid']>;
-  id: Maybe<Scalars['uuid']>;
-  referrer_code: Maybe<Scalars['String']>;
-  referrer_source: Maybe<Scalars['String']>;
-  url: Maybe<Scalars['String']>;
-  user_agent_id: Maybe<Scalars['uuid']>;
-};
-
-/** order by max() on columns of table "logins" */
-export type Logins_Max_Order_By = {
-  agent_id: Maybe<Order_By>;
-  created_at: Maybe<Order_By>;
-  firebase_token_id: Maybe<Order_By>;
-  id: Maybe<Order_By>;
-  referrer_code: Maybe<Order_By>;
-  referrer_source: Maybe<Order_By>;
-  url: Maybe<Order_By>;
-  user_agent_id: Maybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Logins_Min_Fields = {
-  __typename?: 'logins_min_fields';
-  agent_id: Maybe<Scalars['uuid']>;
-  created_at: Maybe<Scalars['timestamptz']>;
-  firebase_token_id: Maybe<Scalars['uuid']>;
-  id: Maybe<Scalars['uuid']>;
-  referrer_code: Maybe<Scalars['String']>;
-  referrer_source: Maybe<Scalars['String']>;
-  url: Maybe<Scalars['String']>;
-  user_agent_id: Maybe<Scalars['uuid']>;
-};
-
-/** order by min() on columns of table "logins" */
-export type Logins_Min_Order_By = {
-  agent_id: Maybe<Order_By>;
-  created_at: Maybe<Order_By>;
-  firebase_token_id: Maybe<Order_By>;
-  id: Maybe<Order_By>;
-  referrer_code: Maybe<Order_By>;
-  referrer_source: Maybe<Order_By>;
-  url: Maybe<Order_By>;
-  user_agent_id: Maybe<Order_By>;
-};
-
-/** response of any mutation on the table "logins" */
-export type Logins_Mutation_Response = {
-  __typename?: 'logins_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Logins>;
-};
-
-/** on conflict condition type for table "logins" */
-export type Logins_On_Conflict = {
-  constraint: Logins_Constraint;
-  update_columns: Array<Logins_Update_Column>;
-  where: Maybe<Logins_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "logins". */
-export type Logins_Order_By = {
-  agent_id: Maybe<Order_By>;
-  created_at: Maybe<Order_By>;
-  firebase_token: Maybe<Firebase_Tokens_Order_By>;
-  firebase_token_id: Maybe<Order_By>;
-  id: Maybe<Order_By>;
-  ip_address: Maybe<Order_By>;
-  referrer_code: Maybe<Order_By>;
-  referrer_source: Maybe<Order_By>;
-  url: Maybe<Order_By>;
-  user_agent: Maybe<User_Agents_Order_By>;
-  user_agent_id: Maybe<Order_By>;
-};
-
-/** primary key columns input for table: logins */
-export type Logins_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "logins" */
-export enum Logins_Select_Column {
-  /** column name */
-  AgentId = 'agent_id',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  FirebaseTokenId = 'firebase_token_id',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  IpAddress = 'ip_address',
-  /** column name */
-  ReferrerCode = 'referrer_code',
-  /** column name */
-  ReferrerSource = 'referrer_source',
-  /** column name */
-  Url = 'url',
-  /** column name */
-  UserAgentId = 'user_agent_id'
-}
-
-/** input type for updating data in table "logins" */
-export type Logins_Set_Input = {
-  agent_id: Maybe<Scalars['uuid']>;
-  created_at: Maybe<Scalars['timestamptz']>;
-  firebase_token_id: Maybe<Scalars['uuid']>;
-  id: Maybe<Scalars['uuid']>;
-  ip_address: Maybe<Scalars['inet']>;
-  referrer_code: Maybe<Scalars['String']>;
-  referrer_source: Maybe<Scalars['String']>;
-  url: Maybe<Scalars['String']>;
-  user_agent_id: Maybe<Scalars['uuid']>;
-};
-
-/** update columns of table "logins" */
-export enum Logins_Update_Column {
-  /** column name */
-  AgentId = 'agent_id',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  FirebaseTokenId = 'firebase_token_id',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  IpAddress = 'ip_address',
-  /** column name */
-  ReferrerCode = 'referrer_code',
-  /** column name */
-  ReferrerSource = 'referrer_source',
-  /** column name */
-  Url = 'url',
-  /** column name */
-  UserAgentId = 'user_agent_id'
-}
 
 /** columns and relationships of "membership_levels" */
 export type Membership_Levels = {
@@ -1119,10 +834,6 @@ export type Mutation_Root = {
   delete_firebase_tokens: Maybe<Firebase_Tokens_Mutation_Response>;
   /** delete single row from the table: "firebase_tokens" */
   delete_firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
-  /** delete data from the table: "logins" */
-  delete_logins: Maybe<Logins_Mutation_Response>;
-  /** delete single row from the table: "logins" */
-  delete_logins_by_pk: Maybe<Logins>;
   /** delete data from the table: "membership_levels" */
   delete_membership_levels: Maybe<Membership_Levels_Mutation_Response>;
   /** delete single row from the table: "membership_levels" */
@@ -1135,6 +846,10 @@ export type Mutation_Root = {
   delete_personas: Maybe<Personas_Mutation_Response>;
   /** delete single row from the table: "personas" */
   delete_personas_by_pk: Maybe<Personas>;
+  /** delete data from the table: "sessions" */
+  delete_sessions: Maybe<Sessions_Mutation_Response>;
+  /** delete single row from the table: "sessions" */
+  delete_sessions_by_pk: Maybe<Sessions>;
   /** delete data from the table: "user_agents" */
   delete_user_agents: Maybe<User_Agents_Mutation_Response>;
   /** delete single row from the table: "user_agents" */
@@ -1147,10 +862,6 @@ export type Mutation_Root = {
   insert_firebase_tokens: Maybe<Firebase_Tokens_Mutation_Response>;
   /** insert a single row into the table: "firebase_tokens" */
   insert_firebase_tokens_one: Maybe<Firebase_Tokens>;
-  /** insert data into the table: "logins" */
-  insert_logins: Maybe<Logins_Mutation_Response>;
-  /** insert a single row into the table: "logins" */
-  insert_logins_one: Maybe<Logins>;
   /** insert data into the table: "membership_levels" */
   insert_membership_levels: Maybe<Membership_Levels_Mutation_Response>;
   /** insert a single row into the table: "membership_levels" */
@@ -1163,6 +874,10 @@ export type Mutation_Root = {
   insert_personas: Maybe<Personas_Mutation_Response>;
   /** insert a single row into the table: "personas" */
   insert_personas_one: Maybe<Personas>;
+  /** insert data into the table: "sessions" */
+  insert_sessions: Maybe<Sessions_Mutation_Response>;
+  /** insert a single row into the table: "sessions" */
+  insert_sessions_one: Maybe<Sessions>;
   /** insert data into the table: "user_agents" */
   insert_user_agents: Maybe<User_Agents_Mutation_Response>;
   /** insert a single row into the table: "user_agents" */
@@ -1176,10 +891,6 @@ export type Mutation_Root = {
   update_firebase_tokens: Maybe<Firebase_Tokens_Mutation_Response>;
   /** update single row of the table: "firebase_tokens" */
   update_firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
-  /** update data of the table: "logins" */
-  update_logins: Maybe<Logins_Mutation_Response>;
-  /** update single row of the table: "logins" */
-  update_logins_by_pk: Maybe<Logins>;
   /** update data of the table: "membership_levels" */
   update_membership_levels: Maybe<Membership_Levels_Mutation_Response>;
   /** update single row of the table: "membership_levels" */
@@ -1192,6 +903,10 @@ export type Mutation_Root = {
   update_personas: Maybe<Personas_Mutation_Response>;
   /** update single row of the table: "personas" */
   update_personas_by_pk: Maybe<Personas>;
+  /** update data of the table: "sessions" */
+  update_sessions: Maybe<Sessions_Mutation_Response>;
+  /** update single row of the table: "sessions" */
+  update_sessions_by_pk: Maybe<Sessions>;
   /** update data of the table: "user_agents" */
   update_user_agents: Maybe<User_Agents_Mutation_Response>;
   /** update single row of the table: "user_agents" */
@@ -1219,18 +934,6 @@ export type Mutation_RootDelete_Firebase_TokensArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Firebase_Tokens_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_LoginsArgs = {
-  where: Logins_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Logins_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -1272,6 +975,18 @@ export type Mutation_RootDelete_Personas_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_SessionsArgs = {
+  where: Sessions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Sessions_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_User_AgentsArgs = {
   where: User_Agents_Bool_Exp;
 };
@@ -1308,20 +1023,6 @@ export type Mutation_RootInsert_Firebase_TokensArgs = {
 export type Mutation_RootInsert_Firebase_Tokens_OneArgs = {
   object: Firebase_Tokens_Insert_Input;
   on_conflict: Maybe<Firebase_Tokens_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_LoginsArgs = {
-  objects: Array<Logins_Insert_Input>;
-  on_conflict: Maybe<Logins_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Logins_OneArgs = {
-  object: Logins_Insert_Input;
-  on_conflict: Maybe<Logins_On_Conflict>;
 };
 
 
@@ -1368,6 +1069,20 @@ export type Mutation_RootInsert_Personas_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_SessionsArgs = {
+  objects: Array<Sessions_Insert_Input>;
+  on_conflict: Maybe<Sessions_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Sessions_OneArgs = {
+  object: Sessions_Insert_Input;
+  on_conflict: Maybe<Sessions_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_User_AgentsArgs = {
   objects: Array<User_Agents_Insert_Input>;
   on_conflict: Maybe<User_Agents_On_Conflict>;
@@ -1378,13 +1093,6 @@ export type Mutation_RootInsert_User_AgentsArgs = {
 export type Mutation_RootInsert_User_Agents_OneArgs = {
   object: User_Agents_Insert_Input;
   on_conflict: Maybe<User_Agents_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootLoginArgs = {
-  referrer_code: Maybe<Scalars['String']>;
-  referrer_source: Maybe<Scalars['String']>;
 };
 
 
@@ -1413,20 +1121,6 @@ export type Mutation_RootUpdate_Firebase_TokensArgs = {
 export type Mutation_RootUpdate_Firebase_Tokens_By_PkArgs = {
   _set: Maybe<Firebase_Tokens_Set_Input>;
   pk_columns: Firebase_Tokens_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_LoginsArgs = {
-  _set: Maybe<Logins_Set_Input>;
-  where: Logins_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Logins_By_PkArgs = {
-  _set: Maybe<Logins_Set_Input>;
-  pk_columns: Logins_Pk_Columns_Input;
 };
 
 
@@ -1469,6 +1163,20 @@ export type Mutation_RootUpdate_PersonasArgs = {
 export type Mutation_RootUpdate_Personas_By_PkArgs = {
   _set: Maybe<Personas_Set_Input>;
   pk_columns: Personas_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_SessionsArgs = {
+  _set: Maybe<Sessions_Set_Input>;
+  where: Sessions_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Sessions_By_PkArgs = {
+  _set: Maybe<Sessions_Set_Input>;
+  pk_columns: Sessions_Pk_Columns_Input;
 };
 
 
@@ -1723,18 +1431,12 @@ export type Query_Root = {
   customers_aggregate: Customers_Aggregate;
   /** fetch data from the table: "customers" using primary key columns */
   customers_by_pk: Maybe<Customers>;
-  /** An array relationship */
+  /** fetch data from the table: "firebase_tokens" */
   firebase_tokens: Array<Firebase_Tokens>;
-  /** An aggregate relationship */
+  /** fetch aggregated fields from the table: "firebase_tokens" */
   firebase_tokens_aggregate: Firebase_Tokens_Aggregate;
   /** fetch data from the table: "firebase_tokens" using primary key columns */
   firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
-  /** An array relationship */
-  logins: Array<Logins>;
-  /** An aggregate relationship */
-  logins_aggregate: Logins_Aggregate;
-  /** fetch data from the table: "logins" using primary key columns */
-  logins_by_pk: Maybe<Logins>;
   /** fetch data from the table: "membership_levels" */
   membership_levels: Array<Membership_Levels>;
   /** fetch aggregated fields from the table: "membership_levels" */
@@ -1747,12 +1449,18 @@ export type Query_Root = {
   memberships_aggregate: Memberships_Aggregate;
   /** fetch data from the table: "memberships" using primary key columns */
   memberships_by_pk: Maybe<Memberships>;
-  /** fetch data from the table: "personas" */
+  /** An array relationship */
   personas: Array<Personas>;
   /** An aggregate relationship */
   personas_aggregate: Personas_Aggregate;
   /** fetch data from the table: "personas" using primary key columns */
   personas_by_pk: Maybe<Personas>;
+  /** fetch data from the table: "sessions" */
+  sessions: Array<Sessions>;
+  /** An aggregate relationship */
+  sessions_aggregate: Sessions_Aggregate;
+  /** fetch data from the table: "sessions" using primary key columns */
+  sessions_by_pk: Maybe<Sessions>;
   /** fetch data from the table: "user_agents" */
   user_agents: Array<User_Agents>;
   /** fetch aggregated fields from the table: "user_agents" */
@@ -1804,29 +1512,6 @@ export type Query_RootFirebase_Tokens_AggregateArgs = {
 
 
 export type Query_RootFirebase_Tokens_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Query_RootLoginsArgs = {
-  distinct_on: Maybe<Array<Logins_Select_Column>>;
-  limit: Maybe<Scalars['Int']>;
-  offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Logins_Order_By>>;
-  where: Maybe<Logins_Bool_Exp>;
-};
-
-
-export type Query_RootLogins_AggregateArgs = {
-  distinct_on: Maybe<Array<Logins_Select_Column>>;
-  limit: Maybe<Scalars['Int']>;
-  offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Logins_Order_By>>;
-  where: Maybe<Logins_Bool_Exp>;
-};
-
-
-export type Query_RootLogins_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -1900,6 +1585,29 @@ export type Query_RootPersonas_By_PkArgs = {
 };
 
 
+export type Query_RootSessionsArgs = {
+  distinct_on: Maybe<Array<Sessions_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Sessions_Order_By>>;
+  where: Maybe<Sessions_Bool_Exp>;
+};
+
+
+export type Query_RootSessions_AggregateArgs = {
+  distinct_on: Maybe<Array<Sessions_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Sessions_Order_By>>;
+  where: Maybe<Sessions_Bool_Exp>;
+};
+
+
+export type Query_RootSessions_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootUser_AgentsArgs = {
   distinct_on: Maybe<Array<User_Agents_Select_Column>>;
   limit: Maybe<Scalars['Int']>;
@@ -1922,6 +1630,279 @@ export type Query_RootUser_Agents_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
+/** columns and relationships of "sessions" */
+export type Sessions = {
+  __typename?: 'sessions';
+  browser_or_device_id: Scalars['uuid'];
+  created_at: Scalars['timestamptz'];
+  customer_id: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  firebase_token: Maybe<Firebase_Tokens>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Scalars['uuid'];
+  ip_address: Scalars['inet'];
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  revoked: Scalars['Boolean'];
+  token: Scalars['String'];
+  url: Maybe<Scalars['String']>;
+  /** An object relationship */
+  user_agent: User_Agents;
+  user_agent_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "sessions" */
+export type Sessions_Aggregate = {
+  __typename?: 'sessions_aggregate';
+  aggregate: Maybe<Sessions_Aggregate_Fields>;
+  nodes: Array<Sessions>;
+};
+
+/** aggregate fields of "sessions" */
+export type Sessions_Aggregate_Fields = {
+  __typename?: 'sessions_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<Sessions_Max_Fields>;
+  min: Maybe<Sessions_Min_Fields>;
+};
+
+
+/** aggregate fields of "sessions" */
+export type Sessions_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Sessions_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "sessions" */
+export type Sessions_Aggregate_Order_By = {
+  count: Maybe<Order_By>;
+  max: Maybe<Sessions_Max_Order_By>;
+  min: Maybe<Sessions_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "sessions" */
+export type Sessions_Arr_Rel_Insert_Input = {
+  data: Array<Sessions_Insert_Input>;
+  /** on conflict condition */
+  on_conflict: Maybe<Sessions_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "sessions". All fields are combined with a logical 'AND'. */
+export type Sessions_Bool_Exp = {
+  _and: Maybe<Array<Sessions_Bool_Exp>>;
+  _not: Maybe<Sessions_Bool_Exp>;
+  _or: Maybe<Array<Sessions_Bool_Exp>>;
+  browser_or_device_id: Maybe<Uuid_Comparison_Exp>;
+  created_at: Maybe<Timestamptz_Comparison_Exp>;
+  customer_id: Maybe<Uuid_Comparison_Exp>;
+  firebase_token: Maybe<Firebase_Tokens_Bool_Exp>;
+  firebase_token_id: Maybe<Uuid_Comparison_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  ip_address: Maybe<Inet_Comparison_Exp>;
+  referrer_code: Maybe<String_Comparison_Exp>;
+  referrer_source: Maybe<String_Comparison_Exp>;
+  revoked: Maybe<Boolean_Comparison_Exp>;
+  token: Maybe<String_Comparison_Exp>;
+  url: Maybe<String_Comparison_Exp>;
+  user_agent: Maybe<User_Agents_Bool_Exp>;
+  user_agent_id: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "sessions" */
+export enum Sessions_Constraint {
+  /** unique or primary key constraint */
+  SessionsPkey = 'sessions_pkey',
+  /** unique or primary key constraint */
+  SessionsTokenKey = 'sessions_token_key'
+}
+
+/** input type for inserting data into table "sessions" */
+export type Sessions_Insert_Input = {
+  browser_or_device_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  firebase_token: Maybe<Firebase_Tokens_Obj_Rel_Insert_Input>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  ip_address: Maybe<Scalars['inet']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  revoked: Maybe<Scalars['Boolean']>;
+  token: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent: Maybe<User_Agents_Obj_Rel_Insert_Input>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Sessions_Max_Fields = {
+  __typename?: 'sessions_max_fields';
+  browser_or_device_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  token: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "sessions" */
+export type Sessions_Max_Order_By = {
+  browser_or_device_id: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  customer_id: Maybe<Order_By>;
+  firebase_token_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  referrer_code: Maybe<Order_By>;
+  referrer_source: Maybe<Order_By>;
+  token: Maybe<Order_By>;
+  url: Maybe<Order_By>;
+  user_agent_id: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Sessions_Min_Fields = {
+  __typename?: 'sessions_min_fields';
+  browser_or_device_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  token: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "sessions" */
+export type Sessions_Min_Order_By = {
+  browser_or_device_id: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  customer_id: Maybe<Order_By>;
+  firebase_token_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  referrer_code: Maybe<Order_By>;
+  referrer_source: Maybe<Order_By>;
+  token: Maybe<Order_By>;
+  url: Maybe<Order_By>;
+  user_agent_id: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "sessions" */
+export type Sessions_Mutation_Response = {
+  __typename?: 'sessions_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Sessions>;
+};
+
+/** on conflict condition type for table "sessions" */
+export type Sessions_On_Conflict = {
+  constraint: Sessions_Constraint;
+  update_columns: Array<Sessions_Update_Column>;
+  where: Maybe<Sessions_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "sessions". */
+export type Sessions_Order_By = {
+  browser_or_device_id: Maybe<Order_By>;
+  created_at: Maybe<Order_By>;
+  customer_id: Maybe<Order_By>;
+  firebase_token: Maybe<Firebase_Tokens_Order_By>;
+  firebase_token_id: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  ip_address: Maybe<Order_By>;
+  referrer_code: Maybe<Order_By>;
+  referrer_source: Maybe<Order_By>;
+  revoked: Maybe<Order_By>;
+  token: Maybe<Order_By>;
+  url: Maybe<Order_By>;
+  user_agent: Maybe<User_Agents_Order_By>;
+  user_agent_id: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: sessions */
+export type Sessions_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "sessions" */
+export enum Sessions_Select_Column {
+  /** column name */
+  BrowserOrDeviceId = 'browser_or_device_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  CustomerId = 'customer_id',
+  /** column name */
+  FirebaseTokenId = 'firebase_token_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IpAddress = 'ip_address',
+  /** column name */
+  ReferrerCode = 'referrer_code',
+  /** column name */
+  ReferrerSource = 'referrer_source',
+  /** column name */
+  Revoked = 'revoked',
+  /** column name */
+  Token = 'token',
+  /** column name */
+  Url = 'url',
+  /** column name */
+  UserAgentId = 'user_agent_id'
+}
+
+/** input type for updating data in table "sessions" */
+export type Sessions_Set_Input = {
+  browser_or_device_id: Maybe<Scalars['uuid']>;
+  created_at: Maybe<Scalars['timestamptz']>;
+  customer_id: Maybe<Scalars['uuid']>;
+  firebase_token_id: Maybe<Scalars['uuid']>;
+  id: Maybe<Scalars['uuid']>;
+  ip_address: Maybe<Scalars['inet']>;
+  referrer_code: Maybe<Scalars['String']>;
+  referrer_source: Maybe<Scalars['String']>;
+  revoked: Maybe<Scalars['Boolean']>;
+  token: Maybe<Scalars['String']>;
+  url: Maybe<Scalars['String']>;
+  user_agent_id: Maybe<Scalars['uuid']>;
+};
+
+/** update columns of table "sessions" */
+export enum Sessions_Update_Column {
+  /** column name */
+  BrowserOrDeviceId = 'browser_or_device_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  CustomerId = 'customer_id',
+  /** column name */
+  FirebaseTokenId = 'firebase_token_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IpAddress = 'ip_address',
+  /** column name */
+  ReferrerCode = 'referrer_code',
+  /** column name */
+  ReferrerSource = 'referrer_source',
+  /** column name */
+  Revoked = 'revoked',
+  /** column name */
+  Token = 'token',
+  /** column name */
+  Url = 'url',
+  /** column name */
+  UserAgentId = 'user_agent_id'
+}
+
 export type Subscription_Root = {
   __typename?: 'subscription_root';
   /** fetch data from the table: "customers" */
@@ -1930,18 +1911,12 @@ export type Subscription_Root = {
   customers_aggregate: Customers_Aggregate;
   /** fetch data from the table: "customers" using primary key columns */
   customers_by_pk: Maybe<Customers>;
-  /** An array relationship */
+  /** fetch data from the table: "firebase_tokens" */
   firebase_tokens: Array<Firebase_Tokens>;
-  /** An aggregate relationship */
+  /** fetch aggregated fields from the table: "firebase_tokens" */
   firebase_tokens_aggregate: Firebase_Tokens_Aggregate;
   /** fetch data from the table: "firebase_tokens" using primary key columns */
   firebase_tokens_by_pk: Maybe<Firebase_Tokens>;
-  /** An array relationship */
-  logins: Array<Logins>;
-  /** An aggregate relationship */
-  logins_aggregate: Logins_Aggregate;
-  /** fetch data from the table: "logins" using primary key columns */
-  logins_by_pk: Maybe<Logins>;
   /** fetch data from the table: "membership_levels" */
   membership_levels: Array<Membership_Levels>;
   /** fetch aggregated fields from the table: "membership_levels" */
@@ -1954,12 +1929,18 @@ export type Subscription_Root = {
   memberships_aggregate: Memberships_Aggregate;
   /** fetch data from the table: "memberships" using primary key columns */
   memberships_by_pk: Maybe<Memberships>;
-  /** fetch data from the table: "personas" */
+  /** An array relationship */
   personas: Array<Personas>;
   /** An aggregate relationship */
   personas_aggregate: Personas_Aggregate;
   /** fetch data from the table: "personas" using primary key columns */
   personas_by_pk: Maybe<Personas>;
+  /** fetch data from the table: "sessions" */
+  sessions: Array<Sessions>;
+  /** An aggregate relationship */
+  sessions_aggregate: Sessions_Aggregate;
+  /** fetch data from the table: "sessions" using primary key columns */
+  sessions_by_pk: Maybe<Sessions>;
   /** fetch data from the table: "user_agents" */
   user_agents: Array<User_Agents>;
   /** fetch aggregated fields from the table: "user_agents" */
@@ -2011,29 +1992,6 @@ export type Subscription_RootFirebase_Tokens_AggregateArgs = {
 
 
 export type Subscription_RootFirebase_Tokens_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Subscription_RootLoginsArgs = {
-  distinct_on: Maybe<Array<Logins_Select_Column>>;
-  limit: Maybe<Scalars['Int']>;
-  offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Logins_Order_By>>;
-  where: Maybe<Logins_Bool_Exp>;
-};
-
-
-export type Subscription_RootLogins_AggregateArgs = {
-  distinct_on: Maybe<Array<Logins_Select_Column>>;
-  limit: Maybe<Scalars['Int']>;
-  offset: Maybe<Scalars['Int']>;
-  order_by: Maybe<Array<Logins_Order_By>>;
-  where: Maybe<Logins_Bool_Exp>;
-};
-
-
-export type Subscription_RootLogins_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -2107,6 +2065,29 @@ export type Subscription_RootPersonas_By_PkArgs = {
 };
 
 
+export type Subscription_RootSessionsArgs = {
+  distinct_on: Maybe<Array<Sessions_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Sessions_Order_By>>;
+  where: Maybe<Sessions_Bool_Exp>;
+};
+
+
+export type Subscription_RootSessions_AggregateArgs = {
+  distinct_on: Maybe<Array<Sessions_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Sessions_Order_By>>;
+  where: Maybe<Sessions_Bool_Exp>;
+};
+
+
+export type Subscription_RootSessions_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootUser_AgentsArgs = {
   distinct_on: Maybe<Array<User_Agents_Select_Column>>;
   limit: Maybe<Scalars['Int']>;
@@ -2161,6 +2142,7 @@ export type Timestamptz_Comparison_Exp = {
 export type User_Agents = {
   __typename?: 'user_agents';
   id: Scalars['uuid'];
+  last_logged_in_at: Scalars['timestamptz'];
   user_agent: Scalars['String'];
 };
 
@@ -2192,6 +2174,7 @@ export type User_Agents_Bool_Exp = {
   _not: Maybe<User_Agents_Bool_Exp>;
   _or: Maybe<Array<User_Agents_Bool_Exp>>;
   id: Maybe<Uuid_Comparison_Exp>;
+  last_logged_in_at: Maybe<Timestamptz_Comparison_Exp>;
   user_agent: Maybe<String_Comparison_Exp>;
 };
 
@@ -2206,6 +2189,7 @@ export enum User_Agents_Constraint {
 /** input type for inserting data into table "user_agents" */
 export type User_Agents_Insert_Input = {
   id: Maybe<Scalars['uuid']>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
   user_agent: Maybe<Scalars['String']>;
 };
 
@@ -2213,6 +2197,7 @@ export type User_Agents_Insert_Input = {
 export type User_Agents_Max_Fields = {
   __typename?: 'user_agents_max_fields';
   id: Maybe<Scalars['uuid']>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
   user_agent: Maybe<Scalars['String']>;
 };
 
@@ -2220,6 +2205,7 @@ export type User_Agents_Max_Fields = {
 export type User_Agents_Min_Fields = {
   __typename?: 'user_agents_min_fields';
   id: Maybe<Scalars['uuid']>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
   user_agent: Maybe<Scalars['String']>;
 };
 
@@ -2249,6 +2235,7 @@ export type User_Agents_On_Conflict = {
 /** Ordering options when selecting data from "user_agents". */
 export type User_Agents_Order_By = {
   id: Maybe<Order_By>;
+  last_logged_in_at: Maybe<Order_By>;
   user_agent: Maybe<Order_By>;
 };
 
@@ -2262,12 +2249,15 @@ export enum User_Agents_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  LastLoggedInAt = 'last_logged_in_at',
+  /** column name */
   UserAgent = 'user_agent'
 }
 
 /** input type for updating data in table "user_agents" */
 export type User_Agents_Set_Input = {
   id: Maybe<Scalars['uuid']>;
+  last_logged_in_at: Maybe<Scalars['timestamptz']>;
   user_agent: Maybe<Scalars['String']>;
 };
 
@@ -2275,6 +2265,8 @@ export type User_Agents_Set_Input = {
 export enum User_Agents_Update_Column {
   /** column name */
   Id = 'id',
+  /** column name */
+  LastLoggedInAt = 'last_logged_in_at',
   /** column name */
   UserAgent = 'user_agent'
 }
@@ -2293,14 +2285,14 @@ export type Uuid_Comparison_Exp = {
   _nin: Maybe<Array<Scalars['uuid']>>;
 };
 
-export type CustomerLoginMutationVariables = Exact<{ [key: string]: never; }>;
+export type LoginMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CustomerLoginMutation = (
+export type LoginMutation = (
   { __typename?: 'mutation_root' }
   & { login: Maybe<(
     { __typename?: 'LoginOutput' }
-    & Pick<LoginOutput, 'id'>
+    & Pick<LoginOutput, 'session_token'>
     & { customer: (
       { __typename?: 'customers' }
       & CustomerDetailsFragment
@@ -2334,5 +2326,5 @@ export type CustomerDetailsFragment = (
 );
 
 export const CustomerDetailsFragmentDoc: DocumentNode<CustomerDetailsFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"customerDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"customers"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contact_name"}},{"kind":"Field","name":{"kind":"Name","value":"membership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"active_until"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"lifetime"}},{"kind":"Field","name":{"kind":"Name","value":"sabbatical_available_until"}}]}},{"kind":"Field","name":{"kind":"Name","value":"personas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"list_address_with_byline"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"photo_url"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_broadcast_time"}}]}},{"kind":"Field","name":{"kind":"Name","value":"unverified_email"}},{"kind":"Field","name":{"kind":"Name","value":"verified_email"}}]}}]};
-export const CustomerLoginDocument: DocumentNode<CustomerLoginMutation, CustomerLoginMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CustomerLogin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"customerDetails"}}]}}]}}]}},...CustomerDetailsFragmentDoc.definitions]};
+export const LoginDocument: DocumentNode<LoginMutation, LoginMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"session_token"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"customerDetails"}}]}}]}}]}},...CustomerDetailsFragmentDoc.definitions]};
 export const CustomerDetailsDocument: DocumentNode<CustomerDetailsQuery, CustomerDetailsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CustomerDetails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"customer"},"name":{"kind":"Name","value":"customers_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"customerDetails"}}]}}]}},...CustomerDetailsFragmentDoc.definitions]};

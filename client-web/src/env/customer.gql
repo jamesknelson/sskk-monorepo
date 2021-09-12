@@ -1,6 +1,6 @@
-mutation CustomerLogin {
+mutation Login {
   login {
-    id
+    session_token
     customer {
       ...customerDetails
     }

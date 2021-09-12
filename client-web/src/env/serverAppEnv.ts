@@ -15,7 +15,13 @@ export function createServerAppEnv(
   response: Response,
 ): AppEnv {
   const cache = new InMemoryCache()
-  const httpLink = new HttpLink({ fetch, uri: graphqlURL })
+  const httpLink = new HttpLink({
+    fetch,
+    uri: graphqlURL,
+    headers: {
+      'x-sskk-ssr': process.env.SSR_SECRET,
+    },
+  })
   const client = new ApolloClient({
     uri: graphqlURL,
     cache,

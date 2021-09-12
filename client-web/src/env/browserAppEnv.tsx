@@ -6,7 +6,7 @@ import { createMemo } from 'retil-support'
 import { AppEnv } from './appEnv'
 import { AuthUser, getAuthService } from './auth'
 import { getBrowserDataEnvSource } from './browserDataEnv'
-import { getCustomerDetailsSource } from './customerDetails'
+import { getCustomerDetailsService } from './customerDetails'
 
 const authMemo = createMemo()
 const defaultLayoutOptions = {}
@@ -56,13 +56,13 @@ export function createBrowserAppEnvSource(dataCache: any) {
               }),
               [auth.user, customerId],
             )
-      const customerSource =
+      const customerService =
         authUser &&
-        getCustomerDetailsSource(hydrationEnv, dataEnv.client, customerId)
+        getCustomerDetailsService(hydrationEnv, dataEnv.client, customerId)
 
       Object.assign(env, {
         authUser: authUser,
-        customer: customerSource && use(customerSource),
+        customer: customerService && use(customerService[0]),
       })
     }
 

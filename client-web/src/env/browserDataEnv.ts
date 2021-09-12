@@ -70,7 +70,7 @@ export function getBrowserDataEnvSource(
 
   const cache = new InMemoryCache().restore(serializedData)
 
-  const httpLink = new HttpLink({ uri: graphqlURL })
+  const httpLink = new HttpLink({ uri: graphqlURL, credentials: 'include' })
   const authMiddleware = setContext(async (_, previousContext) => {
     const role = previousContext.role
     const headers = { ...previousContext.headers } as Record<string, string>
@@ -82,12 +82,6 @@ export function getBrowserDataEnvSource(
       if (customerId) {
         headers['Authorization'] = `Bearer ${tokenInfo!.token}`
         headers['X-Hasura-Role'] = role || roles.customer
-
-        // WARNING: in production this header will be set by hasura based on
-        // the signed token's claims. However, in development mode, Hasura
-        // requires us to set it manually.
-        headers['X-Hasura-Auth-Time'] = tokenInfo?.authTime!
-        headers['X-Hasura-Customer-Id'] = customerId
       }
     }
     if (!headers['X-Hasura-Role']) {

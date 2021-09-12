@@ -3,36 +3,55 @@ import { Source, createState, fromPromise } from 'retil-source'
 import { createMemo } from 'retil-support'
 
 import * as roles from 'src/constants/roles'
-import {
-  CustomerLoginDocument,
-  CustomerDetailsFragment,
-} from 'src/generated/graphql'
+import { LoginDocument, CustomerDetailsFragment } from 'src/generated/graphql'
 
 import type { AppApolloClient } from './appEnv'
 
 export type CustomerDetails = CustomerDetailsFragment
 export type CustomerDetailsSource = Source<CustomerDetails | null | undefined>
+export interface CustomerDetailsHandle {
+  getSessionToken(): string | null
+}
+export type CustomerDetailsService = readonly [
+  CustomerDetailsSource,
+  CustomerDetailsHandle,
+]
 
-const sourceMemo = createMemo<CustomerDetailsSource>()
+const serviceMemo = createMemo<CustomerDetailsService>()
+const nullService: CustomerDetailsService = [
+  createState(undefined)[0],
+  {
+    getSessionToken: () => null,
+  },
+]
 
-export function getCustomerDetailsSource(
+export function getCustomerDetailsService(
   request: HydrationEnv,
   client: AppApolloClient,
   customerId: string | null,
-): CustomerDetailsSource {
+): CustomerDetailsService {
   if (request.hydrating !== false) {
-    return createState(undefined)[0]
+    return nullService
   } else {
-    return sourceMemo(() => {
+    return serviceMemo(() => {
+      let sessionToken: null | string = null
       const profilePromise = client
         .mutate({
-          mutation: CustomerLoginDocument,
+          mutation: LoginDocument,
           context: {
             role: roles.customer,
           },
         })
-        .then(({ data }) => data?.login?.customer || null)
-      return fromPromise(profilePromise)
+        .then(({ data }) => {
+          sessionToken = data?.login?.session_token || null
+          return data?.login?.customer || null
+        })
+      return [
+        fromPromise(profilePromise),
+        {
+          getSessionToken: () => sessionToken,
+        },
+      ]
     }, [client, customerId])
   }
 }

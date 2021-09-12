@@ -1,0 +1,14 @@
+drop table "disposals";
+drop table "disposal_reasons";
+drop table "flags";
+drop table "flag_types";
+drop table "signatures";
+drop table "approval_allowed_prior_signatures";
+drop table "approvals";
+drop table "broadcast_slots";
+drop table "contributors";
+drop table "drafts";
+drop table "recipients";
+drop table "links";
+drop table "sent_letters";
+drop table "letters";

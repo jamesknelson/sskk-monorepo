@@ -31,6 +31,8 @@ services:
     healthCheckPath: /
     envVars:
       - fromGroup: vite-vars
+      - key: SSR_SECRET
+        generateValue: true
   # Actions service, for hasura
   - type: pserv
     name: sskk-service-actions
@@ -42,6 +44,9 @@ services:
       cd service-actions && yarn install --frozen-lockfile && yarn build
     startCommand: cd service-actions && yarn start
     envVars:
+      - fromGroup: firebase-secrets
+      - key: PORT
+        value: 10000
       - key: ACTION_SECRET
         fromService:
           name: sskk-service-hasura
@@ -49,6 +54,11 @@ services:
           envVarKey: ACTION_SECRET
       - key: COOKIE_SIGNING_SECRET
         generateValue: true
+      - key: SSR_SECRET
+        fromService:
+          name: sskk-client-web-renderer
+          type: web
+          envVarKey: SSR_SECRET
       - key: HASURA_GRAPHQL_PROTOCOL
         value: https
       - key: HASURA_GRAPHQL_HOST_AND_PORT
@@ -73,13 +83,11 @@ services:
     envVars:
       - key: PORT
         value: 8080
-      - key: HASURA_GRAPHQL_UNAUTHORIZED_ROLE
-        value: anonymous
-      - key: HASURA_GRAPHQL_METADATA_DATABASE_URL
+      - key: PG_DATABASE_URL
         fromDatabase:
           name: sskk-db-hasura
           property: connectionString
-      - key: PG_DATABASE_URL
+      - key: HASURA_GRAPHQL_METADATA_DATABASE_URL
         fromDatabase:
           name: sskk-db-hasura
           property: connectionString
@@ -90,6 +98,10 @@ services:
       - key: HASURA_GRAPHQL_ADMIN_SECRET
         generateValue: true
         previewValue: "Preview please!"
+      - key: HASURA_GRAPHQL_AUTH_HOOK
+        value: http://sskk-service-actions:10000/authenticate
+      - key: HASURA_GRAPHQL_AUTH_HOOK_MODE
+        value: POST
       - key: ACTION_SECRET
         generateValue: true # will generate a base64-encoded 256-bit secret
       - key: ACTION_BASE_PROTOCOL
@@ -99,16 +111,6 @@ services:
           name: sskk-service-actions
           type: pserv
           property: hostport
-      - key: HASURA_GRAPHQL_JWT_SECRET
-        value:
-          '{ "type":"RS256",
-          "jwk_url":"https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com",
-          "audience":"sskk-dev",
-          "issuer":"https://securetoken.google.com/sskk-dev", "claims_map":{
-          "x-hasura-allowed-roles":["anonymous","customer"],
-          "x-hasura-default-role":"customer",
-          "x-hasura-auth-time":{"path":"$.auth_time"},
-          "x-hasura-customer-id":{"path":"$.customer_id"} } }'
 
 databases:
   - name: sskk-db-hasura
@@ -116,6 +118,12 @@ databases:
     ipAllowList: [] # only allow internal connections
 
 envVarGroups:
+  - name: hasura-auth
+
+  - name: firebase-secrets
+    envVars:
+      - key: FIREBASE_SERVICE_ACCOUNT
+        sync: false # placeholder for a value to be added in the dashboard
   - name: vite-vars
     envVars:
       - key: VITE_GRAPHQL_HOST_AND_PORT

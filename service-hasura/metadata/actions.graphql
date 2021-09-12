@@ -1,20 +1,8 @@
 type Mutation {
-  login(
-    referrer_code: String
-    referrer_source: String
-  ): LoginOutput
-}
-
-input LoginInput {
-  agent_token: String!
-  languages: [String!]!
-  referrer_code: String
-  referrer_source: String
+  login: LoginOutput
 }
 
 type LoginOutput {
-  id: uuid!
-  created_at: timestamptz!
   customer_id: uuid
+  session_token: String!
 }
-

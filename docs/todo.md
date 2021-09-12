@@ -21,10 +21,13 @@ o get logout dropdown working
   o ensure "audience" is set in "dev" auth configuration
   o FIGURE OUT WHY migration doesn't seem to be working on the render hasura
     service. it says migration has occurred, but it appears nothing has changed.
+  o ensure cookie stays identical between logins
   * get login screen working on dev
-  * ensure X-Forwarded-For works as expected, and ip address appears in logins:
+  * ensure ip address appears in logins:
     https://github.com/hasura/graphql-engine/issues/4770
-  * ensure cookie stays identical between logins
+
+- capture the session token returned from the login action and store it, passing
+  it to all future requests for that user.
 
 - fix login form issues types (remove the "as any")
 
