@@ -99,13 +99,13 @@ services:
         generateValue: true
         previewValue: "Preview please!"
       - key: HASURA_GRAPHQL_AUTH_HOOK
-        value: https://sskk-service-actions:10000/authenticate
+        value: http://sskk-service-actions:10000/authenticate
       - key: HASURA_GRAPHQL_AUTH_HOOK_MODE
         value: POST
       - key: ACTION_SECRET
         generateValue: true # will generate a base64-encoded 256-bit secret
       - key: ACTION_BASE_PROTOCOL
-        value: https
+        value: http
       - key: ACTION_BASE_HOST_AND_PORT
         fromService:
           name: sskk-service-actions
