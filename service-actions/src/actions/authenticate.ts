@@ -55,6 +55,8 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
       ? signedCookies(parse(cookieHeader), cookieSigningSecret)
       : {}
 
+    console.log('forwarded for', forwardedForHeader)
+
     const hasSSRSecret = ssrSecretHeader === ssrSecret
     if (hasSSRSecret) {
       // With the SSR secret, we'll provide anonymous priveleges without any
@@ -78,6 +80,8 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
       }
     const availableRoles: Role[] = ['anonymous']
 
+    console.log('start verify token')
+
     let firebaseToken: { auth_time: string; customer_id: string } | null = null
     if (bearerToken) {
       let decodedToken: admin.auth.DecodedIdToken | undefined
@@ -100,18 +104,26 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
       }
     }
 
+    console.log('finish verify token')
+
     if (operationName === loginOperationName) {
       if (!userAgentHeader || !firebaseToken) {
         return res.sendStatus(400)
       }
+
+      console.log('start lookup', hostHeader && hostHeader.split(':')[0])
 
       const tokenBufferPromise = randomBytes(48)
       const ipAddress = forwardedForHeader
         ? forwardedForHeader.split(',')[0]
         : hostHeader && (await lookup(hostHeader.split(':')[0])).address
 
+      console.log('finish lookup', ipAddress)
+
       const tokenBuffer = await tokenBufferPromise
       const token = tokenBuffer.toString('hex')
+
+      console.log('created token', ipAddress)
 
       const loginVariables = {
         browser_or_device_id: browserOrDeviceId,
@@ -122,6 +134,8 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
         user_agent: userAgentHeader,
         url: refererHeader,
       }
+
+      console.log('start insert session')
 
       let result: InsertSessionAsCustomerMutation
       try {
@@ -139,6 +153,9 @@ const authenticateHandler: RequestHandler = async (req, res, next) => {
         // revoked firebase token.
         return res.sendStatus(401)
       }
+
+      console.log('finish insert session')
+
       if (!result.insert_sessions_one) {
         return res.sendStatus(500)
       }

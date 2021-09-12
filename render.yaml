@@ -99,7 +99,7 @@ services:
         generateValue: true
         previewValue: "Preview please!"
       - key: HASURA_GRAPHQL_AUTH_HOOK
-        value: http://sskk-service-actions:10000/authenticate
+        value: https://sskk-service-actions:10000/authenticate
       - key: HASURA_GRAPHQL_AUTH_HOOK_MODE
         value: POST
       - key: ACTION_SECRET
