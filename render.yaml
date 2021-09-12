@@ -60,7 +60,7 @@ services:
           type: web
           envVarKey: SSR_SECRET
       - key: HASURA_GRAPHQL_PROTOCOL
-        value: https
+        value: http
       - key: HASURA_GRAPHQL_HOST_AND_PORT
         fromService:
           type: web

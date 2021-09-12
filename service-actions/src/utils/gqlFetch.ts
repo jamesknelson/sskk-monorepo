@@ -21,5 +21,6 @@ export function gqlFetch<TData = any, TVariables = Record<string, any>>(
   operation: DocumentNode,
   variables?: TVariables,
 ): Promise<NonNullable<GqlFetchResult<TData>['data']>> {
+  console.log('fetching', hasuraGraphQLEndpoint, hasuraAdminSecret)
   return client.request(operation, variables)
 }
