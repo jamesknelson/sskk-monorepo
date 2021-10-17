@@ -66,13 +66,13 @@ export function openPrompt(options: PromptOptions) {
   })
 
   form.addEventListener('keydown', (e) => {
-    if (e.keyCode == 27) {
+    if (e.keyCode === 27) {
       e.preventDefault()
       close()
-    } else if (e.keyCode == 13 && !(e.ctrlKey || e.metaKey || e.shiftKey)) {
+    } else if (e.keyCode === 13 && !(e.ctrlKey || e.metaKey || e.shiftKey)) {
       e.preventDefault()
       submit()
-    } else if (e.keyCode == 9) {
+    } else if (e.keyCode === 9) {
       window.setTimeout(() => {
         if (!wrapper.contains(document.activeElement)) close()
       }, 500)
@@ -207,7 +207,7 @@ export class SelectField extends Field<SelectFieldOptions> {
     this.options.options.forEach((o) => {
       let opt = select.appendChild(document.createElement('option'))
       opt.value = o.value
-      opt.selected = o.value == this.options.value
+      opt.selected = o.value === this.options.value
       opt.label = o.label
     })
     return select

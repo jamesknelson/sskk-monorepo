@@ -6,7 +6,7 @@ import type { ReactElement } from 'react'
 import { createServerNavEnv } from 'retil-nav'
 
 import { graphqlURL } from 'src/config'
-import { PrecachedQuery } from 'src/utils/precachedQuery'
+import { QueryContext, PrecachedQuery } from 'src/utils/precachedQuery'
 
 import { AppEnv } from './appEnv'
 
@@ -31,14 +31,12 @@ export function createServerAppEnv(
   const precacheQuery = async <Result = any, Variables extends object = object>(
     document: DocumentNode<Result, Variables>,
     defaultVariables: Variables = {} as Variables,
-    role?: string,
+    context: QueryContext = {},
   ): Promise<PrecachedQuery<Result, Variables>> => {
     const result = await client.query({
       query: document,
       variables: defaultVariables,
-      context: {
-        role,
-      },
+      context,
     })
 
     if (result.errors) {
@@ -49,7 +47,7 @@ export function createServerAppEnv(
       client,
       document,
       data: result.data,
-      role,
+      context,
       variables: defaultVariables!,
     }
   }
@@ -62,7 +60,7 @@ export function createServerAppEnv(
     customer: undefined,
     hasHydrated: false,
     head: [] as ReactElement[],
-    layoutOptions: {},
+    mutablePersistedContext: {},
     precacheQuery,
   }
 

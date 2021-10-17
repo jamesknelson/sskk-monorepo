@@ -1,34 +1,52 @@
-import { Placement } from 'popper.js'
-import { useMediaSelector } from 'retil-media'
-import Tippy, { TippyProps } from '@tippy.js/react'
+import { useCallback, useRef } from 'react'
+import { media, useMediaSelector } from 'retil-media'
+import { Placement } from '@popperjs/core'
+import Tippy from '@tippyjs/react/headless'
 
-import { mediaSelectors } from 'src/theme'
+import { TooltipBody } from 'src/presentation/tooltipBody'
+import { TransitionHandle } from 'src/utils/transitionHandle'
 
-export interface TooltipProps extends Omit<TippyProps, 'content'> {
-  content?: TippyProps['content']
+export type { Placement }
+
+export interface TooltipProps {
+  children: React.ReactElement
+  label: React.ReactElement | string
+  placement?: Placement
 }
-
-export type TooltipPlacement = Placement
 
 export function Tooltip({
   children,
+  label,
   placement = 'top',
-  content,
-  enabled,
   ...rest
 }: TooltipProps) {
-  let isPhone = useMediaSelector(mediaSelectors.phoneOnly)
-  if (isPhone) {
+  const transitionHandleRef = useRef<TransitionHandle>(null)
+  const onMount = useCallback(() => {
+    transitionHandleRef.current?.show()
+  }, [])
+  const onHide = useCallback(({ unmount }) => {
+    transitionHandleRef.current?.hide().finally(unmount)
+  }, [])
+
+  let isPhoneOrSSR = useMediaSelector(media.small) ?? true
+  if (isPhoneOrSSR) {
     return children
   } else {
     return (
       <Tippy
+        animation
         placement={placement}
         touch={false}
-        arrow={true}
-        // arrowType="round"
-        content={content || <></>}
-        enabled={enabled === undefined ? !!content : enabled}
+        render={(attrs) => (
+          <TooltipBody
+            placement={attrs['data-placement']}
+            referenceHidden={attrs['data-reference-hidden'] === 'true'}
+            transitionHandleRef={transitionHandleRef}>
+            {label}
+          </TooltipBody>
+        )}
+        onMount={onMount}
+        onHide={onHide}
         {...rest}>
         {children}
       </Tippy>

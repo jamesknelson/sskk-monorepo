@@ -2,10 +2,10 @@ import { EditorState, Transaction } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
 import { ButtonSurface, inHoveredSurface } from 'retil-interaction'
 
-import { FormatBold } from 'src/constants/glyphs'
+import { FormatBold } from 'src/assets/glyphs'
 import { createToggleMarkCommand } from 'src/prose/commands/toggleMarkCommand'
 import { MARK_STRONG } from 'src/prose/markNames'
-import { IconButtonBody } from '../buttons'
+import { IconButtonBody } from 'src/presentation/iconButtonBody'
 
 const toggleStrongCommand = createToggleMarkCommand(MARK_STRONG)
 

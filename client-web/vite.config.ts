@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import reactEmotion from './vite/reactEmotion'
+import svgPlugin from './vite/reactSVG'
 
 const projectRootDir = resolve(__dirname)
 
@@ -25,6 +26,14 @@ export default defineConfig(({ mode }) => ({
     tsconfigPaths({
       root: projectRootDir,
       projects: ['.'],
+    }),
+    svgPlugin({
+      defaultExport: 'component',
+      expandProps: 'end',
+      memo: true,
+      ref: true,
+      svgo: mode === 'production',
+      titleProp: true,
     }),
     reactEmotion(),
   ],

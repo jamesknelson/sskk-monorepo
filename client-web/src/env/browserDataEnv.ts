@@ -3,34 +3,30 @@ import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import { getDefaultHydrationEnvService } from 'retil-hydration'
-import { Source, constant, getSnapshot } from 'retil-source'
+import { Source, createState, getSnapshot, fuse } from 'retil-source'
 
 import { graphqlURL } from 'src/config'
 import * as roles from 'src/constants/roles'
-import { Role } from 'src/constants/roles'
-import { PrecachedQuery } from 'src/utils/precachedQuery'
+import { QueryContext, PrecachedQuery } from 'src/utils/precachedQuery'
 
 import { DataEnv } from './appEnv'
-import { AuthController, AuthSnapshot } from './auth'
+import { AuthTokenInfoGetter } from './auth'
 
-const clientStateRef: { current?: Source<DataEnv> } = {}
+export type SessionTokenSetter = (sessionToken: string | null) => void
 
-export function getBrowserDataEnvSource(
-  _authSnapshot?: AuthSnapshot | null,
-  authController?: AuthController | null,
+export function createBrowserDataEnvService(
+  getTokenInfo?: AuthTokenInfoGetter,
   serializedData?: any,
-): Source<DataEnv> {
-  // TODO: if currentUser has an id and changes, then create a new cache.
-  if (clientStateRef.current) {
-    return clientStateRef.current
-  }
-
+  initialSessionToken?: string | null,
+): readonly [Source<DataEnv>, SessionTokenSetter] {
   let client: ApolloClient<any>
+
+  const [sessionTokenSource, setSessionToken] = createState(initialSessionToken)
 
   const precacheQuery = async <Result = any, Variables extends object = object>(
     document: DocumentNode<Result, Variables>,
     defaultVariables: Variables = {} as Variables,
-    role?: Role,
+    context: QueryContext = {},
   ): Promise<PrecachedQuery<Result, Variables>> => {
     const cachedData = client.readQuery({
       query: document,
@@ -38,7 +34,7 @@ export function getBrowserDataEnvSource(
     })
 
     const [hydrationEnvSource] = getDefaultHydrationEnvService()
-    const hasHydrated = getSnapshot(hydrationEnvSource)[1].hydrating === false
+    const hasHydrated = getSnapshot(hydrationEnvSource).hydrating === false
     const shouldFetch = cachedData === null || hasHydrated
 
     let data = cachedData
@@ -46,9 +42,7 @@ export function getBrowserDataEnvSource(
       const result = await client.query({
         query: document,
         variables: defaultVariables,
-        context: {
-          role,
-        },
+        context,
         fetchPolicy: 'network-only',
       })
 
@@ -62,26 +56,34 @@ export function getBrowserDataEnvSource(
     return {
       client,
       document,
-      role,
+      context,
       variables: defaultVariables!,
       data: data!,
     }
   }
 
   const cache = new InMemoryCache().restore(serializedData)
-
   const httpLink = new HttpLink({ uri: graphqlURL, credentials: 'include' })
+
   const authMiddleware = setContext(async (_, previousContext) => {
     const role = previousContext.role
     const headers = { ...previousContext.headers } as Record<string, string>
 
-    if (authController && role && role !== 'anonymous') {
-      const tokenInfo = await authController.getTokenInfo()
+    if (role && role !== 'anonymous') {
+      if (!getTokenInfo) {
+        throw new Error('Forbidden as unauthenticated')
+      }
+
+      const tokenInfo = await getTokenInfo()
       const customerId = tokenInfo?.['claims']?.customer_id
+      const sessionToken = getSnapshot(sessionTokenSource)
 
       if (customerId) {
         headers['Authorization'] = `Bearer ${tokenInfo!.token}`
         headers['X-Hasura-Role'] = role || roles.customer
+      }
+      if (sessionToken) {
+        headers['X-SSKK-Session'] = sessionToken
       }
     }
     if (!headers['X-Hasura-Role']) {
@@ -107,7 +109,14 @@ export function getBrowserDataEnvSource(
     link: from([errorLink, authMiddleware, httpLink]),
   })
 
-  clientStateRef.current = constant({ client, precacheQuery })
+  const source = fuse((use) => {
+    const sessionId = use(sessionTokenSource)
+    return {
+      client,
+      precacheQuery,
+      sessionId,
+    }
+  })
 
-  return clientStateRef.current
+  return [source, setSessionToken] as const
 }

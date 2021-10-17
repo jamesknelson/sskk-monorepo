@@ -2,25 +2,17 @@
 /// <reference types="vite/client" />
 
 import createStyleCache from '@emotion/cache'
-import {
-  CacheProvider as StyleCacheProvider,
-  ThemeContext,
-  css,
-} from '@emotion/react'
 import createEmotionServer from '@emotion/server/create-instance'
 import type { Request, Response } from 'express'
-import { cloneElement } from 'react'
 import { renderToString } from 'react-dom/server'
-import { Helmet, HelmetData, HelmetProvider } from 'react-helmet-async'
-import { Mount, ServerMount } from 'retil-mount'
+import { ServerMount } from 'retil-mount'
 import { createHref } from 'retil-nav'
-import { CSSProvider } from 'retil-css'
 
-import { App } from './components/app'
-import { retilDataCacheName } from './constants/htmlGeneration'
+import { App } from './app'
+import { appPageSerializedDataGlobal } from './constants/htmlGeneration'
 import { createServerAppEnv } from './env/serverAppEnv'
+import { HeadContext, renderHeadContextToString } from './head'
 import appLoader from './pages/appLoader'
-import { AppGlobalStyles } from './styles/appGlobalStyles'
 
 export async function render(
   request: Omit<Request, 'params' | 'query'>,
@@ -48,47 +40,30 @@ export async function render(
     ) {
       return null
     } else {
+      const cache = env.cache?.extract()
+      const dataHTML = cache
+        ? `<script>window.${appPageSerializedDataGlobal} = ${JSON.stringify({
+            cache,
+            context: env.mutablePersistedContext,
+          })}</script>`
+        : ''
+      const headContext = {} as HeadContext
       const { html: appHTML, styles: appStyles } = extractCriticalToChunks(
         renderToString(
           mount.provide(
-            <StyleCacheProvider value={styleCache}>
-              <CSSProvider runtime={css} themeContext={ThemeContext}>
-                <AppGlobalStyles />
-                <Mount loader={appLoader} env={env}>
-                  <App />
-                </Mount>
-              </CSSProvider>
-            </StyleCacheProvider>,
+            <App
+              env={env}
+              headContext={headContext}
+              loader={mount.loader}
+              styleCache={styleCache}
+            />,
           ),
         ),
       )
-
-      // Render the head separately, as once it is done, as this makes it
-      // possible to stream the rest of the content.
-      const helmetContext = {} as { helmet: HelmetData }
-      renderToString(
-        <HelmetProvider context={helmetContext}>
-          <Helmet>
-            <title>The Daily Paragraph</title>
-            {env.head.map((item, i) => cloneElement(item, { key: i }))}
-          </Helmet>
-        </HelmetProvider>,
-      )
-
-      const cache = env.cache?.extract()
-      const dataHTML = cache
-        ? `<script>window.${retilDataCacheName} = ${JSON.stringify(
-            cache,
-          )}</script>`
-        : ''
-
-      const headHTML = `
-        ${helmetContext.helmet.title.toString()}
-        ${helmetContext.helmet.meta.toString()}
-        ${helmetContext.helmet.script.toString()}
-        ${helmetContext.helmet.style.toString()}
-        ${constructStyleTagsFromChunks({ html: appHTML, styles: appStyles })}
-      `
+      const headHTML = [
+        renderHeadContextToString(headContext),
+        constructStyleTagsFromChunks({ html: appHTML, styles: appStyles }),
+      ].join('\n')
 
       return {
         headHTML,

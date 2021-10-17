@@ -4,7 +4,6 @@ import { css } from '@emotion/react'
 // import { LetterCard } from 'src/components/letter'
 // import { createStateFromContentObject } from 'src/prose/contentObject'
 // import { ProfileByHandleQuery } from 'src/generated/graphql'
-import { dimensions, media } from 'src/theme'
 // import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
 
 export interface Props {
@@ -25,12 +24,6 @@ export function Page(_props: Props) {
           line-height: 2.5rem;
           text-align: center;
           margin: 3.5rem 1rem 2.5rem;
-
-          ${media.phoneOnly`
-              font-size: 2rem;
-              line-height: 2rem;
-              margin: 3rem 1rem 2rem;
-            `}
         `}>
         {/* {profile.display_name} */}
       </h1>
@@ -39,7 +32,6 @@ export function Page(_props: Props) {
           display: flex;
           flex-direction: column;
           align-items: center;
-          max-width: ${dimensions.largeCardWidth};
           width: calc(100% - 1rem);
           margin: 0 auto;
         `}>

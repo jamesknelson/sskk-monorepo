@@ -4,14 +4,18 @@ import { EditorState } from 'prosemirror-state'
 import React from 'react'
 import { LinkSurface } from 'retil-interaction'
 
-import { Card } from 'src/components/card'
-import { TextContent } from 'src/components/textContent'
+import { TextBlock } from 'src/presentation/blocks'
 import { useAppEnv } from 'src/env'
 import urls from 'src/pages/appURLs'
+import { Card } from 'src/presentation/card'
 import { Schema } from 'src/prose/schema'
-import { colors, media, mediaSelectors } from 'src/theme'
 
 import { LetterContent } from './letterContent'
+import {
+  paletteColors,
+  structureColors,
+  textColors,
+} from 'src/presentation/colors'
 
 export type LetterCardProps = React.ComponentProps<typeof Card> & {
   disableEdit?: boolean
@@ -75,9 +79,6 @@ export function LetterCard(props: LetterCardProps) {
       <header
         css={css`
           padding: 1rem 2rem 0.5rem;
-          ${media.phoneOnly`
-            padding: 0;
-          `}
         `}>
         <div
           css={css`
@@ -85,12 +86,8 @@ export function LetterCard(props: LetterCardProps) {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            border-bottom: 1px solid ${colors.structure.border};
+            border-bottom: 1px solid ${structureColors.border};
             padding-bottom: 0.75rem;
-
-            ${media.phoneOnly`
-              padding: 1rem 1rem 0.75rem;
-            `}
           `}>
           <LinkSurface
             href={urls.profile({ nametag: personaAddress })}
@@ -111,13 +108,18 @@ export function LetterCard(props: LetterCardProps) {
                   margin-right: 0.5rem;
                   margin-bottom: 4px;
                 `}>
-                <img src={personaAvatarURL} width={40} height={40} />
+                <img
+                  alt={personaDisplayName}
+                  src={personaAvatarURL}
+                  width={40}
+                  height={40}
+                />
               </span>
             )}
             <span>
               <span
                 css={css`
-                  color: ${colors.ink.black};
+                  color: ${paletteColors.ink900};
                   font-weight: 700;
                   margin-right: 0.375rem;
                   line-height: 1rem;
@@ -127,7 +129,7 @@ export function LetterCard(props: LetterCardProps) {
               </span>
               <span
                 css={css`
-                  color: ${colors.text.tertiary};
+                  color: ${textColors.tertiary};
                   margin-left: -1px;
                 `}>
                 @{personaAddress}
@@ -136,16 +138,9 @@ export function LetterCard(props: LetterCardProps) {
           </LinkSurface>
           <span
             css={css`
-              ${media.phoneOnly`
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                justify-content: flex-end;
-              `}
-
               &,
               a {
-                color: ${colors.text.tertiary};
+                color: ${textColors.tertiary};
               }
             `}>
             <span>
@@ -163,9 +158,6 @@ export function LetterCard(props: LetterCardProps) {
                       css`
                         padding: 0 0.5rem;
                       `,
-                      mediaSelectors.phoneOnly(css`
-                        display: none;
-                      `),
                     ]}>
                     &middot;
                   </span>
@@ -197,7 +189,7 @@ export function LetterCard(props: LetterCardProps) {
           </span>
         </div>
       </header>
-      <TextContent>{content}</TextContent>
+      <TextBlock>{content}</TextBlock>
       <div
         css={css`
           height: 1rem;

@@ -1,7 +1,7 @@
 import { loadAsync } from 'retil-mount'
 
 import { AppEnv } from 'src/env'
-import { loadWithLayoutOptions } from 'src/env/routing'
+import { loadWithMutablePersistedContext } from 'src/env/routing'
 
 const asyncRouter = loadAsync(async (env: AppEnv) => {
   const pageModulePromise = import('./readPage')
@@ -19,11 +19,11 @@ const asyncRouter = loadAsync(async (env: AppEnv) => {
   return <Page />
 })
 
-const loader = loadWithLayoutOptions(asyncRouter, {
-  scrollingHeader: {
-    from: '0px',
-    to: '64px',
-  },
+const loader = loadWithMutablePersistedContext(asyncRouter, {
+  // scrollingHeader: {
+  //   from: '0px',
+  //   to: '64px',
+  // },
 })
 
 export default loader

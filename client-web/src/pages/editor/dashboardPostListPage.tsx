@@ -4,7 +4,6 @@ import { css } from '@emotion/react'
 // import { LetterCard } from 'src/components/letter'
 // import { DashboardPostListQuery } from 'src/generated/graphql'
 // import { schema } from 'src/prose/schema'
-import { dimensions } from 'src/theme'
 // import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
 
 export interface Props {
@@ -22,7 +21,6 @@ export function Page(_props: Props) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        max-width: ${dimensions.largeCardWidth};
         width: calc(100% - 1rem);
         margin: 0 auto;
       `}>

@@ -10,10 +10,15 @@ import { useMemo } from 'react'
 
 import { Role } from 'src/constants/roles'
 
+export interface QueryContext {
+  role?: Role
+  suspense?: false
+}
+
 export interface PrecachedQuery<Data, Variables extends object = object> {
   client: ApolloClient<any>
   document: DocumentNode<Data, Variables>
-  role?: string
+  context: QueryContext
   variables: Variables
 
   data: Data
@@ -31,7 +36,7 @@ export interface UsePrecachedQueryArgs<Variables extends object = object> {
   variables?: Variables
   requestPolicy?: FetchPolicy
   pollInterval?: number
-  context?: any
+  context?: QueryContext
   pause?: boolean
 }
 
@@ -44,7 +49,7 @@ const emptyQuery = gql`
 export type QueryPrecacher = <Result, Variables extends object>(
   node: DocumentNode<Result, Variables>,
   variables?: Variables,
-  role?: Role,
+  context?: QueryContext,
 ) => Promise<PrecachedQuery<Result, Variables>>
 
 export function usePrecachedQuery<
@@ -55,8 +60,8 @@ export function usePrecachedQuery<
   args: UsePrecachedQueryArgs<Variables> = {},
 ): UsePrecachedQueryResponse<Result, Variables> {
   const context = useMemo(
-    () => ({ role: query?.role, suspense: false }),
-    [query?.role],
+    () => ({ ...args?.context, ...query?.context, suspense: false }),
+    [args?.context, query?.context],
   )
 
   const variables = {

@@ -5,7 +5,6 @@ import { LinkSurface } from 'retil-interaction'
 
 import { renderJSONToReact } from 'src/prose/reactSerializer'
 import { Schema } from 'src/prose/schema'
-import { media } from 'src/theme'
 
 export interface LetterContentProps {
   editorState: EditorState<Schema>
@@ -38,7 +37,4 @@ export function LetterContent(props: LetterContentProps) {
 
 const StyledTitle = styled.h1`
   margin-top: 1.25rem !important;
-  ${media.phoneOnly`
-    margin-top: 2rem !important;
-  `}
 `

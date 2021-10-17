@@ -105,13 +105,13 @@ export function buildKeymap(schema: Schema) {
 function arrowHandler(dir: 'left' | 'right' | 'down' | 'up'): Command<Schema> {
   return (state, dispatch, view) => {
     if (state.selection.empty && view?.endOfTextblock(dir)) {
-      let side = dir == 'left' || dir == 'up' ? -1 : 1,
+      let side = dir === 'left' || dir === 'up' ? -1 : 1,
         $head = state.selection.$head
       let nextPos = Selection.near(
         state.doc.resolve(side > 0 ? $head.after() : $head.before()),
         side,
       )
-      if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
+      if (nextPos.$head && nextPos.$head.parent.type.name === 'code_block') {
         if (dispatch) {
           dispatch(state.tr.setSelection(nextPos))
         }

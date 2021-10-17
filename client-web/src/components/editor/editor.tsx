@@ -9,9 +9,10 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useAppEnv } from 'src/env'
 
-import { CodeBlockView } from 'src/prose/codeBlockView'
 import { Schema } from 'src/prose/schema'
+import { createSuspenseLoader } from 'src/utils/createSuspenseLoader'
 
 export interface EditorHandle {
   root: HTMLDivElement
@@ -27,6 +28,8 @@ export interface EditorProps extends ProsemirrorProps {
     transaction: Transaction,
   ) => EditorState | null
 
+  autoFocus?: boolean
+
   minHeight?: string
 
   state: EditorState
@@ -35,65 +38,84 @@ export interface EditorProps extends ProsemirrorProps {
   style?: CSSProperties
 }
 
+// Load this at run-time, as doing so accesses the `navigator` object, which
+// causes a crash if done during SSR.
+const getCodeBlockView = createSuspenseLoader(
+  async () => (await import('src/prose/codeBlockView')).CodeBlockView,
+)
+
 // Based on: https://github.com/dminkovsky/use-prosemirror/blob/93edf8ae5323e9cbffa03e793b494a28046d490a/src/ProseMirror.tsx
 export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
   props,
   ref,
 ): JSX.Element {
+  const env = useAppEnv()
   const viewRef = useRef<EditorView<Schema> | null>(null)
   const { className, applyTransaction, state, style, ...restProps } = props
   const { current: initialRestProps } = useRef(restProps)
   const applyTransactionRef = useRef(applyTransaction)
   const restPropKeys = Object.keys(restProps)
 
-  const wrapperRef = useCallback((root: HTMLDivElement | null) => {
-    if (root) {
-      const view = new EditorView(root, {
-        ...restProps,
-        state,
-        nodeViews: {
-          code_block: (node, view, getPos) =>
-            new CodeBlockView(node, view, getPos as () => number),
-        },
-        dispatchTransaction: (transaction: Transaction) => {
-          if (applyTransactionRef.current) {
-            const newState = applyTransactionRef.current(
-              view.state,
-              transaction,
-            )
-            if (newState) {
-              view.updateState(newState)
+  // The first time this is called will cause a Suspense promise to be thrown,
+  // so we don't want to call it until hydration has completed.
+  const CodeBlockView = env.hasHydrated && getCodeBlockView()
+
+  const wrapperRef = useCallback(
+    async (root: HTMLDivElement | null) => {
+      if (CodeBlockView && root) {
+        const view = new EditorView(root, {
+          ...restProps,
+          state,
+          nodeViews: {
+            code_block: (node, view, getPos) =>
+              new CodeBlockView(node, view, getPos as () => number),
+          },
+          dispatchTransaction: (transaction: Transaction) => {
+            if (applyTransactionRef.current) {
+              const newState = applyTransactionRef.current(
+                view.state,
+                transaction,
+              )
+              if (newState) {
+                view.updateState(newState)
+              }
             }
-          }
-        },
-      })
-
-      viewRef.current = view
-
-      if (typeof ref === 'function') {
-        ref({
-          root,
-          view,
+          },
         })
-      } else if (ref) {
-        ref.current = {
-          root,
-          view,
+
+        viewRef.current = view
+
+        if (props.autoFocus) {
+          viewRef.current?.focus()
+        }
+
+        if (typeof ref === 'function') {
+          ref({
+            root,
+            view,
+          })
+        } else if (ref) {
+          ref.current = {
+            root,
+            view,
+          }
+        }
+      } else {
+        if (typeof ref === 'function') {
+          ref(null)
+        } else if (ref) {
+          ref.current = null
+        }
+
+        if (viewRef.current) {
+          viewRef.current.destroy()
+          viewRef.current = null
         }
       }
-    } else {
-      if (typeof ref === 'function') {
-        ref(null)
-      } else if (ref) {
-        ref.current = null
-      }
-
-      if (viewRef.current) {
-        viewRef.current.destroy()
-        viewRef.current = null
-      }
-    }
-  }, [])
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   useEffect(() => {
     applyTransactionRef.current = applyTransaction
@@ -112,6 +134,7 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
     if (initialRestProps !== restProps) {
       viewRef.current?.setProps(restProps)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, restPropKeys)
 
   return (
@@ -125,6 +148,7 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
           .ProseMirror {
             min-height: ${props.minHeight};
           }
+          min-height: ${props.minHeight};
         `}
 
         .CodeMirror {

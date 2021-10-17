@@ -39,7 +39,7 @@ function insertImageItem(nodeType: AppNodeType) {
         attrs = null
       if (
         state.selection instanceof NodeSelection &&
-        state.selection.node.type == nodeType
+        state.selection.node.type === nodeType
       )
         attrs = state.selection.node.attrs
       openPrompt({

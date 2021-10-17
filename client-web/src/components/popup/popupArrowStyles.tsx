@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { PopupDialogArrowDiv } from 'retil-interaction'
-
-import { colors } from 'src/theme'
+import { structureColors } from 'src/presentation/colors'
 
 export const PopupArrow = styled(PopupDialogArrowDiv)`
   position: absolute;
@@ -33,12 +32,12 @@ export const PopupArrow = styled(PopupDialogArrowDiv)`
     width: 0.5rem;
     height: 0.5rem;
     &::before {
-      border-color: transparent transparent ${colors.structure.border}
+      border-color: transparent transparent ${structureColors.border}
         transparent;
       z-index: 1;
     }
     &::after {
-      border-color: transparent transparent ${colors.structure.bg} transparent;
+      border-color: transparent transparent ${structureColors.bg} transparent;
       z-index: 2;
       margin-left: 1px;
       margin-top: 2px;
@@ -51,12 +50,12 @@ export const PopupArrow = styled(PopupDialogArrowDiv)`
     width: 0.5rem;
     height: 0.5rem;
     &::before {
-      border-color: ${colors.structure.border} transparent transparent
+      border-color: ${structureColors.border} transparent transparent
         transparent;
       z-index: 1;
     }
     &::after {
-      border-color: ${colors.structure.bg} transparent transparent transparent;
+      border-color: ${structureColors.bg} transparent transparent transparent;
       z-index: 2;
       margin-left: 1px;
       margin-bottom: -2px;
@@ -70,12 +69,12 @@ export const PopupArrow = styled(PopupDialogArrowDiv)`
     height: 0.5rem;
     width: 0.5rem;
     &::before {
-      border-color: transparent ${colors.structure.border} transparent
+      border-color: transparent ${structureColors.border} transparent
         transparent;
       z-index: 1;
     }
     &::after {
-      border-color: transparent ${colors.structure.bg} transparent transparent;
+      border-color: transparent ${structureColors.bg} transparent transparent;
       z-index: 2;
       margin-top: 1px;
       margin-left: 2px;
@@ -89,11 +88,11 @@ export const PopupArrow = styled(PopupDialogArrowDiv)`
     width: 0.5rem;
     &::before {
       border-color: transparent transparent transparent
-        ${colors.structure.border};
+        ${structureColors.border};
       z-index: 1;
     }
     &::after {
-      border-color: transparent transparent transparent ${colors.structure.bg};
+      border-color: transparent transparent transparent ${structureColors.bg};
       z-index: 2;
       margin-top: 1px;
       margin-left: 0px;

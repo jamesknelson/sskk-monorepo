@@ -1,32 +1,55 @@
-import { ValidatorIssues } from 'retil-issues'
+import {
+  DefaultIssueCodes,
+  IssueCodes,
+  IssuePath,
+  RootType,
+  Validator,
+  ValidatorIssues,
+} from 'retil-issues'
 
-export interface IssueCodeMap {
-  [code: string]: string | IssueCodeMap
-}
+import {
+  FirebaseSignInWithPasswordRequest,
+  FirebaseSignInWithPasswordCodes,
+  FirebaseCreateUserWithPasswordRequest,
+  FirebaseCreateUserWithPasswordCodes,
+} from './firebaseAuthTypes'
 
-function buildIssueFromError(
-  codeMap: string | IssueCodeMap,
-  error: any,
-): ValidatorIssues<any> {
-  if (typeof codeMap === 'string') {
-    return [
-      {
-        code: codeMap,
-        message: error.message,
-      },
-    ]
-  } else {
-    const path = Object.keys(codeMap)[0]
-    return {
-      [path]: buildIssueFromError(codeMap[path], error),
-    } as ValidatorIssues<any>
-  }
-}
+const validatePresence = (maybeValue?: string | null) => [
+  !maybeValue && ('missing' as const),
+]
 
-export const convertErrorsToIssues = async (
+const validateEmail = (maybeEmail?: string | null) => [
+  !maybeEmail && ('missing' as const),
+  !!maybeEmail && !/^.+@.+\..+$/.test(maybeEmail) && ('invalid' as const),
+]
+
+export const validateCreateUserWithPasswordRequest: Validator<
+  FirebaseCreateUserWithPasswordRequest,
+  FirebaseCreateUserWithPasswordCodes
+> = (value) => ({
+  email: validateEmail(value.email),
+  password: validatePresence(value.password),
+  displayName: validatePresence(value.displayName),
+})
+
+export const validateSignInWithPasswordRequest: Validator<
+  FirebaseSignInWithPasswordRequest,
+  FirebaseSignInWithPasswordCodes
+> = (value) => ({
+  email: validateEmail(value.email),
+  password: validatePresence(value.password),
+})
+
+export async function convertErrorsToIssues<
+  Value extends object,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends IssuePath<Codes> | RootType = IssuePath<Codes> | RootType,
+>(
   fn: Function,
-  codeMap: IssueCodeMap,
-): Promise<null | ValidatorIssues<any>> => {
+  codeMap: {
+    [code: string]: string | { [path: string]: string }
+  },
+): Promise<null | ValidatorIssues<Value, Codes, Path>> {
   const issueCodes = Object.keys(codeMap)
 
   try {
@@ -37,7 +60,32 @@ export const convertErrorsToIssues = async (
     if (code && issueCodes.includes(code)) {
       return buildIssueFromError(codeMap[code], error)
     } else {
-      throw error
+      console.error('Firebase returned unknown error:', error)
+      return [
+        {
+          code: 'error',
+          message: error.message,
+        },
+      ]
     }
+  }
+}
+
+function buildIssueFromError(
+  issue: string | { [path: string]: string },
+  error: any,
+): ValidatorIssues<any> {
+  if (typeof issue === 'string') {
+    return [
+      {
+        code: issue,
+        message: error.message,
+      },
+    ]
+  } else {
+    const path = Object.keys(issue)[0]
+    return {
+      [path]: buildIssueFromError(issue[path], error),
+    } as ValidatorIssues<any>
   }
 }

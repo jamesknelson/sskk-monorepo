@@ -1,51 +1,79 @@
-https://github.com/chanzuckerberg/czi-prosemirror
+---
 
+PRIORITIES:
 
-o add a down migration
-o add a name field to the recipients
-o create basic tests for login action
-  
-o use hasura claims_map configuration to expose a session variable with the
-  auth time, so that it's possible to create a volatile function that upserts
-  a row into the logins table, along with any entries/referrers using a single
-  hasura query
-o rename "member" to "customer" in firebase functions
-o get login screen working w/ local services
+1. core usage: sign up, pay, sign in, send to public addresses, send to multiple addresses, bcc, read, reply, forward
+2. extra features: quoting, topics, multi-author letters
 
-o fix so preloading redirects don't cause an infinite loop
-o port from styled-components to emotion
-o get things rendering without a flash of "loading"
-o get logout dropdown working
+---
 
-- deploy to "dev"
-  o ensure "audience" is set in "dev" auth configuration
-  o FIGURE OUT WHY migration doesn't seem to be working on the render hasura
-    service. it says migration has occurred, but it appears nothing has changed.
-  o ensure cookie stays identical between logins
-  * get login screen working on dev
-  * ensure ip address appears in logins:
-    https://github.com/hasura/graphql-engine/issues/4770
+TODO:
 
-- capture the session token returned from the login action and store it, passing
-  it to all future requests for that user.
+o write the layout options to a script tag during ssr so that they're available even before the page code is loaded
+o create a transition to go from the front page to the join process, w/:
+o add separate image for second step
+o get back and forward buttons working
+o complete transition between steps
+o figure out why clicking "start writing" temporarily shows the loading screen
+o remove auth footer space from layout while not in use
+o instead of using Tippy, use a Tooltip component
+o get eslint hooks rules working
 
-- fix login form issues types (remove the "as any")
+- ensure the editor header can be stuck to the top with position: sticky
+- for second step, put a gray arc around the ">" chevron, and then set it to a new lighter blue color as a progress indicator 
+- add the progress indicator color as a secondary palette color
+- increase target size on the header stops
+- when a progress marker is first filled, it should have an animation
+  * the circle expands and contracts, like a water drop hitting the surface
+  * then the line grows
+  * then the tooltip is briefly shown
+ 
+- add the third step (remember that we don't need to make any network calls when the user hits "continue")
+- save to sessionStorage, but delete from sessionStorage if the user navigates while ignoring a save warning.
 
-- fix nav precaching in retil w/ tests; figure out why hovering between
-  two different links causes an ever increasing number of loader calls.
+- add the windmills background to the sign in page, try and animate the windmills
+  to rotate
+
+- get the "save" button popping up an account creation modal
+- get editor menu working
+  * B, I
+  * make sure buttons don't steal focus
+- Link/unlink button for editor
+- Add / remove title menu button (show a confirmation window if hitting remove while a title exists)
+- If there's an empty title, add placeholder text behind it
+- ensure the editor menu stickies to the top if you write something really long.
+- block navigation if there's unsaved changes, and if the user cancels navigation due to this block, put a 2-beat beacon over the "save draft" button (or 1 beat if the user hits save draft before the second beat).
+
+- make the "Login" button redirect back to the current page after login
+
+- add a user dropdown to the app sidebar, maybe at the top, maybe under the
+  house and L.H stamp
 
 - create a user registration page that creates a new customer id without setting up a persona
-
 - port the "hello I am" screen to create a persona. we'll probably want an
   action to handle persona creation too.
 
+- make icons with smaller strokes
+
+- write the "You've made the first step" page from the perspective of the founder (me), and sign it as such (for now, just use a nice script font)
+
+
+- get login and sign up working in production
+
+- get login and registration working on deployed app
+
+
+one day: (not necessary for mvp, where we just display hellos in order)
+- add infrastructure to allow each cookied user to always receive the same version of the front page for each 12-hour period, with the aim to spread a day's "hello" messages evenly between all viewers, except for messages which have received the most replies, which are weighted lower.
+
+
+- add the "start a story" page, and get the editor working again
 
 ---
 
 
-- start working on onboarding and connecting payments
 
-- add back the svgo babel loader somehow
+- start working on onboarding and connecting payments
 
 todo
 
@@ -241,3 +269,17 @@ todo
   published article to have a newer draft with a conflicting slug
 
 - server side auth
+
+
+
+
+
+
+wishlist:
+
+- handle scrolling in transitions
+- fix transitions when clicking "back" multiples times in quick succession
+- allow to configure waiting a delay instead of waiting for the previous page
+  to completely transition out
+- add a top-level holdable scheduler to transitions, and use this scheduler
+  to schedule updates across the app

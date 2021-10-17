@@ -1,63 +1,83 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
-import { LargeCardLayout } from 'src/components/largeCardLayout'
-import { colors } from 'src/theme'
+import { Card } from 'src/presentation/card'
+import { textColors } from 'src/presentation/colors'
 
 const P = styled.p`
-  color: ${colors.text.secondary};
+  color: ${textColors.tertiary};
   line-height: 1.4rem;
   margin-top: 1.5rem;
   text-align: center;
 `
 
+export const Title = styled.h1`
+  color: ${textColors.default};
+  font-size: 2rem;
+  font-weight: 400;
+  margin-top: 4rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+`
+
 function LegalPage() {
   return (
-    <LargeCardLayout
-      title="Policies and Terms"
+    <div
       css={css`
-        margin-top: 2rem;
+        padding: 0 1rem;
       `}>
-      <P>
-        Your data is yours.
-        <br />
-        We will not sell your data.
-        <br />
-        Not to anyone.
-      </P>
+      <div
+        css={css`
+          margin: 0 auto 2rem;
+        `}>
+        <Card
+          css={css`
+            padding: 0 0 4rem;
+          `}>
+          <Title>Policies and Terms</Title>
 
-      <P>
-        Don’t be an asshole.
-        <br />
-        Treat others with respect.
-        <br />
-        It’s a public space.
-      </P>
+          <P>
+            Your data is yours.
+            <br />
+            We will not sell your data.
+            <br />
+            Not to anyone.
+          </P>
 
-      <P>
-        We’re just a small team.
-        <br />
-        Anything could happen so
-        <br />
-        Sorry. Deal with it.
-      </P>
+          <P>
+            Don’t be an asshole.
+            <br />
+            Treat others with respect.
+            <br />
+            It’s a public space.
+          </P>
 
-      {/* <P>
-        There is one thing though.
-        <br />
-        Advertisements are bullshit.
-        <br />
-        We’ll never show them.
-      </P>
+          <P>
+            We’re just a small team.
+            <br />
+            Anything could happen so
+            <br />
+            Sorry. Deal with it.
+          </P>
 
-      <P>
-        So please join a plan.
-        <br />
-        To support our adventure.
-        <br />
-        Or it may vanish.
-      </P> */}
-    </LargeCardLayout>
+          {/* <P>
+            There is one thing though.
+            <br />
+            Advertisements are bullshit.
+            <br />
+            We’ll never show them.
+          </P>
+
+          <P>
+            So please join a plan.
+            <br />
+            To support our adventure.
+            <br />
+            Or it may vanish.
+          </P> */}
+        </Card>
+      </div>
+    </div>
   )
 }
 

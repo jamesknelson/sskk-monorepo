@@ -4,7 +4,7 @@ services:
     container_name: sskk_postgres
     image: postgres:12
     platform: linux/arm64
-    restart: always
+    restart: on-failure
     expose:
       - "5431" # Publishes 5431 to other containers but NOT to host machine
     ports:
@@ -21,10 +21,10 @@ services:
       - "3711:8080"
     depends_on:
       - "postgres"
-    restart: always
+    restart: on-failure
     environment:
       PORT: 3711
-      
+
       ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
       PG_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5431/postgres
 

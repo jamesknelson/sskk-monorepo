@@ -12,7 +12,7 @@ import {
 } from 'prosemirror-model'
 import { ReactNode } from 'react'
 
-import { StyledCodeBlock } from 'src/components/codeBlock'
+import { StyledCodeBlock } from 'src/presentation/codeBlock'
 
 export type ReactHole = (content?: ReactNode) => ReactNode
 
@@ -246,7 +246,7 @@ export const schema = createAppSchema({
         },
       ],
       toDOM(node) {
-        return node.attrs.order == 1
+        return node.attrs.order === 1
           ? olDOM
           : ['ol', { start: node.attrs.order }, 0]
       },
@@ -319,7 +319,7 @@ export const schema = createAppSchema({
         // tags with a font-weight normal.
         {
           tag: 'b',
-          getAttrs: (node: any) => node.style.fontWeight != 'normal' && null,
+          getAttrs: (node: any) => node.style.fontWeight !== 'normal' && null,
         },
         {
           style: 'font-weight',

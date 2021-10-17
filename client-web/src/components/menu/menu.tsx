@@ -1,8 +1,7 @@
 import styled from '@emotion/styled'
 import React, { useCallback, useContext } from 'react'
 import { usePopupHandle } from 'retil-interaction'
-
-import { colors } from 'src/theme'
+import { structureColors, textColors } from 'src/presentation/colors'
 
 const StyledMenu = styled.div`
   background-color: white;
@@ -21,7 +20,7 @@ const StyledMenu = styled.div`
 `
 
 const StyledMenuItem = styled.div`
-  color: ${colors.text.secondary};
+  color: ${textColors.secondary};
   cursor: pointer;
   display: block;
   font-size: 0.9rem;
@@ -63,7 +62,7 @@ export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
 )
 
 export const MenuDivider = styled.hr`
-  background-color: ${colors.structure.divider};
+  background-color: ${structureColors.divider};
   border: none;
   display: flex;
   height: 1px;
@@ -104,7 +103,7 @@ export const MenuItem = React.forwardRef<HTMLDivElement, MenuItemProps>(
           onDidSelect()
         }
       },
-      [onClick, onDidSelect],
+      [disabled, onClick, onDidSelect],
     )
 
     return <StyledMenuItem {...rest} ref={ref} onClick={handleClick} />

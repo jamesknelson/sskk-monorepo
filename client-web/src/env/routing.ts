@@ -3,7 +3,7 @@ import { NavAction, createHref, loadRedirect, NavEnv } from 'retil-nav'
 
 import loadingRouter from 'src/pages/loadingLoader'
 
-import { AppEnv, AppLayoutOptions } from './appEnv'
+import { AppEnv, AppMutablePersistedContext } from './appEnv'
 
 export type AppLoader = Loader<AppEnv>
 
@@ -16,7 +16,7 @@ export function switchAuth(routers: {
     return (
       request.customer === undefined
         ? routers.pending
-        : request.authUser && !request.authUser.isAnonymous
+        : request.authUser
         ? routers.authenticated
         : routers.unauthenticated
     )(request)
@@ -49,12 +49,12 @@ export function loadWhenUnauthenticated(
   })
 }
 
-export function loadWithLayoutOptions(
+export function loadWithMutablePersistedContext(
   loader: AppLoader,
-  layoutOptions: AppLayoutOptions,
+  mutablePersistedContext: AppMutablePersistedContext,
 ): AppLoader {
   return (env) => {
-    Object.assign(env.layoutOptions, layoutOptions)
+    Object.assign(env.mutablePersistedContext, mutablePersistedContext)
     return loader(env)
   }
 }

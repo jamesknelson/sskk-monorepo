@@ -45,13 +45,10 @@ export function createProseCommand({
   isActive,
 }: ProseCommandOptions): ProseCommand {
   const isEnabled = (state: EditorState, view?: EditorView): boolean => {
-    const { Proxy } = self
-    const dryRunState = Proxy
-      ? new Proxy(state, {
-          get: dryRunEditorStateProxyGetter,
-          set: dryRunEditorStateProxySetter,
-        })
-      : state
+    const dryRunState = new Proxy(state, {
+      get: dryRunEditorStateProxyGetter,
+      set: dryRunEditorStateProxySetter,
+    })
     return executeOrPerformDryRun(dryRunState, null, view)
   }
 

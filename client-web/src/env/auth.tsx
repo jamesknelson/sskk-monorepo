@@ -5,16 +5,24 @@ import { createContext, useContext } from 'react'
 import { createState } from 'retil-source'
 
 import { auth as authConfig } from 'src/config'
+import { createFirebaseAuthService } from './firebaseAuthService'
 import {
-  createFirebaseAuthService,
   FirebaseAuthController as AuthController,
   FirebaseAuthSnapshot as AuthSnapshot,
   FirebaseAuthService as AuthService,
   FirebaseAuthSource as AuthSource,
   FirebaseAuthUser as AuthUser,
-} from './firebaseAuthService'
+  FirebaseTokenInfoGetter as AuthTokenInfoGetter,
+} from './firebaseAuthTypes'
 
-export type { AuthController, AuthSnapshot, AuthService, AuthSource, AuthUser }
+export type {
+  AuthController,
+  AuthSnapshot,
+  AuthService,
+  AuthSource,
+  AuthTokenInfoGetter,
+  AuthUser,
+}
 
 const [pendingSource] = createState<AuthSnapshot>()
 
@@ -26,8 +34,6 @@ export function getAuthService(): AuthService {
     return pendingAuthService
   } else if (!authServiceRef.current) {
     authServiceRef.current = createFirebaseAuthService({
-      automaticallySignInAsAnonymous: false,
-
       shouldRefreshToken: async (tokenInfo, user) => {
         if (tokenInfo.claims.customer_id) {
           return false

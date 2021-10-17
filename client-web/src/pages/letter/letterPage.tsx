@@ -7,7 +7,6 @@ import { css } from '@emotion/react'
 // import urls from 'src/pages/appURLs'
 // import { createStateFromContentObject } from 'src/prose/contentObject'
 // import { getTitle } from 'src/prose/getTitle'
-import { dimensions } from 'src/theme'
 // import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
 
 export interface Props {
@@ -50,7 +49,6 @@ export function Page(_props: Props) {
           display: flex;
           flex-direction: column;
           align-items: center;
-          max-width: ${dimensions.largeCardWidth};
           width: calc(100% - 1rem);
           margin: 0 auto;
         `}>

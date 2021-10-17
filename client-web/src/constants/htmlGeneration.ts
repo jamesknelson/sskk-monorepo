@@ -1,1 +1,1 @@
-export const retilDataCacheName = `retilDataCache`
+export const appPageSerializedDataGlobal = `appPageData`

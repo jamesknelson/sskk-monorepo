@@ -16,19 +16,15 @@ export interface AppAuthUser extends Omit<AuthUser, 'id'> {
   memberId?: string
 }
 
-// This is a mutable object which can be modified by routes to configure
-// how the layout behaves.
-export interface AppLayoutOptions {
-  scrollingHeader?: {
-    from: string
-    to: string
-  }
-}
-
 export interface DataEnv {
   cache?: InMemoryCache
   client: AppApolloClient
   precacheQuery: QueryPrecacher
+  sessionId?: string | null
+}
+
+export interface AppMutablePersistedContext {
+  transitionKey?: string
 }
 
 export interface AppEnv<
@@ -38,6 +34,8 @@ export interface AppEnv<
     HydrationEnv,
     NavEnv {
   head: ReactElement[]
+
+  mutablePersistedContext: AppMutablePersistedContext
 
   nav: Omit<NavEnv['nav'], 'params' | 'query'> & {
     query: Query
@@ -49,8 +47,6 @@ export interface AppEnv<
 
   doNotTrack?: boolean
   hasHydrated: boolean
-
-  layoutOptions: AppLayoutOptions
 }
 
 export function useAppEnv(): AppEnv {

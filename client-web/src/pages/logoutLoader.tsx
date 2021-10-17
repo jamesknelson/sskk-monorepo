@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { useEffect } from 'react'
+import { useEffectOnce } from 'retil-support'
 
 import { AuthLayout } from 'src/components/authLayout'
 import { useAuthController } from 'src/env/auth'
@@ -11,9 +11,9 @@ export default loader
 export function LogoutPage() {
   const authController = useAuthController()
 
-  useEffect(() => {
+  useEffectOnce(() => {
     authController.signOut()
-  }, [])
+  })
 
   return (
     <AuthLayout title="Thanks">

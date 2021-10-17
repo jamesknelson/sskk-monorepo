@@ -37,7 +37,6 @@
 //   SavePostDraftDocument,
 //   PublishPostDocument,
 // } from 'src/generated/graphql'
-// import { colors, dimensions } from 'src/theme'
 // import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
 // import { useAppEnv } from 'src/env'
 
@@ -71,7 +70,7 @@ export interface Props {
 //   return new Date(attempt)
 // }
 
-export function Page({}: Props) {
+export function Page(_props: Props) {
   return null
 
   // const env = useAppEnv()
