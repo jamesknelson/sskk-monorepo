@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { animated, useSpring } from 'react-spring'
 import { Boundary } from 'retil-boundary'
 import { useHasHydrated } from 'retil-hydration'
@@ -10,11 +10,7 @@ import {
 } from 'src/components/columnTransition'
 
 import { Background, BackgroundScene } from 'src/components/background'
-import {
-  barHeight,
-  barWidth,
-  largeCardClampWidth,
-} from 'src/presentation/dimensions'
+import { barWidth, largeCardClampWidth } from 'src/presentation/dimensions'
 import { hideAuthBarEffect } from 'src/services/authBarService'
 import {
   useTransitionHandle,
@@ -26,7 +22,7 @@ import JoinHeader from './joinHeader'
 export interface JoinLayoutProps {
   backgroundScene: BackgroundScene
   children: React.ReactNode
-  step: number
+  transitionKey: string
 }
 
 const headerInStyles = {
@@ -52,7 +48,7 @@ const headerOutStyles = {
 export default function JoinLayout({
   backgroundScene,
   children,
-  step,
+  transitionKey,
 }: JoinLayoutProps) {
   useEffect(hideAuthBarEffect, [])
 
@@ -122,25 +118,35 @@ export default function JoinLayout({
           max-width: ${largeCardClampWidth};
           width: 100%;
           margin: 0 auto;
-          z-index: 1;
         `}>
-        <animated.div
-          style={headerSpring}
+        <div
           css={css`
-            height: ${barHeight};
-
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            z-index: 2;
           `}>
-          <JoinHeader />
-        </animated.div>
+          <animated.div
+            style={headerSpring}
+            css={css`
+              display: flex;
+              align-items: center;
+            `}>
+            <JoinHeader />
+          </animated.div>
+        </div>
         <ColumnTransition
           css={css`
             flex-grow: 1;
+            z-index: 1;
           `}
-          transitionKey={String(step)}
+          transitionKey={String(transitionKey)}
           transitionHandleRef={hasHydrated ? stepTransitionHandleRef : null}>
-          <Boundary fallback={<JoinLayoutFallback />}>{children}</Boundary>
+          {useMemo(
+            () => (
+              <Boundary fallback={<JoinLayoutFallback />}>{children}</Boundary>
+            ),
+            [children],
+          )}
         </ColumnTransition>
       </div>
     </div>

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { structureColors } from 'src/presentation/colors'
 
-import { standardRadius } from 'src/presentation/radii'
 import { cardShadow } from 'src/presentation/shadows'
 
 export interface CardProps {
@@ -16,5 +15,5 @@ export const Card = styled.div<CardProps>`
   background-color: ${structureColors.bg};
   box-shadow: ${cardShadow()};
   border: 1px solid ${structureColors.border};
-  border-radius: ${(props) => props.radius ?? standardRadius};
+  border-radius: ${(props) => props.radius ?? 0};
 `

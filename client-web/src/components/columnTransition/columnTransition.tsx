@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   ControllerUpdate,
   SpringValue,
@@ -78,7 +78,7 @@ interface ColumnTransitionMutableState {
   pageHandlesByKey: PageHandlesByKey
 }
 
-export function ColumnTransition(
+export const ColumnTransition = memo(function ColumnTransition(
   props: JSX.IntrinsicElements['div'] & ColumnTransitionProps,
 ) {
   const {
@@ -254,7 +254,7 @@ export function ColumnTransition(
       ))}
     </div>
   )
-}
+})
 
 interface AppLayoutPageProps {
   active: boolean

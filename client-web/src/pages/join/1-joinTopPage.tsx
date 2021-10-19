@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import { LinkSurface } from 'retil-interaction'
 
+import { createBackgroundScene } from 'src/components/background'
 import appURLs from 'src/pages/appURLs'
 import { Card } from 'src/presentation/card'
 import { LetterMetaBlock } from 'src/presentation/letterMetaBlock'
@@ -8,9 +9,48 @@ import { TextBlock } from 'src/presentation/blocks'
 import { RaisedButtonBody } from 'src/presentation/buttonBodies'
 
 export const title = "You've just taken the first step."
-export const meta = {
-  robots: 'noindex',
-}
+export const meta = {}
+
+export const backgroundScene = createBackgroundScene(async () => {
+  const [{ default: MountainVillage }, { default: SailingShips }] =
+    await Promise.all([
+      import('src/assets/backgrounds/mountain-village.optimized.svg'),
+      import('src/assets/backgrounds/sailing-ships.optimized.svg'),
+    ])
+
+  return () => (
+    <div
+      css={css`
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      `}>
+      <MountainVillage
+        css={css`
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          opacity: 0.1;
+          transform: scaleX(-1);
+          z-index: 0;
+        `}
+      />
+      <SailingShips
+        css={css`
+          position: absolute;
+          bottom: 0;
+          right: -50px;
+          width: 100%;
+          opacity: 0.1;
+          transform: scaleX(-1);
+          z-index: 0;
+        `}
+      />
+    </div>
+  )
+})
 
 export function Page() {
   return (
@@ -27,7 +67,7 @@ export function Page() {
           `}>
           <LetterMetaBlock
             title={title}
-            from={['The Letterhouse Community']}
+            from={['@james (at Letterhouse)']}
             to={['The Reader']}
           />
           <TextBlock>
@@ -45,8 +85,7 @@ export function Page() {
               details, there's one thing that we ask of you.
             </p>
             <p>
-              We ask you to write a letter to <em>us</em> – the writers and
-              readers of letterhouse.
+              We ask you to write a hello letter to the readers of letterhouse.
             </p>
             <p>
               But what should you write? That is totally up to you! It could be
@@ -55,7 +94,7 @@ export function Page() {
               fancy. The only rule is that it must have <em>at least</em> 280
               characters.
             </p>
-            <p>Whatever you decide to write, we can't wait to read it.</p>
+            <p>Whatever you decide to write, I can't wait to read it!</p>
             <div
               css={css`
                 display: flex;
@@ -63,7 +102,7 @@ export function Page() {
                 margin: 1.5rem 0 1rem;
               `}>
               <LinkSurface href={appURLs.join.writeIntroLetter()}>
-                <RaisedButtonBody label="Start writing" chevron="right" />
+                <RaisedButtonBody label="Say hello" chevron="right" />
               </LinkSurface>
             </div>
           </TextBlock>

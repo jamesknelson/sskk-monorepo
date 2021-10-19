@@ -30,8 +30,11 @@
   ],
   "include": [
     "@types/**.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "vite/**/*.ts",
+    "vite/**/*.tsx",
+    "vite/**/*.js"
   ]
 }

@@ -1,23 +1,23 @@
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
 import { rgba } from 'polished'
 import { highStyle } from 'retil-css'
-import { ButtonSurface } from 'retil-interaction'
+import { useNavLinkProps } from 'retil-nav'
 
+// import { ChevronLeft, ChevronRight } from 'src/assets/glyphs'
 import { Tooltip } from 'src/components/tooltip'
-import { ChevronLeft, ChevronRight } from 'src/assets/glyphs'
+import appURLs from 'src/pages/appURLs'
 import { paletteColors, structureColors } from 'src/presentation/colors'
 import { barHeight, blockMarginHorizontal } from 'src/presentation/dimensions'
-import { easeInOut } from 'src/presentation/easings'
-import { Icon } from 'src/presentation/icon'
+import { easeIn, easeOut } from 'src/presentation/easings'
+// import { Icon } from 'src/presentation/icon'
 import { standardRadius } from 'src/presentation/radii'
 import { inkShadow } from 'src/presentation/shadows'
 
-export interface JoinHeaderProps {
-  showBack?: boolean
-}
+import { JoinPath, useJoinContext } from './joinContext'
 
-export default function JoinHeader(props: JoinHeaderProps) {
+const totalStepCount = 6
+
+export default function JoinHeader() {
   return (
     <div
       css={css`
@@ -27,13 +27,13 @@ export default function JoinHeader(props: JoinHeaderProps) {
         display: flex;
         justify-content: space-between;
         height: ${barHeight};
-        margin: 0 0.5rem;
+        margin: 0 calc(0.5rem + 1px);
 
-        background-color: ${structureColors.wash};
+        /* background-color: ${structureColors.wash};
         border-radius: 0 0 ${standardRadius} ${standardRadius};
         box-shadow: ${inkShadow(structureColors.border, {
           external: true,
-        })};
+        })}; */
       `}>
       <div
         css={[
@@ -50,7 +50,7 @@ export default function JoinHeader(props: JoinHeaderProps) {
             paddingLeft: blockMarginHorizontal,
           }),
         ]}>
-        {props.showBack && (
+        {/* {props.showBack && (
           // TODO: animate this
           <Icon
             color={paletteColors.ink500}
@@ -58,9 +58,9 @@ export default function JoinHeader(props: JoinHeaderProps) {
             label={null}
             size="1.5rem"
           />
-        )}
+        )} */}
       </div>
-      <JoinStepIndicators step={2} />
+      <JoinStepIndicators />
       <div
         css={[
           css`
@@ -78,7 +78,7 @@ export default function JoinHeader(props: JoinHeaderProps) {
             paddingRight: blockMarginHorizontal,
           }),
         ]}>
-        <ButtonSurface>
+        {/* <ButtonSurface>
           <div
             css={css`
               display: flex;
@@ -102,121 +102,102 @@ export default function JoinHeader(props: JoinHeaderProps) {
               size="1.5rem"
             />
           </div>
-        </ButtonSurface>
+        </ButtonSurface> */}
       </div>
     </div>
   )
 }
 
-interface StyledJoinPositionProps {
-  active: boolean
-  complete: boolean
-  percentage: number
-}
-
-const StyledJoinPosition = styled.div<StyledJoinPositionProps>`
-  display: block;
-  height: 13px;
-  width: 13px;
-  position: absolute;
-  left: ${(props) => props.percentage}%;
-  margin-left: -6px;
-  top: calc(50% - 7px);
-  border-radius: 9999px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 0 1.2px
-      ${(props) =>
-        props.active || props.complete
-          ? paletteColors.ink900
-          : paletteColors.ink100}
-      inset,
-    0 0 10px
-      ${(props) =>
-        rgba(
-          props.active || props.complete
-            ? paletteColors.ink900
-            : paletteColors.ink100,
-          0.12,
-        )},
-    0 0 10px
-      ${(props) =>
-        rgba(
-          props.active || props.complete
-            ? paletteColors.ink900
-            : paletteColors.ink100,
-          0.12,
-        )}
-      inset;
-
-  transition: transform 250ms 250ms ${easeInOut};
-  ${(props) =>
-    props.complete &&
-    css`
-      transform: scale(1.05);
-    `}
-`
-
 interface JoinPositionProps {
-  active?: boolean
-  complete?: boolean
-  href?: string
-  percentage: number
+  paths: JoinPath[]
+  step: number
   tooltip: string
 }
 
-const JoinPosition = ({
-  active,
-  complete,
-  href,
-  percentage,
-  tooltip,
-}: JoinPositionProps) => {
-  // const linkProps = useLinkProps({ href })
-  const linkProps = {}
+const JoinPosition = ({ paths, step, tooltip }: JoinPositionProps) => {
+  const { completedSteps, path: activePath } = useJoinContext()
+
+  const active = paths.includes(activePath)
+  const href = appURLs.join[paths[0]]()
+
+  const percentage = (100 / (totalStepCount - 1)) * step
+  const complete = completedSteps > step
+  const next = completedSteps === step
+
+  const linkProps = useNavLinkProps(href, {
+    disabled: active || (!complete && !next),
+  })
+
+  const borderColor =
+    next || complete ? paletteColors.ink900 : paletteColors.ink100
+  const borderShadowColor = rgba(borderColor, 0.12)
+  const circleColor = !complete
+    ? 'transparent'
+    : active
+    ? paletteColors.ink500
+    : paletteColors.ink900
+
+  const targetSize = '40px'
 
   return (
-    <Tooltip label={tooltip} placement="bottom">
-      <StyledJoinPosition
-        as={href ? 'a' : 'div'}
-        complete={!!complete}
-        active={!!active}
-        {...(href ? linkProps : {})}
-        percentage={percentage}>
-        <InnerJoinPosition
-          color={complete ? paletteColors.ink900 : 'transparent'}
-        />
-      </StyledJoinPosition>
+    <Tooltip label={tooltip} placement="bottom" offset={[0, -4]}>
+      <a
+        {...linkProps}
+        css={css`
+          position: absolute;
+          left: calc(${percentage}% - ${targetSize} / 2);
+          top: calc((${barHeight} - ${targetSize}) / 2);
+          height: ${targetSize};
+          width: ${targetSize};
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        `}>
+        <div
+          css={css`
+            position: relative;
+            height: 13px;
+            width: 13px;
+            border-radius: 9999px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 0 1.2px ${borderColor} inset,
+              0 0 10px ${borderShadowColor}, 0 0 10px ${borderShadowColor} inset;
+            transition: box-shadow 500ms 500ms ${easeOut};
+          `}>
+          <div
+            style={{ backgroundColor: circleColor }}
+            css={css`
+              position: absolute;
+              height: calc(0.5rem + 1px);
+              width: calc(0.5rem + 1px);
+              left: 0.125rem;
+              top: 0.125rem;
+              background-color: ${circleColor};
+              border-radius: 9999px;
+              transition: background-color 250ms ${easeIn};
+            `}
+          />
+        </div>
+      </a>
     </Tooltip>
   )
 }
 
-interface InnerJoinPositionProps {
-  color: string
-}
-
-const InnerJoinPosition = styled.div<InnerJoinPositionProps>`
-  position: absolute;
-  height: calc(0.5rem + 1px);
-  width: calc(0.5rem + 1px);
-  left: 0.125rem;
-  top: 0.125rem;
-  background-color: ${(props) => props.color};
-  border-radius: 9999px;
-  transition: background-color 250ms 250ms ${easeInOut};
-`
-
-interface JoinFlowIndicatorProps {
-  step: number
-}
-
-function JoinStepIndicators({ step }: JoinFlowIndicatorProps) {
-  const progressBarProportion = Math.min(1, (step - 1) / 5)
+function JoinStepIndicators() {
+  const { completedSteps } = useJoinContext()
+  const progressBarProportion = Math.min(
+    1,
+    completedSteps / (totalStepCount - 1),
+  )
 
   return (
     <div
       css={css`
         position: relative;
+        flex-basis: 300px;
         flex-grow: 1;
+        flex-shrink: 1;
         margin: 0 auto;
         max-width: 710px;
       `}>
@@ -224,7 +205,7 @@ function JoinStepIndicators({ step }: JoinFlowIndicatorProps) {
         css={css`
           position: absolute;
           width: 100%;
-          top: calc(50% - 1px);
+          top: 50%;
           border-radius: 9999px;
           height: 1px;
           flex-grow: 1;
@@ -240,7 +221,7 @@ function JoinStepIndicators({ step }: JoinFlowIndicatorProps) {
         css={css`
           position: absolute;
           width: 100%;
-          top: calc(50% - 1px);
+          top: 50%;
           border-radius: 9999px;
           height: 1px;
           flex-grow: 1;
@@ -248,44 +229,34 @@ function JoinStepIndicators({ step }: JoinFlowIndicatorProps) {
             0 0 10px 0px ${rgba(paletteColors.ink500, 0.33)},
             0 0 3px 1px ${rgba(paletteColors.ink500, 0.1)};
           transform-origin: 0 0;
-          transition: transform 250ms ${easeInOut};
+          transition: transform 250ms 250ms linear;
         `}
       />
+      <JoinPosition paths={['top']} step={0} tooltip="Welcome!" />
       <JoinPosition
-        percentage={0}
-        active={step === 1}
-        complete={step > 1}
-        tooltip="Decide to join"
+        paths={['writeIntroLetter']}
+        step={1}
+        tooltip="Write your introduction"
       />
       <JoinPosition
-        percentage={20}
-        active={step === 2}
-        complete={step > 2}
-        tooltip="Say hello"
+        paths={['createAccount']}
+        step={2}
+        tooltip="Create your login"
       />
       <JoinPosition
-        percentage={40}
-        active={step === 3}
-        complete={step > 3}
-        tooltip="Account details"
-      />
-      <JoinPosition
-        percentage={60}
-        active={step === 4}
-        complete={step > 4}
+        paths={['selectMembershipType', 'enterPaymentDetails']}
+        step={3}
         tooltip="Pick your plan"
       />
       <JoinPosition
-        percentage={80}
-        active={step === 5}
-        complete={step > 5}
+        paths={['chooseAddress']}
+        step={4}
         tooltip="Choose your @address"
       />
       <JoinPosition
-        percentage={100}
-        active={step === 6}
-        complete={step > 6}
-        tooltip="Confirmation"
+        paths={['confirmAndComplete']}
+        step={5}
+        tooltip="Join Letterhouse"
       />
     </div>
   )

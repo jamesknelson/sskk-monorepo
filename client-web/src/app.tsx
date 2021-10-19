@@ -20,6 +20,7 @@ import { AppEnv, AuthProvider, useAppEnv } from './env'
 import { Head, HeadContext } from './head'
 import { FontFaces } from './assets/fonts'
 import { GlobalStyles } from './presentation/globalStyles'
+import { smoothScrollTo } from './utils/smoothScrollTo'
 
 export interface AppProps {
   env: CastableToEnvSource<AppEnv>
@@ -50,7 +51,9 @@ function InnerApp() {
   const content = useMountContent<ReactNode>()
 
   useBoundaryHydrater()
-  useBoundaryNavScroller()
+  useBoundaryNavScroller({
+    scrollTo: smoothScrollTo,
+  })
 
   return <ApolloProvider client={env.client}>{content}</ApolloProvider>
 }

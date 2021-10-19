@@ -3,9 +3,10 @@
 const easeOutCubic = (t: number) => --t * t * t + 1
 
 export const smoothScrollTo = (
-  y: number,
+  coords: { top: number; left?: number },
   { duration = 400, offset = 0 } = {},
 ): Promise<void> => {
+  const y = coords.top
   const startY = window.scrollY
   const difference = y - startY
   const startTime = performance.now()

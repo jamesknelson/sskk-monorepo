@@ -32,6 +32,7 @@ export function EditorMenu(props: EditorMenuProps) {
       }}>
       <IconButtonBody
         glyph={FormatBold}
+        label="Bold"
         color={{
           default: 'black',
           [inHoveredSurface]: 'red',

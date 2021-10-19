@@ -5,6 +5,10 @@ services:
     image: postgres:12
     platform: linux/arm64
     restart: on-failure
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     expose:
       - "5431" # Publishes 5431 to other containers but NOT to host machine
     ports:
@@ -16,12 +20,16 @@ services:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
     container_name: sskk_hasura
-    image: fedormelexin/graphql-engine-arm64:v2.0.7.cli-migrations-v3
+    image: fedormelexin/graphql-engine-arm64:v2.0.9.cli-migrations-v3
     ports:
       - "3711:8080"
     depends_on:
       - "postgres"
     restart: on-failure
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     environment:
       PORT: 3711
 

@@ -9,42 +9,30 @@ PRIORITIES:
 
 TODO:
 
-o write the layout options to a script tag during ssr so that they're available even before the page code is loaded
-o create a transition to go from the front page to the join process, w/:
-o add separate image for second step
-o get back and forward buttons working
-o complete transition between steps
-o figure out why clicking "start writing" temporarily shows the loading screen
-o remove auth footer space from layout while not in use
-o instead of using Tippy, use a Tooltip component
-o get eslint hooks rules working
-
-- ensure the editor header can be stuck to the top with position: sticky
-- for second step, put a gray arc around the ">" chevron, and then set it to a new lighter blue color as a progress indicator 
-- add the progress indicator color as a secondary palette color
-- increase target size on the header stops
-- when a progress marker is first filled, it should have an animation
-  * the circle expands and contracts, like a water drop hitting the surface
-  * then the line grows
-  * then the tooltip is briefly shown
- 
-- add the third step (remember that we don't need to make any network calls when the user hits "continue")
-- save to sessionStorage, but delete from sessionStorage if the user navigates while ignoring a save warning.
-
+- get the third step screen working
+  * improve the look and feel of the card and form
+  * save the in-progress letter on registration
+- make logging in on an account without a persona redirect back to the onboarding process
+- show a loading indicator in place of the editor during hydration, at the loader level
 - add the windmills background to the sign in page, try and animate the windmills
   to rotate
+- update join context/loader to know how to deal with starting on the 3rd page:
+  * when there is enough data in session, set complete steps to 2
+  * otherwise, redirect to first page
 
-- get the "save" button popping up an account creation modal
+- improve the "register & save" button w/ indicator
+- add next/previous links to header for *complete* steps
+
 - get editor menu working
   * B, I
   * make sure buttons don't steal focus
-- Link/unlink button for editor
+- add some instructions somewhere on the editor page, maybe stickied to the bottom
 - Add / remove title menu button (show a confirmation window if hitting remove while a title exists)
 - If there's an empty title, add placeholder text behind it
-- ensure the editor menu stickies to the top if you write something really long.
-- block navigation if there's unsaved changes, and if the user cancels navigation due to this block, put a 2-beat beacon over the "save draft" button (or 1 beat if the user hits save draft before the second beat).
 
-- make the "Login" button redirect back to the current page after login
+- deploy to production
+
+---
 
 - add a user dropdown to the app sidebar, maybe at the top, maybe under the
   house and L.H stamp
@@ -277,7 +265,7 @@ todo
 
 wishlist:
 
-- handle scrolling in transitions
+- reverse the transition animation when going back
 - fix transitions when clicking "back" multiples times in quick succession
 - allow to configure waiting a delay instead of waiting for the previous page
   to completely transition out

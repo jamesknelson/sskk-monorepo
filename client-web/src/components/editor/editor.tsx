@@ -6,11 +6,13 @@ import {
   forwardRef,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
-import { useAppEnv } from 'src/env'
+import { createState, Source } from 'retil-source'
 
+import { useAppEnv } from 'src/env'
 import { Schema } from 'src/prose/schema'
 import { createSuspenseLoader } from 'src/utils/createSuspenseLoader'
 
@@ -114,7 +116,7 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [CodeBlockView],
   )
 
   useEffect(() => {
@@ -163,8 +165,25 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
   )
 })
 
-export function useEditorState(getInitialEditorState: () => EditorState) {
-  const [editorState, setEditorState] = useState(getInitialEditorState)
+export type EditorApplyTransaction = (
+  state: EditorState,
+  transaction: Transaction,
+) => EditorState
+
+export interface EditorStateHandle {
+  set: (editorState: EditorState) => void
+  applyTransaction: EditorApplyTransaction
+}
+
+// This is implemented as a source instead of a `setState`, so that we're able
+// to subscribe to editor state updates only at the place where they're used –
+// eliminating unnecessary updates in response to keystrokes, and improving
+// responsiveness.
+export function useEditorStateSource(
+  getInitialEditorState: () => EditorState,
+  onChange?: (editorState: EditorState) => void,
+): readonly [Source<EditorState>, EditorStateHandle] {
+  const [[source, set]] = useState(() => createState(getInitialEditorState()))
 
   // This function acts a little like a combination between a reducer and a
   // `dispatch` function. It receives a state and an action ("transaction"),
@@ -178,11 +197,22 @@ export function useEditorState(getInitialEditorState: () => EditorState) {
   const applyTransaction = useCallback(
     (state: EditorState, transaction: Transaction) => {
       const newState = state.apply(transaction)
-      setEditorState(newState)
+      set(newState)
+      if (onChange && newState !== state) {
+        onChange(newState)
+      }
       return newState
     },
-    [],
+    [onChange, set],
   )
 
-  return [editorState, setEditorState, applyTransaction] as const
+  const editorHandle = useMemo(
+    () => ({
+      applyTransaction,
+      set,
+    }),
+    [applyTransaction, set],
+  )
+
+  return [source, editorHandle] as const
 }

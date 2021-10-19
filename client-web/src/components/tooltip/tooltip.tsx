@@ -11,12 +11,14 @@ export type { Placement }
 export interface TooltipProps {
   children: React.ReactElement
   label: React.ReactElement | string
+  offset?: [number, number]
   placement?: Placement
 }
 
 export function Tooltip({
   children,
   label,
+  offset,
   placement = 'top',
   ...rest
 }: TooltipProps) {
@@ -36,6 +38,7 @@ export function Tooltip({
       <Tippy
         animation
         placement={placement}
+        offset={offset}
         touch={false}
         render={(attrs) => (
           <TooltipBody

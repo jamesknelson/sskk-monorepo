@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
 import { ensureTruthyArray } from 'retil-support'
 
-interface CreateHeadTagsInput {
+export interface CreateHeadTagsInput {
   title?: string
   meta?: Record<string, string | string[]>
 }

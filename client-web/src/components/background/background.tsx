@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { memo, useEffect, useState, useRef } from 'react'
 import { useHasHydrated } from 'retil-hydration'
 
 import {
@@ -33,20 +33,20 @@ const defaultExitTransition = {
   config: backgroundFadeConfig,
 }
 
-export function Background({
+export const Background = memo(function Background({
   scene,
   transitionHandleRef,
   ...rest
 }: BackgroundProps &
   Omit<JSX.IntrinsicElements['div'], 'children'>): null | React.ReactElement {
+  const hasHydrated = useHasHydrated()
   const [component, setComponent] = useState<BackgroundSceneComponent | null>(
     () =>
-      scene?.cache.result?.type === 'component'
+      hasHydrated && scene?.cache.result?.type === 'component'
         ? scene.cache.result.value
         : null,
   )
   const childTransitionHandleRef = useRef<TransitionHandle | null>(null)
-  const hasHydrated = useHasHydrated()
   const shownRef = useRef(!hasHydrated)
 
   // Don't show the background until it's loaded, and `show` has been called on
@@ -76,7 +76,7 @@ export function Background({
   )
 
   useEffect(() => {
-    if (scene) {
+    if (hasHydrated && scene) {
       const { load, cache } = scene
       load().then(() => {
         if (cache.result?.type === 'component') {
@@ -87,7 +87,7 @@ export function Background({
     } else {
       setComponent(null)
     }
-  }, [scene])
+  }, [hasHydrated, scene])
 
   useEffect(() => {
     if (component && transitionHandleRef && shownRef.current) {
@@ -107,7 +107,7 @@ export function Background({
       {component && <InnerBackground component={component} />}
     </ColumnTransition>
   )
-}
+})
 
 interface InnerBackgroundProps {
   component: BackgroundSceneComponent

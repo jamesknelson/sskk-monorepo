@@ -13,6 +13,8 @@ export const paletteColors = {
   ink500: '#606672',
   ink100: '#d8dbde',
   ink050: '#F4F8FF',
+
+  secondary500: '#2a98c3',
 }
 
 // ---
