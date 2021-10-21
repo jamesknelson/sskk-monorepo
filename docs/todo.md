@@ -10,7 +10,10 @@ PRIORITIES:
 TODO:
 
 - get the third step screen working
-  * improve the look and feel of the card and form
+  o improve the look and feel of the card and form
+  * move form model kit into retil-interaction, and hook up 
+    - FormSubmitButton w/ surface selectors for busy, invalid
+    - fields w/ surface selector for invalid
   * save the in-progress letter on registration
 - make logging in on an account without a persona redirect back to the onboarding process
 - show a loading indicator in place of the editor during hydration, at the loader level

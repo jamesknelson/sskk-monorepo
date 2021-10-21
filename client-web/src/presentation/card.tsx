@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import { structureColors } from 'src/presentation/colors'
 
-import { cardShadow } from 'src/presentation/shadows'
+import { structureColors } from './colors'
+import { cardShadow } from './shadows'
 
 export interface CardProps {
   radius?: string | 0

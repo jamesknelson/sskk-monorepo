@@ -55,7 +55,7 @@ export const textColors = {
   secondary: '#384048',
   tertiary: '#607080',
   subHeading: '#9098B0',
-  placeholder: '#778899',
+  placeholder: '#AABBCC',
   issue: '#4e3e3e',
   warning: '#4e3e3e',
   success: '#113322',

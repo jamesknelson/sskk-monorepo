@@ -7,8 +7,9 @@ import {
   stringifyTransition,
 } from 'retil-css'
 
-import { paletteColors } from 'src/presentation/colors'
 import { appendPixelUnitsIfRequired } from 'src/utils/appendPixelUnitsIfRequired'
+
+import { paletteColors } from './colors'
 
 export interface CaretProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color'> {

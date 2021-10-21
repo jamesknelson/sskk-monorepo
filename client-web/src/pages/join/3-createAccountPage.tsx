@@ -9,9 +9,16 @@ import { useAuthController } from 'src/env/auth'
 import { validateCreateUserWithPasswordRequest } from 'src/env/firebaseAuthIssues'
 import appURLs from 'src/pages/appURLs'
 import { TextBlock } from 'src/presentation/blocks'
+import { RaisedButtonBody } from 'src/presentation/buttonBodies'
 import { Card } from 'src/presentation/card'
-import { textColors } from 'src/presentation/colors'
+import {
+  controlColors,
+  structureColors,
+  textColors,
+} from 'src/presentation/colors'
 import { smallCardClampWidth } from 'src/presentation/dimensions'
+import { easeOut } from 'src/presentation/easings'
+import { standardRadius } from 'src/presentation/radii'
 import { Form, useModelInput } from 'src/utils/model'
 
 export const title = "You've taken the first step."
@@ -66,11 +73,15 @@ export function Page() {
         <Card
           css={css`
             padding: 3rem 1.5rem 3rem;
-            text-align: center;
           `}>
-          <TextBlock>
+          <TextBlock
+            css={css`
+              text-align: center;
+            `}>
             <h1>It's that time.</h1>
-            <p>You'll need a Letterhouse login to send your letter.</p>
+            <p>
+              You'll need to create a Letterhouse login to send your letter.
+            </p>
           </TextBlock>
           <Form
             initialValue={{
@@ -103,22 +114,29 @@ export function Page() {
             {(Provide) => (
               <>
                 <Provide path="displayName">
-                  <Field>
-                    <Input />
-                  </Field>
+                  <FieldBlock label="Name">
+                    <Input placeholder="Little Red" />
+                  </FieldBlock>
                 </Provide>
                 <Provide path="email">
-                  <Field>
-                    <Input type="email" />
-                  </Field>
+                  <FieldBlock>
+                    <Input type="email" placeholder="hood@example.com" />
+                  </FieldBlock>
                 </Provide>
                 <Provide path="password">
-                  <Field>
+                  <FieldBlock>
                     <Input type="password" />
-                  </Field>
+                  </FieldBlock>
                 </Provide>
 
-                <SubmitButtonSurface>Register</SubmitButtonSurface>
+                <SubmitButtonSurface
+                  css={css`
+                    width: 100%;
+                    background-color: transparent;
+                    text-align: center;
+                  `}>
+                  <RaisedButtonBody label="Create my account" />
+                </SubmitButtonSurface>
               </>
             )}
           </Form>
@@ -136,7 +154,7 @@ interface FieldProps extends React.ComponentProps<'div'> {
   label?: React.ReactNode
 }
 
-const Field = (props: FieldProps) => {
+const FieldBlock = (props: FieldProps) => {
   const [{ name }, issues] = useModelInput()
   const firstIssueMessage = issues[0]?.message
   const {
@@ -151,27 +169,45 @@ const Field = (props: FieldProps) => {
     <div
       {...rest}
       css={css`
-        margin: 1rem 0;
+        margin: 1.5rem 0;
       `}>
       <label
         css={css`
-          color: ${textColors.default};
+          color: ${textColors.tertiary};
           display: block;
+          font-family: sans-serif;
           font-weight: 600;
-          font-size: 90%;
-          line-height: 2rem;
+          font-size: 12px;
+          line-height: 12px;
           text-transform: uppercase;
           width: 100%;
         `}>
-        {label}
-        {children}
+        <div
+          css={css`
+            display: block;
+            padding: 0 0.5rem;
+          `}>
+          {label}
+        </div>
+        <div
+          css={css`
+            display: flex;
+            justify-content: center;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid ${controlColors.border.default};
+          `}>
+          {children}
+        </div>
       </label>
       <div
         css={css`
-          color: ${textColors.default};
-          font-size: 90%;
-          line-height: 1.4rem;
-          margin: 0.5rem 0;
+          background-color: ${structureColors.canvas};
+          border-radius: 0 0 ${standardRadius} ${standardRadius};
+          padding: 0 0.5rem;
+          color: ${textColors.tertiary};
+          font-family: sans-serif;
+          font-size: 0.75rem;
+          line-height: 1.5rem;
         `}>
         {message}
       </div>
@@ -180,7 +216,7 @@ const Field = (props: FieldProps) => {
 }
 
 function Input(props: JSX.IntrinsicElements['input']) {
-  const [{ onChange, ...inputProps }] = useModelInput({
+  const [{ onChange, ...inputProps }, issues] = useModelInput({
     onChange: props.onChange,
   })
 
@@ -193,5 +229,27 @@ function Input(props: JSX.IntrinsicElements['input']) {
     [onChange],
   )
 
-  return <input {...inputProps} {...props} onChange={handleChange} />
+  return (
+    <input
+      css={css`
+        border-radius: ${standardRadius};
+        color: ${textColors.default};
+        flex-grow: 1;
+        font-family: sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        height: 100%;
+        width: 100%;
+        padding: 0.25rem 0.5rem;
+
+        ::placeholder {
+          color: ${issues.length ? textColors.placeholder : 'transparent'};
+          transition: color 500ms ${easeOut};
+        }
+      `}
+      {...inputProps}
+      {...props}
+      onChange={handleChange}
+    />
+  )
 }

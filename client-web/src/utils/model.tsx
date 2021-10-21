@@ -21,6 +21,7 @@ import {
   useValidator,
 } from 'retil-issues'
 import { useOperation } from 'retil-operation'
+import { useJoinedEventHandler } from 'retil-support'
 
 export const rootModelPath = Symbol('root')
 export type RootModelPath = typeof rootModelPath
@@ -194,33 +195,25 @@ export interface ModelInputProps {
   onBlur?: (any?: any) => void
   onChange?: (value: any) => void
   value?: any
+  validateOnBlur?: boolean
 }
 
 export function useModelInput(
   options: ModelInputProps = {},
 ): readonly [ModelInputProps, Issue<any>[]] {
   const modelPath = useModelPathContext()
+  const { validateOnBlur: defaultValidateOnBlur } = useContext(formContext)
 
   const {
     name = modelPath.path,
     onBlur,
     onChange,
     value = modelPath.value,
+    validateOnBlur = defaultValidateOnBlur,
   } = options
 
-  const handleBlur = useMemo(
-    () =>
-      onBlur && modelPath.validate
-        ? (event?: any) => {
-            onBlur(event as any)
-            if (event && !event.defaultPrevented) {
-              modelPath.validate!()
-            }
-          }
-        : onBlur || modelPath.validate,
-    [onBlur, modelPath.validate],
-  )
-
+  const blurValidationHandler = validateOnBlur ? modelPath.validate : undefined
+  const handleBlur = useJoinedEventHandler(onBlur, blurValidationHandler)
   const handleChange = useMemo(
     () =>
       onChange && modelPath.update
@@ -270,6 +263,8 @@ export interface FormProps<
   areValuePathsEqual?: (x: TValue, y: TValue, path: string) => boolean
   attemptResolutionOnChange?: boolean
   getMessage?: GetIssueMessage<TValue, TCodes>
+
+  validateOnBlur?: boolean
 }
 
 const formContext = createContext<FormContext<any, any, any>>(undefined as any)
@@ -307,6 +302,8 @@ export interface FormContext<
   submit: () => Promise<TResult>
   submitPending: boolean
   submitResult: TResult | undefined
+
+  validateOnBlur?: boolean
 }
 
 export function Form<
@@ -329,6 +326,8 @@ export function Form<
     areValuePathsEqual,
     attemptResolutionOnChange,
     getMessage,
+
+    validateOnBlur = false,
 
     ...rest
   } = props
@@ -382,8 +381,9 @@ export function Form<
       submit,
       submitPending,
       submitResult,
+      validateOnBlur,
     }),
-    [model, handle, submit, submitPending, submitResult],
+    [model, handle, submit, submitPending, submitResult, validateOnBlur],
   )
 
   return (

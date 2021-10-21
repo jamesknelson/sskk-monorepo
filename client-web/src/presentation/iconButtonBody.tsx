@@ -2,7 +2,6 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { forwardRef } from 'react'
 import { HighStyleValue } from 'retil-css'
-
 import { inDisabledSurface } from 'retil-interaction'
 
 import { controlColors } from './colors'

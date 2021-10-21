@@ -2,9 +2,9 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { inFocusedSurface, inHoveredSurface } from 'retil-interaction'
 
-import { paletteColors } from 'src/presentation/colors'
-import { easeOut } from 'src/presentation/easings'
-import { interactionShadow } from 'src/presentation/shadows'
+import { paletteColors } from './colors'
+import { easeOut } from './easings'
+import { interactionShadow } from './shadows'
 
 export const InteractionRingDiv = styled.div([
   css`

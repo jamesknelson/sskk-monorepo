@@ -283,6 +283,7 @@ const AnimatedButtonLabelWrapper: React.FunctionComponent<
       flex-grow: 1;
       display: flex;
       align-items: center;
+      justify-content: center;
     `}
     {...props}
   />
