@@ -35,7 +35,7 @@ export const controlColors = {
     default: '#FBFCFF',
     highlight: rgba(paletteColors.focusBlue, 0.05),
     warning: '#FFFDFD',
-    issue: '#FFFDFD',
+    issue: '#F9F7F5',
   },
   border: {
     default: '#E0E8EC',

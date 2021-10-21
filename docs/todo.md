@@ -9,6 +9,18 @@ PRIORITIES:
 
 TODO:
 
+
+
+o FormFieldProps<TRequest> can be added used by a field component's props
+o FormFieldSurface (defines inFocusedSurface using :focus-within, is unstyled)
+o FieldBlock / Input are defined under src/presentation, uses surface selectors
+o FormFieldBlock / FormInput (under src/components/form)
+o const RegisterFormFieldBlock: FormFieldBlockProps<TRequest> = FormFieldBlock
+o to access busy/invalid/etc. states in code instead of styles, use the context
+- FormSubmitButtonSurface sets busy/invalid surface selectors
+
+
+
 - get the third step screen working
   o improve the look and feel of the card and form
   * move form model kit into retil-interaction, and hook up 

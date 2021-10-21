@@ -3,11 +3,20 @@ import get from 'lodash/get'
 import set from 'lodash/set'
 import React, {
   createContext,
+  forwardRef,
   useCallback,
   useContext,
   useMemo,
   useState,
 } from 'react'
+import {
+  inFocusedSurface,
+  inHoveredSurface,
+  inInvalidSurface,
+  SurfaceSelectorOverrides,
+  useDisableableConnector,
+  useSurfaceSelectorsConnector,
+} from 'retil-interaction'
 import {
   AddIssuesFunction,
   ClearIssuesFunction,
@@ -22,18 +31,22 @@ import {
 } from 'retil-issues'
 import { useOperation } from 'retil-operation'
 import { useJoinedEventHandler } from 'retil-support'
+import type { Object } from 'ts-toolbelt'
 
 export const rootModelPath = Symbol('root')
 export type RootModelPath = typeof rootModelPath
 
 // TODO: allow for nested types, using template literal types, e.g.
 // https://github.com/millsp/ts-toolbelt/blob/master/sources/Function/AutoPath.ts
-export type ModelPaths<TValue extends object> = Extract<keyof TValue, string>
+export type FormModelPaths<TValue extends object> = Extract<
+  keyof TValue,
+  string
+>
 
 // TODO: update these two interfaces to support nested paths, and for
 // ModelPath to be a true model that can itself have a nested model.
 // This would probably require the model TValue param to not extend "object".
-export interface Model<TValue extends object, TCodes extends IssueCodes> {
+export interface FormModel<TValue extends object, TCodes extends IssueCodes> {
   issues: Issue<TValue, TCodes>[]
   path: RootModelPath
   value: TValue
@@ -41,10 +54,10 @@ export interface Model<TValue extends object, TCodes extends IssueCodes> {
   update: (updater: TValue | ((value: TValue) => TValue)) => void
   validate: (path?: IssuePath<TCodes>) => Promise<boolean>
 }
-export interface ModelPath<
+export interface FormModelPath<
   Value extends object,
   Codes extends IssueCodes,
-  Path extends ModelPaths<Value>,
+  Path extends FormModelPaths<Value>,
 > {
   // Note: this does not include the parent model's value/issues, as including
   // these would mean that changing any model path in a form would require new
@@ -60,16 +73,18 @@ export interface ModelPath<
   validate: (path?: IssuePath<Codes>) => Promise<boolean>
 }
 
-export const ModelPathContext = createContext<null | ModelPath<any, any, any>>(
-  null,
-)
+export const FormModelPathContext = createContext<null | FormModelPath<
+  any,
+  any,
+  any
+>>(null)
 
 /**
  * Utility to memoize model and infer types.
  */
-export function useModel<Value extends object, Codes extends IssueCodes>(
-  model: Omit<Model<Value, Codes>, 'path'>,
-): Model<Value, Codes> {
+export function useFormModel<Value extends object, Codes extends IssueCodes>(
+  model: Omit<FormModel<Value, Codes>, 'path'>,
+): FormModel<Value, Codes> {
   const { issues, update, validate, value } = model
 
   return useMemo(
@@ -88,11 +103,14 @@ const noIssues = [] as Issue<any, any>[]
 
 // TODO: types for the returned model. This means `Value` can be anything, but
 // that currently breaks Issue types.
-export function useModelPath<
+export function useFormModelPath<
   Value extends object,
   Codes extends IssueCodes,
-  Path extends ModelPaths<Value>,
->(model: Model<Value, Codes>, path: Path): ModelPath<Value, Codes, Path> {
+  Path extends FormModelPaths<Value>,
+>(
+  model: FormModel<Value, Codes>,
+  path: Path,
+): FormModelPath<Value, Codes, Path> {
   const modelUpdate = model.update
   const modelValidate = model.validate
 
@@ -145,52 +163,13 @@ export function useModelPath<
   return pathModel
 }
 
-export type ProvideChildFunction<
-  Value extends object,
-  Codes extends IssueCodes,
-  Path extends ModelPaths<Value>,
-> = (modelPath: ModelPath<Value, Codes, Path>) => React.ReactElement
+const emptyModelPath = {} as Partial<FormModelPath<any, any, any>>
 
-export interface ProvideProps<
-  Value extends object = any,
-  Codes extends IssueCodes = DefaultIssueCodes<Value>,
-  Path extends ModelPaths<Value> = ModelPaths<object>,
-> {
-  children: React.ReactNode | ProvideChildFunction<Value, Codes, Path>
-  model?: Model<Value, Codes>
-  path: Path
+export function useFormModelContext() {
+  return useContext(FormModelPathContext) || emptyModelPath
 }
 
-// By putting our model in context, it's possible to separate form controls
-// into composable parts - e.g. a field wrapping an input.
-export function Provide<
-  Value extends object = any,
-  Codes extends IssueCodes = DefaultIssueCodes<Value>,
-  Path extends ModelPaths<Value> = ModelPaths<object>,
->({ children, model, path }: ProvideProps<Value, Codes, Path>) {
-  const form = useContext(formContext)
-  const modelPath = useModelPath(model || form.model, path)
-  const content = useMemo(
-    () => (typeof children === 'function' ? children(modelPath) : children),
-    [children, modelPath],
-  )
-  return useMemo(
-    () => (
-      <ModelPathContext.Provider value={modelPath}>
-        {content}
-      </ModelPathContext.Provider>
-    ),
-    [modelPath, content],
-  )
-}
-
-const emptyModelPath = {} as Partial<ModelPath<any, any, any>>
-
-export function useModelPathContext() {
-  return useContext(ModelPathContext) || emptyModelPath
-}
-
-export interface ModelInputProps {
+export interface FormModelInputProps {
   name?: string
   onBlur?: (any?: any) => void
   onChange?: (value: any) => void
@@ -198,10 +177,10 @@ export interface ModelInputProps {
   validateOnBlur?: boolean
 }
 
-export function useModelInput(
-  options: ModelInputProps = {},
-): readonly [ModelInputProps, Issue<any>[]] {
-  const modelPath = useModelPathContext()
+export function useFormModelInput(
+  options: FormModelInputProps = {},
+): readonly [FormModelInputProps, Issue<any>[]] {
+  const modelPath = useFormModelContext()
   const { validateOnBlur: defaultValidateOnBlur } = useContext(formContext)
 
   const {
@@ -237,21 +216,14 @@ export function useModelInput(
   return [inputProps, modelPath.issues || noIssues]
 }
 
-export interface FormProps<
+interface FormPropsExt<
   TValue extends object = any,
   TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
   TResult = void,
 > {
-  // The function form doesn't provide any extra functionality at runtime, but
-  // does allow for a typed Provide function.
   children:
     | React.ReactNode
-    | ((
-        Provide: <TPath extends ModelPaths<TValue>>(
-          props: Omit<ProvideProps<TValue, TCodes, TPath>, 'model'>,
-        ) => React.ReactElement,
-        handle: FormHandle<TValue, TCodes>,
-      ) => React.ReactNode)
+    | ((handle: FormHandle<TValue, TCodes>) => React.ReactNode)
 
   initialValue: TValue
   onValidate: Validator<TValue, TCodes>
@@ -289,7 +261,7 @@ export interface FormSubmitInput<
 > extends FormHandle<TValue, TCodes> {
   // Is null when imperatively submitted.
   event: React.FormEvent<HTMLFormElement> | null
-  model: Model<TValue, TCodes>
+  model: FormModel<TValue, TCodes>
 }
 
 export interface FormContext<
@@ -297,7 +269,7 @@ export interface FormContext<
   TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
   TResult = any,
 > {
-  model: Model<TValue, TCodes>
+  model: FormModel<TValue, TCodes>
   handle: FormHandle<TValue, TCodes>
   submit: () => Promise<TResult>
   submitPending: boolean
@@ -306,14 +278,32 @@ export interface FormContext<
   validateOnBlur?: boolean
 }
 
-export function Form<
+export type FormProps<
+  TValue extends object = any,
+  TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
+  TResult = void,
+> = FormPropsExt<TValue, TCodes, TResult> &
+  Omit<JSX.IntrinsicElements['form'], 'children' | 'onSubmit' | 'ref'> &
+  React.RefAttributes<HTMLFormElement>
+
+interface FormType {
+  <
+    TValue extends object = any,
+    TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
+    TResult = void,
+  >(
+    props: FormProps<TValue, TCodes, TResult>,
+  ): null | React.ReactElement
+}
+
+const FormForwardRefRenderCallback = <
   TValue extends object = any,
   TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
   TResult = void,
 >(
-  props: FormProps<TValue, TCodes, TResult> &
-    Omit<JSX.IntrinsicElements['form'], 'children' | 'onSubmit'>,
-) {
+  props: FormProps<TValue, TCodes, TResult>,
+  ref: React.ForwardedRef<HTMLFormElement>,
+) => {
   const {
     children,
     disabled,
@@ -340,7 +330,7 @@ export function Form<
     getMessage,
   })
   const [validate, clearValidationIssues] = useValidator(addIssues, onValidate)
-  const model = useModel({
+  const model = useFormModel({
     issues,
     value,
     update,
@@ -387,16 +377,154 @@ export function Form<
   )
 
   return (
-    <form onSubmit={handleSubmit} {...rest}>
+    <form ref={ref} onSubmit={handleSubmit} {...rest}>
       <formContext.Provider value={context}>
         {useMemo(
-          () =>
-            typeof children === 'function'
-              ? children(Provide as any, handle)
-              : children,
+          () => (typeof children === 'function' ? children(handle) : children),
           [children, handle],
         )}
       </formContext.Provider>
     </form>
   )
+}
+
+export const Form: FormType = forwardRef<
+  HTMLFormElement,
+  FormProps<any, any, any>
+>(FormForwardRefRenderCallback)
+
+export type FormFieldProviderChildFunction<
+  Value extends object,
+  Codes extends IssueCodes,
+  Path extends FormModelPaths<Value>,
+> = (modelPath: FormModelPath<Value, Codes, Path>) => React.ReactElement
+
+export interface FormFieldProps<
+  Value extends object = any,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends FormModelPaths<Value> = FormModelPaths<object>,
+> {
+  model?: FormModel<Value, Codes>
+  path: Path
+}
+
+export interface FormFieldProviderProps<
+  Value extends object = any,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends FormModelPaths<Value> = FormModelPaths<object>,
+> extends FormFieldProps<Value, Codes, Path> {
+  children: React.ReactNode | FormFieldProviderChildFunction<Value, Codes, Path>
+}
+
+// By putting our model in context, it's possible to separate form controls
+// into composable parts - e.g. a field wrapping an input.
+export function FormFieldProvider<
+  Value extends object = any,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends FormModelPaths<Value> = FormModelPaths<object>,
+>({ children, model, path }: FormFieldProviderProps<Value, Codes, Path>) {
+  const form = useContext(formContext)
+  const modelPath = useFormModelPath(model || form.model, path)
+  const content = useMemo(
+    () => (typeof children === 'function' ? children(modelPath) : children),
+    [children, modelPath],
+  )
+  return useMemo(
+    () => (
+      <FormModelPathContext.Provider value={modelPath}>
+        {content}
+      </FormModelPathContext.Provider>
+    ),
+    [modelPath, content],
+  )
+}
+
+export interface FormFieldSurfaceProps<
+  Value extends object = any,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends FormModelPaths<Value> = FormModelPaths<object>,
+> extends React.ComponentProps<'div'>,
+    Omit<FormFieldProps<Value, Codes, Path>, 'children'> {
+  disabled?: boolean
+  overrideSelectors?: SurfaceSelectorOverrides
+}
+
+export type TypedFormFieldSurface<
+  Value extends object = any,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends FormModelPaths<Value> = FormModelPaths<Value>,
+> = React.ForwardRefExoticComponent<FormFieldSurfaceProps<Value, Codes, Path>>
+
+export const FormFieldSurface = forwardRef<
+  HTMLDivElement,
+  FormFieldSurfaceProps<any, any, any>
+>(({ children, disabled, model, path, overrideSelectors, ...rest }, ref) => {
+  const form = useContext(formContext)
+  const modelPath = useFormModelPath(model || form.model, path)
+
+  // TODO: a "valid" surface would required that we know that the current
+  // value is equal to the most recent validated value.
+
+  const [disableableState, mergeDisableableProps, provideDisableable] =
+    useDisableableConnector(disabled)
+  const [, mergeSurfaceSelectorProps, provideSurfaceSelectors] =
+    useSurfaceSelectorsConnector(
+      [
+        [inFocusedSurface, ':focus-within'],
+        [inHoveredSurface, disableableState.disabled ? false : null],
+        [inInvalidSurface, modelPath.issues.length > 0],
+      ],
+      overrideSelectors,
+    )
+
+  return provideDisableable(
+    provideSurfaceSelectors(
+      <FormModelPathContext.Provider value={modelPath}>
+        <div
+          {...mergeDisableableProps(
+            mergeSurfaceSelectorProps({
+              ...rest,
+              ref,
+            }),
+          )}>
+          {children}
+        </div>
+      </FormModelPathContext.Provider>,
+    ),
+  )
+})
+
+export type TypedForm<
+  TValue extends object = any,
+  TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
+  TPath extends FormModelPaths<TValue> = FormModelPaths<TValue>,
+  TResult = any,
+  TDefaultProps extends object = any,
+> = React.ForwardRefExoticComponent<
+  Object.Optional<FormProps<TValue, TCodes, TResult>, keyof TDefaultProps>
+> & {
+  FieldSurface: React.ForwardRefExoticComponent<
+    FormFieldSurfaceProps<TValue, TCodes, TPath>
+  >
+}
+
+export function createForm<
+  TValue extends object = any,
+  TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
+  TPath extends FormModelPaths<TValue> = FormModelPaths<TValue>,
+  TResult = any,
+  TDefaultProps extends object = {},
+>(
+  defaultProps:
+    | Partial<FormProps<TValue, TCodes, TResult>>
+    | TDefaultProps = {},
+): TypedForm<TValue, TCodes, TPath, TResult, TDefaultProps> {
+  const Form: any = forwardRef<HTMLFormElement, FormProps<any, any, any>>(
+    FormForwardRefRenderCallback,
+  )
+
+  Form.defaultProps = defaultProps
+  Form.FieldSurface = FormFieldSurface
+
+  return Form
 }
