@@ -4,13 +4,12 @@ import { inInvalidSurface } from 'retil-interaction'
 
 import { textColors } from './colors'
 import { easeOut } from './easings'
-import { standardRadius } from './radii'
 
 export type InputProps = JSX.IntrinsicElements['input']
 
 export const Input = styled.input(
   css`
-    border-radius: ${standardRadius};
+    border-radius: 999px;
     color: ${textColors.default};
     flex-grow: 1;
     font-family: sans-serif;

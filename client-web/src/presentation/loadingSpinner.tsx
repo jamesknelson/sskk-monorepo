@@ -57,7 +57,7 @@ export const LoadingSpinner = ({
         {...rest}>
         <circle
           stroke={color}
-          strokeWidth={4}
+          strokeWidth={10}
           strokeMiterlimit={1}
           fill="none"
           cx={50}

@@ -21,6 +21,6 @@ export const InteractionRingDiv = styled.div([
     box-shadow: ${interactionShadow(paletteColors.ink100)};
   `),
   inFocusedSurface(css`
-    box-shadow: ${interactionShadow(paletteColors.focusBlue)};
+    box-shadow: ${interactionShadow(paletteColors.focusBlue)} !important;
   `),
 ])

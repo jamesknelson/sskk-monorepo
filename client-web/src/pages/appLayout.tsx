@@ -221,11 +221,11 @@ function AppAuthFooter(_props: AppAuthFooterProps) {
                 someone else does. Join Letterhouse now!
               </AppAuthFooterMessage>
               <LinkSurface href={appURLs.login()}>
-                <OutlineButtonBody label="Login" />
+                <OutlineButtonBody lowProfile label="Login" />
               </LinkSurface>
               <FlexGap size="0.5rem" />
               <LinkSurface href={appURLs.join()}>
-                <RaisedButtonBody label="Join" />
+                <RaisedButtonBody lowProfile label="Join" />
               </LinkSurface>
             </animated.footer>
           ),

@@ -1,6 +1,7 @@
 export { default as Code } from './icomoon/SVG/code.svg'
 export { default as Glasses } from './icomoon/SVG/glasses.svg'
 export { default as Pen } from './icomoon/SVG/pen.svg'
+export { default as Check } from './icomoon/SVG/check.svg'
 export { default as ChevronLeft } from './icomoon/SVG/chevron-left.svg'
 export { default as ChevronRight } from './icomoon/SVG/chevron-right.svg'
 export { default as FormatBold } from './icomoon/SVG/format_bold.svg'

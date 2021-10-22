@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import { SubmitButtonSurface } from 'retil-interaction'
 import { useNavController } from 'retil-nav'
 
+import { Check } from 'src/assets/glyphs'
 import { createBackgroundScene } from 'src/components/background'
 import { FormInput, FormFieldBlock } from 'src/components/form'
 import { messages } from 'src/constants/messages'
@@ -12,7 +13,7 @@ import { TextBlock } from 'src/presentation/blocks'
 import { RaisedButtonBody } from 'src/presentation/buttonBodies'
 import { Card } from 'src/presentation/card'
 import { smallCardClampWidth } from 'src/presentation/dimensions'
-import { createForm } from 'src/utils/form'
+import { createForm, FormSubmitButtonSurface } from 'src/utils/form'
 
 const RegisterForm = createForm({
   getMessage: (issue) =>
@@ -45,11 +46,11 @@ export const backgroundScene = createBackgroundScene(async () => {
         css={css`
           position: absolute;
           bottom: 0;
-          right: 0;
+          right: 12%;
           opacity: 0.1;
           z-index: 0;
-          transform: scale(1.5);
-          transform-origin: bottom right;
+          transform: scale3d(-1.5, 1.5, 1.5);
+          transform-origin: center bottom;
         `}
       />
     </div>
@@ -64,17 +65,33 @@ export function Page() {
     <div
       css={css`
         padding: 0 1rem;
-        margin-top: 2rem;
       `}>
-      <div
+      <Card
         css={css`
-          margin: 0 auto 2rem;
+          margin: 2rem auto;
           max-width: ${smallCardClampWidth};
+          padding: 3rem 1.5rem 3rem;
         `}>
-        <Card
-          css={css`
-            padding: 3rem 1.5rem 3rem;
-          `}>
+        <RegisterForm
+          initialValue={{
+            displayName: '',
+            email: '',
+            password: '',
+          }}
+          onSubmit={async (form) => {
+            if (await form.validate()) {
+              form.clearIssues()
+              const createUserIssues = await createUserWithPassword(
+                form.model.value,
+              )
+              if (createUserIssues) {
+                form.addIssues(createUserIssues)
+              } else {
+                // Navigation is handled by the loader.
+                await navigate(appURLs.join.selectMembershipType())
+              }
+            }
+          }}>
           <TextBlock
             css={css`
               text-align: center;
@@ -84,54 +101,38 @@ export function Page() {
               You'll need to create a Letterhouse login to send your letter.
             </p>
           </TextBlock>
-          <RegisterForm
-            initialValue={{
-              displayName: '',
-              email: '',
-              password: '',
-            }}
-            onSubmit={async (form) => {
-              if (await form.validate()) {
-                form.clearIssues()
-                const createUserIssues = await createUserWithPassword(
-                  form.model.value,
-                )
-                if (createUserIssues) {
-                  form.addIssues(createUserIssues)
-                } else {
-                  // Navigation is handled by the loader.
-                  await navigate(appURLs.join.selectMembershipType())
-                }
+          <RegisterForm.FieldSurface path="displayName">
+            <FormFieldBlock
+              label="Name"
+              input={<FormInput autoFocus placeholder="Little Red" />}
+            />
+          </RegisterForm.FieldSurface>
+          <RegisterForm.FieldSurface path="email">
+            <FormFieldBlock
+              input={<FormInput type="email" placeholder="hood@example.com" />}
+            />
+          </RegisterForm.FieldSurface>
+          <RegisterForm.FieldSurface path="password">
+            <FormFieldBlock input={<FormInput type="password" />} />
+          </RegisterForm.FieldSurface>
+          {/* <RegisterForm.Consumer select={form => form.model.issues}>
+              {(issues) =>
+                form.model.issues.map((issue, i) => (
+                  <div key={i}>{issue.message}</div>
+                ))
               }
-            }}>
-            <RegisterForm.FieldSurface path="displayName">
-              <FormFieldBlock
-                label="Name"
-                input={<FormInput autoFocus placeholder="Little Red" />}
-              />
-            </RegisterForm.FieldSurface>
-            <RegisterForm.FieldSurface path="email">
-              <FormFieldBlock
-                input={
-                  <FormInput type="email" placeholder="hood@example.com" />
-                }
-              />
-            </RegisterForm.FieldSurface>
-            <RegisterForm.FieldSurface path="password">
-              <FormFieldBlock input={<FormInput type="password" />} />
-            </RegisterForm.FieldSurface>
-            <SubmitButtonSurface
-              css={css`
-                width: 100%;
-                background-color: transparent;
-                text-align: center;
-              `}>
-              <RaisedButtonBody label="Create my account" />
-            </SubmitButtonSurface>
-          </RegisterForm>
-          <hr />
-        </Card>
-      </div>
+            </RegisterForm.Consumer> */}
+          <FormSubmitButtonSurface
+            css={css`
+              background-color: transparent;
+              display: block;
+              width: 100%;
+            `}>
+            <RaisedButtonBody glyph={null} label="Create my account" />
+          </FormSubmitButtonSurface>
+        </RegisterForm>
+        <hr />
+      </Card>
     </div>
   )
 }

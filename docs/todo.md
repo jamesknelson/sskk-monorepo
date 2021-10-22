@@ -9,28 +9,17 @@ PRIORITIES:
 
 TODO:
 
+- Implement the "select" prop of the form consumer
+- Implement support for a complete message on the button body
 
+- get registration and login both working
 
-o FormFieldProps<TRequest> can be added used by a field component's props
-o FormFieldSurface (defines inFocusedSurface using :focus-within, is unstyled)
-o FieldBlock / Input are defined under src/presentation, uses surface selectors
-o FormFieldBlock / FormInput (under src/components/form)
-o const RegisterFormFieldBlock: FormFieldBlockProps<TRequest> = FormFieldBlock
-o to access busy/invalid/etc. states in code instead of styles, use the context
-- FormSubmitButtonSurface sets busy/invalid surface selectors
+- move form model kit into retil-interaction
+- fields need interaction indicators
 
-
-
-- get the third step screen working
-  o improve the look and feel of the card and form
-  * move form model kit into retil-interaction, and hook up 
-    - FormSubmitButton w/ surface selectors for busy, invalid
-    - fields w/ surface selector for invalid
-  * save the in-progress letter on registration
+- save the in-progress letter on registration
 - make logging in on an account without a persona redirect back to the onboarding process
 - show a loading indicator in place of the editor during hydration, at the loader level
-- add the windmills background to the sign in page, try and animate the windmills
-  to rotate
 - update join context/loader to know how to deal with starting on the 3rd page:
   * when there is enough data in session, set complete steps to 2
   * otherwise, redirect to first page
@@ -45,6 +34,8 @@ o to access busy/invalid/etc. states in code instead of styles, use the context
 - Add / remove title menu button (show a confirmation window if hitting remove while a title exists)
 - If there's an empty title, add placeholder text behind it
 
+- add the windmills background to the sign in page, try and animate the windmills
+  to rotate
 - deploy to production
 
 ---

@@ -6,16 +6,25 @@ import React, {
   forwardRef,
   useCallback,
   useContext,
+  useImperativeHandle,
   useMemo,
   useState,
 } from 'react'
+import { useHasHydrated } from 'retil-hydration'
 import {
+  ActionSurfaceOptions,
+  createSurfaceSelector,
   inFocusedSurface,
   inHoveredSurface,
+  inHydratingSurface,
   inInvalidSurface,
   SurfaceSelectorOverrides,
+  mergeOverrides,
+  splitActionSurfaceOptions,
+  useActionSurfaceConnector,
   useDisableableConnector,
   useSurfaceSelectorsConnector,
+  inWorkingSurface,
 } from 'retil-interaction'
 import {
   AddIssuesFunction,
@@ -30,8 +39,13 @@ import {
   useValidator,
 } from 'retil-issues'
 import { useOperation } from 'retil-operation'
-import { useJoinedEventHandler } from 'retil-support'
+import {
+  preventDefaultEventHandler,
+  useJoinedEventHandler,
+} from 'retil-support'
 import type { Object } from 'ts-toolbelt'
+
+export const inCompleteSurface = /*#__PURE__*/ createSurfaceSelector(false)
 
 export const rootModelPath = Symbol('root')
 export type RootModelPath = typeof rootModelPath
@@ -42,6 +56,8 @@ export type FormModelPaths<TValue extends object> = Extract<
   keyof TValue,
   string
 >
+
+export type FormStatus = 'ready' | 'busy' | 'complete'
 
 // TODO: update these two interfaces to support nested paths, and for
 // ModelPath to be a true model that can itself have a nested model.
@@ -54,7 +70,7 @@ export interface FormModel<TValue extends object, TCodes extends IssueCodes> {
   update: (updater: TValue | ((value: TValue) => TValue)) => void
   validate: (path?: IssuePath<TCodes>) => Promise<boolean>
 }
-export interface FormModelPath<
+export interface FormFieldModel<
   Value extends object,
   Codes extends IssueCodes,
   Path extends FormModelPaths<Value>,
@@ -73,7 +89,7 @@ export interface FormModelPath<
   validate: (path?: IssuePath<Codes>) => Promise<boolean>
 }
 
-export const FormModelPathContext = createContext<null | FormModelPath<
+export const FormFieldModelContext = createContext<null | FormFieldModel<
   any,
   any,
   any
@@ -103,14 +119,14 @@ const noIssues = [] as Issue<any, any>[]
 
 // TODO: types for the returned model. This means `Value` can be anything, but
 // that currently breaks Issue types.
-export function useFormModelPath<
+export function useFormFieldModel<
   Value extends object,
   Codes extends IssueCodes,
   Path extends FormModelPaths<Value>,
 >(
   model: FormModel<Value, Codes>,
   path: Path,
-): FormModelPath<Value, Codes, Path> {
+): FormFieldModel<Value, Codes, Path> {
   const modelUpdate = model.update
   const modelValidate = model.validate
 
@@ -149,7 +165,7 @@ export function useFormModelPath<
       : relevantIssues
   }, [path, model.issues])
 
-  const pathModel = useMemo(
+  const fieldModel = useMemo(
     () => ({
       issues,
       path,
@@ -160,13 +176,13 @@ export function useFormModelPath<
     [issues, path, update, validate, value],
   )
 
-  return pathModel
+  return fieldModel
 }
 
-const emptyModelPath = {} as Partial<FormModelPath<any, any, any>>
+const emptyModelPath = {} as Partial<FormFieldModel<any, any, any>>
 
 export function useFormModelContext() {
-  return useContext(FormModelPathContext) || emptyModelPath
+  return useContext(FormFieldModelContext) || emptyModelPath
 }
 
 export interface FormModelInputProps {
@@ -236,14 +252,12 @@ interface FormPropsExt<
   attemptResolutionOnChange?: boolean
   getMessage?: GetIssueMessage<TValue, TCodes>
 
+  canSubmitAfterSuccessfulResult?: boolean
   validateOnBlur?: boolean
 }
 
 const formContext = createContext<FormContext<any, any, any>>(undefined as any)
 
-// Note: does not include `submit`, as this would require a new handle to be
-// passed into any render function on each update, thus causing *every* form
-// field to be re-rendered on each keystroke.
 export interface FormHandle<
   TValue extends object = any,
   TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
@@ -271,11 +285,16 @@ export interface FormContext<
 > {
   model: FormModel<TValue, TCodes>
   handle: FormHandle<TValue, TCodes>
+  reset: () => void
+  result: TResult | undefined
   submit: () => Promise<TResult>
-  submitPending: boolean
-  submitResult: TResult | undefined
+  status: FormStatus
 
   validateOnBlur?: boolean
+}
+
+export function useFormContext() {
+  return useContext(formContext)
 }
 
 export type FormProps<
@@ -284,7 +303,9 @@ export type FormProps<
   TResult = void,
 > = FormPropsExt<TValue, TCodes, TResult> &
   Omit<JSX.IntrinsicElements['form'], 'children' | 'onSubmit' | 'ref'> &
-  React.RefAttributes<HTMLFormElement>
+  React.RefAttributes<HTMLFormElement> & {
+    handleRef?: React.Ref<FormHandle<TValue, TCodes>>
+  }
 
 interface FormType {
   <
@@ -317,19 +338,25 @@ const FormForwardRefRenderCallback = <
     attemptResolutionOnChange,
     getMessage,
 
+    canSubmitAfterSuccessfulResult = false,
     validateOnBlur = false,
+
+    handleRef,
 
     ...rest
   } = props
 
   const [value, update] = useState<TValue>(initialValue)
+
   const [issues, addIssues, clearIssues] = useIssues<TValue, TCodes>(value, {
     areValuesEqual,
     areValuePathsEqual,
     attemptResolutionOnChange,
     getMessage,
   })
+
   const [validate, clearValidationIssues] = useValidator(addIssues, onValidate)
+
   const model = useFormModel({
     issues,
     value,
@@ -348,32 +375,49 @@ const FormForwardRefRenderCallback = <
     [addIssues, clearIssues, clearValidationIssues, update, validate],
   )
 
-  const [handleSubmit, submitPending, submitResult] = useOperation(
+  useImperativeHandle(handleRef, () => handle, [handle])
+
+  const [handleSubmit, submitPending, result] = useOperation(
     (event?: React.FormEvent<HTMLFormElement>) => {
       if (event) {
         event.preventDefault()
       }
-      return onSubmit({
+      const result = onSubmit({
         event: event || null,
         model,
         ...handle,
       })
+      return result
     },
     [handle, model, onSubmit],
   )
 
+  const [status, setStatus] = useState<FormStatus>('ready')
+  if (submitPending === false && status === 'busy') {
+    setStatus(
+      issues.length || canSubmitAfterSuccessfulResult ? 'ready' : 'complete',
+    )
+  }
+
   const submit = useCallback(() => handleSubmit(undefined), [handleSubmit])
+
+  const reset = useCallback(() => {
+    clearIssues()
+    update(() => initialValue)
+    setStatus('ready')
+  }, [clearIssues, initialValue])
 
   const context: FormContext<TValue, TCodes, TResult> = useMemo(
     () => ({
       model,
       handle,
+      reset,
+      result,
+      status,
       submit,
-      submitPending,
-      submitResult,
       validateOnBlur,
     }),
-    [model, handle, submit, submitPending, submitResult, validateOnBlur],
+    [model, handle, reset, result, status, submit, validateOnBlur],
   )
 
   return (
@@ -397,7 +441,7 @@ export type FormFieldProviderChildFunction<
   Value extends object,
   Codes extends IssueCodes,
   Path extends FormModelPaths<Value>,
-> = (modelPath: FormModelPath<Value, Codes, Path>) => React.ReactElement
+> = (modelPath: FormFieldModel<Value, Codes, Path>) => React.ReactElement
 
 export interface FormFieldProps<
   Value extends object = any,
@@ -423,17 +467,17 @@ export function FormFieldProvider<
   Codes extends IssueCodes = DefaultIssueCodes<Value>,
   Path extends FormModelPaths<Value> = FormModelPaths<object>,
 >({ children, model, path }: FormFieldProviderProps<Value, Codes, Path>) {
-  const form = useContext(formContext)
-  const modelPath = useFormModelPath(model || form.model, path)
+  const form = useFormContext()
+  const modelPath = useFormFieldModel(model || form.model, path)
   const content = useMemo(
     () => (typeof children === 'function' ? children(modelPath) : children),
     [children, modelPath],
   )
   return useMemo(
     () => (
-      <FormModelPathContext.Provider value={modelPath}>
+      <FormFieldModelContext.Provider value={modelPath}>
         {content}
-      </FormModelPathContext.Provider>
+      </FormFieldModelContext.Provider>
     ),
     [modelPath, content],
   )
@@ -460,7 +504,7 @@ export const FormFieldSurface = forwardRef<
   FormFieldSurfaceProps<any, any, any>
 >(({ children, disabled, model, path, overrideSelectors, ...rest }, ref) => {
   const form = useContext(formContext)
-  const modelPath = useFormModelPath(model || form.model, path)
+  const modelPath = useFormFieldModel(model || form.model, path)
 
   // TODO: a "valid" surface would required that we know that the current
   // value is equal to the most recent validated value.
@@ -479,7 +523,7 @@ export const FormFieldSurface = forwardRef<
 
   return provideDisableable(
     provideSurfaceSelectors(
-      <FormModelPathContext.Provider value={modelPath}>
+      <FormFieldModelContext.Provider value={modelPath}>
         <div
           {...mergeDisableableProps(
             mergeSurfaceSelectorProps({
@@ -489,10 +533,28 @@ export const FormFieldSurface = forwardRef<
           )}>
           {children}
         </div>
-      </FormModelPathContext.Provider>,
+      </FormFieldModelContext.Provider>,
     ),
   )
 })
+
+export interface FormConsumerProps<
+  Value extends object = any,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends FormModelPaths<Value> = FormModelPaths<object>,
+  Selection = FormContext<Value, Codes, Path>,
+> {
+  children: (selection: Selection) => void
+  select?: (value: FormContext<Value, Codes, Path>) => Selection
+}
+
+export type TypedFormConsumer<
+  Value extends object = any,
+  Codes extends IssueCodes = DefaultIssueCodes<Value>,
+  Path extends FormModelPaths<Value> = FormModelPaths<Value>,
+> = React.FunctionComponent<FormConsumerProps<Value, Codes, Path>>
+
+export const FormConsumer = formContext.Consumer
 
 export type TypedForm<
   TValue extends object = any,
@@ -503,6 +565,7 @@ export type TypedForm<
 > = React.ForwardRefExoticComponent<
   Object.Optional<FormProps<TValue, TCodes, TResult>, keyof TDefaultProps>
 > & {
+  Consumer: TypedFormConsumer<TValue, TCodes, TPath>
   FieldSurface: React.ForwardRefExoticComponent<
     FormFieldSurfaceProps<TValue, TCodes, TPath>
   >
@@ -524,7 +587,63 @@ export function createForm<
   )
 
   Form.defaultProps = defaultProps
+  Form.Consumer = FormConsumer
   Form.FieldSurface = FormFieldSurface
 
   return Form
 }
+
+export interface FormSubmitButtonSurfaceProps
+  // Note that we've removed "type", as we don't want to support submit
+  // buttons. They behave differently, so they deserve a separate surface.
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'>,
+    ActionSurfaceOptions {
+  enableBeforeHydration?: boolean
+}
+
+export const FormSubmitButtonSurface = forwardRef<
+  HTMLButtonElement,
+  FormSubmitButtonSurfaceProps
+>((props, ref) => {
+  const [actionSurfaceOptions, { enableBeforeHydration, onClick, ...rest }] =
+    splitActionSurfaceOptions(props)
+
+  // By default, we'll disable the form during hydration to prevent accidental
+  // submits. To enable the form anyway, pass an `enableBeforeHydration` prop.
+  const isHydrating = !useHasHydrated() && !enableBeforeHydration
+  const formContext = useFormContext()
+
+  const [actionSurfaceState, mergeActionSurfaceProps, provideActionSurface] =
+    useActionSurfaceConnector({
+      ...actionSurfaceOptions,
+      overrideSelectors: mergeOverrides(
+        [
+          [inHydratingSurface, !!isHydrating],
+          [inInvalidSurface, formContext.model.issues.length > 0],
+          [inWorkingSurface, formContext.status === 'busy'],
+          [inCompleteSurface, formContext.status === 'complete'],
+        ],
+        actionSurfaceOptions.overrideSelectors,
+      ),
+    })
+
+  const handleClick = useJoinedEventHandler(
+    onClick,
+    actionSurfaceState.disabled ? preventDefaultEventHandler : undefined,
+  )
+
+  return provideActionSurface(
+    <button
+      {...mergeActionSurfaceProps({
+        ...rest,
+        onClick: handleClick,
+        ref,
+      })}
+      // Disable the form until the app has hydrated and we're able to
+      // programatically disable the form if required. Apply a hydrating
+      // surface selector instead of a `disabled` one.
+      disabled={isHydrating}
+      type="submit"
+    />,
+  )
+})

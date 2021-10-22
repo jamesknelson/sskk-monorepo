@@ -1,13 +1,8 @@
 import { css } from '@emotion/react'
 import { forwardRef } from 'react'
-import { inFocusedSurface, inInvalidSurface } from 'retil-interaction'
+import { inInvalidSurface } from 'retil-interaction'
 
-import {
-  controlColors,
-  paletteColors,
-  structureColors,
-  textColors,
-} from './colors'
+import { controlColors, structureColors, textColors } from './colors'
 import { standardRadius } from './radii'
 
 export interface FieldBlockProps extends React.ComponentProps<'div'> {
@@ -55,9 +50,6 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
               padding: 0.25rem 0;
               border-bottom: 1px solid ${controlColors.border.default};
             `,
-            inFocusedSurface(css`
-              border-bottom-color: ${paletteColors.focusBlue};
-            `),
           ]}>
           {input}
         </div>
