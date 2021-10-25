@@ -9,7 +9,6 @@ PRIORITIES:
 
 TODO:
 
-- Implement the "select" prop of the form consumer
 - Implement support for a complete message on the button body
 
 - get registration and login both working

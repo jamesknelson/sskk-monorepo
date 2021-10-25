@@ -1,8 +1,7 @@
 import { css } from '@emotion/react'
-import { SubmitButtonSurface } from 'retil-interaction'
 import { useNavController } from 'retil-nav'
 
-import { Check } from 'src/assets/glyphs'
+// import { Check } from 'src/assets/glyphs'
 import { createBackgroundScene } from 'src/components/background'
 import { FormInput, FormFieldBlock } from 'src/components/form'
 import { messages } from 'src/constants/messages'
@@ -13,14 +12,36 @@ import { TextBlock } from 'src/presentation/blocks'
 import { RaisedButtonBody } from 'src/presentation/buttonBodies'
 import { Card } from 'src/presentation/card'
 import { smallCardClampWidth } from 'src/presentation/dimensions'
-import { createForm, FormSubmitButtonSurface } from 'src/utils/form'
+import { FormSubmitButtonSurface, createForm, useForm } from 'src/utils/form'
 
-const RegisterForm = createForm({
-  getMessage: (issue) =>
-    (issue.path && messages.auth[issue.path][issue.code]) ||
-    issue.message ||
-    issue.code,
-  onValidate: validateCreateUserWithPasswordRequest,
+const RegisterForm = createForm((props) => {
+  const { createUserWithPassword } = useAuthController()
+  const { navigate } = useNavController()
+  return useForm({
+    ...props,
+    getMessage: (issue) =>
+      (issue.path && messages.auth[issue.path][issue.code]) ||
+      issue.message ||
+      issue.code,
+    initialValue: {
+      displayName: '',
+      email: '',
+      password: '',
+    },
+    onSubmit: async (form) => {
+      if (await form.validate()) {
+        form.clearIssues()
+        const createUserIssues = await createUserWithPassword(form.model.value)
+        if (createUserIssues) {
+          form.addIssues(createUserIssues)
+        } else {
+          // Navigation is handled by the loader.
+          await navigate(appURLs.join.selectMembershipType())
+        }
+      }
+    },
+    onValidate: validateCreateUserWithPasswordRequest,
+  })
 })
 
 export const title = "You've taken the first step."
@@ -58,9 +79,6 @@ export const backgroundScene = createBackgroundScene(async () => {
 })
 
 export function Page() {
-  const { createUserWithPassword } = useAuthController()
-  const { navigate } = useNavController()
-
   return (
     <div
       css={css`
@@ -72,26 +90,7 @@ export function Page() {
           max-width: ${smallCardClampWidth};
           padding: 3rem 1.5rem 3rem;
         `}>
-        <RegisterForm
-          initialValue={{
-            displayName: '',
-            email: '',
-            password: '',
-          }}
-          onSubmit={async (form) => {
-            if (await form.validate()) {
-              form.clearIssues()
-              const createUserIssues = await createUserWithPassword(
-                form.model.value,
-              )
-              if (createUserIssues) {
-                form.addIssues(createUserIssues)
-              } else {
-                // Navigation is handled by the loader.
-                await navigate(appURLs.join.selectMembershipType())
-              }
-            }
-          }}>
+        <RegisterForm>
           <TextBlock
             css={css`
               text-align: center;
@@ -115,13 +114,11 @@ export function Page() {
           <RegisterForm.FieldSurface path="password">
             <FormFieldBlock input={<FormInput type="password" />} />
           </RegisterForm.FieldSurface>
-          {/* <RegisterForm.Consumer select={form => form.model.issues}>
-              {(issues) =>
-                form.model.issues.map((issue, i) => (
-                  <div key={i}>{issue.message}</div>
-                ))
-              }
-            </RegisterForm.Consumer> */}
+          <RegisterForm.Issues>
+            {(issues) =>
+              issues.map((issue, i) => <div key={i}>{issue.message}</div>)
+            }
+          </RegisterForm.Issues>
           <FormSubmitButtonSurface
             css={css`
               background-color: transparent;
