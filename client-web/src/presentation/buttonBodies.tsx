@@ -10,7 +10,11 @@ import { forwardRef } from 'react'
 //   to as interpolate,
 // } from 'react-spring'
 import { highStyle } from 'retil-css'
-import { inActiveSurface, inDisabledSurface } from 'retil-interaction'
+import {
+  inActiveSurface,
+  inDisabledSurface,
+  inWorkingSurface,
+} from 'retil-interaction'
 
 import { ChevronRight } from 'src/assets/glyphs'
 
@@ -72,28 +76,26 @@ export const RaisedButtonBody = forwardRef<HTMLDivElement, ButtonBodyProps>(
     },
     ref,
   ) => (
-    <InteractionRingDiv ref={ref}>
-      <ButtonBody
-        {...rest}
-        ref={ref}
-        labelColor={labelColor}
-        themeCSS={[
-          highStyle({
-            backgroundColor: color,
-          }),
-          css`
-            box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2),
-              1px 1px 1px rgba(255, 255, 255, 0.12) inset,
-              -1px -1px 1px rgba(0, 0, 0, 0.08) inset;
-          `,
-          inActiveSurface(css`
-            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.08),
-              -1px -1px 1px rgba(255, 255, 255, 0.2) inset,
-              1px 1px 1px rgba(0, 0, 0, 0.1) inset;
-          `),
-        ]}
-      />
-    </InteractionRingDiv>
+    <ButtonBody
+      {...rest}
+      ref={ref}
+      labelColor={labelColor}
+      themeCSS={[
+        highStyle({
+          backgroundColor: color,
+        }),
+        css`
+          box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2),
+            1px 1px 1px rgba(255, 255, 255, 0.12) inset,
+            -1px -1px 1px rgba(0, 0, 0, 0.08) inset;
+        `,
+        inActiveSurface(css`
+          box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.08),
+            -1px -1px 1px rgba(255, 255, 255, 0.2) inset,
+            1px 1px 1px rgba(0, 0, 0, 0.1) inset;
+        `),
+      ]}
+    />
   ),
 )
 
@@ -109,6 +111,7 @@ export interface ButtonBodyContentConfig {
   glyphColor?: string
   glyphPlacement?: 'left' | 'right'
   label: React.ReactElement | string
+  labelWhenComplete?: React.ReactElement | string
   labelColor: string
   lowProfile?: boolean
   showBusyIndicator?: boolean
@@ -134,6 +137,7 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
       // glyphSide = 'left',
       label,
       labelColor,
+      labelWhenComplete,
       lowProfile = false,
       showBusyIndicator,
       showBusyIndicatorColor = defaultSymbolColor,
@@ -141,17 +145,24 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
       ...rest
     } = props
 
-    // let labelStyleSpring = useSpring({
-    //   to: {
-    //     transform: `translateX(${glyph ? 1 : 0}em)`,
-    //   },
-    // })
-
     return (
       <InteractionRingDiv
-        css={css`
-          cursor: pointer;
-        `}
+        css={[
+          css`
+            cursor: pointer;
+          `,
+          inWorkingSurface(css`
+            cursor: progress;
+          `),
+          inDisabledSurface(
+            css`
+              cursor: default;
+            `,
+            inWorkingSurface(css`
+              cursor: wait;
+            `),
+          ),
+        ]}
         ref={ref}
         {...rest}>
         <div
@@ -167,33 +178,44 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
               border-radius: 9999px;
 
               transition: background-color 200ms ${easeOut},
-                opacity 200ms ${easeOut}, text-shadow 200ms ${easeOut},
-                box-shadow 200ms ${easeOut}, color 200ms ${easeOut};
+                opacity 250ms ${easeOut}, text-shadow 250ms ${easeOut},
+                box-shadow 250ms ${easeOut}, color 250ms ${easeOut};
             `,
-            inDisabledSurface(css`
-              opacity: 0.5;
-            `),
+            inDisabledSurface(
+              !showBusyIndicator &&
+                css`
+                  opacity: 0.5;
+                `,
+              inWorkingSurface(css`
+                opacity: 1;
+              `),
+            ),
             highStyle({
               color: labelColor,
             }),
           ]}>
           <div
-            css={css`
-              flex-grow: 1;
+            css={[
+              css`
+                flex-grow: 1;
 
-              display: flex;
-              align-items: center;
-              flex-direction: column;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
 
-              transform: translateY(
-                ${showBusyIndicator
-                  ? '-100%'
-                  : busyIndicatorPlacement === 'below'
-                  ? 0
-                  : '-200%'}
-              );
-              transition: transform 250ms ${easeInOut};
-            `}>
+                transform: translateY(
+                  ${showBusyIndicator
+                    ? '-100%'
+                    : busyIndicatorPlacement === 'below'
+                    ? 0
+                    : '-200%'}
+                );
+                transition: transform 250ms ${easeInOut};
+              `,
+              inWorkingSurface(css`
+                transform: translateY(-100%);
+              `),
+            ]}>
             <div
               css={css`
                 position: absolute;
@@ -215,25 +237,27 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
               />
             </div>
             <div
-              css={css`
-                flex-grow: 1;
+              css={[
+                css`
+                  flex-grow: 1;
 
-                display: flex;
-                align-items: center;
+                  display: flex;
+                  align-items: center;
 
-                padding: ${lowProfile ? 0.25 : 0.5}rem 1rem;
-                line-height: 1.5rem;
+                  padding: ${lowProfile ? 0.25 : 0.5}rem 1rem;
+                  line-height: 1.5rem;
 
-                font-family: sans-serif;
-                font-weight: 500;
-                font-size: 1rem;
-                text-align: center;
-                white-space: nowrap;
+                  font-family: sans-serif;
+                  font-weight: 500;
+                  font-size: 1rem;
+                  text-align: center;
+                  white-space: nowrap;
 
-                transform: translateY(
-                  ${busyIndicatorPlacement === 'below' ? 0 : '200%'}
-                );
-              `}>
+                  transform: translateY(
+                    ${busyIndicatorPlacement === 'below' ? 0 : '200%'}
+                  );
+                `,
+              ]}>
               {glyph && (
                 <Icon
                   css={css`
@@ -254,7 +278,7 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
                   align-items: center;
                   justify-content: center;
                 `}>
-                {label}
+                <span>{label}</span>
                 {chevron === 'right' && (
                   <Icon
                     color={chevronColor}

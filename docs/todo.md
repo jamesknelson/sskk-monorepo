@@ -9,12 +9,11 @@ PRIORITIES:
 
 TODO:
 
-- Implement support for a complete message on the button body
+o Implement support for a complete message on the button body
+o fields need interaction indicators
+o get registration and login both working
 
-- get registration and login both working
-
-- move form model kit into retil-interaction
-- fields need interaction indicators
+- add the persona selection screen, and skip directly there
 
 - save the in-progress letter on registration
 - make logging in on an account without a persona redirect back to the onboarding process

@@ -1,8 +1,19 @@
 import { css } from '@emotion/react'
+import { rgba } from 'polished'
 import { forwardRef } from 'react'
-import { inInvalidSurface } from 'retil-interaction'
+import {
+  inFocusedSurface,
+  inHoveredSurface,
+  inInvalidSurface,
+} from 'retil-interaction'
 
-import { controlColors, structureColors, textColors } from './colors'
+import {
+  controlColors,
+  paletteColors,
+  structureColors,
+  textColors,
+} from './colors'
+import { easeIn, easeInOut, easeOut } from './easings'
 import { standardRadius } from './radii'
 
 export interface FieldBlockProps extends React.ComponentProps<'div'> {
@@ -12,6 +23,20 @@ export interface FieldBlockProps extends React.ComponentProps<'div'> {
   message?: React.ReactNode
   label: React.ReactNode
 }
+
+const fieldBorderCSS = css`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+`
+const fieldInteractionIndicatorCSS = css`
+  ${fieldBorderCSS};
+  transform-origin: center center;
+  transform: scaleX(0);
+  transition: transform 125ms ${easeInOut};
+`
 
 export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
   ({ hint, input, issue, message = issue || hint, label, ...rest }, ref) => (
@@ -26,6 +51,7 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
       <label
         css={css`
           color: ${textColors.tertiary};
+          cursor: text;
           display: block;
           font-family: sans-serif;
           font-weight: 600;
@@ -35,23 +61,76 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
           width: 100%;
         `}>
         <div
-          css={css`
-            cursor: pointer;
-            display: block;
-            padding: 0 0.5rem;
-          `}>
-          {label}
+          css={[
+            css`
+              display: block;
+              padding: 0 0.5rem;
+              transition: color 200ms ${easeIn}, text-shadow 200ms ${easeIn};
+            `,
+            inHoveredSurface(css`
+              text-shadow: 0 0 2px ${rgba(paletteColors.ink100, 0.4)};
+            `),
+            inFocusedSurface(css`
+              color: ${paletteColors.focusBlue};
+              transition: color 200ms ${easeOut}, text-shadow 200ms ${easeOut};
+            `),
+          ]}>
+          <span
+            css={css`
+              cursor: pointer;
+            `}>
+            {label}
+          </span>
         </div>
         <div
           css={[
             css`
               display: flex;
               justify-content: center;
-              padding: 0.25rem 0;
-              border-bottom: 1px solid ${controlColors.border.default};
+              padding: 0.25rem 0 calc(0.25rem + 1px);
+              position: relative;
             `,
           ]}>
           {input}
+          <div
+            css={[
+              fieldBorderCSS,
+              css`
+                background-color: ${controlColors.border.default};
+              `,
+            ]}
+          />
+          <div
+            css={[
+              fieldInteractionIndicatorCSS,
+              css`
+                background-color: ${rgba(paletteColors.ink100, 1)};
+                box-shadow: 0 0 3px 0px ${rgba(paletteColors.ink100, 1)};
+              `,
+              inHoveredSurface(
+                css`
+                  transform: scaleX(1);
+                `,
+                inFocusedSurface(css`
+                  transform: scaleX(0);
+                `),
+              ),
+            ]}
+          />
+          <div
+            css={[
+              fieldInteractionIndicatorCSS,
+              css`
+                background-color: ${rgba(paletteColors.focusBlue, 0.4)};
+                box-shadow: 0 0 3px 0px ${rgba(paletteColors.focusBlue, 0.4)};
+              `,
+              inFocusedSurface(
+                css`
+                  transform: scaleX(1);
+                `,
+              ),
+            ]}
+          />
         </div>
       </label>
       <div
@@ -66,8 +145,8 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
             line-height: 1.5rem;
           `,
           inInvalidSurface(css`
-            background-color: ${controlColors.bg.issue};
-            color: ${textColors.issue};
+            background-color: ${controlColors.bg.default};
+            color: ${textColors.tertiary};
           `),
         ]}>
         {message}

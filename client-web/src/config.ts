@@ -1,5 +1,5 @@
 export const auth = {
-  refreshTokenEndpoint: import.meta.env.VITE_REFRESH_TOKEN_ENDPOINT!,
+  refreshTokenEndpoint: import.meta.env.VITE_REFRESH_TOKEN_ENDPOINT as string,
 }
 
 export const firebase = JSON.parse(

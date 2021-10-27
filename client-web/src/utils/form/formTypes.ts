@@ -15,6 +15,8 @@ export type FormPassthroughProps = Omit<
   'onSubmit' | 'ref'
 >
 
+export type FormStatus = 'ready' | 'busy' | 'complete'
+
 // TODO: types for nested paths
 export type FormModelPath<TValue extends object> = [
   Extract<keyof TValue, string>,
@@ -54,10 +56,9 @@ export type FormModelRoot<
 export interface FormSnapshot<TModel extends FormModelRoot<any, any>> {
   model: TModel
   props?: FormPassthroughProps
+  status: FormStatus
   submit: (event?: React.FormEvent<HTMLFormElement>) => any
 }
-
-export type UseFormStatus = 'ready' | 'busy' | 'complete'
 
 export interface UseFormOwnOptions<
   TValue extends object = any,
@@ -101,7 +102,6 @@ export interface UseFormSnapshot<
   clearValidationIssues: () => void
   reset: () => void
   result: TResult | undefined
-  status: UseFormStatus
   submit: (event?: React.FormEvent<HTMLFormElement>) => Promise<TResult>
   update: React.Dispatch<React.SetStateAction<TValue>>
   validate: (path?: IssuePath<TCodes>) => Promise<boolean>

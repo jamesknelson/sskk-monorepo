@@ -24,7 +24,7 @@ import {
   FormModelPath,
   FormModelRoot,
   UseFormOptions,
-  UseFormStatus,
+  FormStatus,
 } from './formTypes'
 
 /**
@@ -298,11 +298,13 @@ export function useForm<
     },
   )
 
-  const [status, setStatus] = useState<UseFormStatus>('ready')
+  const [status, setStatus] = useState<FormStatus>('ready')
   if (submitPending === false && status === 'busy') {
     setStatus(
       issues.length || canSubmitAfterSuccessfulResult ? 'ready' : 'complete',
     )
+  } else if (submitPending === true && status !== 'busy') {
+    setStatus('busy')
   }
 
   const reset = useCallback(() => {

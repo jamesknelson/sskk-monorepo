@@ -1,6 +1,10 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { inFocusedSurface, inHoveredSurface } from 'retil-interaction'
+import {
+  inDisabledSurface,
+  inFocusedSurface,
+  inHoveredSurface,
+} from 'retil-interaction'
 
 import { paletteColors } from './colors'
 import { easeOut } from './easings'
@@ -23,4 +27,9 @@ export const InteractionRingDiv = styled.div([
   inFocusedSurface(css`
     box-shadow: ${interactionShadow(paletteColors.focusBlue)} !important;
   `),
+  inDisabledSurface(
+    inHoveredSurface(css`
+      box-shadow: ${interactionShadow(paletteColors.ink100, 0.5)};
+    `),
+  ),
 ])

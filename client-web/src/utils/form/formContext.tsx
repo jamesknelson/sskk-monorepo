@@ -1,21 +1,14 @@
 import { createContext, useContext } from 'react'
-import { DefaultIssueCodes, IssueCodes } from 'retil-issues'
 
-import { UseFormSnapshot, FormModel } from './formTypes'
+import { FormSnapshot, FormModel } from './formTypes'
 
-export const formContext = createContext<UseFormSnapshot<any, any, any>>(
-  undefined as any,
-)
+export const formContext = createContext<FormSnapshot<any>>(undefined as any)
 
 export const formModelContext = createContext<FormModel<any, any, any, any>>(
   undefined as any,
 )
 
-export function useFormContext<
-  TValue extends object = any,
-  TCodes extends IssueCodes = DefaultIssueCodes<TValue>,
-  TResult = any,
->(): UseFormSnapshot<TValue, TCodes, TResult> {
+export function useFormContext(): FormSnapshot<any> {
   return useContext(formContext)
 }
 

@@ -79,19 +79,23 @@ export function createFirebaseAuthService(
   const [claimsSource, setLatestClaims] =
     createState<Record<string, any>>(emptyObject)
 
+  let signOutDepth = 0
+
   const mutableFirebaseUserSource = observe<firebase.User | null>(
     (next, error, complete) =>
       firebaseAuth.onAuthStateChanged(
         (user) => {
-          getTokenInfoForUser(user?.isAnonymous ? null : user).then(
-            (tokenInfo) => {
-              act(authWithoutMessagesSource, () => {
-                setLatestClaims(tokenInfo?.claims || emptyObject)
-                next(user)
-              })
-            },
-            error,
-          )
+          if (!user || !signOutDepth) {
+            getTokenInfoForUser(user?.isAnonymous ? null : user).then(
+              (tokenInfo) => {
+                act(authWithoutMessagesSource, () => {
+                  setLatestClaims(tokenInfo?.claims || emptyObject)
+                  next(user)
+                })
+              },
+              error,
+            )
+          }
         },
         error,
         complete,
@@ -524,10 +528,20 @@ export function createFirebaseAuthService(
     //   auth.signInWithRedirect(provider)
     // },
 
-    signOut: () => {
-      // Don't wrap with act, as we want to see the intermediate states (so
+    signOut: async () => {
+      // *Don't* wrap with act, as we want to see the intermediate states (so
       // that we get an immediate change in the UI).
-      return firebaseAuth.signOut()
+      //
+      // *Do* keep track of the fact that we're signing out, so that we can
+      // ignore any updates that Firebase makes while this is occuring (as
+      // Firebase can emit a new user on load *after* signOut has already been
+      // called).
+      signOutDepth++
+      try {
+        await firebaseAuth.signOut()
+      } finally {
+        signOutDepth--
+      }
     },
 
     updateEmail: async (data): Promise<null | PlaceholderIssues> => {

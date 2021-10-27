@@ -34,12 +34,15 @@ export function getAuthService(): AuthService {
     return pendingAuthService
   } else if (!authServiceRef.current) {
     authServiceRef.current = createFirebaseAuthService({
-      shouldRefreshToken: async (tokenInfo, user) => {
+      shouldRefreshToken: async (tokenInfo) => {
         if (tokenInfo.claims.customer_id) {
           return false
         }
 
-        await fetch(`${authConfig.refreshTokenEndpoint}?uid=${user.uid}`)
+        await fetch(authConfig.refreshTokenEndpoint, {
+          method: 'post',
+          body: JSON.stringify({ token: tokenInfo.token }),
+        })
 
         return true
       },

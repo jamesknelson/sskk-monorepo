@@ -14,36 +14,6 @@ import { Card } from 'src/presentation/card'
 import { smallCardClampWidth } from 'src/presentation/dimensions'
 import { FormSubmitButtonSurface, createForm, useForm } from 'src/utils/form'
 
-const RegisterForm = createForm((props) => {
-  const { createUserWithPassword } = useAuthController()
-  const { navigate } = useNavController()
-  return useForm({
-    ...props,
-    getMessage: (issue) =>
-      (issue.path && messages.auth[issue.path][issue.code]) ||
-      issue.message ||
-      issue.code,
-    initialValue: {
-      displayName: '',
-      email: '',
-      password: '',
-    },
-    onSubmit: async (form) => {
-      if (await form.validate()) {
-        form.clearIssues()
-        const createUserIssues = await createUserWithPassword(form.model.value)
-        if (createUserIssues) {
-          form.addIssues(createUserIssues)
-        } else {
-          // Navigation is handled by the loader.
-          await navigate(appURLs.join.selectMembershipType())
-        }
-      }
-    },
-    onValidate: validateCreateUserWithPasswordRequest,
-  })
-})
-
 export const title = "You've taken the first step."
 export const meta = {
   robots: 'noindex',
@@ -96,9 +66,22 @@ export function Page() {
               text-align: center;
             `}>
             <h1>It's that time.</h1>
-            <p>
-              You'll need to create a Letterhouse login to send your letter.
-            </p>
+
+            <RegisterForm.Issues>
+              {(issues) => {
+                const messages = issues
+                  .filter((issue) => !issue.path)
+                  .map((issue, i) => <div key={i}>{issue.message}</div>)
+                return messages.length ? (
+                  messages
+                ) : (
+                  <p>
+                    You'll need to create a Letterhouse login to send your
+                    letter.
+                  </p>
+                )
+              }}
+            </RegisterForm.Issues>
           </TextBlock>
           <RegisterForm.FieldSurface path="displayName">
             <FormFieldBlock
@@ -114,18 +97,24 @@ export function Page() {
           <RegisterForm.FieldSurface path="password">
             <FormFieldBlock input={<FormInput type="password" />} />
           </RegisterForm.FieldSurface>
-          <RegisterForm.Issues>
-            {(issues) =>
-              issues.map((issue, i) => <div key={i}>{issue.message}</div>)
-            }
-          </RegisterForm.Issues>
           <FormSubmitButtonSurface
             css={css`
               background-color: transparent;
               display: block;
               width: 100%;
             `}>
-            <RaisedButtonBody glyph={null} label="Create my account" />
+            {(status) => (
+              <RaisedButtonBody
+                label={
+                  status === 'complete'
+                    ? 'Account created!'
+                    : 'Create my account'
+                }
+                busyIndicatorPlacement={
+                  status === 'complete' ? 'above' : 'below'
+                }
+              />
+            )}
           </FormSubmitButtonSurface>
         </RegisterForm>
         <hr />
@@ -133,3 +122,34 @@ export function Page() {
     </div>
   )
 }
+
+const RegisterForm = createForm((props) => {
+  const { createUserWithPassword } = useAuthController()
+  const { navigate } = useNavController()
+
+  return useForm({
+    ...props,
+    getMessage: (issue) =>
+      (issue.path && messages.auth[issue.path][issue.code]) ||
+      issue.message ||
+      issue.code,
+    initialValue: {
+      displayName: '',
+      email: '',
+      password: '',
+    },
+    onSubmit: async (form) => {
+      if (await form.validate()) {
+        form.clearIssues()
+        const createUserIssues = await createUserWithPassword(form.model.value)
+        if (createUserIssues) {
+          form.addIssues(createUserIssues)
+        } else {
+          // Navigation is handled by the loader.
+          await navigate(appURLs.join.selectMembershipType())
+        }
+      }
+    },
+    onValidate: validateCreateUserWithPasswordRequest,
+  })
+})

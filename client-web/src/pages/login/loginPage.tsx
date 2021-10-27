@@ -1,108 +1,106 @@
 import { css } from '@emotion/react'
-import { useEffect, useState } from 'react'
-import { LinkSurface, SubmitButtonSurface } from 'retil-interaction'
-import { Validator, useIssues, useValidator } from 'retil-issues'
+import { useEffect } from 'react'
+import { LinkSurface } from 'retil-interaction'
 import { useNavController } from 'retil-nav'
-import { useOperation } from 'retil-operation'
 
-import { AuthLayout } from 'src/components/authLayout'
-import { Input } from 'src/components/input'
+import { FormInput, FormFieldBlock } from 'src/components/form'
+import { messages } from 'src/constants/messages'
 import { useAuthController } from 'src/env/auth'
+import { validateSignInWithPasswordRequest } from 'src/env/firebaseAuthIssues'
 import appURLs from 'src/pages/appURLs'
+import { TextBlock } from 'src/presentation/blocks'
 import { RaisedButtonBody } from 'src/presentation/buttonBodies'
-import { controlColors } from 'src/presentation/colors'
+import { smallCardClampWidth } from 'src/presentation/dimensions'
+import { Card } from 'src/presentation/card'
 import { hideAuthBarEffect } from 'src/services/authBarService'
-// import { useModel, useModelField } from 'src/utils/model'
-
-interface LoginModelValue {
-  email: string
-  password: string
-}
-
-const validateLogin: Validator<LoginModelValue> = (value) => ({
-  email: [!value.email && 'Please enter your email'],
-  password: [!value.password && 'Please enter your password'],
-})
+import { FormSubmitButtonSurface, createForm, useForm } from 'src/utils/form'
 
 export function Page() {
   useEffect(hideAuthBarEffect, [])
 
-  const [value, update] = useState({
-    email: '',
-    password: '',
-  })
-  const [issues, addIssues, clearIssues] = useIssues(value)
-  const [validate] = useValidator(addIssues, validateLogin)
+  return (
+    <div
+      css={css`
+        padding: 0 1rem;
+      `}>
+      <Card
+        css={css`
+          margin: 2rem auto;
+          max-width: ${smallCardClampWidth};
+          padding: 3rem 1.5rem 3rem;
+        `}>
+        <LoginForm>
+          <TextBlock
+            css={css`
+              text-align: center;
+            `}>
+            <h1>Welcome back</h1>
 
-  return null
-
-  // const model = useModel({
-  //   issues,
-  //   value,
-  //   update,
-  //   validate,
-  // })
-
-  // const authController = useAuthController()
-  // const { navigate } = useNavController()
-  // const [login, loginPending] = useOperation(async () => {
-  //   if (await validate()) {
-  //     clearIssues()
-  //     const signInIssues = await authController.signInWithPassword(value)
-  //     if (signInIssues) {
-  //       addIssues(signInIssues)
-  //     } else {
-  //       await navigate(appURLs.read.summary())
-  //     }
-  //   }
-  // })
-
-  // const [emailInput, emailIssues] = useModelField(model, 'email')
-  // const [passwordInput, passwordIssues] = useModelField(model, 'password')
-
-  // return (
-  //   <AuthLayout title="Sign in">
-  //     <form
-  //       onSubmit={(event) => {
-  //         event.preventDefault()
-  //         login()
-  //       }}
-  //       css={css`
-  //         margin: 1rem 0 2rem;
-
-  //         label {
-  //           display: block;
-  //           margin-bottom: 1rem;
-  //         }
-
-  //         input {
-  //           border: 1px solid ${controlColors.border.default};
-  //           background-color: ${controlColors.bg.default};
-  //           border-radius: 4px;
-  //           padding: 0.5rem;
-  //           display: block;
-  //           width: 100%;
-  //         }
-  //       `}>
-  //       <label>
-  //         Email
-  //         <Input type="email" {...emailInput} />
-  //         {emailIssues[0]?.message}
-  //       </label>
-  //       <label>
-  //         Password
-  //         <Input type="password" {...passwordInput} />
-  //         {passwordIssues[0]?.message}
-  //       </label>
-  //       <SubmitButtonSurface disabled={loginPending}>
-  //         <RaisedButtonBody
-  //           label={loginPending ? 'Signing in...' : 'Sign in'}
-  //           showBusyIndicator={loginPending}
-  //         />
-  //       </SubmitButtonSurface>
-  //     </form>
-  //     {/* <Link to="/join">Create New Account</Link>{' '} */}
-  //     <LinkSurface href="/recover">Recover Account</LinkSurface>
-  //   </AuthLayout>
-  // )
+            <LoginForm.Issues>
+              {(issues) => {
+                const messages = issues
+                  .filter((issue) => !issue.path)
+                  .map((issue, i) => <div key={i}>{issue.message}</div>)
+                return messages.length ? messages : null
+              }}
+            </LoginForm.Issues>
+          </TextBlock>
+          <LoginForm.FieldSurface path="email">
+            <FormFieldBlock
+              input={
+                <FormInput
+                  autoFocus
+                  type="email"
+                  placeholder="hood@example.com"
+                />
+              }
+            />
+          </LoginForm.FieldSurface>
+          <LoginForm.FieldSurface path="password">
+            <FormFieldBlock input={<FormInput type="password" />} />
+          </LoginForm.FieldSurface>
+          <FormSubmitButtonSurface
+            css={css`
+              background-color: transparent;
+              display: block;
+              width: 100%;
+            `}>
+            <RaisedButtonBody label="Log in" />
+          </FormSubmitButtonSurface>
+        </LoginForm>
+        {/* <Link to="/join">Create New Account</Link>{' '} */}
+        <LinkSurface href="/recover">Recover Account</LinkSurface>
+      </Card>
+    </div>
+  )
 }
+
+const LoginForm = createForm((props) => {
+  const { signInWithPassword } = useAuthController()
+  const { navigate } = useNavController()
+
+  return useForm({
+    ...props,
+    getMessage: (issue) =>
+      (issue.path && messages.auth[issue.path][issue.code]) ||
+      issue.message ||
+      issue.code,
+    initialValue: {
+      email: '',
+      password: '',
+    },
+    onSubmit: async (form) => {
+      if (await form.validate()) {
+        form.clearIssues()
+        const createUserIssues = await signInWithPassword(form.model.value)
+        if (createUserIssues) {
+          form.addIssues(createUserIssues)
+        } else {
+          // Navigation is handled by the loader.
+          await navigate(appURLs.read.summary())
+        }
+      }
+    },
+    onValidate: validateSignInWithPasswordRequest,
+  })
+})
