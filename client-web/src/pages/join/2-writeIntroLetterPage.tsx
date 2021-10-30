@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import { useRef } from 'react'
 import { Boundary } from 'retil-boundary'
 import { useHasHydrated } from 'retil-hydration'
-import { LinkSurface } from 'retil-interaction'
+import { ButtonSurface } from 'retil-interaction'
 import { useSource } from 'retil-source'
 import { useEffectOnce } from 'retil-support'
 
@@ -14,18 +14,19 @@ import {
   useEditorStateSource,
 } from 'src/components/editor'
 import appURLs from 'src/pages/appURLs'
-import { OutlineButtonBody } from 'src/presentation/buttonBodies'
+import { RaisedButtonBody } from 'src/presentation/buttonBodies'
 import { Card } from 'src/presentation/card'
 import { structureColors } from 'src/presentation/colors'
 import { barHeight } from 'src/presentation/dimensions'
-import { FlexGap } from 'src/presentation/flexGap'
 import { LetterMetaBlock } from 'src/presentation/letterMetaBlock'
-import { ProgressPie } from 'src/presentation/progressPie'
 import { standardRadius } from 'src/presentation/radii'
 import { TextBlock } from 'src/presentation/blocks'
 import { createEditorState } from 'src/prose'
 
 import { useJoinContext } from './joinContext'
+import { useNavController } from 'retil-nav'
+import { useAppEnv } from 'src/env'
+import { Tooltip } from 'src/components/tooltip'
 
 export const title = 'Say hello!'
 export const meta = {
@@ -65,6 +66,8 @@ const minTextLength = 280
 
 export function Page() {
   const hasHydrated = useHasHydrated()
+  const appEnv = useAppEnv()
+  const { navigate } = useNavController()
   const context = useJoinContext()
   const headerRef = useRef<HTMLDivElement>(null)
 
@@ -104,9 +107,23 @@ export function Page() {
 
   const editorState = useSource(editorStateSource)
   const editorHandleRef = useRef<EditorHandle>(null)
+  const currentTextLength = editorState.doc.textContent.length
   const pieProportion = hasHydrated
-    ? Math.min(1, editorState.doc.textContent.length / minTextLength)
+    ? Math.min(1, currentTextLength / minTextLength)
     : 0
+
+  const handleRequestNext = () => {
+    if (pieProportion < 1) {
+      // TODO: show a tooltip saying you need x more characters
+      return
+    }
+
+    navigate(
+      appEnv.customer
+        ? appURLs.join.chooseAddress()
+        : appURLs.join.createAccount(),
+    )
+  }
 
   return (
     <div
@@ -160,22 +177,8 @@ export function Page() {
           <EditorMenu
             state={editorState}
             applyTransaction={editorStateHandle.applyTransaction}
+            editorHandleRef={editorHandleRef}
           />
-          <FlexGap />
-          <div
-            css={css`
-              display: flex;
-              align-items: center;
-            `}>
-            <FlexGap size="0.5rem" />
-            <ProgressPie proportion={pieProportion} size="2rem" />
-            <FlexGap size="0.5rem" />
-            <LinkSurface
-              disabled={pieProportion < 1}
-              href={appURLs.join.createAccount()}>
-              <OutlineButtonBody label="Next" chevron="right" />
-            </LinkSurface>
-          </div>
         </div>
         <Card
           css={css`
@@ -197,12 +200,36 @@ export function Page() {
                   applyTransaction={editorStateHandle.applyTransaction}
                   autoFocus
                   minHeight="80px"
-                  ref={editorHandleRef}
+                  handleRef={editorHandleRef}
                 />
               </Boundary>
             </TextBlock>
           </div>
         </Card>
+      </div>
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          margin-top: 1rem;
+        `}>
+        <Tooltip
+          disabled={pieProportion >= 1}
+          label={`Your introduction needs another ${
+            minTextLength - currentTextLength
+          } characters`}
+          placement="top"
+          offset={[0, 8]}>
+          <ButtonSurface
+            disabled={pieProportion < 1}
+            onTrigger={handleRequestNext}>
+            <RaisedButtonBody
+              inline
+              label="Continue"
+              rightGlyph={pieProportion >= 1 ? 'chevron' : pieProportion}
+            />
+          </ButtonSurface>
+        </Tooltip>
       </div>
     </div>
   )

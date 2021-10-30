@@ -538,6 +538,7 @@ export function createFirebaseAuthService(
       // called).
       signOutDepth++
       try {
+        sessionStorage.clear()
         await firebaseAuth.signOut()
       } finally {
         signOutDepth--

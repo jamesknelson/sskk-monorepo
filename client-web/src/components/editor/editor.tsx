@@ -19,6 +19,8 @@ import { createSuspenseLoader } from 'src/utils/createSuspenseLoader'
 export interface EditorHandle {
   root: HTMLDivElement
   view: EditorView
+  focus: () => void
+  blur: () => void
 }
 
 export interface EditorProps extends ProsemirrorProps {
@@ -31,6 +33,8 @@ export interface EditorProps extends ProsemirrorProps {
   ) => EditorState | null
 
   autoFocus?: boolean
+
+  handleRef?: React.Ref<EditorHandle>
 
   minHeight?: string
 
@@ -47,10 +51,11 @@ const getCodeBlockView = createSuspenseLoader(
 )
 
 // Based on: https://github.com/dminkovsky/use-prosemirror/blob/93edf8ae5323e9cbffa03e793b494a28046d490a/src/ProseMirror.tsx
-export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
+export const Editor = forwardRef<HTMLDivElement, EditorProps>(function Editor(
   props,
-  ref,
+  divRef,
 ): JSX.Element {
+  const handleRef = props.handleRef
   const env = useAppEnv()
   const viewRef = useRef<EditorView<Schema> | null>(null)
   const { className, applyTransaction, state, style, ...restProps } = props
@@ -61,6 +66,13 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
   // The first time this is called will cause a Suspense promise to be thrown,
   // so we don't want to call it until hydration has completed.
   const CodeBlockView = env.hasHydrated && getCodeBlockView()
+
+  const focus = useCallback(() => {
+    viewRef.current?.focus()
+  }, [])
+
+  // Needed for compatibility with retil-interaction focus delegation
+  const blur = useCallback(() => {}, [])
 
   const wrapperRef = useCallback(
     async (root: HTMLDivElement | null) => {
@@ -91,28 +103,35 @@ export const Editor = forwardRef<EditorHandle, EditorProps>(function Editor(
           viewRef.current?.focus()
         }
 
-        if (typeof ref === 'function') {
-          ref({
-            root,
-            view,
-          })
-        } else if (ref) {
-          ref.current = {
-            root,
-            view,
-          }
+        const handle = {
+          root,
+          view,
+          focus,
+          blur,
+        }
+
+        if (typeof handleRef === 'function') {
+          handleRef(handle)
+        } else if (handleRef) {
+          ;(handleRef as React.MutableRefObject<EditorHandle>).current = handle
         }
       } else {
-        if (typeof ref === 'function') {
-          ref(null)
-        } else if (ref) {
-          ref.current = null
+        if (typeof handleRef === 'function') {
+          handleRef(null)
+        } else if (handleRef) {
+          ;(handleRef as React.MutableRefObject<null>).current = null
         }
 
         if (viewRef.current) {
           viewRef.current.destroy()
           viewRef.current = null
         }
+      }
+
+      if (typeof divRef === 'function') {
+        divRef(root)
+      } else if (divRef) {
+        divRef.current = root
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

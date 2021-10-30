@@ -1,14 +1,15 @@
 import { useCallback, useRef } from 'react'
 import { media, useMediaSelector } from 'retil-media'
 import { Placement } from '@popperjs/core'
-import Tippy from '@tippyjs/react/headless'
+import Tippy, { TippyProps } from '@tippyjs/react/headless'
 
 import { TooltipBody } from 'src/presentation/tooltipBody'
 import { TransitionHandle } from 'src/utils/transitionHandle'
 
 export type { Placement }
 
-export interface TooltipProps {
+export interface TooltipProps
+  extends Omit<TippyProps, 'animation' | 'render' | 'touch'> {
   children: React.ReactElement
   label: React.ReactElement | string
   offset?: [number, number]
@@ -36,6 +37,7 @@ export function Tooltip({
   } else {
     return (
       <Tippy
+        {...rest}
         animation
         placement={placement}
         offset={offset}

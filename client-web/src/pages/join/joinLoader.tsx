@@ -5,7 +5,7 @@ import { createMemo } from 'retil-support'
 
 import { BackgroundScene } from 'src/components/background'
 import { AppEnv } from 'src/env'
-import { LoadingPage } from 'src/pages/loadingLoader'
+import loadingLoader from 'src/pages/loadingLoader'
 import { CreateHeadTagsInput, createHeadTags } from 'src/utils/createHeadTags'
 import { patternFor } from 'src/utils/urls'
 
@@ -117,7 +117,7 @@ const joinPersistenceMemo = createMemo<Promise<JoinPersistence>>()
 
 export default loadAsync(async function joinLoader(props: LoaderProps<AppEnv>) {
   if (!props.hasHydrated) {
-    return <LoadingPage />
+    return loadingLoader(props)
   }
 
   const client = props.client

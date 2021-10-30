@@ -13,8 +13,14 @@ o ensure the intro loading spinner isn't animated
 o figure out why session save isn't working on refresh
 o save the in-progress letter on registration
 o show a loading indicator in place of the editor during hydration, at the loader level
+o clear session storage on logout
+o improve the "register & save" button w/ indicator
 
-- remove all session data keys on logout, with an import * on session storage keys
+- get editor menu working
+  * B, I
+  o make sure buttons don't steal focus
+- convert the backgrounds to .svg files instead of javascript files
+
 - add the persona selection screen, and skip directly there. only support
   free addresses for now.
   * add form
@@ -26,18 +32,17 @@ o show a loading indicator in place of the editor during hydration, at the loade
   * when there is enough data in session, set complete steps to 2
   * otherwise, redirect to first page
   * etc.
-
-- improve the "register & save" button w/ indicator
+- don't allow the user to navigate forward using the step indicators if they remove their letter content
 
 - forgotten password flow
 - user menu
 - change password screen
 - forget I ever existed screen
 
+- mobile
+  * pressing the "continue" button on the introduction letter before meeting the
+    minimum character count should imperatively pop up the tooltip
 
-- get editor menu working
-  * B, I
-  * make sure buttons don't steal focus
 - Add / remove title menu button (show a confirmation window if hitting remove while a title exists)
 - If there's an empty title, add placeholder text behind it
 

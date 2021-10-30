@@ -8,7 +8,7 @@ import {
 } from 'scheduler'
 
 import * as roles from 'src/constants/roles'
-import { joinPersistenceStorageKey } from 'src/constants/storageKeys'
+import { joinPersistenceKey } from 'src/constants/sessionStorageKeys'
 import {
   GetPersistedOnboardingDataDocument,
   PersistOnboardingDataDocument,
@@ -52,11 +52,9 @@ export async function createJoinPersistence(
   client: ApolloClient<any>,
   customerId?: string | null,
 ): Promise<JoinPersistence> {
-  console.log('create persistence')
-
   const clearSession = () => {
     try {
-      sessionStorage.removeItem(joinPersistenceStorageKey)
+      sessionStorage.removeItem(joinPersistenceKey)
     } catch {}
   }
 
@@ -82,7 +80,7 @@ export async function createJoinPersistence(
 
   let sessionData: JoinPersistableData | null = null
   try {
-    const data = JSON.parse(sessionStorage.getItem(joinPersistenceStorageKey)!)
+    const data = JSON.parse(sessionStorage.getItem(joinPersistenceKey)!)
     if (data?.id && data?.id !== customerId) {
       clearSession()
     } else if (data) {
@@ -104,7 +102,7 @@ export async function createJoinPersistence(
 
   function persistToSessionStorage(data: JoinPersistableData) {
     try {
-      sessionStorage.setItem(joinPersistenceStorageKey, JSON.stringify(data))
+      sessionStorage.setItem(joinPersistenceKey, JSON.stringify(data))
       return true
     } catch {
       return false

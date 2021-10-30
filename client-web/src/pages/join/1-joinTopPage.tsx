@@ -95,19 +95,19 @@ export function Page() {
               characters.
             </p>
             <p>Whatever you decide to write, I can't wait to read it!</p>
-            <div
-              css={css`
-                display: flex;
-                justify-content: center;
-                margin: 1.5rem 0 1rem;
-              `}>
-              <LinkSurface href={appURLs.join.writeIntroLetter()}>
-                <RaisedButtonBody label="Say hello" chevron="right" />
-              </LinkSurface>
-            </div>
           </TextBlock>
         </div>
       </Card>
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          margin: 1.5rem 0 1rem;
+        `}>
+        <LinkSurface href={appURLs.join.writeIntroLetter()}>
+          <RaisedButtonBody label="Say hello" rightGlyph="chevron" />
+        </LinkSurface>
+      </div>
     </div>
   )
 }

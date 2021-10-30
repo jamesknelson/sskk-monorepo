@@ -1,4 +1,5 @@
 import { css, keyframes } from '@emotion/react'
+import { HighStyleValue } from 'retil-css'
 
 const spinnerDashAnimation = keyframes`
 0%,
@@ -28,9 +29,12 @@ const spinnerRotatorAnimation = keyframes`
 }
 `
 
-export type LoadingSpinnerProps = Omit<React.SVGProps<SVGElement>, 'ref'> & {
+export type LoadingSpinnerProps = Omit<
+  React.SVGProps<SVGElement>,
+  'color' | 'ref'
+> & {
   active?: boolean
-  color?: string
+  color?: HighStyleValue<string>
   size?: string
 }
 
@@ -56,7 +60,8 @@ export const LoadingSpinner = ({
         `}
         {...rest}>
         <circle
-          stroke={color}
+          // FIXME: support high style
+          stroke={color as string}
           strokeWidth={10}
           strokeMiterlimit={1}
           fill="none"

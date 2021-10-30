@@ -1,22 +1,14 @@
 import { css } from '@emotion/react'
 import { Interpolation } from '@emotion/serialize'
-import { rgba } from 'polished'
+import { rgba, tint } from 'polished'
 import type React from 'react'
 import { forwardRef } from 'react'
-// import {
-//   animated,
-//   useSpring,
-//   useTransition,
-//   to as interpolate,
-// } from 'react-spring'
-import { highStyle } from 'retil-css'
-import {
-  inActiveSurface,
-  inDisabledSurface,
-  inWorkingSurface,
-} from 'retil-interaction'
+import { animated, useTransition } from 'react-spring'
+import { HighStyleValue, highStyle } from 'retil-css'
+import { inActiveSurface, inDisabledSurface } from 'retil-interaction'
 
-import { ChevronRight } from 'src/assets/glyphs'
+import { ChevronLeft, ChevronRight } from 'src/assets/glyphs'
+import { Caret } from './caret'
 
 // import { Caret } from './caret'
 import { controlColors, paletteColors } from './colors'
@@ -24,6 +16,7 @@ import { easeInOut, easeOut } from './easings'
 import { GlyphComponent, Icon } from './icon'
 import { InteractionRingDiv } from './interactionRing'
 import { LoadingSpinner } from './loadingSpinner'
+import { ProgressCircle } from './progressCircle'
 
 // FIXME: there's a vite bug where putting this directly into the defaults via
 // destructuring causes it to be undefined during server rendering in some
@@ -46,7 +39,6 @@ export const OutlineButtonBody = forwardRef<HTMLDivElement, ButtonBodyProps>(
       {...rest}
       ref={ref}
       glyphColor={controlColors.icon.default}
-      labelColor={labelColor}
       themeCSS={[
         // TODO: this should only be applied when *not* disabled
         css`
@@ -54,14 +46,22 @@ export const OutlineButtonBody = forwardRef<HTMLDivElement, ButtonBodyProps>(
             0 0 10px ${rgba(color, 0.12)} inset;
           text-shadow: 0 0 5px ${rgba(color, 0.1)};
         `,
+        highStyle({
+          color: labelColor,
+        }),
         inActiveSurface(css`
           box-shadow: 0 0 0 1px ${color} inset, 0 0 15px ${rgba(color, 0.2)},
             0 0 15px ${rgba(color, 0.2)} inset;
           text-shadow: 0 0 8px ${rgba(color, 0.15)};
         `),
-        inDisabledSurface(css`
-          box-shadow: 0 0 0 1px ${color} inset;
-        `),
+        inDisabledSurface(
+          // TODO: handle progress circles as well
+          !rest.busyIndicator &&
+            css`
+              box-shadow: 0 0 0 1px ${color} inset;
+              opacity: 0.5;
+            `,
+        ),
       ]}
     />
   ),
@@ -79,10 +79,14 @@ export const RaisedButtonBody = forwardRef<HTMLDivElement, ButtonBodyProps>(
     <ButtonBody
       {...rest}
       ref={ref}
-      labelColor={labelColor}
+      glyphColor={rgba(labelColor, 0.85)}
       themeCSS={[
         highStyle({
-          backgroundColor: color,
+          backgroundColor: {
+            default: color,
+            [inDisabledSurface]: tint(0.5, color),
+          },
+          color: labelColor,
         }),
         css`
           box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2),
@@ -99,23 +103,39 @@ export const RaisedButtonBody = forwardRef<HTMLDivElement, ButtonBodyProps>(
   ),
 )
 
+// - A function will be rendered as an icon
+// - An element will be rendered as-is
+// - A number will be rendered as a progress circle
+// - `null` will be rendered as extra space
+// - `undefined` will cause nothing to be rendered
+export type ButtonBodyGlyphProp =
+  | GlyphComponent
+  | React.ReactElement
+  | 'caret'
+  | 'chevron'
+  | 'spinner'
+  | number
+  | null
+
+// TODO:
+// - allow a `labelColor` high style value to be passed in, and compute the
+//   default glyph color from this.
 export interface ButtonBodyContentConfig {
-  // When left/right, it will override any glyph in that position
-  busyIndicatorPlacement?: 'above' | 'below' | 'left' | 'right'
-  caret?: boolean
-  caretColor?: string
-  caretRotationDegrees?: number
-  chevron?: 'left' | 'right' | null
-  chevronColor?: string
-  glyph?: GlyphComponent | null
-  glyphColor?: string
-  glyphPlacement?: 'left' | 'right'
+  // Supplying `true` to `busyIndicator` will replace the rest of the content
+  // with a busy indicator, while 'above' and 'below' can be used to animate
+  // the indiator in and out.
+  busyIndicator?: 'above' | 'below' | true
+  busyIndicatorColor?: HighStyleValue<string>
+  glyphColor?: HighStyleValue<string>
+  inline?: boolean
   label: React.ReactElement | string
-  labelWhenComplete?: React.ReactElement | string
-  labelColor: string
+  leftGlyph?: ButtonBodyGlyphProp
+  leftGlyphScale?: number
+  leftGlyphColor?: HighStyleValue<string>
   lowProfile?: boolean
-  showBusyIndicator?: boolean
-  showBusyIndicatorColor?: string
+  rightGlyph?: ButtonBodyGlyphProp
+  rightGlyphColor?: HighStyleValue<string>
+  rightGlyphScale?: number
   themeCSS?: Interpolation<any>
 }
 
@@ -124,43 +144,44 @@ export type ButtonBodyContentProps = ButtonBodyContentConfig &
 
 export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
   (props, ref) => {
-    const defaultSymbolColor = props.glyphColor || rgba(props.labelColor, 0.85)
+    const defaultSymbolColor = 'currentColor'
 
     const {
-      // caret = false,
-      // caretColor,
-      busyIndicatorPlacement = 'below',
-      chevron = null,
-      chevronColor = defaultSymbolColor,
-      glyph,
+      busyIndicator,
+      busyIndicatorColor = defaultSymbolColor,
       glyphColor = defaultSymbolColor,
-      // glyphSide = 'left',
+      inline = false,
       label,
-      labelColor,
-      labelWhenComplete,
+      leftGlyph,
+      leftGlyphColor = glyphColor,
+      leftGlyphScale = 1,
       lowProfile = false,
-      showBusyIndicator,
-      showBusyIndicatorColor = defaultSymbolColor,
+      rightGlyph,
+      rightGlyphColor = glyphColor,
+      rightGlyphScale = 1,
       themeCSS,
       ...rest
     } = props
 
     return (
       <InteractionRingDiv
+        inline={inline}
         css={[
           css`
             cursor: pointer;
           `,
-          inWorkingSurface(css`
-            cursor: progress;
-          `),
+          busyIndicator === true &&
+            css`
+              cursor: progress;
+            `,
           inDisabledSurface(
             css`
               cursor: default;
             `,
-            inWorkingSurface(css`
-              cursor: wait;
-            `),
+            busyIndicator === true &&
+              css`
+                cursor: wait;
+              `,
           ),
         ]}
         ref={ref}
@@ -181,18 +202,6 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
                 opacity 250ms ${easeOut}, text-shadow 250ms ${easeOut},
                 box-shadow 250ms ${easeOut}, color 250ms ${easeOut};
             `,
-            inDisabledSurface(
-              !showBusyIndicator &&
-                css`
-                  opacity: 0.5;
-                `,
-              inWorkingSurface(css`
-                opacity: 1;
-              `),
-            ),
-            highStyle({
-              color: labelColor,
-            }),
           ]}>
           <div
             css={[
@@ -204,38 +213,33 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
                 flex-direction: column;
 
                 transform: translateY(
-                  ${showBusyIndicator
+                  ${busyIndicator === true
                     ? '-100%'
-                    : busyIndicatorPlacement === 'below'
+                    : busyIndicator === 'below'
                     ? 0
                     : '-200%'}
                 );
                 transition: transform 250ms ${easeInOut};
               `,
-              inWorkingSurface(css`
-                transform: translateY(-100%);
-              `),
             ]}>
-            <div
-              css={css`
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+            {busyIndicator && (
+              <div
+                css={css`
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
 
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
 
-                transform: translateY(100%);
-              `}>
-              <LoadingSpinner
-                color={showBusyIndicatorColor}
-                size="1rem"
-                active
-              />
-            </div>
+                  transform: translateY(100%);
+                `}>
+                <LoadingSpinner color={busyIndicatorColor} size="1rem" active />
+              </div>
+            )}
             <div
               css={[
                 css`
@@ -254,20 +258,16 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
                   white-space: nowrap;
 
                   transform: translateY(
-                    ${busyIndicatorPlacement === 'below' ? 0 : '200%'}
+                    ${busyIndicator === 'below' ? 0 : '200%'}
                   );
                 `,
               ]}>
-              {glyph && (
-                <Icon
-                  css={css`
-                    margin-right: 0.5rem;
-                  `}
-                  color={glyphColor}
-                  inline={false}
-                  label={null}
-                  size="1.25rem"
-                  glyph={glyph as GlyphComponent}
+              {leftGlyph !== undefined && (
+                <ButtonBodyGlyph
+                  color={leftGlyphColor}
+                  scale={leftGlyphScale}
+                  side="Left"
+                  value={leftGlyph}
                 />
               )}
               <div
@@ -278,19 +278,16 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
                   align-items: center;
                   justify-content: center;
                 `}>
-                <span>{label}</span>
-                {chevron === 'right' && (
-                  <Icon
-                    color={chevronColor}
-                    glyph={ChevronRight}
-                    label={null}
-                    css={css`
-                      margin-left: 0.33em;
-                      margin-right: -0.33em;
-                    `}
-                  />
-                )}
+                {label}
               </div>
+              {rightGlyph !== undefined && (
+                <ButtonBodyGlyph
+                  color={rightGlyphColor}
+                  scale={rightGlyphScale}
+                  side="Right"
+                  value={rightGlyph}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -299,28 +296,129 @@ export const ButtonBody = forwardRef<HTMLDivElement, ButtonBodyContentProps>(
   },
 )
 
-// const AnimatedButtonGlyphWrapper: React.FunctionComponent<
-//   React.ComponentProps<typeof animated.div>
-// > = (props) => (
-//   <animated.div
-//     css={css`
-//       position: absolute;
-//       left: 0;
-//     `}
-//     {...props}
-//   />
-// )
+interface ButtonBodyGlyphProps {
+  color: HighStyleValue<string>
+  scale?: number
+  side: 'Left' | 'Right'
+  value: ButtonBodyGlyphProp
+}
 
-// const AnimatedButtonLabelWrapper: React.FunctionComponent<
-//   React.ComponentProps<typeof animated.span>
-// > = (props) => (
-//   <animated.span
-//     css={css`
-//       flex-grow: 1;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-//     `}
-//     {...props}
-//   />
-// )
+const glyphFrom = {
+  opacity: 0,
+  transform: 'translateX(-50%)',
+}
+const glyphIn = {
+  opacity: 1,
+  transform: 'translateX(0%)',
+}
+const glyphExit = {
+  opacity: 0,
+  transform: 'translateX(50%)',
+}
+
+function ButtonBodyGlyph(props: ButtonBodyGlyphProps) {
+  const value = props.value
+  const key =
+    value === null
+      ? 'null'
+      : typeof value === 'object'
+      ? value.key ?? value.type
+      : typeof value === 'number'
+      ? 'number'
+      : value
+
+  const transitions = useTransition(props, {
+    key,
+    initial: glyphIn,
+    from: glyphFrom,
+    enter: glyphIn,
+    leave: glyphExit,
+  })
+
+  return (
+    <div
+      css={css`
+        position: relative;
+        width: 1rem;
+        height: 1rem;
+        transform-origin: center;
+        transform: scale(${props.scale});
+      `}>
+      {transitions((spring, props) => (
+        <animated.div
+          css={css`
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          `}
+          style={spring}>
+          {renderGlyph(props)}
+        </animated.div>
+      ))}
+    </div>
+  )
+}
+
+function renderGlyph({
+  color,
+  side,
+  value,
+}: ButtonBodyGlyphProps): React.ReactNode {
+  const valueType = typeof value
+  const oppositeSide = side === 'Left' ? 'Right' : 'Left'
+  switch (valueType === 'string' ? value : valueType) {
+    case 'chevron':
+      return (
+        <Icon
+          color={color}
+          glyph={side === 'Left' ? ChevronLeft : ChevronRight}
+          label={null}
+          css={{
+            ['margin' + oppositeSide]: '0.25em',
+            ['margin' + side]: '-0.25em',
+          }}
+        />
+      )
+    case 'caret':
+      return <Caret color={color} />
+    case 'spinner':
+      return <LoadingSpinner color={color} size="1rem" active />
+    case 'number':
+      return (
+        // TODO: respect color configuration
+        <ProgressCircle
+          color={paletteColors.ink050}
+          trackColor="rgba(255, 255, 255, 0.2)"
+          trackWidth={1}
+          proportion={value as number}
+          size={14}
+          width={2}
+          css={{
+            ['margin' + oppositeSide]: '0.25em',
+            ['margin' + side]: '-0.25em',
+          }}
+        />
+      )
+    case 'function':
+      return (
+        <Icon
+          css={{
+            ['margin' + oppositeSide]: '0.5em',
+          }}
+          color={color}
+          inline={false}
+          label={null}
+          size="1.25rem"
+          glyph={value as GlyphComponent}
+        />
+      )
+    default:
+      return value
+  }
+}

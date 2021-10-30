@@ -9,7 +9,7 @@ import { paletteColors } from 'src/presentation/colors'
 import { LoadingSpinner } from 'src/presentation/loadingSpinner'
 import { useTransitionHandle } from 'src/utils/transitionHandle'
 
-export function LoadingPage() {
+function LoadingPage() {
   const transitionHandleRef = useOverrideColumnTransitionHandleRef()
   const hasHydrated = useHasHydrated()
   const [spring, api] = useSpring(() => ({
@@ -50,6 +50,9 @@ export function LoadingPage() {
   )
 }
 
-const loader = (_props: LoaderProps<AppEnv>) => <LoadingPage />
+const loader = (props: LoaderProps<AppEnv>) => {
+  props.mutablePersistedContext.transitionKey = 'loading'
+  return <LoadingPage />
+}
 
 export default loader

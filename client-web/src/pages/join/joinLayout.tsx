@@ -154,6 +154,6 @@ export default function JoinLayout({
 }
 
 function JoinLayoutFallback() {
-  console.log('render fallback')
+  console.warn('rendering join layout fallback')
   return <div>Loading... (TODO)</div>
 }

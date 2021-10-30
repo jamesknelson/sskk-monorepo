@@ -114,8 +114,12 @@ export function Page() {
                     ? 'Account created!'
                     : 'Create my account'
                 }
-                busyIndicatorPlacement={
-                  status === 'complete' ? 'above' : 'below'
+                busyIndicator={
+                  status === 'busy'
+                    ? true
+                    : status === 'complete'
+                    ? 'above'
+                    : 'below'
                 }
               />
             )}
