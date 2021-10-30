@@ -33,8 +33,7 @@ export function JoinProvider(props: JoinProviderProps) {
   const navController = useNavController()
   const [state, dispatch] = useReducer(joinReducer, {
     // TODO: if logged in, set to 2 or more
-    completedSteps:
-      path === 'createAccount' ? 2 : path === 'writeIntroLetter' ? 1 : 0,
+    completedSteps: getCompletedSteps(0, path),
     path,
   })
 
@@ -70,18 +69,22 @@ interface JoinState {
 type JoinAction = { type: 'setPath'; path: JoinPath }
 
 function joinReducer(state: JoinState, action: JoinAction): JoinState {
-  let completedSteps = state.completedSteps
-
-  if (completedSteps === 0 && action.path !== 'top') {
-    completedSteps = 1
-  }
-  if (completedSteps === 1 && action.path === 'createAccount') {
-    completedSteps = 2
-  }
-
   return {
     ...state,
-    completedSteps,
+    completedSteps: getCompletedSteps(state.completedSteps, action.path),
     path: action.path,
   }
+}
+
+function getCompletedSteps(current: number, path: JoinPath) {
+  if (current < 4 && path === 'chooseAddress') {
+    return 4
+  }
+  if (current < 2 && path === 'createAccount') {
+    return 2
+  }
+  if (current < 1 && path !== 'top') {
+    return 1
+  }
+  return current
 }

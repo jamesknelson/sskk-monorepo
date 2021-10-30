@@ -15,11 +15,8 @@ o save the in-progress letter on registration
 o show a loading indicator in place of the editor during hydration, at the loader level
 o clear session storage on logout
 o improve the "register & save" button w/ indicator
-
-- get editor menu working
-  * B, I
-  o make sure buttons don't steal focus
-- convert the backgrounds to .svg files instead of javascript files
+o get editor menu working
+o convert the backgrounds to .svg files instead of javascript files
 
 - add the persona selection screen, and skip directly there. only support
   free addresses for now.
@@ -43,12 +40,10 @@ o improve the "register & save" button w/ indicator
   * pressing the "continue" button on the introduction letter before meeting the
     minimum character count should imperatively pop up the tooltip
 
-- Add / remove title menu button (show a confirmation window if hitting remove while a title exists)
-- If there's an empty title, add placeholder text behind it
-
-
 - deploy to production
 
+- Add / remove title menu button (show a confirmation window if hitting remove while a title exists)
+- If there's an empty title, add placeholder text behind it
 - add next/previous links to header for *complete* steps
 - add some instructions somewhere on the editor page, maybe stickied to the bottom
 - add the windmills background to the sign in page, try and animate the windmills

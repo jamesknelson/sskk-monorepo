@@ -5,6 +5,7 @@ import { useNavLinkProps } from 'retil-nav'
 
 // import { ChevronLeft, ChevronRight } from 'src/assets/glyphs'
 import { Tooltip } from 'src/components/tooltip'
+import { useAppEnv } from 'src/env'
 import appURLs from 'src/pages/appURLs'
 import { paletteColors, structureColors } from 'src/presentation/colors'
 import { barHeight, blockMarginHorizontal } from 'src/presentation/dimensions'
@@ -109,12 +110,18 @@ export default function JoinHeader() {
 }
 
 interface JoinPositionProps {
+  disableLink?: boolean
   paths: JoinPath[]
   step: number
   tooltip: string
 }
 
-const JoinPosition = ({ paths, step, tooltip }: JoinPositionProps) => {
+const JoinPosition = ({
+  disableLink,
+  paths,
+  step,
+  tooltip,
+}: JoinPositionProps) => {
   const { completedSteps, path: activePath } = useJoinContext()
 
   const active = paths.includes(activePath)
@@ -125,7 +132,7 @@ const JoinPosition = ({ paths, step, tooltip }: JoinPositionProps) => {
   const next = completedSteps === step
 
   const linkProps = useNavLinkProps(href, {
-    disabled: active || (!complete && !next),
+    disabled: disableLink || active || (!complete && !next),
   })
 
   const borderColor =
@@ -160,7 +167,7 @@ const JoinPosition = ({ paths, step, tooltip }: JoinPositionProps) => {
             height: 13px;
             width: 13px;
             border-radius: 9999px;
-            backdrop-filter: blur(8px);
+            background-color: ${structureColors.wash};
             box-shadow: 0 0 0 1.2px ${borderColor} inset,
               0 0 10px ${borderShadowColor}, 0 0 10px ${borderShadowColor} inset;
             transition: box-shadow 500ms 500ms ${easeOut};
@@ -185,6 +192,7 @@ const JoinPosition = ({ paths, step, tooltip }: JoinPositionProps) => {
 }
 
 function JoinStepIndicators() {
+  const appEnv = useAppEnv()
   const { completedSteps } = useJoinContext()
   const progressBarProportion = Math.min(
     1,
@@ -239,6 +247,7 @@ function JoinStepIndicators() {
         tooltip="Write your introduction"
       />
       <JoinPosition
+        disableLink={!!appEnv.customer}
         paths={['createAccount']}
         step={2}
         tooltip="Create your login"

@@ -14,8 +14,8 @@ export const meta = {}
 export const backgroundScene = createBackgroundScene(async () => {
   const [{ default: MountainVillage }, { default: SailingShips }] =
     await Promise.all([
-      import('src/assets/backgrounds/mountain-village.optimized.svg'),
-      import('src/assets/backgrounds/sailing-ships.optimized.svg'),
+      import('src/assets/backgrounds/mountain-village.optimized.svg?url'),
+      import('src/assets/backgrounds/sailing-ships.optimized.svg?url'),
     ])
 
   return () => (
@@ -27,24 +27,31 @@ export const backgroundScene = createBackgroundScene(async () => {
         right: 0;
         bottom: 0;
       `}>
-      <MountainVillage
+      <img
+        alt=""
+        src={MountainVillage}
         css={css`
           position: absolute;
           bottom: 0;
-          left: 0;
+          left: -25%;
           opacity: 0.1;
-          transform: scaleX(-1);
+          width: 100%;
+          transform: scaleX(-0.5) scaleY(0.5);
+          transform-origin: bottom;
           z-index: 0;
         `}
       />
-      <SailingShips
+      <img
+        alt=""
+        src={SailingShips}
         css={css`
           position: absolute;
           bottom: 0;
-          right: -50px;
+          right: calc(-50px - 25%);
           width: 100%;
           opacity: 0.1;
-          transform: scaleX(-1);
+          transform: scaleX(-0.5) scaleY(0.5);
+          transform-origin: bottom;
           z-index: 0;
         `}
       />

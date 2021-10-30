@@ -25,7 +25,7 @@ export const meta = {
 
 export const backgroundScene = createBackgroundScene(async () => {
   const { default: Image } = await import(
-    'src/assets/backgrounds/steam-train.optimized.svg'
+    'src/assets/backgrounds/steam-train.optimized.svg?url'
   )
 
   return () => (
@@ -37,7 +37,9 @@ export const backgroundScene = createBackgroundScene(async () => {
         right: 0;
         bottom: 0;
       `}>
-      <Image
+      <img
+        alt=""
+        src={Image}
         css={css`
           position: absolute;
           bottom: 0;
