@@ -7,7 +7,12 @@ import { useSource } from 'retil-source'
 import { useEffectOnce } from 'retil-support'
 
 import { createBackgroundScene } from 'src/components/background'
-import { Editor, EditorHandle, EditorMenu } from 'src/components/editor'
+import {
+  Editor,
+  EditorHandle,
+  EditorMenu,
+  useEditorStateSource,
+} from 'src/components/editor'
 import appURLs from 'src/pages/appURLs'
 import { OutlineButtonBody } from 'src/presentation/buttonBodies'
 import { Card } from 'src/presentation/card'
@@ -18,6 +23,7 @@ import { LetterMetaBlock } from 'src/presentation/letterMetaBlock'
 import { ProgressPie } from 'src/presentation/progressPie'
 import { standardRadius } from 'src/presentation/radii'
 import { TextBlock } from 'src/presentation/blocks'
+import { createEditorState } from 'src/prose'
 
 import { useJoinContext } from './joinContext'
 
@@ -76,9 +82,28 @@ export function Page() {
     }
   })
 
-  const editorState = useSource(context.editorStateSource)
-  const editorHandleRef = useRef<EditorHandle>(null)
+  const [editorStateSource, editorStateHandle] = useEditorStateSource(
+    () => {
+      try {
+        return createEditorState(
+          context.persistence.get().introduction_letter_editor_state,
+        )
+      } catch {
+        return createEditorState()
+      }
+    },
+    (editorState) => {
+      const textLength = editorState.doc.textContent.length
+      context.persistence.save({
+        introduction_letter_editor_state: textLength
+          ? editorState.toJSON()
+          : null,
+      })
+    },
+  )
 
+  const editorState = useSource(editorStateSource)
+  const editorHandleRef = useRef<EditorHandle>(null)
   const pieProportion = hasHydrated
     ? Math.min(1, editorState.doc.textContent.length / minTextLength)
     : 0
@@ -134,7 +159,7 @@ export function Page() {
           `}>
           <EditorMenu
             state={editorState}
-            applyTransaction={context.editorStateHandle.applyTransaction}
+            applyTransaction={editorStateHandle.applyTransaction}
           />
           <FlexGap />
           <div
@@ -169,7 +194,7 @@ export function Page() {
               <Boundary fallback={<div />}>
                 <Editor
                   state={editorState}
-                  applyTransaction={context.editorStateHandle.applyTransaction}
+                  applyTransaction={editorStateHandle.applyTransaction}
                   autoFocus
                   minHeight="80px"
                   ref={editorHandleRef}

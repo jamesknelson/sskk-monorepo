@@ -68,36 +68,36 @@ create table "address_types" (
   value text PRIMARY KEY
 );
 insert into "address_types" (value) VALUES
-  ('email'),
+  ('Email'),
   -- You cannot access a guest persona through a member address, even though a
   -- member address *may* persist after the persona reverts to a guest.
   -- You cannot create a member address unless it is associated with a member
   -- persona.
-  ('guest'),
-  ('member'),
-  ('myself'),
+  ('Guest'),
+  ('Member'),
+  ('Myself'),
     -- only allowed for single-contributor letters
-  ('nobody'),
-  ('quoted-participants'),
+  ('Nobody'),
+  ('QuotedParticipants'),
     -- addressees, contributors and signatories of all linked letters, along
     -- with the recursive participants of those quoted or linked letters, but
     -- excluding anyone who has recorded a mute against any letter along the
     -- link chain. automatically added as a bcc when addressing the public.
-  ('quoted-contributors-and-signatories'),
+  ('QuotedContributorsAndSignatories'),
     -- addresses just the addressees of the quoted letters
-  ('quoted-addressees'),
+  ('QuotedAddressees'),
     -- addresses just the addressees of the quoted letters
-  ('persona-readers'),
+  ('PersonaReaders'),
     -- addresses the readers of personas on the letter's contributor list
-  ('public'),
+  ('Public'),
     -- address *everyone*
-  ('reserved'),
+  ('Reserved'),
     -- for reserving handles that should not be available to
     -- customers, despite having no meaning to the system
-  ('the-editor'),
+  ('TheEditor'),
     -- this may be removed at some point in favor of an actual
     -- editor account, but for now, it can be automated.
-  ('url-holders');
+  ('URLHolders');
     -- allow access to anyone who has a URL for the letter;
 create table "addresses" (
   "id" uuid not null primary key DEFAULT gen_random_uuid(),

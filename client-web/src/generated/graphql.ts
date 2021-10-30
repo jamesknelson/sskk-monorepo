@@ -1,5 +1,5 @@
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type Maybe<T> = T | null;
+export type Maybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -10,7 +10,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  date: any;
   inet: any;
+  json: any;
+  smallint: any;
   time: any;
   timestamptz: any;
   uuid: any;
@@ -70,6 +73,616 @@ export type String_Comparison_Exp = {
   /** does the column match the given SQL regular expression */
   _similar: Maybe<Scalars['String']>;
 };
+
+/** columns and relationships of "address_types" */
+export type Address_Types = {
+  __typename?: 'address_types';
+  value: Scalars['String'];
+};
+
+/** aggregated selection of "address_types" */
+export type Address_Types_Aggregate = {
+  __typename?: 'address_types_aggregate';
+  aggregate: Maybe<Address_Types_Aggregate_Fields>;
+  nodes: Array<Address_Types>;
+};
+
+/** aggregate fields of "address_types" */
+export type Address_Types_Aggregate_Fields = {
+  __typename?: 'address_types_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<Address_Types_Max_Fields>;
+  min: Maybe<Address_Types_Min_Fields>;
+};
+
+
+/** aggregate fields of "address_types" */
+export type Address_Types_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Address_Types_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "address_types". All fields are combined with a logical 'AND'. */
+export type Address_Types_Bool_Exp = {
+  _and: Maybe<Array<Address_Types_Bool_Exp>>;
+  _not: Maybe<Address_Types_Bool_Exp>;
+  _or: Maybe<Array<Address_Types_Bool_Exp>>;
+  value: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "address_types" */
+export enum Address_Types_Constraint {
+  /** unique or primary key constraint */
+  AddressTypesPkey = 'address_types_pkey'
+}
+
+export enum Address_Types_Enum {
+  Email = 'Email',
+  Guest = 'Guest',
+  Member = 'Member',
+  Myself = 'Myself',
+  Nobody = 'Nobody',
+  PersonaReaders = 'PersonaReaders',
+  Public = 'Public',
+  QuotedAddressees = 'QuotedAddressees',
+  QuotedContributorsAndSignatories = 'QuotedContributorsAndSignatories',
+  QuotedParticipants = 'QuotedParticipants',
+  Reserved = 'Reserved',
+  TheEditor = 'TheEditor',
+  UrlHolders = 'URLHolders'
+}
+
+/** Boolean expression to compare columns of type "address_types_enum". All fields are combined with logical 'AND'. */
+export type Address_Types_Enum_Comparison_Exp = {
+  _eq: Maybe<Address_Types_Enum>;
+  _in: Maybe<Array<Address_Types_Enum>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _neq: Maybe<Address_Types_Enum>;
+  _nin: Maybe<Array<Address_Types_Enum>>;
+};
+
+/** input type for inserting data into table "address_types" */
+export type Address_Types_Insert_Input = {
+  value: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Address_Types_Max_Fields = {
+  __typename?: 'address_types_max_fields';
+  value: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Address_Types_Min_Fields = {
+  __typename?: 'address_types_min_fields';
+  value: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "address_types" */
+export type Address_Types_Mutation_Response = {
+  __typename?: 'address_types_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Address_Types>;
+};
+
+/** on conflict condition type for table "address_types" */
+export type Address_Types_On_Conflict = {
+  constraint: Address_Types_Constraint;
+  update_columns: Array<Address_Types_Update_Column>;
+  where: Maybe<Address_Types_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "address_types". */
+export type Address_Types_Order_By = {
+  value: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: address_types */
+export type Address_Types_Pk_Columns_Input = {
+  value: Scalars['String'];
+};
+
+/** select columns of table "address_types" */
+export enum Address_Types_Select_Column {
+  /** column name */
+  Value = 'value'
+}
+
+/** input type for updating data in table "address_types" */
+export type Address_Types_Set_Input = {
+  value: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "address_types" */
+export enum Address_Types_Update_Column {
+  /** column name */
+  Value = 'value'
+}
+
+/** columns and relationships of "addresses" */
+export type Addresses = {
+  __typename?: 'addresses';
+  created_at: Scalars['timestamptz'];
+  discovers_linked_persona: Scalars['Boolean'];
+  handle: Scalars['String'];
+  id: Scalars['uuid'];
+  listed_in_search: Scalars['Boolean'];
+  listing_priority: Scalars['smallint'];
+  persona_id: Maybe<Scalars['uuid']>;
+  released_at: Maybe<Scalars['timestamptz']>;
+  type: Maybe<Address_Types_Enum>;
+  username_flag: Maybe<Scalars['Boolean']>;
+};
+
+/** aggregated selection of "addresses" */
+export type Addresses_Aggregate = {
+  __typename?: 'addresses_aggregate';
+  aggregate: Maybe<Addresses_Aggregate_Fields>;
+  nodes: Array<Addresses>;
+};
+
+/** aggregate fields of "addresses" */
+export type Addresses_Aggregate_Fields = {
+  __typename?: 'addresses_aggregate_fields';
+  avg: Maybe<Addresses_Avg_Fields>;
+  count: Scalars['Int'];
+  max: Maybe<Addresses_Max_Fields>;
+  min: Maybe<Addresses_Min_Fields>;
+  stddev: Maybe<Addresses_Stddev_Fields>;
+  stddev_pop: Maybe<Addresses_Stddev_Pop_Fields>;
+  stddev_samp: Maybe<Addresses_Stddev_Samp_Fields>;
+  sum: Maybe<Addresses_Sum_Fields>;
+  var_pop: Maybe<Addresses_Var_Pop_Fields>;
+  var_samp: Maybe<Addresses_Var_Samp_Fields>;
+  variance: Maybe<Addresses_Variance_Fields>;
+};
+
+
+/** aggregate fields of "addresses" */
+export type Addresses_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Addresses_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Addresses_Avg_Fields = {
+  __typename?: 'addresses_avg_fields';
+  listing_priority: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "addresses". All fields are combined with a logical 'AND'. */
+export type Addresses_Bool_Exp = {
+  _and: Maybe<Array<Addresses_Bool_Exp>>;
+  _not: Maybe<Addresses_Bool_Exp>;
+  _or: Maybe<Array<Addresses_Bool_Exp>>;
+  created_at: Maybe<Timestamptz_Comparison_Exp>;
+  discovers_linked_persona: Maybe<Boolean_Comparison_Exp>;
+  handle: Maybe<String_Comparison_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  listed_in_search: Maybe<Boolean_Comparison_Exp>;
+  listing_priority: Maybe<Smallint_Comparison_Exp>;
+  persona_id: Maybe<Uuid_Comparison_Exp>;
+  released_at: Maybe<Timestamptz_Comparison_Exp>;
+  type: Maybe<Address_Types_Enum_Comparison_Exp>;
+  username_flag: Maybe<Boolean_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "addresses" */
+export enum Addresses_Constraint {
+  /** unique or primary key constraint */
+  AddressesHandleKey = 'addresses_handle_key',
+  /** unique or primary key constraint */
+  AddressesPersonaIdTypeUsernameFlagKey = 'addresses_persona_id_type_username_flag_key',
+  /** unique or primary key constraint */
+  AddressesPkey = 'addresses_pkey'
+}
+
+/** input type for incrementing numeric columns in table "addresses" */
+export type Addresses_Inc_Input = {
+  listing_priority: Maybe<Scalars['smallint']>;
+};
+
+/** input type for inserting data into table "addresses" */
+export type Addresses_Insert_Input = {
+  created_at: Maybe<Scalars['timestamptz']>;
+  discovers_linked_persona: Maybe<Scalars['Boolean']>;
+  handle: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  listed_in_search: Maybe<Scalars['Boolean']>;
+  listing_priority: Maybe<Scalars['smallint']>;
+  persona_id: Maybe<Scalars['uuid']>;
+  released_at: Maybe<Scalars['timestamptz']>;
+  type: Maybe<Address_Types_Enum>;
+  username_flag: Maybe<Scalars['Boolean']>;
+};
+
+/** aggregate max on columns */
+export type Addresses_Max_Fields = {
+  __typename?: 'addresses_max_fields';
+  created_at: Maybe<Scalars['timestamptz']>;
+  handle: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  listing_priority: Maybe<Scalars['smallint']>;
+  persona_id: Maybe<Scalars['uuid']>;
+  released_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Addresses_Min_Fields = {
+  __typename?: 'addresses_min_fields';
+  created_at: Maybe<Scalars['timestamptz']>;
+  handle: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  listing_priority: Maybe<Scalars['smallint']>;
+  persona_id: Maybe<Scalars['uuid']>;
+  released_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "addresses" */
+export type Addresses_Mutation_Response = {
+  __typename?: 'addresses_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Addresses>;
+};
+
+/** on conflict condition type for table "addresses" */
+export type Addresses_On_Conflict = {
+  constraint: Addresses_Constraint;
+  update_columns: Array<Addresses_Update_Column>;
+  where: Maybe<Addresses_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "addresses". */
+export type Addresses_Order_By = {
+  created_at: Maybe<Order_By>;
+  discovers_linked_persona: Maybe<Order_By>;
+  handle: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  listed_in_search: Maybe<Order_By>;
+  listing_priority: Maybe<Order_By>;
+  persona_id: Maybe<Order_By>;
+  released_at: Maybe<Order_By>;
+  type: Maybe<Order_By>;
+  username_flag: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: addresses */
+export type Addresses_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "addresses" */
+export enum Addresses_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  DiscoversLinkedPersona = 'discovers_linked_persona',
+  /** column name */
+  Handle = 'handle',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ListedInSearch = 'listed_in_search',
+  /** column name */
+  ListingPriority = 'listing_priority',
+  /** column name */
+  PersonaId = 'persona_id',
+  /** column name */
+  ReleasedAt = 'released_at',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UsernameFlag = 'username_flag'
+}
+
+/** input type for updating data in table "addresses" */
+export type Addresses_Set_Input = {
+  created_at: Maybe<Scalars['timestamptz']>;
+  discovers_linked_persona: Maybe<Scalars['Boolean']>;
+  handle: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  listed_in_search: Maybe<Scalars['Boolean']>;
+  listing_priority: Maybe<Scalars['smallint']>;
+  persona_id: Maybe<Scalars['uuid']>;
+  released_at: Maybe<Scalars['timestamptz']>;
+  type: Maybe<Address_Types_Enum>;
+  username_flag: Maybe<Scalars['Boolean']>;
+};
+
+/** aggregate stddev on columns */
+export type Addresses_Stddev_Fields = {
+  __typename?: 'addresses_stddev_fields';
+  listing_priority: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Addresses_Stddev_Pop_Fields = {
+  __typename?: 'addresses_stddev_pop_fields';
+  listing_priority: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Addresses_Stddev_Samp_Fields = {
+  __typename?: 'addresses_stddev_samp_fields';
+  listing_priority: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Addresses_Sum_Fields = {
+  __typename?: 'addresses_sum_fields';
+  listing_priority: Maybe<Scalars['smallint']>;
+};
+
+/** update columns of table "addresses" */
+export enum Addresses_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  DiscoversLinkedPersona = 'discovers_linked_persona',
+  /** column name */
+  Handle = 'handle',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ListedInSearch = 'listed_in_search',
+  /** column name */
+  ListingPriority = 'listing_priority',
+  /** column name */
+  PersonaId = 'persona_id',
+  /** column name */
+  ReleasedAt = 'released_at',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UsernameFlag = 'username_flag'
+}
+
+/** aggregate var_pop on columns */
+export type Addresses_Var_Pop_Fields = {
+  __typename?: 'addresses_var_pop_fields';
+  listing_priority: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Addresses_Var_Samp_Fields = {
+  __typename?: 'addresses_var_samp_fields';
+  listing_priority: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Addresses_Variance_Fields = {
+  __typename?: 'addresses_variance_fields';
+  listing_priority: Maybe<Scalars['Float']>;
+};
+
+/** columns and relationships of "customer_onboardings" */
+export type Customer_Onboardings = {
+  __typename?: 'customer_onboardings';
+  address_handle: Maybe<Scalars['String']>;
+  address_type: Maybe<Address_Types_Enum>;
+  id: Scalars['uuid'];
+  introduction_letter_date: Maybe<Scalars['date']>;
+  introduction_letter_editor_state: Maybe<Scalars['json']>;
+  introduction_letter_extra_recipients: Maybe<Scalars['json']>;
+  introduction_letter_time: Maybe<Scalars['time']>;
+  introduction_letter_url_slug: Maybe<Scalars['String']>;
+  persona_name: Scalars['String'];
+  persona_photo_url: Maybe<Scalars['String']>;
+  skip_onboarding_redirect_on_login: Maybe<Scalars['Boolean']>;
+  updated_at: Scalars['timestamptz'];
+};
+
+
+/** columns and relationships of "customer_onboardings" */
+export type Customer_OnboardingsIntroduction_Letter_Editor_StateArgs = {
+  path: Maybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "customer_onboardings" */
+export type Customer_OnboardingsIntroduction_Letter_Extra_RecipientsArgs = {
+  path: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "customer_onboardings" */
+export type Customer_Onboardings_Aggregate = {
+  __typename?: 'customer_onboardings_aggregate';
+  aggregate: Maybe<Customer_Onboardings_Aggregate_Fields>;
+  nodes: Array<Customer_Onboardings>;
+};
+
+/** aggregate fields of "customer_onboardings" */
+export type Customer_Onboardings_Aggregate_Fields = {
+  __typename?: 'customer_onboardings_aggregate_fields';
+  count: Scalars['Int'];
+  max: Maybe<Customer_Onboardings_Max_Fields>;
+  min: Maybe<Customer_Onboardings_Min_Fields>;
+};
+
+
+/** aggregate fields of "customer_onboardings" */
+export type Customer_Onboardings_Aggregate_FieldsCountArgs = {
+  columns: Maybe<Array<Customer_Onboardings_Select_Column>>;
+  distinct: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "customer_onboardings". All fields are combined with a logical 'AND'. */
+export type Customer_Onboardings_Bool_Exp = {
+  _and: Maybe<Array<Customer_Onboardings_Bool_Exp>>;
+  _not: Maybe<Customer_Onboardings_Bool_Exp>;
+  _or: Maybe<Array<Customer_Onboardings_Bool_Exp>>;
+  address_handle: Maybe<String_Comparison_Exp>;
+  address_type: Maybe<Address_Types_Enum_Comparison_Exp>;
+  id: Maybe<Uuid_Comparison_Exp>;
+  introduction_letter_date: Maybe<Date_Comparison_Exp>;
+  introduction_letter_editor_state: Maybe<Json_Comparison_Exp>;
+  introduction_letter_extra_recipients: Maybe<Json_Comparison_Exp>;
+  introduction_letter_time: Maybe<Time_Comparison_Exp>;
+  introduction_letter_url_slug: Maybe<String_Comparison_Exp>;
+  persona_name: Maybe<String_Comparison_Exp>;
+  persona_photo_url: Maybe<String_Comparison_Exp>;
+  skip_onboarding_redirect_on_login: Maybe<Boolean_Comparison_Exp>;
+  updated_at: Maybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "customer_onboardings" */
+export enum Customer_Onboardings_Constraint {
+  /** unique or primary key constraint */
+  CustomerOnboardingsPkey = 'customer_onboardings_pkey'
+}
+
+/** input type for inserting data into table "customer_onboardings" */
+export type Customer_Onboardings_Insert_Input = {
+  address_handle: Maybe<Scalars['String']>;
+  address_type: Maybe<Address_Types_Enum>;
+  id: Maybe<Scalars['uuid']>;
+  introduction_letter_date: Maybe<Scalars['date']>;
+  introduction_letter_editor_state: Maybe<Scalars['json']>;
+  introduction_letter_extra_recipients: Maybe<Scalars['json']>;
+  introduction_letter_time: Maybe<Scalars['time']>;
+  introduction_letter_url_slug: Maybe<Scalars['String']>;
+  persona_name: Maybe<Scalars['String']>;
+  persona_photo_url: Maybe<Scalars['String']>;
+  skip_onboarding_redirect_on_login: Maybe<Scalars['Boolean']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Customer_Onboardings_Max_Fields = {
+  __typename?: 'customer_onboardings_max_fields';
+  address_handle: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  introduction_letter_date: Maybe<Scalars['date']>;
+  introduction_letter_url_slug: Maybe<Scalars['String']>;
+  persona_name: Maybe<Scalars['String']>;
+  persona_photo_url: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Customer_Onboardings_Min_Fields = {
+  __typename?: 'customer_onboardings_min_fields';
+  address_handle: Maybe<Scalars['String']>;
+  id: Maybe<Scalars['uuid']>;
+  introduction_letter_date: Maybe<Scalars['date']>;
+  introduction_letter_url_slug: Maybe<Scalars['String']>;
+  persona_name: Maybe<Scalars['String']>;
+  persona_photo_url: Maybe<Scalars['String']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "customer_onboardings" */
+export type Customer_Onboardings_Mutation_Response = {
+  __typename?: 'customer_onboardings_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Customer_Onboardings>;
+};
+
+/** on conflict condition type for table "customer_onboardings" */
+export type Customer_Onboardings_On_Conflict = {
+  constraint: Customer_Onboardings_Constraint;
+  update_columns: Array<Customer_Onboardings_Update_Column>;
+  where: Maybe<Customer_Onboardings_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "customer_onboardings". */
+export type Customer_Onboardings_Order_By = {
+  address_handle: Maybe<Order_By>;
+  address_type: Maybe<Order_By>;
+  id: Maybe<Order_By>;
+  introduction_letter_date: Maybe<Order_By>;
+  introduction_letter_editor_state: Maybe<Order_By>;
+  introduction_letter_extra_recipients: Maybe<Order_By>;
+  introduction_letter_time: Maybe<Order_By>;
+  introduction_letter_url_slug: Maybe<Order_By>;
+  persona_name: Maybe<Order_By>;
+  persona_photo_url: Maybe<Order_By>;
+  skip_onboarding_redirect_on_login: Maybe<Order_By>;
+  updated_at: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: customer_onboardings */
+export type Customer_Onboardings_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "customer_onboardings" */
+export enum Customer_Onboardings_Select_Column {
+  /** column name */
+  AddressHandle = 'address_handle',
+  /** column name */
+  AddressType = 'address_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IntroductionLetterDate = 'introduction_letter_date',
+  /** column name */
+  IntroductionLetterEditorState = 'introduction_letter_editor_state',
+  /** column name */
+  IntroductionLetterExtraRecipients = 'introduction_letter_extra_recipients',
+  /** column name */
+  IntroductionLetterTime = 'introduction_letter_time',
+  /** column name */
+  IntroductionLetterUrlSlug = 'introduction_letter_url_slug',
+  /** column name */
+  PersonaName = 'persona_name',
+  /** column name */
+  PersonaPhotoUrl = 'persona_photo_url',
+  /** column name */
+  SkipOnboardingRedirectOnLogin = 'skip_onboarding_redirect_on_login',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "customer_onboardings" */
+export type Customer_Onboardings_Set_Input = {
+  address_handle: Maybe<Scalars['String']>;
+  address_type: Maybe<Address_Types_Enum>;
+  id: Maybe<Scalars['uuid']>;
+  introduction_letter_date: Maybe<Scalars['date']>;
+  introduction_letter_editor_state: Maybe<Scalars['json']>;
+  introduction_letter_extra_recipients: Maybe<Scalars['json']>;
+  introduction_letter_time: Maybe<Scalars['time']>;
+  introduction_letter_url_slug: Maybe<Scalars['String']>;
+  persona_name: Maybe<Scalars['String']>;
+  persona_photo_url: Maybe<Scalars['String']>;
+  skip_onboarding_redirect_on_login: Maybe<Scalars['Boolean']>;
+  updated_at: Maybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "customer_onboardings" */
+export enum Customer_Onboardings_Update_Column {
+  /** column name */
+  AddressHandle = 'address_handle',
+  /** column name */
+  AddressType = 'address_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IntroductionLetterDate = 'introduction_letter_date',
+  /** column name */
+  IntroductionLetterEditorState = 'introduction_letter_editor_state',
+  /** column name */
+  IntroductionLetterExtraRecipients = 'introduction_letter_extra_recipients',
+  /** column name */
+  IntroductionLetterTime = 'introduction_letter_time',
+  /** column name */
+  IntroductionLetterUrlSlug = 'introduction_letter_url_slug',
+  /** column name */
+  PersonaName = 'persona_name',
+  /** column name */
+  PersonaPhotoUrl = 'persona_photo_url',
+  /** column name */
+  SkipOnboardingRedirectOnLogin = 'skip_onboarding_redirect_on_login',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
 
 /** columns and relationships of "customers" */
 export type Customers = {
@@ -282,6 +895,20 @@ export enum Customers_Update_Column {
   VerifiedEmail = 'verified_email'
 }
 
+
+/** Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'. */
+export type Date_Comparison_Exp = {
+  _eq: Maybe<Scalars['date']>;
+  _gt: Maybe<Scalars['date']>;
+  _gte: Maybe<Scalars['date']>;
+  _in: Maybe<Array<Scalars['date']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['date']>;
+  _lte: Maybe<Scalars['date']>;
+  _neq: Maybe<Scalars['date']>;
+  _nin: Maybe<Array<Scalars['date']>>;
+};
+
 /** columns and relationships of "firebase_tokens" */
 export type Firebase_Tokens = {
   __typename?: 'firebase_tokens';
@@ -492,6 +1119,20 @@ export type Inet_Comparison_Exp = {
   _lte: Maybe<Scalars['inet']>;
   _neq: Maybe<Scalars['inet']>;
   _nin: Maybe<Array<Scalars['inet']>>;
+};
+
+
+/** Boolean expression to compare columns of type "json". All fields are combined with logical 'AND'. */
+export type Json_Comparison_Exp = {
+  _eq: Maybe<Scalars['json']>;
+  _gt: Maybe<Scalars['json']>;
+  _gte: Maybe<Scalars['json']>;
+  _in: Maybe<Array<Scalars['json']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['json']>;
+  _lte: Maybe<Scalars['json']>;
+  _neq: Maybe<Scalars['json']>;
+  _nin: Maybe<Array<Scalars['json']>>;
 };
 
 /** columns and relationships of "membership_levels" */
@@ -826,6 +1467,18 @@ export enum Memberships_Update_Column {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
+  /** delete data from the table: "address_types" */
+  delete_address_types: Maybe<Address_Types_Mutation_Response>;
+  /** delete single row from the table: "address_types" */
+  delete_address_types_by_pk: Maybe<Address_Types>;
+  /** delete data from the table: "addresses" */
+  delete_addresses: Maybe<Addresses_Mutation_Response>;
+  /** delete single row from the table: "addresses" */
+  delete_addresses_by_pk: Maybe<Addresses>;
+  /** delete data from the table: "customer_onboardings" */
+  delete_customer_onboardings: Maybe<Customer_Onboardings_Mutation_Response>;
+  /** delete single row from the table: "customer_onboardings" */
+  delete_customer_onboardings_by_pk: Maybe<Customer_Onboardings>;
   /** delete data from the table: "customers" */
   delete_customers: Maybe<Customers_Mutation_Response>;
   /** delete single row from the table: "customers" */
@@ -854,6 +1507,18 @@ export type Mutation_Root = {
   delete_user_agents: Maybe<User_Agents_Mutation_Response>;
   /** delete single row from the table: "user_agents" */
   delete_user_agents_by_pk: Maybe<User_Agents>;
+  /** insert data into the table: "address_types" */
+  insert_address_types: Maybe<Address_Types_Mutation_Response>;
+  /** insert a single row into the table: "address_types" */
+  insert_address_types_one: Maybe<Address_Types>;
+  /** insert data into the table: "addresses" */
+  insert_addresses: Maybe<Addresses_Mutation_Response>;
+  /** insert a single row into the table: "addresses" */
+  insert_addresses_one: Maybe<Addresses>;
+  /** insert data into the table: "customer_onboardings" */
+  insert_customer_onboardings: Maybe<Customer_Onboardings_Mutation_Response>;
+  /** insert a single row into the table: "customer_onboardings" */
+  insert_customer_onboardings_one: Maybe<Customer_Onboardings>;
   /** insert data into the table: "customers" */
   insert_customers: Maybe<Customers_Mutation_Response>;
   /** insert a single row into the table: "customers" */
@@ -883,6 +1548,18 @@ export type Mutation_Root = {
   /** insert a single row into the table: "user_agents" */
   insert_user_agents_one: Maybe<User_Agents>;
   login: Maybe<LoginOutput>;
+  /** update data of the table: "address_types" */
+  update_address_types: Maybe<Address_Types_Mutation_Response>;
+  /** update single row of the table: "address_types" */
+  update_address_types_by_pk: Maybe<Address_Types>;
+  /** update data of the table: "addresses" */
+  update_addresses: Maybe<Addresses_Mutation_Response>;
+  /** update single row of the table: "addresses" */
+  update_addresses_by_pk: Maybe<Addresses>;
+  /** update data of the table: "customer_onboardings" */
+  update_customer_onboardings: Maybe<Customer_Onboardings_Mutation_Response>;
+  /** update single row of the table: "customer_onboardings" */
+  update_customer_onboardings_by_pk: Maybe<Customer_Onboardings>;
   /** update data of the table: "customers" */
   update_customers: Maybe<Customers_Mutation_Response>;
   /** update single row of the table: "customers" */
@@ -911,6 +1588,42 @@ export type Mutation_Root = {
   update_user_agents: Maybe<User_Agents_Mutation_Response>;
   /** update single row of the table: "user_agents" */
   update_user_agents_by_pk: Maybe<User_Agents>;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Address_TypesArgs = {
+  where: Address_Types_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Address_Types_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_AddressesArgs = {
+  where: Addresses_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Addresses_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Customer_OnboardingsArgs = {
+  where: Customer_Onboardings_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Customer_Onboardings_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -995,6 +1708,48 @@ export type Mutation_RootDelete_User_AgentsArgs = {
 /** mutation root */
 export type Mutation_RootDelete_User_Agents_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Address_TypesArgs = {
+  objects: Array<Address_Types_Insert_Input>;
+  on_conflict: Maybe<Address_Types_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Address_Types_OneArgs = {
+  object: Address_Types_Insert_Input;
+  on_conflict: Maybe<Address_Types_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_AddressesArgs = {
+  objects: Array<Addresses_Insert_Input>;
+  on_conflict: Maybe<Addresses_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Addresses_OneArgs = {
+  object: Addresses_Insert_Input;
+  on_conflict: Maybe<Addresses_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Customer_OnboardingsArgs = {
+  objects: Array<Customer_Onboardings_Insert_Input>;
+  on_conflict: Maybe<Customer_Onboardings_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Customer_Onboardings_OneArgs = {
+  object: Customer_Onboardings_Insert_Input;
+  on_conflict: Maybe<Customer_Onboardings_On_Conflict>;
 };
 
 
@@ -1093,6 +1848,50 @@ export type Mutation_RootInsert_User_AgentsArgs = {
 export type Mutation_RootInsert_User_Agents_OneArgs = {
   object: User_Agents_Insert_Input;
   on_conflict: Maybe<User_Agents_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Address_TypesArgs = {
+  _set: Maybe<Address_Types_Set_Input>;
+  where: Address_Types_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Address_Types_By_PkArgs = {
+  _set: Maybe<Address_Types_Set_Input>;
+  pk_columns: Address_Types_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_AddressesArgs = {
+  _inc: Maybe<Addresses_Inc_Input>;
+  _set: Maybe<Addresses_Set_Input>;
+  where: Addresses_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Addresses_By_PkArgs = {
+  _inc: Maybe<Addresses_Inc_Input>;
+  _set: Maybe<Addresses_Set_Input>;
+  pk_columns: Addresses_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Customer_OnboardingsArgs = {
+  _set: Maybe<Customer_Onboardings_Set_Input>;
+  where: Customer_Onboardings_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Customer_Onboardings_By_PkArgs = {
+  _set: Maybe<Customer_Onboardings_Set_Input>;
+  pk_columns: Customer_Onboardings_Pk_Columns_Input;
 };
 
 
@@ -1425,6 +2224,24 @@ export enum Personas_Update_Column {
 
 export type Query_Root = {
   __typename?: 'query_root';
+  /** fetch data from the table: "address_types" */
+  address_types: Array<Address_Types>;
+  /** fetch aggregated fields from the table: "address_types" */
+  address_types_aggregate: Address_Types_Aggregate;
+  /** fetch data from the table: "address_types" using primary key columns */
+  address_types_by_pk: Maybe<Address_Types>;
+  /** fetch data from the table: "addresses" */
+  addresses: Array<Addresses>;
+  /** fetch aggregated fields from the table: "addresses" */
+  addresses_aggregate: Addresses_Aggregate;
+  /** fetch data from the table: "addresses" using primary key columns */
+  addresses_by_pk: Maybe<Addresses>;
+  /** fetch data from the table: "customer_onboardings" */
+  customer_onboardings: Array<Customer_Onboardings>;
+  /** fetch aggregated fields from the table: "customer_onboardings" */
+  customer_onboardings_aggregate: Customer_Onboardings_Aggregate;
+  /** fetch data from the table: "customer_onboardings" using primary key columns */
+  customer_onboardings_by_pk: Maybe<Customer_Onboardings>;
   /** fetch data from the table: "customers" */
   customers: Array<Customers>;
   /** fetch aggregated fields from the table: "customers" */
@@ -1467,6 +2284,75 @@ export type Query_Root = {
   user_agents_aggregate: User_Agents_Aggregate;
   /** fetch data from the table: "user_agents" using primary key columns */
   user_agents_by_pk: Maybe<User_Agents>;
+};
+
+
+export type Query_RootAddress_TypesArgs = {
+  distinct_on: Maybe<Array<Address_Types_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Address_Types_Order_By>>;
+  where: Maybe<Address_Types_Bool_Exp>;
+};
+
+
+export type Query_RootAddress_Types_AggregateArgs = {
+  distinct_on: Maybe<Array<Address_Types_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Address_Types_Order_By>>;
+  where: Maybe<Address_Types_Bool_Exp>;
+};
+
+
+export type Query_RootAddress_Types_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+export type Query_RootAddressesArgs = {
+  distinct_on: Maybe<Array<Addresses_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Addresses_Order_By>>;
+  where: Maybe<Addresses_Bool_Exp>;
+};
+
+
+export type Query_RootAddresses_AggregateArgs = {
+  distinct_on: Maybe<Array<Addresses_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Addresses_Order_By>>;
+  where: Maybe<Addresses_Bool_Exp>;
+};
+
+
+export type Query_RootAddresses_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootCustomer_OnboardingsArgs = {
+  distinct_on: Maybe<Array<Customer_Onboardings_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customer_Onboardings_Order_By>>;
+  where: Maybe<Customer_Onboardings_Bool_Exp>;
+};
+
+
+export type Query_RootCustomer_Onboardings_AggregateArgs = {
+  distinct_on: Maybe<Array<Customer_Onboardings_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customer_Onboardings_Order_By>>;
+  where: Maybe<Customer_Onboardings_Bool_Exp>;
+};
+
+
+export type Query_RootCustomer_Onboardings_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -1903,8 +2789,40 @@ export enum Sessions_Update_Column {
   UserAgentId = 'user_agent_id'
 }
 
+
+/** Boolean expression to compare columns of type "smallint". All fields are combined with logical 'AND'. */
+export type Smallint_Comparison_Exp = {
+  _eq: Maybe<Scalars['smallint']>;
+  _gt: Maybe<Scalars['smallint']>;
+  _gte: Maybe<Scalars['smallint']>;
+  _in: Maybe<Array<Scalars['smallint']>>;
+  _is_null: Maybe<Scalars['Boolean']>;
+  _lt: Maybe<Scalars['smallint']>;
+  _lte: Maybe<Scalars['smallint']>;
+  _neq: Maybe<Scalars['smallint']>;
+  _nin: Maybe<Array<Scalars['smallint']>>;
+};
+
 export type Subscription_Root = {
   __typename?: 'subscription_root';
+  /** fetch data from the table: "address_types" */
+  address_types: Array<Address_Types>;
+  /** fetch aggregated fields from the table: "address_types" */
+  address_types_aggregate: Address_Types_Aggregate;
+  /** fetch data from the table: "address_types" using primary key columns */
+  address_types_by_pk: Maybe<Address_Types>;
+  /** fetch data from the table: "addresses" */
+  addresses: Array<Addresses>;
+  /** fetch aggregated fields from the table: "addresses" */
+  addresses_aggregate: Addresses_Aggregate;
+  /** fetch data from the table: "addresses" using primary key columns */
+  addresses_by_pk: Maybe<Addresses>;
+  /** fetch data from the table: "customer_onboardings" */
+  customer_onboardings: Array<Customer_Onboardings>;
+  /** fetch aggregated fields from the table: "customer_onboardings" */
+  customer_onboardings_aggregate: Customer_Onboardings_Aggregate;
+  /** fetch data from the table: "customer_onboardings" using primary key columns */
+  customer_onboardings_by_pk: Maybe<Customer_Onboardings>;
   /** fetch data from the table: "customers" */
   customers: Array<Customers>;
   /** fetch aggregated fields from the table: "customers" */
@@ -1947,6 +2865,75 @@ export type Subscription_Root = {
   user_agents_aggregate: User_Agents_Aggregate;
   /** fetch data from the table: "user_agents" using primary key columns */
   user_agents_by_pk: Maybe<User_Agents>;
+};
+
+
+export type Subscription_RootAddress_TypesArgs = {
+  distinct_on: Maybe<Array<Address_Types_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Address_Types_Order_By>>;
+  where: Maybe<Address_Types_Bool_Exp>;
+};
+
+
+export type Subscription_RootAddress_Types_AggregateArgs = {
+  distinct_on: Maybe<Array<Address_Types_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Address_Types_Order_By>>;
+  where: Maybe<Address_Types_Bool_Exp>;
+};
+
+
+export type Subscription_RootAddress_Types_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+export type Subscription_RootAddressesArgs = {
+  distinct_on: Maybe<Array<Addresses_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Addresses_Order_By>>;
+  where: Maybe<Addresses_Bool_Exp>;
+};
+
+
+export type Subscription_RootAddresses_AggregateArgs = {
+  distinct_on: Maybe<Array<Addresses_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Addresses_Order_By>>;
+  where: Maybe<Addresses_Bool_Exp>;
+};
+
+
+export type Subscription_RootAddresses_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCustomer_OnboardingsArgs = {
+  distinct_on: Maybe<Array<Customer_Onboardings_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customer_Onboardings_Order_By>>;
+  where: Maybe<Customer_Onboardings_Bool_Exp>;
+};
+
+
+export type Subscription_RootCustomer_Onboardings_AggregateArgs = {
+  distinct_on: Maybe<Array<Customer_Onboardings_Select_Column>>;
+  limit: Maybe<Scalars['Int']>;
+  offset: Maybe<Scalars['Int']>;
+  order_by: Maybe<Array<Customer_Onboardings_Order_By>>;
+  where: Maybe<Customer_Onboardings_Bool_Exp>;
+};
+
+
+export type Subscription_RootCustomer_Onboardings_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -2325,6 +3312,34 @@ export type CustomerDetailsFragment = (
   )> }
 );
 
+export type PersistOnboardingDataMutationVariables = Exact<{
+  data?: Maybe<Customer_Onboardings_Insert_Input>;
+}>;
+
+
+export type PersistOnboardingDataMutation = (
+  { __typename?: 'mutation_root' }
+  & { insert_customer_onboardings_one: Maybe<(
+    { __typename?: 'customer_onboardings' }
+    & Pick<Customer_Onboardings, 'id' | 'address_handle' | 'address_type' | 'introduction_letter_date' | 'introduction_letter_editor_state' | 'introduction_letter_extra_recipients' | 'introduction_letter_time' | 'introduction_letter_url_slug' | 'persona_name' | 'persona_photo_url' | 'skip_onboarding_redirect_on_login' | 'updated_at'>
+  )> }
+);
+
+export type GetPersistedOnboardingDataQueryVariables = Exact<{
+  customer_id: Scalars['uuid'];
+}>;
+
+
+export type GetPersistedOnboardingDataQuery = (
+  { __typename?: 'query_root' }
+  & { customer_onboardings_by_pk: Maybe<(
+    { __typename?: 'customer_onboardings' }
+    & Pick<Customer_Onboardings, 'id' | 'address_handle' | 'address_type' | 'introduction_letter_date' | 'introduction_letter_editor_state' | 'introduction_letter_extra_recipients' | 'introduction_letter_time' | 'introduction_letter_url_slug' | 'persona_name' | 'persona_photo_url' | 'skip_onboarding_redirect_on_login' | 'updated_at'>
+  )> }
+);
+
 export const CustomerDetailsFragmentDoc: DocumentNode<CustomerDetailsFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"customerDetails"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"customers"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contact_name"}},{"kind":"Field","name":{"kind":"Name","value":"membership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"active_until"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"lifetime"}},{"kind":"Field","name":{"kind":"Name","value":"sabbatical_available_until"}}]}},{"kind":"Field","name":{"kind":"Name","value":"personas"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"list_address_with_byline"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"photo_url"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_broadcast_time"}}]}},{"kind":"Field","name":{"kind":"Name","value":"unverified_email"}},{"kind":"Field","name":{"kind":"Name","value":"verified_email"}}]}}]};
 export const LoginDocument: DocumentNode<LoginMutation, LoginMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"session_token"}},{"kind":"Field","name":{"kind":"Name","value":"customer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"customerDetails"}}]}}]}}]}},...CustomerDetailsFragmentDoc.definitions]};
 export const CustomerDetailsDocument: DocumentNode<CustomerDetailsQuery, CustomerDetailsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CustomerDetails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"customer"},"name":{"kind":"Name","value":"customers_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"customerDetails"}}]}}]}},...CustomerDetailsFragmentDoc.definitions]};
+export const PersistOnboardingDataDocument: DocumentNode<PersistOnboardingDataMutation, PersistOnboardingDataMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PersistOnboardingData"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"customer_onboardings_insert_input"}},"defaultValue":{"kind":"ObjectValue","fields":[]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_customer_onboardings_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}},{"kind":"Argument","name":{"kind":"Name","value":"on_conflict"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"constraint"},"value":{"kind":"EnumValue","value":"customer_onboardings_pkey"}},{"kind":"ObjectField","name":{"kind":"Name","value":"update_columns"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"address_handle"},{"kind":"EnumValue","value":"address_type"},{"kind":"EnumValue","value":"introduction_letter_date"},{"kind":"EnumValue","value":"introduction_letter_editor_state"},{"kind":"EnumValue","value":"introduction_letter_extra_recipients"},{"kind":"EnumValue","value":"introduction_letter_time"},{"kind":"EnumValue","value":"introduction_letter_url_slug"},{"kind":"EnumValue","value":"persona_name"},{"kind":"EnumValue","value":"persona_photo_url"},{"kind":"EnumValue","value":"skip_onboarding_redirect_on_login"},{"kind":"EnumValue","value":"updated_at"}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address_handle"}},{"kind":"Field","name":{"kind":"Name","value":"address_type"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_date"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_editor_state"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_extra_recipients"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_time"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_url_slug"}},{"kind":"Field","name":{"kind":"Name","value":"persona_name"}},{"kind":"Field","name":{"kind":"Name","value":"persona_photo_url"}},{"kind":"Field","name":{"kind":"Name","value":"skip_onboarding_redirect_on_login"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}}]}}]}}]};
+export const GetPersistedOnboardingDataDocument: DocumentNode<GetPersistedOnboardingDataQuery, GetPersistedOnboardingDataQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPersistedOnboardingData"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customer_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"customer_onboardings_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customer_id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"address_handle"}},{"kind":"Field","name":{"kind":"Name","value":"address_type"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_date"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_editor_state"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_extra_recipients"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_time"}},{"kind":"Field","name":{"kind":"Name","value":"introduction_letter_url_slug"}},{"kind":"Field","name":{"kind":"Name","value":"persona_name"}},{"kind":"Field","name":{"kind":"Name","value":"persona_photo_url"}},{"kind":"Field","name":{"kind":"Name","value":"skip_onboarding_redirect_on_login"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}}]}}]}}]};

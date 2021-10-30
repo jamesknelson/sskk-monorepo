@@ -1,0 +1,51 @@
+mutation PersistOnboardingData($data: customer_onboardings_insert_input = {}) {
+  insert_customer_onboardings_one(
+    object: $data,
+    on_conflict: {
+      constraint: customer_onboardings_pkey,
+      update_columns: [
+        address_handle,
+        address_type,
+        introduction_letter_date,
+        introduction_letter_editor_state,
+        introduction_letter_extra_recipients,
+        introduction_letter_time,
+        introduction_letter_url_slug,
+        persona_name,
+        persona_photo_url,
+        skip_onboarding_redirect_on_login,
+        updated_at
+      ]
+    }
+  ) {
+    id
+    address_handle
+    address_type
+    introduction_letter_date
+    introduction_letter_editor_state
+    introduction_letter_extra_recipients
+    introduction_letter_time
+    introduction_letter_url_slug
+    persona_name
+    persona_photo_url
+    skip_onboarding_redirect_on_login
+    updated_at
+  }
+}
+
+query GetPersistedOnboardingData($customer_id: uuid!) {
+  customer_onboardings_by_pk(id: $customer_id) {
+    id
+    address_handle
+    address_type
+    introduction_letter_date
+    introduction_letter_editor_state
+    introduction_letter_extra_recipients
+    introduction_letter_time
+    introduction_letter_url_slug
+    persona_name
+    persona_photo_url
+    skip_onboarding_redirect_on_login
+    updated_at
+  }
+}

@@ -9,32 +9,45 @@ PRIORITIES:
 
 TODO:
 
-o Implement support for a complete message on the button body
-o fields need interaction indicators
-o get registration and login both working
+o ensure the intro loading spinner isn't animated
+o figure out why session save isn't working on refresh
+o save the in-progress letter on registration
+o show a loading indicator in place of the editor during hydration, at the loader level
 
-- add the persona selection screen, and skip directly there
-
-- save the in-progress letter on registration
-- make logging in on an account without a persona redirect back to the onboarding process
-- show a loading indicator in place of the editor during hydration, at the loader level
-- update join context/loader to know how to deal with starting on the 3rd page:
+- remove all session data keys on logout, with an import * on session storage keys
+- add the persona selection screen, and skip directly there. only support
+  free addresses for now.
+  * add form
+  * check that address is available 
+  * save to onboarding data
+- add a placeholder confirmation screen.
+- update join context/loader to know how to deal with starting on the 3rd and later pages, and how to deal with any saved onboarding data
+  * skip "register" page
   * when there is enough data in session, set complete steps to 2
   * otherwise, redirect to first page
+  * etc.
 
 - improve the "register & save" button w/ indicator
-- add next/previous links to header for *complete* steps
+
+- forgotten password flow
+- user menu
+- change password screen
+- forget I ever existed screen
+
 
 - get editor menu working
   * B, I
   * make sure buttons don't steal focus
-- add some instructions somewhere on the editor page, maybe stickied to the bottom
 - Add / remove title menu button (show a confirmation window if hitting remove while a title exists)
 - If there's an empty title, add placeholder text behind it
 
+
+- deploy to production
+
+- add next/previous links to header for *complete* steps
+- add some instructions somewhere on the editor page, maybe stickied to the bottom
 - add the windmills background to the sign in page, try and animate the windmills
   to rotate
-- deploy to production
 
 ---
 

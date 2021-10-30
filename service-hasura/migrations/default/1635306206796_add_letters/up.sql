@@ -144,13 +144,7 @@ create table "drafts" (
   "allow_public_to_sign" boolean not null DEFAULT false,
 
   "url_slug" text,
-  check (
-    (url_slug ~ '^[a-zA-Z0-9-]+$') and
-    -- Why max 80 characters? a quick google seems to suggest that's about
-    -- the limit of many other services. I'm honestly not sure the reasoning
-    -- behind it though. We can always change it later.
-    length(url_slug) <= 80
-  ),
+  check (is_valid_url_slug(url_slug)),
 
   -- The date can be null for early drafts, but a final draft requires a value
   -- so that approvals will validate. The possibility of null dates is intended
@@ -159,10 +153,7 @@ create table "drafts" (
   "date" date,
   "time" time,
   check (
-    "date" is null OR (
-      "time" = time '00:00' OR
-      "time" = time '12:00'
-    )
+    "date" is null OR is_valid_publication_time("time")
   ),
 
   -- There can be at most *one* unlocked draft, which will be the draft that is

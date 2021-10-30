@@ -1,107 +1,147 @@
 import type React from 'react'
-import { Loader, LoaderProps, loadAsync } from 'retil-mount'
+import { LoaderProps, loadAsync } from 'retil-mount'
 import { joinPathnames, loadMatch } from 'retil-nav'
+import { createMemo } from 'retil-support'
 
 import { BackgroundScene } from 'src/components/background'
 import { AppEnv } from 'src/env'
+import { LoadingPage } from 'src/pages/loadingLoader'
 import { CreateHeadTagsInput, createHeadTags } from 'src/utils/createHeadTags'
 import { patternFor } from 'src/utils/urls'
 
 import { JoinPath, JoinProvider } from './joinContext'
 import Layout from './joinLayout'
+import { JoinPersistence, createJoinPersistence } from './joinPersistence'
 import urls from './joinURLs'
 
-interface JoinEnv extends AppEnv {
-  joinMountPath: string
+interface JoinOwnEnv {
+  join: {
+    persistence: JoinPersistence
+    mountPath: string
+  }
 }
+
+interface JoinEnv extends AppEnv, JoinOwnEnv {}
 
 const joinMatchLoader = loadMatch<JoinEnv>({
   // The top level loader is synchronous, so that it can be immediately
   // displayed when the user clicks through to the join flow, while
   // subsequent loaders are
-  [patternFor(urls.top)]: loadStep(async (env) => {
+  [patternFor(urls.top)]: loadAsync(async (env) => {
     const pageModule = await import('./1-joinTopPage')
 
     env.nav.precache(
-      joinPathnames(env.joinMountPath, urls.writeIntroLetter().pathname),
+      joinPathnames(env.join.mountPath, urls.writeIntroLetter().pathname),
     )
 
-    return {
+    return loadJoinStep({
+      env,
       mod: pageModule,
       path: 'top',
-    }
+    })
   }),
 
-  [patternFor(urls.writeIntroLetter)]: loadStep(async (env) => {
-    // TODO:
-    // - show loading page before while hydrating
-    // - if the user is logged in, read anything saved server-side,
-    //   comparing the version with something in sessionStorage, and
-    //   using whichever one is newer.
-
+  [patternFor(urls.writeIntroLetter)]: loadAsync(async (env) => {
     const pageModule = await import('./2-writeIntroLetterPage')
 
     env.nav.precache(
-      joinPathnames(env.joinMountPath, urls.createAccount().pathname),
+      joinPathnames(env.join.mountPath, urls.createAccount().pathname),
     )
 
-    return {
+    return loadJoinStep({
+      env,
       mod: pageModule,
       path: 'writeIntroLetter',
-    }
+    })
   }),
 
-  [patternFor(urls.createAccount)]: loadStep(async (env) => {
+  [patternFor(urls.createAccount)]: loadAsync(async (env) => {
     const pageModule = await import('./3-createAccountPage')
 
-    // env.nav.precache(
-    //   joinPathnames(env.joinMountPath, urls.selectMembershipType().pathname),
-    // )
+    env.nav.precache(
+      joinPathnames(env.join.mountPath, urls.selectMembershipType().pathname),
+    )
 
-    return {
+    return loadJoinStep({
+      env,
       mod: pageModule,
       path: 'createAccount',
-    }
+    })
+  }),
+
+  [patternFor(urls.chooseAddress)]: loadAsync(async (env) => {
+    const pageModule = await import('./6-chooseAddressPage')
+
+    // env.nav.precache(
+    //   joinPathnames(env.join.mountPath, urls.selectMembershipType().pathname),
+    // )
+
+    return loadJoinStep({
+      env,
+      mod: pageModule,
+      path: 'chooseAddress',
+    })
   }),
 })
 
-type LoadJoinStep = (env: LoaderProps<JoinEnv>) => Promise<{
+interface LoadJoinStepProps {
+  env: JoinEnv
   mod: CreateHeadTagsInput & {
     backgroundScene: BackgroundScene
     Page: React.ComponentType
   }
   path: JoinPath
-}>
-
-function loadStep(loadJoinStep: LoadJoinStep): Loader<JoinEnv> {
-  return loadAsync(async (env) => {
-    const { mod, path } = await loadJoinStep(env)
-
-    env.head.push(...createHeadTags(mod))
-    env.mutablePersistedContext.transitionKey = '/join'
-
-    mod.backgroundScene.load()
-
-    return (
-      <JoinProvider mountPath={env.joinMountPath} path={path}>
-        <Layout backgroundScene={mod.backgroundScene} transitionKey={path}>
-          <mod.Page />
-        </Layout>
-      </JoinProvider>
-    )
-  })
 }
 
-export default function joinLoader(props: LoaderProps<AppEnv>) {
+function loadJoinStep(props: LoadJoinStepProps): React.ReactNode {
+  const { env, mod, path } = props
+
+  env.head.push(...createHeadTags(mod))
+  env.mutablePersistedContext.transitionKey = '/join'
+
+  mod.backgroundScene.load()
+
+  return (
+    <JoinProvider
+      mountPath={env.join.mountPath}
+      path={path}
+      persistence={env.join.persistence}>
+      <Layout backgroundScene={mod.backgroundScene} transitionKey={path}>
+        <mod.Page />
+      </Layout>
+    </JoinProvider>
+  )
+}
+
+const joinPersistenceMemo = createMemo<Promise<JoinPersistence>>()
+
+export default loadAsync(async function joinLoader(props: LoaderProps<AppEnv>) {
+  if (!props.hasHydrated) {
+    return <LoadingPage />
+  }
+
+  const client = props.client
+  const customerId = props.customer?.id
+
+  const joinOwnEnv: JoinOwnEnv = {
+    join: {
+      persistence: await joinPersistenceMemo(
+        () => createJoinPersistence(client, customerId),
+        [client, customerId],
+      ),
+      mountPath: props.nav.matchname,
+    },
+  }
+
   return joinMatchLoader({
     ...props,
-    joinMountPath: props.nav.matchname,
+    ...joinOwnEnv,
     mount: {
       ...props.mount,
       env: {
         ...props.mount.env,
-        joinMountPath: props.nav.matchname,
+        ...joinOwnEnv,
       },
     },
   })
-}
+})

@@ -1,1 +1,1 @@
-export const joinEditorStateStorageKey = 'sskk_joinEditorState'
+export const joinPersistenceStorageKey = 'sskk_joinEditorState'

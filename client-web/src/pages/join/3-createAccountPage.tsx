@@ -1,10 +1,12 @@
 import { css } from '@emotion/react'
+import { useEffect, useRef } from 'react'
 import { useNavController } from 'retil-nav'
 
 // import { Check } from 'src/assets/glyphs'
 import { createBackgroundScene } from 'src/components/background'
 import { FormInput, FormFieldBlock } from 'src/components/form'
 import { messages } from 'src/constants/messages'
+import { useAppEnv } from 'src/env'
 import { useAuthController } from 'src/env/auth'
 import { validateCreateUserWithPasswordRequest } from 'src/env/firebaseAuthIssues'
 import appURLs from 'src/pages/appURLs'
@@ -13,6 +15,8 @@ import { RaisedButtonBody } from 'src/presentation/buttonBodies'
 import { Card } from 'src/presentation/card'
 import { smallCardClampWidth } from 'src/presentation/dimensions'
 import { FormSubmitButtonSurface, createForm, useForm } from 'src/utils/form'
+
+import { useJoinContext } from './joinContext'
 
 export const title = "You've taken the first step."
 export const meta = {
@@ -117,17 +121,18 @@ export function Page() {
             )}
           </FormSubmitButtonSurface>
         </RegisterForm>
-        <hr />
       </Card>
     </div>
   )
 }
 
 const RegisterForm = createForm((props) => {
+  const env = useAppEnv()
   const { createUserWithPassword } = useAuthController()
   const { navigate } = useNavController()
+  const { persistence } = useJoinContext()
 
-  return useForm({
+  const form = useForm({
     ...props,
     getMessage: (issue) =>
       (issue.path && messages.auth[issue.path][issue.code]) ||
@@ -144,12 +149,33 @@ const RegisterForm = createForm((props) => {
         const createUserIssues = await createUserWithPassword(form.model.value)
         if (createUserIssues) {
           form.addIssues(createUserIssues)
-        } else {
-          // Navigation is handled by the loader.
-          await navigate(appURLs.join.selectMembershipType())
         }
       }
     },
     onValidate: validateCreateUserWithPasswordRequest,
   })
+
+  const customer = env.customer
+  const { current: initiallyPersistedData } = useRef(persistence.get())
+
+  // This will only be called after account creation, as the router prevents
+  // guests from loading this page while already logged in.
+  useEffect(() => {
+    if (customer) {
+      // Re-save the current data to persist on the server, now that we
+      // have a customer id.
+      persistence.save(
+        {
+          ...initiallyPersistedData,
+          persona_name: customer.contact_name,
+        },
+        { immediate: true },
+      )
+
+      // Continue on to the next page
+      navigate(appURLs.join.chooseAddress())
+    }
+  }, [customer, initiallyPersistedData, navigate, persistence])
+
+  return form
 })

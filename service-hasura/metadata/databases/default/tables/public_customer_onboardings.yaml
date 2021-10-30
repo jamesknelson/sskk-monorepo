@@ -1,0 +1,62 @@
+table:
+  name: customer_onboardings
+  schema: public
+insert_permissions:
+- permission:
+    backend_only: false
+    check:
+      id:
+        _eq: X-Hasura-Customer-Id
+    columns:
+    - address_handle
+    - address_type
+    - introduction_letter_date
+    - introduction_letter_editor_state
+    - introduction_letter_extra_recipients
+    - introduction_letter_time
+    - introduction_letter_url_slug
+    - persona_name
+    - persona_photo_url
+    - skip_onboarding_redirect_on_login
+    - updated_at
+    set:
+      id: x-hasura-Customer-Id
+  role: customer
+select_permissions:
+- permission:
+    columns:
+    - id
+    - skip_onboarding_redirect_on_login
+    - address_type
+    - address_handle
+    - persona_name
+    - persona_photo_url
+    - introduction_letter_editor_state
+    - introduction_letter_extra_recipients
+    - introduction_letter_url_slug
+    - introduction_letter_date
+    - introduction_letter_time
+    - updated_at
+    filter:
+      id:
+        _eq: X-Hasura-Customer-Id
+  role: customer
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - address_handle
+    - address_type
+    - introduction_letter_date
+    - introduction_letter_editor_state
+    - introduction_letter_extra_recipients
+    - introduction_letter_time
+    - introduction_letter_url_slug
+    - persona_name
+    - persona_photo_url
+    - skip_onboarding_redirect_on_login
+    - updated_at
+    filter:
+      id:
+        _eq: X-Hasura-Customer-Id
+  role: customer

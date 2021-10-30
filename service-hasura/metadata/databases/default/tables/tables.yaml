@@ -1,3 +1,6 @@
+- "!include public_address_types.yaml"
+- "!include public_addresses.yaml"
+- "!include public_customer_onboardings.yaml"
 - "!include public_customers.yaml"
 - "!include public_firebase_tokens.yaml"
 - "!include public_membership_levels.yaml"

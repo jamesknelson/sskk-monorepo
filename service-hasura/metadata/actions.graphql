@@ -6,3 +6,4 @@ type LoginOutput {
   customer_id: uuid
   session_token: String!
 }
+
