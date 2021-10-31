@@ -9,7 +9,7 @@ import {
 
 export interface SpringTrailColumnProps {
   children: React.ReactElement[]
-  transitionHandleRef: React.Ref<TransitionHandle | null>
+  transitionHandleRef: React.Ref<TransitionHandle>
 }
 
 const fromStyles = {

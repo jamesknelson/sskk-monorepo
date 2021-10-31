@@ -10,6 +10,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
     "types": ["@emotion/react"],
+    "allowJs": true,
     "noEmit": true,
     "strict": true,
     "allowSyntheticDefaultImports": true,
@@ -23,11 +24,11 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@emotion/core": ["./emotion-core-stub.ts"]
+    }
   },
-  "exclude": [
-    "node_modules"
-  ],
   "include": [
     "@types/**.ts",
     "src/**/*.ts",
@@ -36,5 +37,10 @@
     "vite/**/*.ts",
     "vite/**/*.tsx",
     "vite/**/*.js"
+  ],
+  "exclude": [
+    "src/**/*.stories.tsx",
+    ".storybook",
+    "node_modules"
   ]
 }

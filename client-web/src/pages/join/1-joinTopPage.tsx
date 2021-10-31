@@ -12,11 +12,13 @@ export const title = "You've just taken the first step."
 export const meta = {}
 
 export const backgroundScene = createBackgroundScene(async () => {
-  const [{ default: MountainVillage }, { default: SailingShips }] =
-    await Promise.all([
-      import('src/assets/backgrounds/mountain-village.optimized.svg?url'),
-      import('src/assets/backgrounds/sailing-ships.optimized.svg?url'),
-    ])
+  const [
+    { default: MountainVillage },
+    { default: SailingShips },
+  ] = await Promise.all([
+    import('src/assets/backgrounds/mountain-village.optimized.svg?url'),
+    import('src/assets/backgrounds/sailing-ships.optimized.svg?url'),
+  ])
 
   return () => (
     <div

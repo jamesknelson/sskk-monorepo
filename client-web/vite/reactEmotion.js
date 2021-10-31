@@ -1,13 +1,14 @@
-import { transformSync } from '@babel/core'
-import { Plugin } from 'vite'
+const { transformSync } = require('@babel/core')
+const babelEmotion = require('@emotion/babel-plugin')
+// import { Plugin } from 'vite'
 
-export function emotionPlugin(): Plugin {
+module.exports = function emotionPlugin() /*: Plugin*/ {
   return {
     name: 'emotion',
 
-    enforce: 'pre' as const,
+    enforce: 'pre', // as const,
 
-    transform(code: string, id: string) {
+    transform(code /*: string*/, id /*: string*/) {
       if (!/\.(t|j)sx?$/.test(id) || id.includes('node_modules')) {
         return
       }
@@ -44,12 +45,12 @@ export function emotionPlugin(): Plugin {
         parserOpts: {
           sourceType: 'module',
           allowAwaitOutsideFunction: true,
-          plugins: parserPlugins as any,
+          plugins: parserPlugins, // as any,
         },
         generatorOpts: {
           decoratorsBeforeExport: true,
         },
-        plugins: [require('@emotion/babel-plugin')],
+        plugins: [babelEmotion],
         ast: true,
         sourceMaps: true,
         sourceFileName: id,
@@ -58,11 +59,9 @@ export function emotionPlugin(): Plugin {
       // TODO: return null if there's no styled components detected
 
       return {
-        code: result!.code || undefined,
-        map: result!.map || undefined,
+        code: result.code || undefined,
+        map: result.map || undefined,
       }
     },
   }
 }
-
-export default emotionPlugin

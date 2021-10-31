@@ -1,4 +1,4 @@
-import { css } from '@emotion/react'
+import { Theme, css } from '@emotion/react'
 import { Interpolation } from '@emotion/serialize'
 import { rgba, tint } from 'polished'
 import type React from 'react'
@@ -135,7 +135,7 @@ export interface ButtonBodyContentConfig {
   rightGlyph?: ButtonBodyGlyphProp
   rightGlyphColor?: HighStyleValue<string>
   rightGlyphScale?: number
-  themeCSS?: Interpolation<any>
+  themeCSS?: Interpolation<Theme>
 }
 
 export type ButtonBodyContentProps = ButtonBodyContentConfig &

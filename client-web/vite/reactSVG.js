@@ -1,9 +1,10 @@
 // Taken from: https://www.npmjs.com/package/vite-plugin-react-svg
 
-import { Plugin } from 'vite'
-import svgr from '@svgr/core'
-import { readFileSync } from 'fs'
+// import { Plugin } from 'vite'
+const svgr = require('@svgr/core')
+const { readFileSync } = require('fs')
 
+/*
 export interface SVGPluginOptions {
   // Default behavior when importing `.svg` files, possible options are: 'url' and `component`
   defaultExport?: 'url' | 'component'
@@ -37,8 +38,11 @@ export interface SVGPluginOptions {
   // <SvgIcon title="Accessible icon name" titleId="iconName" /> => <svg aria-labelledby="iconName><title id="iconName">Accessible icon name</title><...></svg>
   titleProp?: boolean
 }
+*/
 
-export default function svgPlugin(options: SVGPluginOptions = {}): Plugin {
+module.exports = function svgPlugin(
+  options /*: SVGPluginOptions = {}*/,
+) /*: Plugin*/ {
   const {
     defaultExport = 'url',
     svgoConfig,
@@ -102,30 +106,35 @@ export default function svgPlugin(options: SVGPluginOptions = {}): Plugin {
   }
 }
 
-async function compileSvg(source: Buffer, id: string, options: any) {
-  const code = await svgr(
-    source,
-    {
-      ...options,
-      runtimeConfig: false,
-      plugins: ['@svgr/plugin-svgo', '@svgr/plugin-jsx'],
-      jsx: {
-        babelConfig: {
-          plugins: [
-            [
-              '@babel/plugin-transform-react-jsx',
-              {
-                useBuiltIns: true,
-              },
+async function compileSvg(
+  source /*: Buffer*/,
+  id /*: string*/,
+  options /*: any*/,
+) {
+  const code = await svgr /* as any*/
+    .default(
+      source,
+      {
+        ...options,
+        runtimeConfig: false,
+        plugins: ['@svgr/plugin-svgo', '@svgr/plugin-jsx'],
+        jsx: {
+          babelConfig: {
+            plugins: [
+              [
+                '@babel/plugin-transform-react-jsx',
+                {
+                  useBuiltIns: true,
+                },
+              ],
             ],
-          ],
+          },
         },
       },
-    },
-    {
-      filePath: id,
-    },
-  )
+      {
+        filePath: id,
+      },
+    )
 
   return code
 }

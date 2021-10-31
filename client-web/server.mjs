@@ -1,18 +1,22 @@
-const express = require('express')
-const fs = require('fs')
-const path = require('path')
+import compression from 'compression'
+import express from 'express'
+import fs from 'fs'
+import { dirname, resolve } from 'path'
+import serveStatic from 'serve-static'
+import { fileURLToPath } from 'url'
+import { createServer as createViteServer } from 'vite'
 
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
 const port = process.env.PORT || 3000
 
-async function createServer(
+const resolveRoot = (p) => resolve(dirname(fileURLToPath(import.meta.url)), p)
+
+export async function createServer(
   root = process.cwd(),
   isProd = process.env.NODE_ENV === 'production',
 ) {
-  const resolve = (p) => path.resolve(__dirname, p)
-
   const indexProd = isProd
-    ? fs.readFileSync(resolve('dist/server/index.html'), 'utf-8')
+    ? fs.readFileSync(resolveRoot('dist/server/index.html'), 'utf-8')
     : ''
 
   const app = express()
@@ -22,8 +26,7 @@ async function createServer(
    */
   let viteDevServer
   if (!isProd) {
-    const { createServer } = require('vite')
-    viteDevServer = await createServer({
+    viteDevServer = await createViteServer({
       root,
       logLevel: isTest ? 'error' : 'info',
       server: {
@@ -39,9 +42,9 @@ async function createServer(
     // use vite's connect instance as middleware
     app.use(viteDevServer.middlewares)
   } else {
-    app.use(require('compression')())
+    app.use(compression())
     app.use(
-      require('serve-static')(resolve('dist/client'), {
+      serveStatic(resolveRoot('dist/client'), {
         index: false,
       }),
     )
@@ -54,7 +57,7 @@ async function createServer(
       let template, render
       if (viteDevServer) {
         // always read fresh template in dev
-        template = fs.readFileSync(resolve('index.html'), 'utf-8')
+        template = fs.readFileSync(resolveRoot('index.html'), 'utf-8')
         template = await viteDevServer.transformIndexHtml(url, template)
         render = (await viteDevServer.ssrLoadModule('/src/entry-server.tsx'))
           .render
@@ -99,6 +102,3 @@ if (!isTest) {
     }),
   )
 }
-
-// for test use
-exports.createServer = createServer
