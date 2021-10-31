@@ -74,8 +74,14 @@ export function Page() {
           `}>
           <LetterMetaBlock
             title={title}
-            from={['@james (at Letterhouse)']}
-            to={['The Reader']}
+            from={[
+              {
+                type: 'member',
+                handle: 'jkn',
+                name: 'James K Nelson (at Letterhouse)',
+              },
+            ]}
+            to={[{ type: 'placeholder', label: 'The Reader' }]}
           />
           <TextBlock>
             <p>

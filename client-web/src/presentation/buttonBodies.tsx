@@ -8,9 +8,8 @@ import { HighStyleValue, highStyle } from 'retil-css'
 import { inActiveSurface, inDisabledSurface } from 'retil-interaction'
 
 import { ChevronLeft, ChevronRight } from 'src/assets/glyphs'
-import { Caret } from './caret'
 
-// import { Caret } from './caret'
+import { Caret } from './caret'
 import { controlColors, paletteColors } from './colors'
 import { easeInOut, easeOut } from './easings'
 import { GlyphComponent, Icon } from './icon'

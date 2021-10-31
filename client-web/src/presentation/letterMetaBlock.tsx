@@ -9,10 +9,15 @@ import { TextBlock } from './blocks'
 // - this should actually be part of the prosemirror json
 // - the pills should be rendered by a multi select
 
+export type LetterMetaAddress =
+  | { type: 'placeholder'; label: string }
+  | { type: 'guest'; handle: string }
+  | { type: 'member'; handle: string; name?: string; photoURL?: string }
+
 export interface LetterMetaBlockProps {
   title: string | null
-  to: string[]
-  from: string[]
+  to: LetterMetaAddress[]
+  from: LetterMetaAddress[]
 }
 
 export function LetterMetaBlock(props: LetterMetaBlockProps) {
@@ -38,13 +43,13 @@ export function LetterMetaBlock(props: LetterMetaBlockProps) {
         <LetterMetaRow>
           <UnselectableSpan>To:</UnselectableSpan>
           {to.map((to, i) => (
-            <AddressPill key={i}>{to}</AddressPill>
+            <AddressPill key={i} {...to} />
           ))}
         </LetterMetaRow>
         <LetterMetaRow>
           <UnselectableSpan>From:</UnselectableSpan>
           {from.map((to, i) => (
-            <AddressPill key={i}>{to}</AddressPill>
+            <AddressPill key={i} {...to} />
           ))}
         </LetterMetaRow>
       </div>
@@ -52,7 +57,18 @@ export function LetterMetaBlock(props: LetterMetaBlockProps) {
   )
 }
 
-const AddressPill: React.FunctionComponent = ({ children, ...rest }) => (
+function AddressPill(props: LetterMetaAddress) {
+  switch (props.type) {
+    case 'placeholder':
+      return <AddressPillContent>{props.label}</AddressPillContent>
+    case 'member':
+      return <AddressPillContent>@{props.handle}</AddressPillContent>
+    case 'guest':
+      return <AddressPillContent>@{props.handle}</AddressPillContent>
+  }
+}
+
+const AddressPillContent: React.FunctionComponent = ({ children, ...rest }) => (
   <span
     {...rest}
     css={css`

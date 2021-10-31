@@ -192,8 +192,14 @@ export function Page() {
             `}>
             <LetterMetaBlock
               title={null}
-              from={['You']}
-              to={['The Letterhouse Community']}
+              from={[{ type: 'placeholder', label: 'You' }]}
+              to={[
+                {
+                  type: 'member',
+                  handle: 'jkn',
+                  name: 'James K Nelson (at Letterhouse)',
+                },
+              ]}
             />
             <TextBlock>
               <Boundary fallback={<div />}>

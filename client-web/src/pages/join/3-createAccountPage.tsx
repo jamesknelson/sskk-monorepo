@@ -71,7 +71,7 @@ export function Page() {
             css={css`
               text-align: center;
             `}>
-            <h1>It's that time.</h1>
+            <h1>Thank you!</h1>
 
             <RegisterForm.Issues>
               {(issues) => {
@@ -81,10 +81,12 @@ export function Page() {
                 return messages.length ? (
                   messages
                 ) : (
-                  <p>
-                    You'll need to create a Letterhouse login to send your
-                    letter.
-                  </p>
+                  <>
+                    <p>
+                      Writing that first letter takes some effort. Let's create
+                      an account to keep it safe.
+                    </p>
+                  </>
                 )
               }}
             </RegisterForm.Issues>
