@@ -7,19 +7,22 @@ PRIORITIES:
 
 ---
 
+
+
 TODO:
 
-o ensure the intro loading spinner isn't animated
-o figure out why session save isn't working on refresh
-o save the in-progress letter on registration
-o show a loading indicator in place of the editor during hydration, at the loader level
-o clear session storage on logout
-o improve the "register & save" button w/ indicator
-o get editor menu working
-o convert the backgrounds to .svg files instead of javascript files
+- refactor "presentation" directory into theme + components
+  * components can also be exported as part of the theme if it makes sense,
+    but given that a theme must be loaded as a single chunk, they should be
+    kept in "components" until such a time as it's desired for them to be themed.
+  * theme parts should be read out of context
 
-- add the persona selection screen, and skip directly there. only support
-  free addresses for now.
+
+- add letter meta block story
+  * figure out how to define lists of objects as args
+- add address pill components for guest and member
+
+- add the persona selection screen
   * add form
   * check that address is available 
   * save to onboarding data

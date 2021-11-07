@@ -5,7 +5,10 @@ import { useFormContext, useFormModelContext } from '.'
 import { formContext, formModelContext } from './formContext'
 import { FormFieldSurface, FormFieldSurfaceProps } from './formFieldSurface'
 import { useForm } from './formHooks'
-import { FormIssues, TypedFormIssues } from './formIssues'
+import {
+  FormIssuesConsumer,
+  TypedFormIssuesConsumer,
+} from './formIssuesConsumer'
 import {
   FormModelRoot,
   FormPassthroughProps,
@@ -77,7 +80,7 @@ export type TypedForm<
     (void extends TOptions ? {} : TOptions) &
     FormCommonProps<TSnapshot>
 > & {
-  Issues: TypedFormIssues<TValue, TCodes>
+  IssuesConsumer: TypedFormIssuesConsumer<TValue, TCodes>
   FieldSurface: React.ForwardRefExoticComponent<FormFieldSurfaceProps<TValue>>
 
   useSnapshot: TSnapshot
@@ -128,7 +131,7 @@ export function createForm<
       useForwardRefRenderCallback(props, ref, (formHook as any) ?? useForm),
   )
 
-  Form.Issues = FormIssues
+  Form.IssuesConsumer = FormIssuesConsumer
   Form.FieldSurface = FormFieldSurface
 
   Form.useSnapshot = useFormContext

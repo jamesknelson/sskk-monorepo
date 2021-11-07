@@ -9,7 +9,7 @@ import { createRoot } from 'react-dom'
 
 import { App } from './app'
 import { firebase as firebaseConfig, firebaseEmulators } from './config'
-import { appPageSerializedDataGlobal } from './constants/htmlGeneration'
+import { appPageSerializedDataGlobal } from './config'
 import { createBrowserAppEnvSource } from './env/browserAppEnv'
 import appLoader from './pages/appLoader'
 

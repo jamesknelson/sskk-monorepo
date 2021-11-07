@@ -9,11 +9,11 @@ config:
   avoidOptionals: true
   maybeValue: T | null | undefined
 generates:
-  src/generated/graphql.ts:
+  src/graphql.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
       - "typed-document-node"
-  src/generated/graphql.schema.json:
-    plugins:
-      - "introspection"
+  # src/graphql.schema.json:
+  #   plugins:
+  #     - "introspection"

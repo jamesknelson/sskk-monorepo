@@ -12,3 +12,9 @@ export const firebaseEmulators = {
 export const graphqlURL = `${
   import.meta.env.VITE_GRAPHQL_PROTOCOL! as string
 }://${import.meta.env.VITE_GRAPHQL_HOST_AND_PORT! as string}/v1/graphql`
+
+// ---
+
+export const appPageSerializedDataGlobal = `appPageData`
+
+export const joinPersistenceKey = 'sskk_joinEditorState'

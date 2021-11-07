@@ -9,7 +9,7 @@ import { ServerMount } from 'retil-mount'
 import { createHref } from 'retil-nav'
 
 import { App } from './app'
-import { appPageSerializedDataGlobal } from './constants/htmlGeneration'
+import { appPageSerializedDataGlobal } from './config'
 import { createServerAppEnv } from './env/serverAppEnv'
 import { HeadContext, renderHeadContextToString } from './head'
 import appLoader from './pages/appLoader'
