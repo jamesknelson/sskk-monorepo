@@ -1,6 +1,6 @@
-import { forwardRef, useCallback } from 'react'
+import { forwardRef } from 'react'
 
-import { Input, InputProps } from 'src/presentation/inputs'
+import { Input, InputProps } from 'src/components/web/input'
 import { useFormModelContext, useFormModelInput } from 'src/utils/form'
 
 export type FormInputProps = Omit<InputProps, 'onChange'> & {
@@ -14,17 +14,6 @@ export const FormInput = forwardRef<HTMLInputElement, InputProps>(
       onChange: props.onChange,
     })
 
-    const handleChange = useCallback(
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (onChange) {
-          onChange(event.target.value)
-        }
-      },
-      [onChange],
-    )
-
-    return (
-      <Input ref={ref} {...props} {...inputProps} onChange={handleChange} />
-    )
+    return <Input ref={ref} {...props} {...inputProps} onChange={onChange} />
   },
 )

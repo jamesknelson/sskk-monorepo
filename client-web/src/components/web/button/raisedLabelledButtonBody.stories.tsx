@@ -1,18 +1,17 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { ButtonSurface } from 'retil-interaction'
 
-import { RaisedButtonBody } from './buttonBodies'
-import { paletteColors } from './colors'
+import { RaisedLabelledButtonBody } from './raisedLabelledButtonBody'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'presentation/RaisedButtonBody',
-  component: RaisedButtonBody,
+  title: 'components/RaisedButtonBody',
+  component: RaisedLabelledButtonBody,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     color: {
       control: 'color',
-      options: Object.values(paletteColors),
+      // options: Object.values(paletteColors),
     },
     leftGlyph: {
       control: 'radio',
@@ -23,13 +22,13 @@ export default {
       options: [undefined, null, 'caret', 'spinner', 'chevron', 0.5],
     },
   },
-} as ComponentMeta<typeof RaisedButtonBody>
+} as ComponentMeta<typeof RaisedLabelledButtonBody>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof RaisedButtonBody> = (args) => (
+const Template: ComponentStory<typeof RaisedLabelledButtonBody> = (args) => (
   <div>
     <ButtonSurface>
-      <RaisedButtonBody {...args} />
+      <RaisedLabelledButtonBody {...args} />
     </ButtonSurface>
   </div>
 )

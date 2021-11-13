@@ -1,7 +1,6 @@
 import { Global, css } from '@emotion/react'
 import prosemirrorStyles from 'prosemirror-view/style/prosemirror.css'
 
-import { structureColors } from './colors'
 import { remPixels } from './dimensions'
 import GlobalStylesInDevMode from './globalStylesInDevMode'
 
@@ -10,7 +9,7 @@ export const GlobalStyles = () => {
     <>
       {import.meta.env.DEV && <GlobalStylesInDevMode />}
       <Global
-        styles={css`
+        styles={(theme) => css`
           * {
             appearance: none;
             border: 0;
@@ -28,7 +27,7 @@ export const GlobalStyles = () => {
 
           /* These styles make the body full-height */
           html {
-            background-color: ${structureColors.wash};
+            background-color: ${theme.color.background};
             box-sizing: border-box;
             font-family: Lora, -apple-system, BlinkMacSystemFont, 'Segoe UI',
               Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',

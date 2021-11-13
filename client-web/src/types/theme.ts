@@ -25,15 +25,16 @@ export interface ColorScheme {
   secondaryWash: string
   onSecondaryWash: string
 
-  // The tertiary color is used for drawing immediate attention. It is primary
-  // intended for use in focus indicators.
+  // The tertiary color is used for drawing immediate attention. Think orange
+  // amongst black and blue ink. It is primary intended for use in focus
+  // indicators.
   tertiary: string
   onTertiary: string
   tertiaryWash: string
   onTertiaryWash: string
 
   // The issue color is used for calling attention to things that might (or
-  // definitely) are not right.
+  // definitely) are not right. Think red or pink amongst black ink.
   issue: string
   onIssue: string
   issueWash: string

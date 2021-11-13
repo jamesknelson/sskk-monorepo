@@ -1,0 +1,18 @@
+{
+  "importSorter.sortConfiguration.customOrderingRules.rules": [
+    {
+      "type": "importMember",
+      "regex": "^$",
+      "orderLevel": 10,
+      "disableSort": true
+    },
+    {
+      "regex": "^src/",
+      "orderLevel": 30
+    },
+    {
+      "regex": "^[.]",
+      "orderLevel": 40
+    }
+  ]
+}

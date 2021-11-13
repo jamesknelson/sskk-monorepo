@@ -1,24 +1,28 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
-import { Card } from 'src/presentation/card'
-import { textColors } from 'src/presentation/colors'
+import { Card } from 'src/components/web/card/card'
 
-const P = styled.p`
-  color: ${textColors.tertiary};
-  line-height: 1.4rem;
-  margin-top: 1.5rem;
-  text-align: center;
-`
+const P = styled.p(
+  ({ theme }) => css`
+    color: ${theme.color.onSurface};
+    opacity: ${theme.opacity.alt};
+    line-height: 1.4rem;
+    margin-top: 1.5rem;
+    text-align: center;
+  `,
+)
 
-export const Title = styled.h1`
-  color: ${textColors.default};
-  font-size: 2rem;
-  font-weight: 400;
-  margin-top: 4rem;
-  margin-bottom: 0.5rem;
-  text-align: center;
-`
+export const Title = styled.h1(
+  ({ theme }) => css`
+    color: ${theme.color.onSurface};
+    font-size: 2rem;
+    font-weight: 400;
+    margin-top: 4rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  `,
+)
 
 function LegalPage() {
   return (

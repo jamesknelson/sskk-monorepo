@@ -1,17 +1,15 @@
 import { css } from '@emotion/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { animated, useSpring } from 'react-spring'
 import { Boundary } from 'retil-boundary'
 import { useHasHydrated } from 'retil-hydration'
 import { delay, useEffectOnce } from 'retil-support'
-import {
-  ColumnTransition,
-  useOverrideColumnTransitionHandleRef,
-} from 'src/components/columnTransition'
 
-import { Background, BackgroundScene } from 'src/components/background'
-import { barWidth, largeCardClampWidth } from 'src/constants/dimensions'
-import { hideAuthBarEffect } from 'src/services/authBarService'
+import { Background, BackgroundScene } from 'src/components/web/background'
+import { ColumnTransition } from 'src/components/web/transition/columnTransition'
+import { useTransitionHandleRefContext } from 'src/context/transitionHandleRefContext'
+import { useHideAuthBarEffect } from 'src/services/authBarService'
+import { barWidth, largeCardClampWidth } from 'src/style/dimensions'
 import {
   useTransitionHandle,
   useTransitionHandleRef,
@@ -50,7 +48,7 @@ export default function JoinLayout({
   children,
   transitionKey,
 }: JoinLayoutProps) {
-  useEffect(hideAuthBarEffect, [])
+  useHideAuthBarEffect()
 
   const hasHydrated = useHasHydrated()
 
@@ -70,7 +68,7 @@ export default function JoinLayout({
   })
 
   useTransitionHandle(
-    useOverrideColumnTransitionHandleRef(),
+    useTransitionHandleRefContext(),
     {
       show: async () => {
         Promise.all(headerSpringHandle.start(headerInStyles))

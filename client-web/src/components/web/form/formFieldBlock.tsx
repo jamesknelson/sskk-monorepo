@@ -1,7 +1,10 @@
 import { forwardRef } from 'react'
 import type { Object } from 'ts-toolbelt'
 
-import { FieldBlock, FieldBlockProps } from 'src/components/block'
+import {
+  FieldBlock,
+  FieldBlockProps,
+} from 'src/components/web/block/fieldBlock'
 import { useFormModelContext } from 'src/utils/form'
 
 export type FormFieldBlockProps = Omit<

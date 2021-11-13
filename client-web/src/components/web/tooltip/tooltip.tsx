@@ -1,7 +1,7 @@
-import { useCallback, useRef } from 'react'
-import { media, useMediaSelector } from 'retil-media'
 import { Placement } from '@popperjs/core'
 import Tippy, { TippyProps } from '@tippyjs/react/headless'
+import { useCallback, useRef } from 'react'
+import { media, useMediaSelector } from 'retil-media'
 
 import { TransitionHandle } from 'src/utils/transitionHandle'
 

@@ -11,7 +11,7 @@ import { App } from './app'
 import { firebase as firebaseConfig, firebaseEmulators } from './config'
 import { appPageSerializedDataGlobal } from './config'
 import { createBrowserAppEnvSource } from './env/browserAppEnv'
-import appLoader from './pages/appLoader'
+import appLoader from './routes/appLoader'
 
 if (typeof window !== 'undefined') {
   firebase.initializeApp(firebaseConfig)

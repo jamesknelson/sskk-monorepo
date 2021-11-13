@@ -12,7 +12,7 @@ import { App } from './app'
 import { appPageSerializedDataGlobal } from './config'
 import { createServerAppEnv } from './env/serverAppEnv'
 import { HeadContext, renderHeadContextToString } from './head'
-import appLoader from './pages/appLoader'
+import appLoader from './routes/appLoader'
 
 export async function render(
   request: Omit<Request, 'params' | 'query'>,

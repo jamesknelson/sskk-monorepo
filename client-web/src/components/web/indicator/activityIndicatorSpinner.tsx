@@ -1,5 +1,6 @@
 import { css, keyframes } from '@emotion/react'
 import { HighStyleValue } from 'retil-css'
+import { Theme } from 'src/types'
 
 const spinnerDashAnimation = keyframes`
 0%,
@@ -29,22 +30,22 @@ const spinnerRotatorAnimation = keyframes`
 }
 `
 
-export type ActivitySpinnerProps = Omit<
+export type ActivityIndicatorSpinnerProps = Omit<
   React.SVGProps<SVGElement>,
   'color' | 'ref'
 > & {
   active?: boolean
-  color?: HighStyleValue<string>
+  color?: HighStyleValue<string, Theme>
   size?: string
 }
 
 // From: https://glennmccomb.com/articles/building-a-pure-css-animated-svg-spinner/
-export const ActivitySpinner = ({
+export const ActivityIndicatorSpinner = ({
   active = true,
   color = '#aabbcc',
   size = '100%',
   ...rest
-}: ActivitySpinnerProps) => {
+}: ActivityIndicatorSpinnerProps) => {
   return (
     (active || null) && (
       <svg

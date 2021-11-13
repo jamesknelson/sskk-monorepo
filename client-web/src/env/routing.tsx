@@ -1,11 +1,13 @@
 import { Loader } from 'retil-mount'
 import { NavAction, createHref, loadRedirect, NavEnv } from 'retil-nav'
 
-import loadingRouter from 'src/pages/loadingLoader'
+import { LoadingPage } from 'src/routes/loadingPage'
 
 import { AppEnv, AppMutablePersistedContext } from './appEnv'
 
 export type AppLoader = Loader<AppEnv>
+
+const loadingRouter = () => <LoadingPage />
 
 export function switchAuth(routers: {
   authenticated: AppLoader

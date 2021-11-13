@@ -1,23 +1,23 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useHasHydrated } from 'retil-hydration'
 import { LinkSurface } from 'retil-interaction'
 
-import { Background, createBackgroundScene } from 'src/components/background'
-import { FormInput, FormFieldBlock } from 'src/components/form'
 import {
-  ColumnTransition,
-  useOverrideColumnTransitionHandleRef,
-} from 'src/components/columnTransition'
-import { TextBlock } from 'src/components/block'
-import { RaisedButtonBody } from 'src/presentation/buttonBodies'
-import { Card } from 'src/presentation/card'
-import { hideAuthBarEffect } from 'src/services/authBarService'
+  Background,
+  createBackgroundScene,
+} from 'src/components/web/background'
+import { FormInput, FormFieldBlock } from 'src/components/web/form'
+import { ColumnTransition } from 'src/components/web/transition/columnTransition'
+import { TextBlock } from 'src/components/web/block/textBlock'
+import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
+import { Card } from 'src/components/web/card/card'
+import { useTransitionHandleRefContext } from 'src/context/transitionHandleRefContext'
+import { useHideAuthBarEffect } from 'src/services/authBarService'
 import { FormSubmitButtonSurface } from 'src/utils/form'
-import { barWidth, smallCardClampWidth } from 'src/theme/dimensions'
-import { sansFontFamily } from 'src/theme/fonts'
-import { paletteColors } from 'src/theme/colors'
+import { barWidth, smallCardClampWidth } from 'src/style/dimensions'
+import { sansFontFamily } from 'src/style/fonts'
 import {
   useTransitionHandle,
   useTransitionHandleRef,
@@ -54,22 +54,16 @@ export const backgroundScene = createBackgroundScene(async () => {
   )
 })
 
-export const [useDeps, loadDeps] = deps((theme) => ({
-  ...pick(theme.glyphs, ['X', 'Y']),
-  Joe: import('./y'),
-}))
-
 export function Page() {
-  const deps = useDeps()
   const emailInputRef = useRef<HTMLInputElement>(null)
 
   const hasHydrated = useHasHydrated()
   const backgroundTransitionHandleRef = useTransitionHandleRef()
   const stepTransitionHandleRef = useTransitionHandleRef()
 
-  const transitionRef = useOverrideColumnTransitionHandleRef()
+  const transitionRef = useTransitionHandleRefContext()
 
-  useEffect(hideAuthBarEffect, [])
+  useHideAuthBarEffect()
   useTransitionHandle(
     hasHydrated ? transitionRef : null,
     {
@@ -162,7 +156,7 @@ export function Page() {
                 display: block;
                 width: 100%;
               `}>
-              <RaisedButtonBody label="Log in" />
+              <RaisedLabelledButtonBody label="Log in" />
             </FormSubmitButtonSurface>
           </LoginForm>
           <div
@@ -184,8 +178,11 @@ export function Page() {
   )
 }
 
-const LoginAltLinkBody = styled.span`
-  color: ${paletteColors.ink500};
-  font-family: ${sansFontFamily};
-  text-decoration: underline;
-`
+const LoginAltLinkBody = styled.span(
+  ({ theme }) => css`
+    color: ${theme.color.onSurface};
+    opacity: ${theme.opacity.peripheral};
+    font-family: ${sansFontFamily};
+    text-decoration: underline;
+  `,
+)

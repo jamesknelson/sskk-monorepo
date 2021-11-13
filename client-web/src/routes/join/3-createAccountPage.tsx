@@ -3,18 +3,18 @@ import { useEffect, useRef } from 'react'
 import { useNavController } from 'retil-nav'
 
 // import { Check } from 'src/assets/glyphs'
-import { createBackgroundScene } from 'src/components/background'
-import { FormInput, FormFieldBlock } from 'src/components/form'
-import { messages } from 'src/constants/messages'
+import { createBackgroundScene } from 'src/components/web/background'
+import { TextBlock } from 'src/components/web/block/textBlock'
+import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
+import { Card } from 'src/components/web/card/card'
+import { FormFieldBlock, FormInput } from 'src/components/web/form'
 import { useAppEnv } from 'src/env'
 import { useAuthController } from 'src/env/auth'
 import { validateCreateUserWithPasswordRequest } from 'src/env/firebaseAuthIssues'
-import appURLs from 'src/pages/appURLs'
-import { TextBlock } from 'src/presentation/blocks'
-import { RaisedButtonBody } from 'src/presentation/buttonBodies'
-import { Card } from 'src/presentation/card'
-import { smallCardClampWidth } from 'src/presentation/dimensions'
-import { FormSubmitButtonSurface, createForm, useForm } from 'src/utils/form'
+import { messages } from 'src/locales/en'
+import appURLs from 'src/routes/appURLs'
+import { smallCardClampWidth } from 'src/style/dimensions'
+import { createForm, FormSubmitButtonSurface, useForm } from 'src/utils/form'
 
 import { useJoinContext } from './joinContext'
 
@@ -73,7 +73,7 @@ export function Page() {
             `}>
             <h1>Thank you!</h1>
 
-            <RegisterForm.Issues>
+            <RegisterForm.IssuesConsumer>
               {(issues) => {
                 const messages = issues
                   .filter((issue) => !issue.path)
@@ -89,7 +89,7 @@ export function Page() {
                   </>
                 )
               }}
-            </RegisterForm.Issues>
+            </RegisterForm.IssuesConsumer>
           </TextBlock>
           <RegisterForm.FieldSurface path="displayName">
             <FormFieldBlock
@@ -112,7 +112,7 @@ export function Page() {
               width: 100%;
             `}>
             {(status) => (
-              <RaisedButtonBody
+              <RaisedLabelledButtonBody
                 label={
                   status === 'complete'
                     ? 'Account created!'

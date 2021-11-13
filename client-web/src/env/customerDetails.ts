@@ -1,9 +1,9 @@
 import { HydrationEnv } from 'retil-hydration'
-import { Source, createState, fromPromise } from 'retil-source'
+import { createState, fromPromise, Source } from 'retil-source'
 import { createMemo } from 'retil-support'
 
-import * as roles from 'src/constants/roles'
-import { LoginDocument, CustomerDetailsFragment } from 'src/generated/graphql'
+import { customerRole } from 'src/config'
+import { CustomerDetailsFragment, LoginDocument } from 'src/graphql'
 
 import type { AppApolloClient } from './appEnv'
 
@@ -39,7 +39,7 @@ export function getCustomerDetailsService(
         .mutate({
           mutation: LoginDocument,
           context: {
-            role: roles.customer,
+            role: customerRole,
           },
         })
         .then(({ data }) => {

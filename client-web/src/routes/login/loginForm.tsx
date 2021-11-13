@@ -1,9 +1,9 @@
 import { useNavController } from 'retil-nav'
 
-import { messages } from 'src/constants/messages'
 import { useAuthController } from 'src/env/auth'
 import { validateSignInWithPasswordRequest } from 'src/env/firebaseAuthIssues'
-import appURLs from 'src/pages/appURLs'
+import { messages } from 'src/locales/en'
+import appURLs from 'src/routes/appURLs'
 import { createForm, useForm } from 'src/utils/form'
 
 export const LoginForm = createForm((props) => {

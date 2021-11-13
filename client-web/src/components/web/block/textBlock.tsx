@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { rgba } from 'polished'
 
-import { textColors } from '../../presentation/colors'
 import { blockHorizontalGutter } from './blockStyles'
 
 export const TextBlock = styled.div(({ theme }) => [
@@ -34,7 +34,7 @@ export const TextBlock = styled.div(({ theme }) => [
     }
 
     code {
-      background: ${theme.color.wash};
+      background: ${theme.color.altSurface};
       color: inherit;
       font-family: monospace;
       font-size: 95%;
@@ -70,14 +70,14 @@ export const TextBlock = styled.div(({ theme }) => [
       position: relative;
       width: 33% !important;
       height: 1px;
-      background-color: ${theme.color.border};
+      background-color: ${theme.color.surfaceLine};
     }
 
     h1,
     h1 a,
     h2,
     h2 a {
-      color: ${theme.color.primary[900]};
+      color: ${theme.color.primary};
     }
 
     h1 {
@@ -105,7 +105,7 @@ export const TextBlock = styled.div(({ theme }) => [
     }
     blockquote {
       position: relative;
-      color: ${textColors.secondary};
+      color: ${rgba(theme.color.onSurface, theme.opacity.alt)};
       margin-top: 1.5rem;
       margin-bottom: 1.5rem;
       padding-left: 2rem;
@@ -127,7 +127,7 @@ export const TextBlock = styled.div(({ theme }) => [
     }
     p a,
     li a {
-      color: ${textColors.link};
+      color: ${theme.color.secondary};
       text-decoration: underline;
     }
   `,

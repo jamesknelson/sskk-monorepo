@@ -9,11 +9,11 @@ import {
 import { easeOut } from 'src/style/easings'
 import { interactionShadow } from 'src/style/shadows'
 
-export interface InteractionRingDivProps {
+export interface FocusHoverIndicatorRingProps {
   inline?: boolean
 }
 
-export const InteractionRingDiv = styled.div<InteractionRingDivProps>(
+export const FocusHoverIndicatorRing = styled.div<FocusHoverIndicatorRingProps>(
   ({ inline, theme }) => [
     inline
       ? css`

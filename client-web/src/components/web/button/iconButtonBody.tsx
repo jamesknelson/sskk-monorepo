@@ -4,8 +4,6 @@ import React, { forwardRef } from 'react'
 import { HighStyleValue } from 'retil-css'
 import { inDisabledSurface } from 'retil-interaction'
 
-import { controlColors } from './colors'
-
 import { Icon } from 'src/components/web/icon'
 import { easeOut } from 'src/style/easings'
 import { Theme } from 'src/types'
@@ -18,16 +16,7 @@ export interface IconButtonProps {
 }
 
 export const IconButtonBody = forwardRef<HTMLDivElement, IconButtonProps>(
-  (
-    {
-      color = controlColors.icon.default,
-      glyph,
-      label,
-      size = '1.5rem',
-      ...rest
-    },
-    ref,
-  ) => {
+  ({ color = 'currentColor', glyph, label, size = '1.5rem', ...rest }, ref) => {
     return (
       <StyledIconButton ref={ref} {...rest}>
         <Icon color={color} glyph={glyph} size={size} label={label} />

@@ -1,25 +1,24 @@
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
+import { rgba } from 'polished'
 import { animated, useTransition } from 'react-spring'
 import { highStyle } from 'retil-css'
 import { LinkSurface } from 'retil-interaction'
 import { useSourceLegacy } from 'retil-source'
 
+import { OutlinedLabelledButtonBody } from 'src/components/web/button/outlinedLabelledButtonBody'
+import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
+import { FlexGap } from 'src/components/web/flex/flexGap'
 import { useAppEnv } from 'src/env'
-import appURLs from 'src/pages/appURLs'
-import {
-  OutlineButtonBody,
-  RaisedButtonBody,
-} from 'src/presentation/buttonBodies'
-import { structureColors } from 'src/presentation/colors'
+import appURLs from 'src/routes/appURLs'
+import { authBarHiddenSource } from 'src/services/authBarService'
 import {
   barHeight,
   barWidth,
   blockMarginHorizontal,
-} from 'src/presentation/dimensions'
-import { FlexGap } from 'src/presentation/flexGap'
-import { raisedCardShadow } from 'src/presentation/shadows'
-import { appAuthBarZ } from 'src/presentation/zIndexes'
-import { authBarHiddenSource } from 'src/services/authBarService'
+} from 'src/style/dimensions'
+import { raisedCardShadow } from 'src/style/shadows'
+import { appAuthBarZ } from 'src/style/zIndexes'
 
 export interface LayoutAuthFooterProps {}
 
@@ -50,7 +49,7 @@ export function LayoutAuthFooter(_props: LayoutAuthFooterProps) {
           show && (
             <animated.footer
               style={style}
-              css={[
+              css={(theme) => [
                 css`
                   position: fixed;
                   left: ${barWidth};
@@ -62,7 +61,7 @@ export function LayoutAuthFooter(_props: LayoutAuthFooterProps) {
                   display: flex;
                   align-items: center;
 
-                  background-color: ${structureColors.bg};
+                  background-color: ${theme.color.surface};
                   box-shadow: ${raisedCardShadow()};
                 `,
                 highStyle({
@@ -75,11 +74,11 @@ export function LayoutAuthFooter(_props: LayoutAuthFooterProps) {
                 someone else does. Join Letterhouse now!
               </AppAuthFooterMessage>
               <LinkSurface href={appURLs.login()}>
-                <OutlineButtonBody lowProfile label="Login" />
+                <OutlinedLabelledButtonBody lowProfile label="Login" />
               </LinkSurface>
               <FlexGap size="0.5rem" />
               <LinkSurface href={appURLs.join()}>
-                <RaisedButtonBody lowProfile label="Join" />
+                <RaisedLabelledButtonBody lowProfile label="Join" />
               </LinkSurface>
             </animated.footer>
           ),
@@ -89,7 +88,8 @@ export function LayoutAuthFooter(_props: LayoutAuthFooterProps) {
 }
 
 const AppAuthFooterMessage = styled.p`
-  color: ${textColors.secondary};
+  color: ${({ theme }) => rgba(theme.color.onPrimary, theme.opacity.alt)};
+
   flex: 1;
 
   font-family: sans-serif;

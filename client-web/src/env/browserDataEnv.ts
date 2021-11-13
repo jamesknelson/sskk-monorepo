@@ -1,13 +1,12 @@
-import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client'
+import { ApolloClient, from, HttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import { getDefaultHydrationEnvService } from 'retil-hydration'
-import { Source, createState, getSnapshot, fuse } from 'retil-source'
+import { createState, fuse, getSnapshot, Source } from 'retil-source'
 
-import { graphqlURL } from 'src/config'
-import * as roles from 'src/constants/roles'
-import { QueryContext, PrecachedQuery } from 'src/utils/precachedQuery'
+import { customerRole, graphqlURL } from 'src/config'
+import { PrecachedQuery, QueryContext } from 'src/utils/precachedQuery'
 
 import { DataEnv } from './appEnv'
 import { AuthTokenInfoGetter } from './auth'
@@ -80,7 +79,7 @@ export function createBrowserDataEnvService(
 
       if (customerId) {
         headers['Authorization'] = `Bearer ${tokenInfo!.token}`
-        headers['X-Hasura-Role'] = role || roles.customer
+        headers['X-Hasura-Role'] = role || customerRole
       }
       if (sessionToken) {
         headers['X-SSKK-Session'] = sessionToken

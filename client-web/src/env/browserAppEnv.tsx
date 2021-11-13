@@ -3,13 +3,13 @@ import { getDefaultHydrationEnvService } from 'retil-hydration'
 import { getDefaultBrowserNavEnvService } from 'retil-nav'
 import { fuse, observe } from 'retil-source'
 
-import * as roles from 'src/constants/roles'
+import { customerRole } from 'src/config'
 import {
   LoginDocument,
   CustomerDetailsDocument,
   CustomerDetailsFragment,
   CustomerDetailsQuery,
-} from 'src/generated/graphql'
+} from 'src/graphql'
 
 import { AppEnv } from './appEnv'
 import { getAuthService } from './auth'
@@ -82,11 +82,10 @@ export function createBrowserAppEnvSource(initialSerializedData?: {
 
     if (auth?.user && dataEnv.sessionId === undefined) {
       return act(async () => {
-        // TODO: for new registrations, send a referrer record
         const { data } = await dataEnv.client.mutate({
           mutation: LoginDocument,
           context: {
-            role: roles.customer,
+            role: customerRole,
           },
         })
 

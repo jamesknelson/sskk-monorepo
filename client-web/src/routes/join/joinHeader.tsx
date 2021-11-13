@@ -4,17 +4,15 @@ import { highStyle } from 'retil-css'
 import { useNavLinkProps } from 'retil-nav'
 
 // import { ChevronLeft, ChevronRight } from 'src/assets/glyphs'
-import { Tooltip } from 'src/components/tooltip'
-import { paletteColors, structureColors } from 'src/constants/colors'
-import { barHeight, blockMarginHorizontal } from 'src/constants/dimensions'
-import { easeIn, easeOut } from 'src/constants/easings'
-import { standardRadius } from 'src/constants/radii'
-import { inkShadow } from 'src/constants/shadows'
+import { Tooltip } from 'src/components/web/tooltip'
+import { barHeight, blockMarginHorizontal } from 'src/style/dimensions'
+import { easeIn, easeOut } from 'src/style/easings'
 import { useAppEnv } from 'src/env'
-import appURLs from 'src/pages/appURLs'
+import appURLs from 'src/routes/appURLs'
 // import { Icon } from 'src/presentation/icon'
 
 import { JoinPath, useJoinContext } from './joinContext'
+import { useTheme } from 'src/style/useTheme'
 
 const totalStepCount = 6
 
@@ -29,12 +27,6 @@ export default function JoinHeader() {
         justify-content: space-between;
         height: ${barHeight};
         margin: 0 calc(0.5rem + 1px);
-
-        /* background-color: ${structureColors.wash};
-        border-radius: 0 0 ${standardRadius} ${standardRadius};
-        box-shadow: ${inkShadow(structureColors.border, {
-          external: true,
-        })}; */
       `}>
       <div
         css={[
@@ -122,6 +114,7 @@ const JoinPosition = ({
   step,
   tooltip,
 }: JoinPositionProps) => {
+  const colorScheme = useTheme().color
   const { completedSteps, path: activePath } = useJoinContext()
 
   const active = paths.includes(activePath)
@@ -135,14 +128,22 @@ const JoinPosition = ({
     disabled: disableLink || active || (!complete && !next),
   })
 
+  // const borderColor =
+  //   next || complete ? theme.color.primary : paletteColors.ink100
+  // const borderShadowColor = rgba(borderColor, 0.12)
+  // const circleColor = !complete
+  //   ? 'transparent'
+  //   : active
+  //   ? paletteColors.ink500
+  //   : paletteColors.ink900
   const borderColor =
-    next || complete ? paletteColors.ink900 : paletteColors.ink100
+    next || complete ? colorScheme.primary : colorScheme.primaryWash
   const borderShadowColor = rgba(borderColor, 0.12)
   const circleColor = !complete
     ? 'transparent'
     : active
-    ? paletteColors.ink500
-    : paletteColors.ink900
+    ? colorScheme.primaryWash
+    : colorScheme.primary
 
   const targetSize = '40px'
 
@@ -167,7 +168,7 @@ const JoinPosition = ({
             height: 13px;
             width: 13px;
             border-radius: 9999px;
-            background-color: ${structureColors.wash};
+            background-color: ${colorScheme.background};
             box-shadow: 0 0 0 1.2px ${borderColor} inset,
               0 0 10px ${borderShadowColor}, 0 0 10px ${borderShadowColor} inset;
             transition: box-shadow 500ms 500ms ${easeOut};
@@ -192,6 +193,7 @@ const JoinPosition = ({
 }
 
 function JoinStepIndicators() {
+  const colorScheme = useTheme().color
   const appEnv = useAppEnv()
   const { completedSteps } = useJoinContext()
   const progressBarProportion = Math.min(
@@ -217,9 +219,10 @@ function JoinStepIndicators() {
           border-radius: 9999px;
           height: 1px;
           flex-grow: 1;
-          box-shadow: 0 0 0 1px ${paletteColors.ink100} inset,
-            0 0 10px 0px ${rgba(paletteColors.ink100, 0.33)},
-            0 0 3px 1px ${rgba(paletteColors.ink100, 0.1)};
+          // ink100
+          box-shadow: 0 0 0 1px ${colorScheme.primaryWash} inset,
+            0 0 10px 0px ${rgba(colorScheme.primaryWash, 0.33)},
+            0 0 3px 1px ${rgba(colorScheme.primaryWash, 0.1)};
         `}
       />
       <div
@@ -233,9 +236,10 @@ function JoinStepIndicators() {
           border-radius: 9999px;
           height: 1px;
           flex-grow: 1;
-          box-shadow: 0 0 0 1px ${paletteColors.ink500} inset,
-            0 0 10px 0px ${rgba(paletteColors.ink500, 0.33)},
-            0 0 3px 1px ${rgba(paletteColors.ink500, 0.1)};
+          // ink500
+          box-shadow: 0 0 0 1px ${colorScheme.primaryWash} inset,
+            0 0 10px 0px ${rgba(colorScheme.primaryWash, 0.33)},
+            0 0 3px 1px ${rgba(colorScheme.primaryWash, 0.1)};
           transform-origin: 0 0;
           transition: transform 250ms 250ms linear;
         `}

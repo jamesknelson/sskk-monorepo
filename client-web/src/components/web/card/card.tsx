@@ -13,9 +13,9 @@ export const Card = styled.div<CardProps>(
     flex-direction: column;
     position: relative;
 
-    background-color: ${theme.color.bg};
+    background-color: ${theme.color.surface};
     box-shadow: ${cardShadow()};
-    border: 1px solid ${theme.color.border};
+    border: 1px solid ${theme.color.surfaceBorder};
     border-radius: ${radius};
   `,
 )

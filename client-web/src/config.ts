@@ -1,3 +1,5 @@
+import { Role } from './types'
+
 export const auth = {
   refreshTokenEndpoint: import.meta.env.VITE_REFRESH_TOKEN_ENDPOINT as string,
 }
@@ -18,3 +20,6 @@ export const graphqlURL = `${
 export const appPageSerializedDataGlobal = `appPageData`
 
 export const joinPersistenceKey = 'sskk_joinEditorState'
+
+export const anonymousRole: Role = 'anonymous'
+export const customerRole: Role = 'customer'

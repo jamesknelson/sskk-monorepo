@@ -7,12 +7,11 @@ import {
   unstable_LowPriority as LowPriority,
 } from 'scheduler'
 
-import * as roles from 'src/types/roles'
-import { joinPersistenceKey } from 'src/config'
+import { customerRole, joinPersistenceKey } from 'src/config'
 import {
   GetPersistedOnboardingDataDocument,
   PersistOnboardingDataDocument,
-} from 'src/generated/graphql'
+} from 'src/graphql'
 
 // Data will be persisted a maximum of once over this time period.
 const persistenceThrottleMilliseconds = 5000
@@ -69,7 +68,7 @@ export async function createJoinPersistence(
         customer_id: customerId,
       },
       context: {
-        role: roles.customer,
+        role: customerRole,
       },
     })
 
@@ -135,7 +134,7 @@ export async function createJoinPersistence(
         const result = await client.mutate({
           mutation: PersistOnboardingDataDocument,
           context: {
-            role: roles.customer,
+            role: customerRole,
           },
           variables: {
             data: dataVariable,

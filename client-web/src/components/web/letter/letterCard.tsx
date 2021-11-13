@@ -4,18 +4,13 @@ import { EditorState } from 'prosemirror-state'
 import React from 'react'
 import { LinkSurface } from 'retil-interaction'
 
-import { TextBlock } from 'src/presentation/blocks'
+import { TextBlock } from 'src/components/web/block/textBlock'
 import { useAppEnv } from 'src/env'
-import urls from 'src/pages/appURLs'
-import { Card } from 'src/presentation/card'
+import urls from 'src/routes/appURLs'
+import { Card } from 'src/components/web/card/card'
 import { Schema } from 'src/prose/schema'
 
 import { LetterContent } from './letterContent'
-import {
-  paletteColors,
-  structureColors,
-  textColors,
-} from 'src/presentation/colors'
 
 export type LetterCardProps = React.ComponentProps<typeof Card> & {
   disableEdit?: boolean

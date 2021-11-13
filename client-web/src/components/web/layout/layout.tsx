@@ -1,14 +1,18 @@
 import { css } from '@emotion/react'
 import React from 'react'
-import { ColumnTransition } from 'src/components/columnTransition'
-import { appMainZ } from 'src/presentation/zIndexes'
 
-export interface AppLayoutProps {
+import { ColumnTransition } from 'src/components/web/transition/columnTransition'
+import { appMainZ } from 'src/style/zIndexes'
+
+import { LayoutAuthFooter } from './layoutAuthFooter'
+import { LayoutNav } from './layoutNav'
+
+export interface LayoutProps {
   children: React.ReactNode
   transitionKey: string
 }
 
-export default function AppLayout({ children, transitionKey }: AppLayoutProps) {
+export function Layout({ children, transitionKey }: LayoutProps) {
   return (
     <div
       css={css`
@@ -17,7 +21,7 @@ export default function AppLayout({ children, transitionKey }: AppLayoutProps) {
         flex-grow: 1;
         max-width: 100%;
       `}>
-      <AppNavSidebar />
+      <LayoutNav />
       <div
         css={css`
           flex-grow: 1;
@@ -42,7 +46,7 @@ export default function AppLayout({ children, transitionKey }: AppLayoutProps) {
             transitionKey={transitionKey}
           />
         </main>
-        <AppAuthFooter />
+        <LayoutAuthFooter />
       </div>
     </div>
   )

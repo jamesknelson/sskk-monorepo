@@ -211,12 +211,6 @@ export interface FirebaseAuthController {
     },
   ): Promise<null | PlaceholderIssues>
 
-  // Useful for account creation processes, where you'd like to ensure a user
-  // record is created in your database with the correct id *before* creating
-  // an auth record -- preventing issues where closing the browser in the middle
-  // of the account creation process results in orpahned auth records.
-  signInAnonymously(): Promise<void>
-
   signInWithPassword(
     data: FirebaseSignInWithPasswordRequest,
   ): Promise<null | FirebaseSignInWithPasswordIssues>

@@ -3,6 +3,7 @@ import {
   CacheProvider as StyleCacheProvider,
   EmotionCache,
   ThemeContext,
+  ThemeProvider,
   css,
 } from '@emotion/react'
 import { ReactNode } from 'react'
@@ -18,8 +19,9 @@ import { useBoundaryNavScroller } from 'retil-nav'
 
 import { AppEnv, AuthProvider, useAppEnv } from './env'
 import { Head, HeadContext } from './head'
-import { FontFaces } from './assets/fonts'
-import { GlobalStyles } from './presentation/globalStyles'
+import { FontFaces } from './style/fonts'
+import { GlobalStyles } from './style/globalStyles'
+import { theme as lightTheme } from './style/theme/lightTheme'
 import { smoothScrollTo } from './utils/smoothScrollTo'
 
 export interface AppProps {
@@ -32,16 +34,18 @@ export interface AppProps {
 export function App(props: AppProps) {
   return (
     <StyleCacheProvider value={props.styleCache}>
-      <CSSProvider runtime={css} themeContext={ThemeContext}>
-        <FontFaces />
-        <GlobalStyles />
-        <Mount loader={props.loader} env={props.env}>
-          <Head context={props.headContext} />
-          <AuthProvider>
-            <InnerApp />
-          </AuthProvider>
-        </Mount>
-      </CSSProvider>
+      <ThemeProvider theme={lightTheme}>
+        <CSSProvider runtime={css} themeContext={ThemeContext}>
+          <FontFaces />
+          <GlobalStyles />
+          <Mount loader={props.loader} env={props.env}>
+            <Head context={props.headContext} />
+            <AuthProvider>
+              <InnerApp />
+            </AuthProvider>
+          </Mount>
+        </CSSProvider>
+      </ThemeProvider>
     </StyleCacheProvider>
   )
 }

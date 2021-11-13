@@ -3,8 +3,7 @@ import { Placement } from '@popperjs/core'
 import { forwardRef } from 'react'
 import { animated, useSpring } from 'react-spring'
 
-import { paletteColors } from 'src/constants/colors'
-import { standardRadius } from 'src/constants/radii'
+import { standardRadius } from 'src/style/radii'
 import {
   TransitionHandle,
   useTransitionHandle,

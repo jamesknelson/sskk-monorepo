@@ -6,27 +6,27 @@ import { ButtonSurface } from 'retil-interaction'
 import { useSource } from 'retil-source'
 import { useEffectOnce } from 'retil-support'
 
-import { createBackgroundScene } from 'src/components/background'
+import { createBackgroundScene } from 'src/components/web/background'
+import { LetterMetaBlock } from 'src/components/web/block/letterMetaBlock'
+import { TextBlock } from 'src/components/web/block/textBlock'
+import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
+import { Card } from 'src/components/web/card/card'
 import {
   Editor,
   EditorHandle,
   EditorMenu,
   useEditorStateSource,
-} from 'src/components/editor'
-import appURLs from 'src/pages/appURLs'
-import { RaisedButtonBody } from 'src/presentation/buttonBodies'
-import { Card } from 'src/presentation/card'
-import { structureColors } from 'src/presentation/colors'
-import { barHeight } from 'src/presentation/dimensions'
-import { LetterMetaBlock } from 'src/presentation/letterMetaBlock'
-import { standardRadius } from 'src/presentation/radii'
-import { TextBlock } from 'src/presentation/blocks'
+} from 'src/components/web/editor'
+import { Tooltip } from 'src/components/web/tooltip'
+import { barHeight } from 'src/style/dimensions'
+import { standardRadius } from 'src/style/radii'
 import { createEditorState } from 'src/prose'
+import appURLs from 'src/routes/appURLs'
 
 import { useJoinContext } from './joinContext'
 import { useNavController } from 'retil-nav'
 import { useAppEnv } from 'src/env'
-import { Tooltip } from 'src/components/tooltip'
+import { useTheme } from 'src/style/useTheme'
 
 export const title = 'Say hello!'
 export const meta = {
@@ -67,6 +67,7 @@ export const backgroundScene = createBackgroundScene(async () => {
 const minTextLength = 280
 
 export function Page() {
+  const colorScheme = useTheme().color
   const hasHydrated = useHasHydrated()
   const appEnv = useAppEnv()
   const { navigate } = useNavController()
@@ -149,9 +150,9 @@ export function Page() {
             height: ${standardRadius};
             z-index: 2;
 
-            background-color: ${structureColors.bg};
-            border-left: 1px solid ${structureColors.border};
-            border-right: 1px solid ${structureColors.border};
+            background-color: ${colorScheme.surface};
+            border-left: 1px solid ${colorScheme.surfaceBorder};
+            border-right: 1px solid ${colorScheme.surfaceBorder};
           `}
         />
         <div
@@ -167,8 +168,8 @@ export function Page() {
             align-items: center;
             padding: 0 1.25rem;
 
-            background-color: ${structureColors.wash};
-            border: 1px solid ${structureColors.border};
+            background-color: ${colorScheme.background};
+            border: 1px solid ${colorScheme.surfaceBorder};
 
             transition: border-radius 150ms ease-in-out;
 
@@ -231,7 +232,7 @@ export function Page() {
           <ButtonSurface
             disabled={pieProportion < 1}
             onTrigger={handleRequestNext}>
-            <RaisedButtonBody
+            <RaisedLabelledButtonBody
               inline
               label="Continue"
               rightGlyph={pieProportion >= 1 ? 'chevron' : pieProportion}

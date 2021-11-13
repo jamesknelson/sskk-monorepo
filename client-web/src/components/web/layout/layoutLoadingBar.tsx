@@ -1,8 +1,6 @@
 import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
 
-import { paletteColors } from './colors'
-
 const loadingBarKeyframes = keyframes`
   0% {
     transform: scaleX(0);
@@ -29,7 +27,7 @@ export interface LoadingBarProps {
 export const LoadingBar = styled.div<LoadingBarProps>`
   height: 2px;
   width: 100%;
-  background-color: ${(props) => props.color || paletteColors.ink500};
+  background-color: ${({ theme }) => theme.color.primaryWash};
   background-size: 35px 35px;
   z-index: 9999;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;

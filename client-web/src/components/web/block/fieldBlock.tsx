@@ -7,7 +7,6 @@ import {
   inInvalidSurface,
 } from 'retil-interaction'
 
-import { controlColors, textColors } from 'src/style/colors'
 import { easeIn, easeInOut, easeOut } from 'src/style/easings'
 import { standardRadius } from 'src/style/radii'
 
@@ -44,8 +43,8 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
       {/* The label wraps the input, as this will cause the browser to focus
           the input if the user clicks anywhere inside the label. */}
       <label
-        css={css`
-          color: ${textColors.tertiary};
+        css={(theme) => css`
+          color: ${theme.color.primary};
           cursor: text;
           display: block;
           font-family: sans-serif;
@@ -63,7 +62,7 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
               transition: color 200ms ${easeIn}, text-shadow 200ms ${easeIn};
             `,
             inHoveredSurface(css`
-              text-shadow: 0 0 2px ${rgba(theme.color.primary[100], 0.4)};
+              text-shadow: 0 0 2px ${rgba(theme.color.primaryWash, 0.4)};
             `),
             inFocusedSurface(css`
               color: ${theme.color.secondary[500]};
@@ -88,10 +87,10 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
           ]}>
           {input}
           <div
-            css={[
+            css={(theme) => [
               fieldBorderCSS,
               css`
-                background-color: ${controlColors.border.default};
+                background-color: ${theme.color.surfaceLine};
               `,
             ]}
           />
@@ -131,17 +130,17 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
       <div
         css={(theme) => [
           css`
-            background-color: ${theme.color.canvas};
+            background-color: ${theme.color.surfaceWash};
             border-radius: 0 0 ${standardRadius} ${standardRadius};
             padding: 0 0.5rem;
-            color: ${textColors.tertiary};
+            color: ${theme.color.onSurfaceWash};
             font-family: sans-serif;
             font-size: 0.75rem;
             line-height: 1.5rem;
           `,
           inInvalidSurface(css`
-            background-color: ${controlColors.bg.default};
-            color: ${textColors.tertiary};
+            background-color: ${theme.color.issueWash};
+            color: ${theme.color.onIssueWash};
           `),
         ]}>
         {message}

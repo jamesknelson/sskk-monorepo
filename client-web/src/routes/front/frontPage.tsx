@@ -2,25 +2,24 @@ import { format } from 'date-fns'
 import { css } from '@emotion/react'
 import { useState } from 'react'
 
-import { paletteColors } from 'src/presentation/colors'
-import { largeCardClampWidth } from 'src/presentation/dimensions'
-import { Card } from 'src/presentation/card'
-import { TextBlock } from 'src/presentation/blocks'
+import { largeCardClampWidth } from 'src/style/dimensions'
+import { Card } from 'src/components/web/card/card'
+import { TextBlock } from 'src/components/web/block/textBlock'
 
 // import { LetterCard } from 'src/components/letter'
 // import { createStateFromContentObject } from 'src/prose/contentObject'
 // import { HelloQuery } from 'src/generated/graphql'
 // import { PrecachedQuery, usePrecachedQuery } from 'src/utils/precachedQuery'
 
-import { SpringTrailColumn } from 'src/presentation/springTrailColumn'
-import { useOverrideColumnTransitionHandleRef } from 'src/components/columnTransition'
+import { SpringTrailColumn } from 'src/components/web/transition/trailTransition'
+import { useTransitionHandleRefContext } from 'src/context/transitionHandleRefContext'
 
 export interface Props {
   // query: PrecachedQuery<HelloQuery>
 }
 
 export function Page(_props: Props) {
-  const transitionHandleRef = useOverrideColumnTransitionHandleRef()
+  const transitionHandleRef = useTransitionHandleRefContext()
   const [date] = useState(new Date())
 
   // const { query } = props

@@ -10,7 +10,7 @@ import { useSourceLegacy } from 'retil-source'
 import { Glasses, Home, Pen } from 'src/assets/glyphs'
 import { ColumnTransition } from 'src/components/columnTransition'
 import { useAppEnv } from 'src/env'
-import appURLs from 'src/pages/appURLs'
+import appURLs from 'src/routes/appURLs'
 import {
   OutlineButtonBody,
   RaisedButtonBody,
@@ -25,8 +25,8 @@ import {
   barWidth,
   blockMarginHorizontal,
 } from 'src/presentation/dimensions'
-import { FlexGap } from 'src/presentation/flexGap'
-import { GlyphComponent, Icon } from 'src/presentation/icon'
+import { FlexGap } from 'src/components/web/flex/flexGap'
+import { GlyphComponent, Icon } from 'src/components/web/icon/icon'
 import { raisedCardShadow } from 'src/presentation/shadows'
 import { appAuthBarZ, appMainZ, appNavBarZ } from 'src/presentation/zIndexes'
 import { authBarHiddenSource } from 'src/services/authBarService'
@@ -36,10 +36,7 @@ export interface AppLayoutProps {
   getTransitionKey: () => string
 }
 
-export default function AppLayout({
-  children,
-  getTransitionKey,
-}: AppLayoutProps) {
+export default function Layout({ children, getTransitionKey }: AppLayoutProps) {
   const transitionKey = getTransitionKey()
 
   return (

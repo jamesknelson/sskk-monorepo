@@ -2,8 +2,7 @@ import { css } from '@emotion/react'
 import { animated, useSpring } from 'react-spring'
 import { useHasHydrated } from 'retil-hydration'
 
-import { paletteColors } from 'src/style/colors'
-import { LoadingSpinner } from 'src/presentation/loadingSpinner'
+import { ActivityIndicatorSpinner } from 'src/components/web/indicator/activityIndicatorSpinner'
 import {
   TransitionHandleRef,
   useTransitionHandle,
@@ -50,7 +49,7 @@ export function LayoutLoadingSpinner({
         left: calc(50% - 2rem);
         margin: 0 auto;
       `}>
-      <LoadingSpinner color={paletteColors.ink100} />
+      <ActivityIndicatorSpinner color={(theme) => theme.color.primaryWash} />
     </animated.div>
   )
 }

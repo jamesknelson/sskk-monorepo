@@ -7,8 +7,8 @@ import {
 import { CSSProvider } from 'retil-css'
 import { useBoundaryHydrater } from 'retil-hydration'
 
-import { FontFaces } from '../src/assets/fonts'
-import { GlobalStyles } from '../src/presentation/globalStyles'
+import { FontFaces } from '../src/style/fonts'
+import { GlobalStyles } from '../src/style/globalStyles'
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

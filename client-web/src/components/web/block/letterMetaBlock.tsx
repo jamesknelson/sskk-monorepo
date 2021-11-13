@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { rgba } from 'polished'
 
-import { textColors } from 'src/style/colors'
 import { standardRadius } from 'src/style/radii'
 
 import { TextBlock } from './textBlock'
@@ -30,13 +30,13 @@ export function LetterMetaBlock(props: LetterMetaBlockProps) {
         h1 {
           padding-bottom: 0.5rem;
           margin-bottom: 0;
-          border-bottom: 1px solid ${theme.color.divider};
+          border-bottom: 1px solid ${theme.color.surfaceLine};
         }
       `}>
       {title && <h1>{title}</h1>}
       <div
-        css={css`
-          color: ${textColors.tertiary};
+        css={(theme) => css`
+          color: ${rgba(theme.color.onSurface, theme.opacity.alt)};
           font-family: sans-serif;
           font-size: 15px;
           line-height: 1.5rem;
@@ -73,7 +73,7 @@ const AddressPillContent: React.FunctionComponent = ({ children, ...rest }) => (
   <span
     {...rest}
     css={(theme) => css`
-      background-color: ${theme.color.primary['050']};
+      background-color: ${theme.color.primary};
       border-radius: ${standardRadius};
       color: ${theme.color.primary[900]};
       padding: 0.25rem 0.5rem;
@@ -85,7 +85,7 @@ const AddressPillContent: React.FunctionComponent = ({ children, ...rest }) => (
 
 const LetterMetaRow = styled.div(
   ({ theme }) => css`
-    border-bottom: 1px solid ${theme.color.divider};
+    border-bottom: 1px solid ${theme.color.surfaceLine};
     padding: 0.5rem 0;
   `,
 )

@@ -479,18 +479,6 @@ export function createFirebaseAuthService(
       )
     },
 
-    signInAnonymously: (): Promise<void> =>
-      act(authSource, async () => {
-        const mutableFirebaseUser = await getSnapshotPromise(
-          mutableFirebaseUserSource,
-        )
-
-        if (!mutableFirebaseUser || !mutableFirebaseUser.isAnonymous) {
-          const { user: firebaseUser } = await firebaseAuth.signInAnonymously()
-          await wait(mutableFirebaseUserSource, (x) => x !== firebaseUser)
-        }
-      }),
-
     signInWithPassword: (request) =>
       act(authSource, () =>
         convertErrorsToIssues<

@@ -21,5 +21,11 @@
     "isolatedModules": true
   },
   "exclude": ["node_modules"],
-  "include": ["src/@types/**.ts", "src/**/*.ts"]
+  "include": [
+    "src/@types/**.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.stories.ts",
+    "src/**/*.stories.tsx"
+  ]
 }

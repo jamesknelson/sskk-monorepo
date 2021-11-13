@@ -1,35 +1,38 @@
 import { css } from '@emotion/react'
 import { animated, useSpring } from 'react-spring'
 
-import { paletteColors } from './colors'
+import { useTheme } from 'src/style/useTheme'
 
-// FIXME: there's a vite bug where putting this directly into the defaults via
-// destructuring causes it to be undefined during server rendering in some
-// cases, which in turn causes some pages to briefly show the loading page
-// on the client after initial load. For some reason.
-const defaultColor = paletteColors.ink900
-const defaultTrackColor = paletteColors.ink100
-
-export type ProgressPieProps = Omit<React.SVGProps<SVGElement>, 'ref'> & {
+export type ProgressIndicatorCircleProps = Omit<
+  React.SVGProps<SVGElement>,
+  'ref'
+> & {
   active?: boolean
-  color?: string
-  trackColor?: string
-  trackWidth?: number
-  width?: number
+
+  // TODO: accept HighStyle strings
+  colorString?: string
+  trackColorString?: string
+
   proportion: number // 0 <= proportion <= 1
   size: number
+  trackWidth?: number
+  width?: number
 }
 
-export const ProgressCircle = ({
-  active = true,
-  color = defaultColor,
-  width = 3,
-  proportion,
-  size,
-  trackColor = defaultTrackColor,
-  trackWidth = 1,
-  ...rest
-}: ProgressPieProps) => {
+export const ProgressIndicatorCircle = (
+  props: ProgressIndicatorCircleProps,
+) => {
+  const theme = useTheme()
+  const {
+    active = true,
+    colorString: color = theme.color.primary,
+    width = 3,
+    proportion,
+    size,
+    trackColorString: trackColor = theme.color.altSurface,
+    trackWidth = 1,
+    ...rest
+  } = props
   const spring = useSpring({
     proportion,
   })

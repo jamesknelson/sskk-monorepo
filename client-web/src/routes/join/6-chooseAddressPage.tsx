@@ -1,9 +1,9 @@
 import { css } from '@emotion/react'
 
-import { createBackgroundScene } from 'src/components/background'
-import { TextBlock } from 'src/presentation/blocks'
-import { Card } from 'src/presentation/card'
-import { smallCardClampWidth } from 'src/presentation/dimensions'
+import { createBackgroundScene } from 'src/components/web/background'
+import { TextBlock } from 'src/components/web/block/textBlock'
+import { Card } from 'src/components/web/card/card'
+import { smallCardClampWidth } from 'src/style/dimensions'
 
 export const title = "You've taken the first step."
 export const meta = {

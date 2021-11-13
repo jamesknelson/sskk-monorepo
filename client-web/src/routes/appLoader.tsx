@@ -1,12 +1,12 @@
 import { Boundary } from 'retil-boundary'
 import { LoaderProps, loadLazy } from 'retil-mount'
 import { loadMatch, loadNotFoundBoundary } from 'retil-nav'
-import { AppEnv } from 'src/env'
-import { FixedCenteredLoadingSpinner } from 'src/presentation/fixedCenteredLoadingSpinner'
 
+import { Layout, LayoutProps } from 'src/components/web/layout/layout'
+import { LayoutLoadingSpinner } from 'src/components/web/layout/layoutLoadingSpinner'
+import { AppEnv } from 'src/env'
 import { patternFor } from 'src/utils/urls'
 
-import Layout, { AppLayoutProps as LayoutProps } from './appLayout'
 import urls from './appURLs'
 import notFoundLoader from './notFoundLoader'
 
@@ -26,7 +26,7 @@ const appLoader = (props: LoaderProps<AppEnv>) => (
     getTransitionKey={() =>
       props.mutablePersistedContext.transitionKey || props.nav.pathname
     }>
-    <Boundary fallback={<FixedCenteredLoadingSpinner />}>
+    <Boundary fallback={<LayoutLoadingSpinner />}>
       {loadNotFoundBoundary(
         loadMatch<AppEnv>({
           '/': loadLazy(() => import('./front/frontLoader')),

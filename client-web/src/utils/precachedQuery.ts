@@ -1,14 +1,14 @@
 import {
   ApolloClient,
   FetchPolicy,
-  QueryResult,
   gql,
+  QueryResult,
   useQuery,
 } from '@apollo/client'
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import { useMemo } from 'react'
 
-import { Role } from 'src/constants/roles'
+import { Role } from 'src/types/roles'
 
 export interface QueryContext {
   role?: Role

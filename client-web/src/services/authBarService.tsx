@@ -1,18 +1,21 @@
 import { createState } from 'retil-source'
+import { useEffectOnce } from 'retil-support'
 
 let counter = 0
 const [authBarHiddenSource, setAuthBarHiddenSource] = createState(false)
 
 export { authBarHiddenSource }
 
-export function hideAuthBarEffect() {
-  const hideCount = ++counter
+export function useHideAuthBarEffect() {
+  useEffectOnce(() => {
+    const hideCount = ++counter
 
-  setAuthBarHiddenSource(true)
+    setAuthBarHiddenSource(true)
 
-  return () => {
-    if (hideCount === counter) {
-      setAuthBarHiddenSource(false)
+    return () => {
+      if (hideCount === counter) {
+        setAuthBarHiddenSource(false)
+      }
     }
-  }
+  })
 }
