@@ -1,5 +1,5 @@
 {
-  "name": "sskk-actions",
+  "name": "@letterhouse/service-actions",
   "private": true,
   "license": "UNLICENSED",
   "version": "1.0.0",

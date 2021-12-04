@@ -1,5 +1,7 @@
 {
-  "name": "sskk-firebase",
+  "name": "@letterhouse/service-firebase",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "build": "cd functions && npm run build",
     "dev": "npm run build && firebase emulators:start",
@@ -7,6 +9,5 @@
     "start": "npm run shell",
     "deploy": "firebase deploy",
     "logs": "firebase functions:log"
-  },
-  "private": true
+  }
 }

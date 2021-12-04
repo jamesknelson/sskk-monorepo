@@ -1,0 +1,34 @@
+{
+  "name": "letterhouse-project",
+  "private": true,
+  "author": "James K Nelson <james@jamesknelson.com>",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "lerna run --stream build --ignore retil.tech",
+    "build:es-and-types": "lerna run --stream build:es-and-types --ignore retil.tech",
+    "build:watch": "lerna run --stream build:watch",
+    "publish": "lerna publish --ignore retil.tech",
+    "test": "lerna run --stream test --ignore retil.tech",
+    "test:watch": "lerna run --stream test:watch --ignore retil.tech"
+  },
+  "dependencies": {
+    "typescript": "4.5.2"
+  },
+  "workspaces": [
+    "app-client",
+    "lib-prose",
+    "lib-ui-web",
+    "service-actions",
+    "service-firebase",
+    "tool-eslint-config",
+    "tool-vite-app-plugin"
+  ],
+  "resolutions": {
+    "react": "18.0.0-beta-f320ef88f-20211116",
+    "react-dom": "18.0.0-beta-f320ef88f-20211116",
+    "react-is": "18.0.0-beta-f320ef88f-20211116",
+    "react-refresh": "0.11.0-beta-f320ef88f-20211116",
+    "@types/react": "^17.0.19",
+    "@types/react-dom": "^17.0.9"
+  }
+}

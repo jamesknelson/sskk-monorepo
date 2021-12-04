@@ -1,0 +1,50 @@
+{
+  "name": "@letterhouse/lib-ui-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "dev": "node server.mjs",
+    "dev:spa": "vite",
+    "build:client": "yarn typecheck && NODE_ENV=production node_modules/.bin/vite build --outDir dist/client && mv dist/client/index.html dist/server",
+    "build:server": "node_modules/.bin/vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "build": "yarn lint && yarn build:server && yarn build:client",
+    "lint": "eslint --ext ts,tsx src",
+    "serve": "NODE_ENV=production node server",
+    "debug": "node --inspect-brk server",
+    "graphql-codegen": "graphql-codegen --config graphql.codegen.yml"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/serialize": "^1.0.2",
+    "@emotion/styled": "^11.3.0",
+    "@tippyjs/react": "^4.2.5",
+    "date-fns": "^2.16.1",
+    "polished": "^4.0.5",
+    "react-helmet-async": "^1.0.9",
+    "react-spring": "^9.3.0"
+  },
+  "devDependencies": {
+    "@emotion/server": "^11.4.0",
+    "@letterhouse/tool-vite-app-config": "link:../tool-vite-app-config",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "serve-static": "^1.14.1",
+    "typescript": "4.5.2"
+  },
+  "peerDependencies": {
+    "react": "18.0.0-beta-f320ef88f-20211116",
+    "react-dom": "18.0.0-beta-f320ef88f-20211116",
+    "retil-boundary": "^0.24.0",
+    "retil-css": "^0.24.5",
+    "retil-hydration": "^0.24.4",
+    "retil-interaction": "^0.24.5",
+    "retil-issues": "^0.24.0",
+    "retil-media": "^0.24.5",
+    "retil-mount": "^0.24.4",
+    "retil-nav": "^0.24.4",
+    "retil-operation": "^0.24.0",
+    "retil-source": "^0.24.3",
+    "retil-support": "^0.24.0"
+  }
+}

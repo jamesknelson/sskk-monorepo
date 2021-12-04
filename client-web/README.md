@@ -1,2 +1,0 @@
-# thedailyparagraph.com
-

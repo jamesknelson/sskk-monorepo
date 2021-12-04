@@ -1,24 +1,31 @@
 {
 	"folders": [
 		{
-			"name": "client-web",
-			"path": "client-web"
+			"path": "app-client"
 		},
 		{
-			"name": "docs",
-			"path": "docs"
+			"path": "lib-prose"
 		},
 		{
-			"name": "service-actions",
+			"path": "lib-ui-web"
+		},
+		{
 			"path": "service-actions"
 		},
 		{
-			"name": "service-firebase",
 			"path": "service-firebase"
 		},
 		{
-			"name": "service-hasura",
 			"path": "service-hasura"
+		},
+		{
+			"path": "tool-eslint-config"
+		},
+		{
+			"path": "tool-vite-app-config"
+		},
+		{
+			"path": "workspace"
 		}
 	],
 	"settings": {

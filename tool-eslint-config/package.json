@@ -1,0 +1,28 @@
+{
+  "name": "@letterhouse/tool-eslint-config",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "./index.js",
+  
+  "scripts": {
+    "clean": "rimraf dist",
+    "compile": "tsc -p tsconfig.build.json --module es2015 --outDir dist/es --declaration",
+    "build": "yarn run clean && yarn lint && yarn compile",
+    "build:watch": "yarn run build --watch",
+    "lint": "eslint --ext ts,tsx src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@babel/eslint-parser": "^7.16.3",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "confusing-browser-globals": "^1.0.10",
+    "eslint": "^7.5.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^24.0.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^3.9.0"
+  }
+}
