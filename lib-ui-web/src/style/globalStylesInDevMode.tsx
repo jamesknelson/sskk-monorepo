@@ -1,6 +1,6 @@
 import { Global, css } from '@emotion/react'
 
-const GlobalStylesInDevMode = () => (
+export const GlobalStylesInDevMode = () => (
   <Global
     styles={css`
       .firebase-emulator-warning {
@@ -9,5 +9,3 @@ const GlobalStylesInDevMode = () => (
     `}
   />
 )
-
-export default GlobalStylesInDevMode

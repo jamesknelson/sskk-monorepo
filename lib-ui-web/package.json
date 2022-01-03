@@ -25,26 +25,23 @@
     "react-spring": "^9.3.0"
   },
   "devDependencies": {
-    "@emotion/server": "^11.4.0",
-    "@letterhouse/tool-vite-app-config": "link:../tool-vite-app-config",
-    "compression": "^1.7.4",
-    "express": "^4.17.1",
-    "serve-static": "^1.14.1",
-    "typescript": "4.5.2"
+    "typescript": "4.5.4"
   },
   "peerDependencies": {
-    "react": "18.0.0-beta-f320ef88f-20211116",
-    "react-dom": "18.0.0-beta-f320ef88f-20211116",
-    "retil-boundary": "^0.24.0",
-    "retil-css": "^0.24.5",
-    "retil-hydration": "^0.24.4",
-    "retil-interaction": "^0.24.5",
-    "retil-issues": "^0.24.0",
-    "retil-media": "^0.24.5",
-    "retil-mount": "^0.24.4",
-    "retil-nav": "^0.24.4",
-    "retil-operation": "^0.24.0",
-    "retil-source": "^0.24.3",
-    "retil-support": "^0.24.0"
+    "react": "18.0.0-rc.0",
+    "react-dom": "18.0.0-rc.0",
+    "retil-boundary": "^0.26.0",
+    "retil-css": "^0.26.0",
+    "retil-hydration": "^0.26.0",
+    "retil-interaction": "^0.26.0",
+    "retil-issues": "^0.26.0",
+    "retil-media": "^0.26.0",
+    "retil-mount": "^0.26.0",
+    "retil-nav": "^0.26.0",
+    "retil-nav-scheme": "^0.26.0",
+    "retil-operation": "^0.26.0",
+    "retil-source": "^0.26.0",
+    "retil-support": "^0.26.0",
+    "retil-transition": "^0.26.0"
   }
 }

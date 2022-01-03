@@ -2,11 +2,11 @@
   "extends": "./tsconfig.build.json",
 
   "compilerOptions": {
-    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
       "lib-prose": ["lib-prose/src"],
       "lib-ui-web": ["lib-ui-web/src"]
-    }
+    },
+    "removeComments": false
   }
 }

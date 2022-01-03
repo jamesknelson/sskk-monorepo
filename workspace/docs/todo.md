@@ -7,14 +7,33 @@ PRIORITIES:
 
 ---
 
-
-
 TODO:
 
+o move url stuff to a retil package
 
-- move url stuff to a retil package
+- app-storyboard
+  o fix all errors in component files
+  o get server starting
+  o get server hydrating (why is @emotion/react/jsx-runtime being imported?)
+  o what are story files?
+    * they're just mdx docs
+    * they frequently show components w/ different props, but don't have to.
+      they could also just import some constants and render them in some way.
+    * we probably want some component that accepts an element, renders
+      the element, and also renders its props. we could also allow some of
+      the props to be controlled if we wanted to be fancy (which at least
+      initially, we don't.)
+  o where do story files go?
+    * under lib-ui-web/src/**/*.story.mdx
+    * under lib-prose/src/**/*.story.mdx)
 
+  * update storyIndex and getStoryContent
+    > fix extractGlobData to work with our new globs
 
+  * get a simple "toggle a button" story working
+    > figure out how to provide helper code for a story
+
+- update the codeBlock element so that it loads prism with suspense
 
 - add letter meta block story
   * figure out how to define lists of objects as args

@@ -1,0 +1,6 @@
+import '@emotion/react'
+import { Theme as AppTheme } from 'lib-ui-web/type'
+
+declare module '@emotion/react' {
+  export interface Theme extends AppTheme {}
+}

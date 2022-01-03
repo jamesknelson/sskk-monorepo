@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "paths": {
+      "lib-prose*": ["lib-prose/src*"],
+      "lib-ui-web*": ["lib-ui-web/src*"],
+      "~*": ["app-storyboard/src*"],
+    }
+  },
+  "include": [
+    "../workspace/types/*.d.ts",
+    "./src",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

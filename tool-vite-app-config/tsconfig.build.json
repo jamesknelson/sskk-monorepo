@@ -1,8 +1,9 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../tsconfig.build.json",
   "include": [
     "../workspace/types/*.d.ts",
-    "src/**/*.ts",
+    "./type/*.d.ts",
+    "./src/**/*.ts",
   ],
   "exclude": [
     "node_modules"

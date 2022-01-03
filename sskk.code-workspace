@@ -4,6 +4,9 @@
 			"path": "app-client"
 		},
 		{
+			"path": "app-storyboard"
+		},
+		{
 			"path": "lib-prose"
 		},
 		{
