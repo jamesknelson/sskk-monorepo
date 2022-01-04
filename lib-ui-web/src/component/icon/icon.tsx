@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import React, { AriaRole } from 'react'
 import { HighStyleValue, highStyle } from 'retil-css'
 
-import { Theme } from 'src/types'
+import { Theme } from '~/theme'
 
 export type GlyphComponent = React.ComponentType<{
   className?: string

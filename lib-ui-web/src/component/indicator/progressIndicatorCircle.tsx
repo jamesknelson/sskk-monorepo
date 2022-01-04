@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import { animated, useSpring } from 'react-spring'
 
-import { useTheme } from 'src/style/useTheme'
+import { useTheme } from '~/theme/useTheme'
 
 export type ProgressIndicatorCircleProps = Omit<
   React.SVGProps<SVGElement>,

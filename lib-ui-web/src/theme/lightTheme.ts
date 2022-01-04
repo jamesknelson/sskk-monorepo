@@ -1,129 +1,96 @@
-import { rgba } from 'polished'
+// https://coolors.co/607080-101618-1b1f4b-304ffe-ff5722-d50000
 
-import { ColorScheme, OpacityScheme, Theme } from '~/type'
+import { ColorScheme, OpacityScheme, Theme } from './theme'
 
-// const primary = '#334455'
-// const primaryDark = '#0a1d2c'
-// const primaryLight = '#5e6f82'
-
-// const primaryPalette = {
-//   10: '#212F3D',
-//   20: '#334455',
-//   95: '#F5F7F9',
-//   99: '#F9FbFd',
-// }
-
-// const secondary = '#0009ca'
-// const secondaryDark = '#000086'
-// const secondaryLight = '#304ffe'
-
-// const secondaryPalette = {}
-
-// const error = '#f50057'
-// const errorDark = '#bb002f'
-// const errorLight = '#ff616f'
-
-//
-// Key colors
-//
-
-const white = '#ffffff'
-const black = '#000000'
-
-const neutral = '#101820'
-const neutralAlt = '#202224'
-
-const primary = '#102030'
-const secondary = '#0009ca'
-const tertiary = '' // use tertiary for focus indicators, maybe teal?
-
-const issue = '#f50057'
-
-const placeholder = 'pink'
-
-//
-// Palette
-//
-
-const neutralPalette = {
-  10: placeholder,
-  20: placeholder,
-  30: placeholder,
-  40: placeholder,
-  50: placeholder,
-  60: placeholder,
-  70: placeholder,
-  80: placeholder,
-  90: placeholder,
-  95: placeholder,
-  99: placeholder,
+export const neutral = {
+  0: '#000000',
+  10: '#0c0e10',
+  20: '#242a31',
+  30: '#3d4751',
+  40: '#556371',
+  50: '#6d7f92',
+  60: '#8e9caa',
+  70: '#aeb8c2',
+  80: '#ced4db',
+  90: '#eff1f3',
+  95: '#f7f8f9',
+  99: '#FBFcFf',
+  100: '#ffffff',
 }
-const neutralAltPalette = {
-  10: placeholder,
-  20: placeholder,
-  30: placeholder,
-  40: placeholder,
-  50: placeholder,
-  60: placeholder,
-  70: placeholder,
-  80: placeholder,
-  90: placeholder,
-  95: placeholder,
-  99: placeholder,
+export const neutralAlt = {
+  0: '#000000',
+  10: '#0d0e0f',
+  20: '#282a2d',
+  30: '#43474b',
+  40: '#5d6369',
+  50: '#788087',
+  60: '#969ca2',
+  70: '#b4b8bc',
+  80: '#d2d4d7',
+  90: '#f0f1f2',
+  95: '#f7f9fa',
+  99: '#FaFcFf',
+  100: '#ffffff',
 }
-
-const primaryPalette = {
-  10: placeholder,
-  20: placeholder,
-  30: placeholder,
-  40: placeholder,
-  50: placeholder,
-  60: placeholder,
-  70: placeholder,
-  80: placeholder,
-  90: placeholder,
-  95: placeholder,
-  99: placeholder,
+export const primary = {
+  0: '#000000',
+  10: '#03070a',
+  20: '#102030',
+  30: '#1e3c5b',
+  40: '#2c5783',
+  50: '#548dc6',
+  60: '#7ca8d3',
+  70: '#a4c3e1',
+  80: '#caddf0',
+  90: '#e0eaf6',
+  95: '#f2f6fd',
+  99: '#FaFbFF',
+  100: '#ffffff',
 }
-const secondaryPalette = {
-  10: placeholder,
-  20: placeholder,
-  30: placeholder,
-  40: placeholder,
-  50: placeholder,
-  60: placeholder,
-  70: placeholder,
-  80: placeholder,
-  90: placeholder,
-  95: placeholder,
-  99: placeholder,
+export const secondary = {
+  0: '#000000',
+  10: '#000628',
+  20: '#000e5d',
+  30: '#011378',
+  40: '#0123e3',
+  50: '#304ffe',
+  60: '#516bfe',
+  70: '#6c82fe',
+  80: '#a1afff',
+  90: '#d7ddff',
+  95: '#f2f4ff',
+  99: '#f8fbff',
+  100: '#ffffff',
 }
-const tertiaryPalette = {
-  10: placeholder,
-  20: placeholder,
-  30: placeholder,
-  40: placeholder,
-  50: placeholder,
-  60: placeholder,
-  70: placeholder,
-  80: placeholder,
-  90: placeholder,
-  95: placeholder,
-  99: placeholder,
+export const tertiary = {
+  0: '#000000',
+  10: '#0d0300',
+  20: '#280a00',
+  30: '#5e1700',
+  40: '#c93000',
+  50: '#ff3d00',
+  60: '#ff521b',
+  70: '#ff8f6b',
+  80: '#ffb8a1',
+  90: '#ffe0d7',
+  95: '#fff5f2',
+  99: '#fffcf9',
+  100: '#ffffff',
 }
-
-const errorPalette = {
-  10: placeholder,
-  20: placeholder,
-  30: placeholder,
-  40: placeholder,
-  50: placeholder,
-  60: placeholder,
-  70: placeholder,
-  80: placeholder,
-  90: placeholder,
-  95: placeholder,
-  99: placeholder,
+export const issue = {
+  0: '#000000',
+  10: '#0d0000',
+  20: '#430000',
+  30: '#790000',
+  40: '#ae0000',
+  50: '#D50000',
+  60: '#ff3636',
+  70: '#ff6b6b',
+  80: '#ffa1a1',
+  90: '#ffd7d7',
+  95: '#fff2f2',
+  99: '#fffafa',
+  100: '#ffffff',
 }
 
 //
@@ -134,55 +101,60 @@ const colorScheme: ColorScheme = {
   background: neutral[99],
   onBackground: neutral[10],
 
-  primary: primary[90],
-  onPrimary: primary[10],
-  primaryWash: primary[60],
-  onPrimaryWash: primary[20],
+  primary: primary[30],
+  onPrimary: primary[95],
+  primaryWash: primary[95],
+  onPrimaryWash: primary[10],
 
-  secondary: placeholder,
-  onSecondary: placeholder,
-  secondaryWash: placeholder,
-  onSecondaryWash: placeholder,
+  secondary: secondary[40],
+  onSecondary: secondary[95],
+  secondaryWash: secondary[90],
+  onSecondaryWash: secondary[10],
 
-  tertiary: placeholder,
-  onTertiary: placeholder,
-  tertiaryWash: placeholder,
-  onTertiaryWash: placeholder,
+  tertiary: tertiary[50],
+  onTertiary: tertiary[100],
+  tertiaryWash: tertiary[90],
+  onTertiaryWash: tertiary[20],
 
-  issue: placeholder,
-  onIssue: placeholder,
-  issueWash: placeholder,
-  onIssueWash: placeholder,
+  issue: issue[40],
+  onIssue: issue[95],
+  issueWash: issue[80],
+  onIssueWash: issue[20],
 
-  surface: white,
-  surfaceBorder: placeholder, // Between surface and backgorund
-  surfaceLine: placeholder, // As divider, between surface and wash, or as outline
-  onSurface: placeholder,
-  surfaceWash: placeholder,
-  onSurfaceWash: placeholder,
+  surface: neutral[100],
+  surfaceBorder: neutral[90],
+  surfaceLine: neutral[95],
+  onSurface: neutral[10],
 
   // Surface shaded darker w/ primary
-  altSurface: placeholder,
-  altSurfaceBorder: placeholder,
-  altSurfaceLine: placeholder,
-  onAltSurface: placeholder,
-  altSurfaceWash: placeholder,
-  onAltSurfaceWash: placeholder,
+  altSurface: neutralAlt[90],
+  altSurfaceBorder: neutralAlt[90],
+  altSurfaceLine: neutralAlt[90],
+  onAltSurface: neutralAlt[40],
 
-  inverseSurface: placeholder,
-  inverseSurfaceBorder: placeholder,
-  inverseSurfaceLine: placeholder,
-  onInverseSurface: placeholder,
+  inverseSurface: neutral[10],
+  inverseSurfaceBorder: neutral[30],
+  inverseSurfaceLine: neutral[20],
+  onInverseSurface: neutral[90],
 
   // For use on inverse surface
-  inversePrimary: placeholder,
+  inversePrimary: primary[40],
 }
 
 // Used for dimming `on` colors
 const opacityScheme: OpacityScheme = {
-  alt: 83,
-  peripheral: 60,
-  placeholder: 38,
+  alt: 0.83,
+  peripheral: 0.6,
+  placeholder: 0.38,
+}
+
+export const palette = {
+  neutral,
+  neutralAlt,
+  primary,
+  secondary,
+  tertiary,
+  issue,
 }
 
 export const theme: Theme = {

@@ -1,13 +1,13 @@
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { useHasHydrated } from 'retil-hydration'
-
-import { ColumnTransition } from 'src/components/web/transition/columnTransition'
-import { useTransitionHandleRefContext } from 'src/context/transitionHandleRefContext'
-import { crossfadeTransitionConfig } from 'src/style/transitionConfigs'
 import {
   TransitionHandle,
   useTransitionHandle,
-} from 'src/utils/transitionHandle'
+  useTransitionHandleRefContext,
+} from 'retil-transition'
+
+import { ColumnTransition } from '~/component/transition/columnTransition'
+import { crossfadeTransitionConfig } from '~/style/transitionConfigs'
 
 import { BackgroundScene, BackgroundSceneComponent } from './backgroundScene'
 

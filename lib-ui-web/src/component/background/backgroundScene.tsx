@@ -1,4 +1,4 @@
-import { TransitionHandleRef } from 'src/utils/transitionHandle'
+import { TransitionHandleRef } from 'retil-transition'
 
 /**
  * A background will fade in once loaded, instead of blocking rendering

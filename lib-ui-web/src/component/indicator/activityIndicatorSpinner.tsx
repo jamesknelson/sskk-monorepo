@@ -1,6 +1,7 @@
 import { css, keyframes } from '@emotion/react'
-import { HighStyleValue } from 'retil-css'
-import { Theme } from 'src/types'
+import { HighStyleValue, highStyle } from 'retil-css'
+
+import { Theme } from '~/theme'
 
 const spinnerDashAnimation = keyframes`
 0%,
@@ -62,19 +63,23 @@ export const ActivityIndicatorSpinner = ({
         {...rest}>
         <circle
           // FIXME: support high style
-          stroke={color as string}
           strokeWidth={10}
           strokeMiterlimit={1}
           fill="none"
           cx={50}
           cy={50}
-          r={48}
-          css={css`
-            stroke-dasharray: 283;
-            stroke-dashoffset: 280;
-            transform-origin: 50% 50%;
-            animation: ${spinnerDashAnimation} 1.6s ease-in-out infinite both;
-          `}
+          r={47}
+          css={[
+            css`
+              stroke-dasharray: 283;
+              stroke-dashoffset: 280;
+              transform-origin: 50% 50%;
+              animation: ${spinnerDashAnimation} 1.6s ease-in-out infinite both;
+            `,
+            highStyle({
+              stroke: color,
+            }),
+          ]}
         />
       </svg>
     )

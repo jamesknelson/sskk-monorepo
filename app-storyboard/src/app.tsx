@@ -23,7 +23,7 @@ import { Head, HeadContext } from './head'
 import { FontFaces } from 'lib-ui-web/style/fonts'
 import { GlobalStyles } from 'lib-ui-web/style/globalStyles'
 import { theme as lightTheme } from 'lib-ui-web/theme/lightTheme'
-import { smoothScrollTo } from 'lib-ui-web/utils/smoothScrollTo'
+import { smoothScrollTo } from 'lib-ui-web/util/smoothScrollTo'
 import { AppLayout } from './components/layout'
 
 export interface AppProps {

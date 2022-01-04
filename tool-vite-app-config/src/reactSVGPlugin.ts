@@ -1,7 +1,6 @@
 // Taken from: https://www.npmjs.com/package/vite-plugin-react-svg
 
 import { Plugin } from 'vite'
-import svgr from '@svgr/core'
 import { readFileSync } from 'fs'
 
 export interface ReactSVGPluginOptions {
@@ -105,7 +104,10 @@ export default function reactSVGPlugin(
 }
 
 async function compileSvg(source: Buffer, id: string, options: any) {
-  const code = await svgr(
+  //@ts-ignore - for some reason, the build sees different types.
+  const { transform } = await import('@svgr/core')
+  const code = await transform(
+    //@ts-ignore
     source,
     {
       ...options,

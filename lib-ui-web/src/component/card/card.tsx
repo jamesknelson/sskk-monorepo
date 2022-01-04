@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 
-import { cardShadow } from 'src/style/shadows'
+import { cardShadow } from '~/style/shadows'
 
 export interface CardProps {
   radius?: string | 0
@@ -14,7 +14,7 @@ export const Card = styled.div<CardProps>(
     position: relative;
 
     background-color: ${theme.color.surface};
-    box-shadow: ${cardShadow()};
+    box-shadow: ${cardShadow({ color: theme.color.primary })};
     border: 1px solid ${theme.color.surfaceBorder};
     border-radius: ${radius};
   `,

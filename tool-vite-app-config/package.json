@@ -17,9 +17,9 @@
     "@emotion/babel-plugin": "^11.3.0",
     "@mdx-js/mdx": "^2.0.0-rc.2",
     "@mdx-js/react": "^2.0.0-rc.2",
-    "@svgr/core": "^5.5.0",
-    "@svgr/plugin-jsx": "^5.5.0",
-    "@svgr/plugin-svgo": "^5.5.0",
+    "@svgr/core": "^6.1.2",
+    "@svgr/plugin-jsx": "^6.1.2",
+    "@svgr/plugin-svgo": "^6.1.2",
     "@vitejs/plugin-react": "^1.1.0",
     "es-module-lexer": "^0.9.3",
     "gray-matter": "^4.0.3",
@@ -57,9 +57,10 @@
     "@types/textr": "^0.3.0",
     "eslint": "^7.5.0",
     "rimraf": "3.0.2",
-    "typescript": "4.5.4"
+    "typescript": "4.5.4",
+    "vite": "^2.7.10"
   },
   "peerDependencies": {
-    "vite": "^2.7.1"
+    "vite": "^2.7.10"
   }
 }

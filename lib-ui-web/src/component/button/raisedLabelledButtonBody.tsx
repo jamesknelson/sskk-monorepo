@@ -1,18 +1,23 @@
 import { css } from '@emotion/react'
 import { rgba, tint } from 'polished'
 import { forwardRef } from 'react'
-import { highStyle } from 'retil-css'
+import { HighStyleValue, highStyle, mapHighStyleValue } from 'retil-css'
 import { inActiveSurface, inDisabledSurface } from 'retil-interaction'
-import { useTheme } from 'src/style/useTheme'
+
+import { useTheme } from '~/theme/useTheme'
 
 import {
   LabelledButtonBodyContentConfig,
   LabelledButtonBody,
 } from './labelledButtonBody'
 
-type ButtonBodyProps = Omit<JSX.IntrinsicElements['div'], 'children' | 'ref'> &
+type ButtonBodyProps = Omit<
+  JSX.IntrinsicElements['div'],
+  'children' | 'color' | 'ref'
+> &
   Omit<LabelledButtonBodyContentConfig, 'labelColor'> & {
-    labelColor?: string
+    color?: HighStyleValue<string>
+    labelColor?: HighStyleValue<string>
   }
 
 export const RaisedLabelledButtonBody = forwardRef<
@@ -31,12 +36,14 @@ export const RaisedLabelledButtonBody = forwardRef<
     <LabelledButtonBody
       {...rest}
       ref={ref}
-      glyphColor={rgba(labelColor, 0.85)}
+      glyphColor={mapHighStyleValue(labelColor, (color) => rgba(color, 0.85))}
       themeCSS={[
         highStyle({
           backgroundColor: {
             default: color,
-            [inDisabledSurface]: tint(0.5, color),
+            [inDisabledSurface]: mapHighStyleValue(color, (color) =>
+              tint(0.5, color),
+            ),
           },
           color: labelColor,
         }),

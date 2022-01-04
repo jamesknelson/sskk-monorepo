@@ -46,6 +46,9 @@ export default function createConfig({ projectRootDir }: PluginOptions) {
     resolve: {
       dedupe: ['react', 'react-dom', 'react-is'],
     },
+    optimizeDeps: {
+      include: ['hoist-non-react-statics', 'react-is'],
+    },
   })
 
   return configFunction

@@ -1,3 +1,8 @@
+export interface Theme {
+  color: ColorScheme
+  opacity: OpacityScheme
+}
+
 export interface ColorScheme {
   // The background of the app, as applied to the root element.
   background: string
@@ -48,8 +53,6 @@ export interface ColorScheme {
   // Used as divider, between surface and wash, or as outline
   surfaceLine: string
   onSurface: string
-  surfaceWash: string
-  onSurfaceWash: string
 
   // An alternative surface, shaded with the primary color, so as to be able to
   // layer surfaces, providing contrast between them. Typically used for modals,
@@ -58,8 +61,6 @@ export interface ColorScheme {
   altSurfaceBorder: string
   altSurfaceLine: string
   onAltSurface: string
-  altSurfaceWash: string
-  onAltSurfaceWash: string
 
   // An inverse surface, typically used for toasts.
   inverseSurface: string
@@ -88,9 +89,4 @@ export interface OpacityScheme {
    * Used for placeholders within input fields.
    */
   placeholder: number
-}
-
-export interface Theme {
-  color: ColorScheme
-  opacity: OpacityScheme
 }

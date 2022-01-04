@@ -6,8 +6,8 @@ import {
   inHoveredSurface,
 } from 'retil-interaction'
 
-import { easeOut } from 'src/style/easings'
-import { interactionShadow } from 'src/style/shadows'
+import { easeOut } from '~/style/easings'
+import { interactionShadow } from '~/style/shadows'
 
 export interface FocusHoverIndicatorRingProps {
   inline?: boolean
@@ -33,15 +33,15 @@ export const FocusHoverIndicatorRing = styled.div<FocusHoverIndicatorRingProps>(
     `,
     inHoveredSurface(
       css`
-        box-shadow: ${interactionShadow(theme.color.primary[100])};
+        box-shadow: ${interactionShadow(theme.color.tertiary)};
       `,
       inDisabledSurface(css`
-        box-shadow: ${interactionShadow(theme.color.primary[100], 0.5)};
+        box-shadow: ${interactionShadow(theme.color.tertiary, 0.5)};
       `),
     ),
     inFocusedSurface(
       css`
-        box-shadow: ${interactionShadow(theme.color.secondary[500])} !important;
+        box-shadow: ${interactionShadow(theme.color.tertiary)} !important;
       `,
     ),
   ],

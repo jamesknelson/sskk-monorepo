@@ -1,17 +1,18 @@
 import { css, Theme } from '@emotion/react'
 import type { Interpolation } from '@emotion/serialize'
 import React, { forwardRef } from 'react'
+import { isValidElementType } from 'react-is'
 import { animated, useTransition } from 'react-spring'
 import { HighStyleValue } from 'retil-css'
 import { inDisabledSurface } from 'retil-interaction'
 
-import { Caret } from 'src/components/web/caret'
-import { GlyphComponent, Icon } from 'src/components/web/icon'
-import { ActivityIndicatorSpinner } from 'src/components/web/indicator/activityIndicatorSpinner'
-import { FocusHoverIndicatorRing } from 'src/components/web/indicator/focusHoverIndicatorRing'
-import { ProgressIndicatorCircle } from 'src/components/web/indicator/progressIndicatorCircle'
-import { easeInOut, easeOut } from 'src/style/easings'
-import { ChevronLeft, ChevronRight } from 'src/style/glyphs'
+import { Caret } from '~/component/caret'
+import { GlyphComponent, Icon } from '~/component/icon'
+import { ActivityIndicatorSpinner } from '~/component/indicator/activityIndicatorSpinner'
+import { FocusHoverIndicatorRing } from '~/component/indicator/focusHoverIndicatorRing'
+import { ProgressIndicatorCircle } from '~/component/indicator/progressIndicatorCircle'
+import { easeInOut, easeOut } from '~/style/easings'
+import { ChevronLeft, ChevronRight } from '~/style/glyphs'
 
 // - A function will be rendered as an icon
 // - An element will be rendered as-is
@@ -187,13 +188,29 @@ export const LabelledButtonBody = forwardRef<
               />
             )}
             <div
-              css={css`
-                flex-grow: 1;
+              css={[
+                css`
+                  flex-grow: 1;
+                  padding: 0.0625em ${rightGlyph ? 0 : 0.33}em 0
+                    ${leftGlyph ? 0 : 0.33}em;
 
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              `}>
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+
+                  transition: transform 150ms ${easeOut};
+                `,
+                leftGlyph === null &&
+                  rightGlyph !== null &&
+                  css`
+                    transform: translateX(-0.75rem);
+                  `,
+                rightGlyph === null &&
+                  leftGlyph !== null &&
+                  css`
+                    transform: translateX(0.75rem);
+                  `,
+              ]}>
               {label}
             </div>
             {rightGlyph !== undefined && (
@@ -231,13 +248,27 @@ const glyphExit = {
   transform: 'translateX(50%)',
 }
 
+type GlyphType =
+  | Extract<LabelledButtonBodyGlyphProp, string>
+  | 'component'
+  | 'object'
+  | 'number'
+
 function ButtonBodyGlyph(props: ButtonBodyGlyphProps) {
   const value = props.value
+  const valueType = typeof value
+  const type = (
+    valueType === 'string'
+      ? value
+      : isValidElementType(value)
+      ? 'component'
+      : typeof value
+  ) as GlyphType
   const key =
     value === null
       ? 'null'
       : typeof value === 'object'
-      ? value.key ?? value.type
+      ? value.key ?? value.type ?? value
       : typeof value === 'number'
       ? 'number'
       : value
@@ -254,7 +285,7 @@ function ButtonBodyGlyph(props: ButtonBodyGlyphProps) {
     <div
       css={css`
         position: relative;
-        width: 1rem;
+        width: 1.5rem;
         height: 1rem;
         transform-origin: center;
         transform: scale(${props.scale});
@@ -273,21 +304,19 @@ function ButtonBodyGlyph(props: ButtonBodyGlyphProps) {
             justify-content: center;
           `}
           style={spring}>
-          {renderGlyph(props)}
+          {renderGlyph(type, props)}
         </animated.div>
       ))}
     </div>
   )
 }
 
-function renderGlyph({
-  color,
-  side,
-  value,
-}: ButtonBodyGlyphProps): React.ReactNode {
-  const valueType = typeof value
+function renderGlyph(
+  type: GlyphType,
+  { color, side, value }: ButtonBodyGlyphProps,
+): React.ReactNode {
   const oppositeSide = side === 'Left' ? 'Right' : 'Left'
-  switch (valueType === 'string' ? value : valueType) {
+  switch (type) {
     case 'chevron':
       return (
         <Icon
@@ -295,8 +324,8 @@ function renderGlyph({
           glyph={side === 'Left' ? ChevronLeft : ChevronRight}
           label={null}
           css={{
-            ['margin' + oppositeSide]: '0.25em',
-            ['margin' + side]: '-0.25em',
+            ['margin' + oppositeSide]: '0.33em',
+            ['margin' + side]: '-0.33em',
           }}
         />
       )
@@ -306,8 +335,8 @@ function renderGlyph({
           color={color}
           rotationDegrees={90}
           css={{
-            ['margin' + oppositeSide]: '0.25em',
-            ['margin' + side]: '-0.25em',
+            ['margin' + oppositeSide]: '0.5em',
+            ['margin' + side]: '-0.5em',
           }}
         />
       )
@@ -315,9 +344,10 @@ function renderGlyph({
       return (
         <ActivityIndicatorSpinner
           color={color}
-          size="0.75rem"
+          size="1rem"
           active
           css={{
+            marginTop: -1,
             ['margin' + oppositeSide]: '0.25em',
             ['margin' + side]: '-0.25em',
           }}
@@ -335,16 +365,17 @@ function renderGlyph({
           size={14}
           width={2}
           css={{
-            ['margin' + oppositeSide]: '0.25em',
-            ['margin' + side]: '-0.25em',
+            ['margin' + oppositeSide]: '0.125em',
+            ['margin' + side]: '-0.125em',
           }}
         />
       )
-    case 'function':
+    case 'component':
       return (
         <Icon
           css={{
-            ['margin' + oppositeSide]: '0.5em',
+            ['margin' + oppositeSide]: '0.125em',
+            ['margin' + side]: '-0.125em',
           }}
           color={color}
           inline={false}

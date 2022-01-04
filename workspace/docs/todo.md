@@ -16,28 +16,35 @@ o move url stuff to a retil package
   o get server starting
   o get server hydrating (why is @emotion/react/jsx-runtime being imported?)
   o what are story files?
-    * they're just mdx docs
-    * they frequently show components w/ different props, but don't have to.
-      they could also just import some constants and render them in some way.
-    * we probably want some component that accepts an element, renders
-      the element, and also renders its props. we could also allow some of
-      the props to be controlled if we wanted to be fancy (which at least
-      initially, we don't.)
   o where do story files go?
-    * under lib-ui-web/src/**/*.story.mdx
-    * under lib-prose/src/**/*.story.mdx)
-
-  * update storyIndex and getStoryContent
-    > fix extractGlobData to work with our new globs
-
+  o update storyIndex and getStoryContent
+  o get a theme story created
+  o add opacities to the theme sampler
   * get a simple "toggle a button" story working
-    > figure out how to provide helper code for a story
+    * mapHighStyleValue function
+    * add a version with all states visible, including:
+      hover
+      disabled
+      focused
+      active
+    * add an interactive version
+    * center the loading spinner
+  * add blocks stories
+  * add tags to stories, and build a sidebar from them
+  * update storyboard layout to use blocks
+  * add some documentation to the top page, explaining what the .stories and
+    .tools files do, and how to add stories from a new subproject
 
-- update the codeBlock element so that it loads prism with suspense
+- create lib-ui-shared, add themes/constants/assets
+- remove uses of `polished.rgba` from blocks in favor of theme colors
 
 - add letter meta block story
   * figure out how to define lists of objects as args
 - add address pill components for guest and member
+
+- stories and components for icon buttons, including with carets
+
+- update the codeBlock element so that it loads prism with suspense
 
 - add the persona selection screen
   * add form
@@ -50,6 +57,8 @@ o move url stuff to a retil package
   * otherwise, redirect to first page
   * etc.
 - don't allow the user to navigate forward using the step indicators if they remove their letter content
+
+- find a way to apply high styles to a *not* of a selector
 
 - forgotten password flow
 - user menu

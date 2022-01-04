@@ -4,9 +4,9 @@ import React, { forwardRef } from 'react'
 import { HighStyleValue } from 'retil-css'
 import { inDisabledSurface } from 'retil-interaction'
 
-import { Icon } from 'src/components/web/icon'
-import { easeOut } from 'src/style/easings'
-import { Theme } from 'src/types'
+import { Icon } from '~/component/icon'
+import { easeOut } from '~/style/easings'
+import { Theme } from '~/theme'
 
 export interface IconButtonProps {
   color?: HighStyleValue<string, Theme>

@@ -1,11 +1,18 @@
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import {
   AnchorSurface,
   MatchedLinkSurface,
   inToggledSurface,
 } from 'retil-interaction'
 
-import appScheme from '~/appScheme'
+import { sansFontFamily } from 'lib-ui-web/style/fonts'
+
+import app from '~/appScheme'
+
+export const StyledMatchedLinkSurface = styled(MatchedLinkSurface)`
+  display: flex;
+`
 
 const NavLinkBody: React.FunctionComponent<JSX.IntrinsicElements['span']> = (
   props,
@@ -14,14 +21,16 @@ const NavLinkBody: React.FunctionComponent<JSX.IntrinsicElements['span']> = (
     {...props}
     css={(theme) => [
       css`
-        color: ${theme.color.tertiary};
+        color: ${theme.color.onSurface};
+        font-family: ${sansFontFamily};
         font-size: 0.9rem;
-        font-weight: 500;
-        line-height: 40px;
+        font-weight: 700;
+        line-height: 38px;
+        padding-top: 2px;
         margin: 0 0.5rem;
       `,
       inToggledSurface(css`
-        border-bottom: 2px solid ${theme.color.primary};
+        border-bottom: 2px solid ${theme.color.onSurface};
       `),
     ]}
   />
@@ -32,44 +41,59 @@ export interface AppLayoutProps {
 }
 
 export const AppLayout = ({ children }: AppLayoutProps) => (
-  <>
+  <div
+    css={css`
+      flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
+    `}>
     <nav
       css={({ color }) => css`
-        border-bottom: 1px solid ${color.surfaceLine};
+        background-color: ${color.surface};
+        border-bottom: 1px solid ${color.surfaceBorder};
         display: flex;
         padding: 0 1rem;
       `}>
-      <MatchedLinkSurface href={appScheme.top()} match={appScheme.top()}>
+      <StyledMatchedLinkSurface href={app.top()} match={app.top()}>
         <NavLinkBody
           css={({ color }) => css`
             color: ${color.primary};
             font-family: Inconsolata, monospace;
             font-size: 18px;
             font-weight: 900;
+            margin-top: -2px;
           `}>
-          retil.tech
+          letter.house{' '}
+          <span css={(theme) => ({ color: theme.color.onSurface })}>
+            storyboard
+          </span>
         </NavLinkBody>
-      </MatchedLinkSurface>
+      </StyledMatchedLinkSurface>
+      <div
+        css={css`
+          margin: 0 1rem;
+        `}>
+        <StyledMatchedLinkSurface href={app.storyIndex()}>
+          <NavLinkBody>stories</NavLinkBody>
+        </StyledMatchedLinkSurface>
+      </div>
       <div
         css={css`
           flex-grow: 1;
         `}
       />
-      <div
-        css={css`
-          margin: 0 1rem;
-        `}>
-        <MatchedLinkSurface href={appScheme.storyIndex()}>
-          <NavLinkBody>stories</NavLinkBody>
-        </MatchedLinkSurface>
-      </div>
       <div>
         {' '}
-        <AnchorSurface href="https://github.com/jamesknelson/sskk-monorepo">
+        <AnchorSurface
+          css={css`
+            display: flex;
+          `}
+          href="https://github.com/jamesknelson/sskk-monorepo">
           <NavLinkBody>GitHub</NavLinkBody>
         </AnchorSurface>
       </div>
     </nav>
     <main>{children}</main>
-  </>
+  </div>
 )
