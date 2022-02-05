@@ -1,5 +1,7 @@
 import { css } from '@emotion/react'
+import { ButtonSurface } from 'retil-interaction'
 
+import { TestSurface } from '~/component/test'
 import { Check } from '~/style/glyphs'
 
 import { LabelledButtonBody } from './labelledButtonBody'
@@ -14,15 +16,15 @@ import { RaisedLabelledButtonBody } from './raisedLabelledButtonBody'
   display: flex;
   gap: 2rem;
 `}>
-  <div>
+  <ButtonSurface>
     <LabelledButtonBody label="Back" leftGlyph='chevron' />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <LabelledButtonBody label="Busy" busyIndicator />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <LabelledButtonBody label="Forward" rightGlyph='chevron' />
-  </div>
+  </ButtonSurface>
 </div>
 
 ## Outlined Labelled Button Body
@@ -32,15 +34,15 @@ import { RaisedLabelledButtonBody } from './raisedLabelledButtonBody'
   gap: 1rem;
   margin: 1rem 0;
 `}>
-  <div>
+  <ButtonSurface>
     <OutlinedLabelledButtonBody label="Back" leftGlyph='chevron' />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <OutlinedLabelledButtonBody label="Busy" busyIndicator />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <OutlinedLabelledButtonBody label="Forward" rightGlyph='chevron' />
-  </div>
+  </ButtonSurface>
 </div>
 
 <div css={css`
@@ -48,27 +50,64 @@ import { RaisedLabelledButtonBody } from './raisedLabelledButtonBody'
   gap: 1rem;
   margin: 2rem 0;
 `}>
-  <div>
+  <ButtonSurface>
     <OutlinedLabelledButtonBody
       color={theme => theme.color.secondary}
       label="Send"
       leftGlyph={null}
     />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <OutlinedLabelledButtonBody
       color={theme => theme.color.secondary}
       label="Send"
       leftGlyph='spinner'
     />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <OutlinedLabelledButtonBody
       color={theme => theme.color.secondary}
       label="Send"
       leftGlyph={Check}
     />
-  </div>
+  </ButtonSurface>
+</div>
+
+<hr />
+
+<div css={css`
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+`}>
+  <TestSurface disabled>
+    <OutlinedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Disabled"
+      leftGlyph={null}
+    />
+  </TestSurface>
+  <TestSurface hovered>
+    <OutlinedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Hovered"
+      leftGlyph='spinner'
+    />
+  </TestSurface>
+  <TestSurface active>
+    <OutlinedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Active"
+      leftGlyph={Check}
+    />
+  </TestSurface>
+  <TestSurface focused>
+    <OutlinedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Focused"
+      leftGlyph={Check}
+    />
+  </TestSurface>
 </div>
 
 ## Raised Labelled Button Body
@@ -78,15 +117,15 @@ import { RaisedLabelledButtonBody } from './raisedLabelledButtonBody'
   gap: 1rem;
   margin: 2rem 0;
 `}>
-  <div>
+  <ButtonSurface>
     <RaisedLabelledButtonBody label="Back" leftGlyph='chevron' />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <RaisedLabelledButtonBody label="Busy" busyIndicator />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <RaisedLabelledButtonBody label="Forward" rightGlyph='chevron' />
-  </div>
+  </ButtonSurface>
 </div>
 
 <div css={css`
@@ -94,25 +133,62 @@ import { RaisedLabelledButtonBody } from './raisedLabelledButtonBody'
   gap: 1rem;
   margin: 2rem 0;
 `}>
-  <div>
+  <ButtonSurface>
     <RaisedLabelledButtonBody
       color={theme => theme.color.secondary}
       label="Send"
       leftGlyph={null}
     />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <RaisedLabelledButtonBody
       color={theme => theme.color.secondary}
       label="Send"
       leftGlyph='spinner'
     />
-  </div>
-  <div>
+  </ButtonSurface>
+  <ButtonSurface>
     <RaisedLabelledButtonBody
       color={theme => theme.color.secondary}
       label="Send"
       leftGlyph={Check}
     />
-  </div>
+  </ButtonSurface>
+</div>
+
+<hr />
+
+<div css={css`
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+`}>
+  <TestSurface disabled>
+    <RaisedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Disabled"
+      leftGlyph={null}
+    />
+  </TestSurface>
+  <TestSurface hovered>
+    <RaisedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Hovered"
+      leftGlyph='spinner'
+    />
+  </TestSurface>
+  <TestSurface active>
+    <RaisedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Active"
+      leftGlyph={Check}
+    />
+  </TestSurface>
+  <TestSurface focused>
+    <RaisedLabelledButtonBody
+      color={theme => theme.color.secondary}
+      label="Focused"
+      leftGlyph={Check}
+    />
+  </TestSurface>
 </div>

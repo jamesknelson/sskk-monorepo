@@ -29,14 +29,14 @@ export const FocusHoverIndicatorRing = styled.div<FocusHoverIndicatorRingProps>(
 
       border-radius: 999px;
 
-      transition: box-shadow 250ms ${easeOut};
+      transition: box-shadow 150ms ${easeOut};
     `,
     inHoveredSurface(
       css`
         box-shadow: ${interactionShadow(theme.color.tertiary)};
       `,
       inDisabledSurface(css`
-        box-shadow: ${interactionShadow(theme.color.tertiary, 0.5)};
+        box-shadow: ${interactionShadow(theme.color.secondary, 0.5)};
       `),
     ),
     inFocusedSurface(

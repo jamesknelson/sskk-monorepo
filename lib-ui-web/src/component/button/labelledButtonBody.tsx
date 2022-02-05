@@ -111,9 +111,11 @@ export const LabelledButtonBody = forwardRef<
 
             border-radius: 9999px;
 
-            transition: background-color 200ms ${easeOut},
-              opacity 250ms ${easeOut}, text-shadow 250ms ${easeOut},
-              box-shadow 250ms ${easeOut}, color 250ms ${easeOut};
+            user-select: none;
+
+            transition: background-color 150ms ${easeOut},
+              opacity 150ms ${easeOut}, text-shadow 150ms ${easeOut},
+              box-shadow 150ms ${easeOut}, color 150ms ${easeOut};
           `,
         ]}>
         <div

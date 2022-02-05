@@ -10,37 +10,30 @@ PRIORITIES:
 TODO:
 
 o move url stuff to a retil package
+o update buttons storyboard
 
-- app-storyboard
-  o fix all errors in component files
-  o get server starting
-  o get server hydrating (why is @emotion/react/jsx-runtime being imported?)
-  o what are story files?
-  o where do story files go?
-  o update storyIndex and getStoryContent
-  o get a theme story created
-  o add opacities to the theme sampler
-  * get a simple "toggle a button" story working
-    * mapHighStyleValue function
-    * add a version with all states visible, including:
-      hover
-      disabled
-      focused
-      active
-    * add an interactive version
-    * center the loading spinner
-  * add blocks stories
-  * add tags to stories, and build a sidebar from them
-  * update storyboard layout to use blocks
-  * add some documentation to the top page, explaining what the .stories and
-    .tools files do, and how to add stories from a new subproject
 
-- create lib-ui-shared, add themes/constants/assets
+- get everything set up so that I can publish a letter that's read from the db using the new libraries
+
+
+- try and get a native app version working
+  * create lib-ui-shared, add themes/constants/assets
+
+
+- add tags to stories, and build a sidebar from them
+- add blocks stories
+- update storyboard layout to use blocks
+
 - remove uses of `polished.rgba` from blocks in favor of theme colors
 
 - add letter meta block story
   * figure out how to define lists of objects as args
 - add address pill components for guest and member
+
+
+
+
+
 
 - stories and components for icon buttons, including with carets
 

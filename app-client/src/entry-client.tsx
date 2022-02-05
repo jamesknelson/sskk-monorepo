@@ -1,5 +1,5 @@
-/// <reference types="react/experimental" />
-/// <reference types="react-dom/experimental" />
+/// <reference types="react/next" />
+/// <reference types="react-dom/next" />
 /// <reference types="vite/client" />
 
 import createStyleCache from '@emotion/cache'
