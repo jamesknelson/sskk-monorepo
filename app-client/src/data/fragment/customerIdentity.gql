@@ -1,0 +1,20 @@
+fragment customerIdentity on customers {
+  id
+  contact_name
+  membership {
+    id
+    active_until
+    level
+    lifetime
+    sabbatical_available_until
+  }
+  personas {
+    id
+    list_address_with_byline
+    name
+    photo_url
+    preferred_broadcast_time
+  }
+  unverified_email
+  verified_email
+}

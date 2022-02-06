@@ -1,4 +1,4 @@
-import { Role } from './types'
+import { Role } from './type'
 
 export const auth = {
   refreshTokenEndpoint: import.meta.env.VITE_REFRESH_TOKEN_ENDPOINT as string,

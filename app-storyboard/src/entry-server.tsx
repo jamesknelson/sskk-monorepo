@@ -4,14 +4,13 @@
 import createStyleCache from '@emotion/cache'
 import createEmotionServer from '@emotion/server/create-instance'
 import { Request, Response } from 'express'
-import { ReactElement, cloneElement } from 'react'
+import { ReactElement } from 'react'
 import { renderToString } from 'react-dom/server'
-import { Helmet, HelmetData, HelmetProvider } from 'react-helmet-async'
 import { ServerMount } from 'retil-mount'
 import { createHref, createServerNavEnv } from 'retil-nav'
 
-import { App } from './app'
-import appLoader from './appLoader'
+import { App, appLoader } from './app'
+import { createHeadSink, renderHeadSinkToString } from './head'
 
 export async function render(
   request: Omit<Request, 'params' | 'query'>,
@@ -43,34 +42,18 @@ export async function render(
     ) {
       return null
     } else {
+      const headSink = createHeadSink()
       const { html: appHTML, styles: appStyles } = extractCriticalToChunks(
         renderToString(
           mount.provide(
-            <App env={env} loader={appLoader} styleCache={styleCache} />,
+            <App env={env} headSink={headSink} styleCache={styleCache} />,
           ),
         ),
       )
-
-      const helmetContext = {} as { helmet: HelmetData }
-      renderToString(
-        <HelmetProvider context={helmetContext}>
-          <Helmet>
-            {head.length ? (
-              head.map((item, i) => cloneElement(item, { key: i }))
-            ) : (
-              <title>retil.tech</title>
-            )}
-          </Helmet>
-        </HelmetProvider>,
-      )
-
-      const headHTML = `
-        ${helmetContext.helmet.title.toString()}
-        ${helmetContext.helmet.meta.toString()}
-        ${helmetContext.helmet.script.toString()}
-        ${helmetContext.helmet.style.toString()}
-        ${constructStyleTagsFromChunks({ html: appHTML, styles: appStyles })}
-      `
+      const headHTML = [
+        renderHeadSinkToString(headSink),
+        constructStyleTagsFromChunks({ html: appHTML, styles: appStyles }),
+      ].join('\n')
 
       return {
         appHTML,

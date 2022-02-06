@@ -6,13 +6,13 @@ import { animated, useTransition } from 'react-spring'
 import { HighStyleValue } from 'retil-css'
 import { inDisabledSurface } from 'retil-interaction'
 
+import { ChevronLeft, ChevronRight } from '~/asset/glyph'
 import { Caret } from '~/component/caret'
 import { GlyphComponent, Icon } from '~/component/icon'
 import { ActivityIndicatorSpinner } from '~/component/indicator/activityIndicatorSpinner'
 import { FocusHoverIndicatorRing } from '~/component/indicator/focusHoverIndicatorRing'
 import { ProgressIndicatorCircle } from '~/component/indicator/progressIndicatorCircle'
 import { easeInOut, easeOut } from '~/style/easings'
-import { ChevronLeft, ChevronRight } from '~/style/glyphs'
 
 // - A function will be rendered as an icon
 // - An element will be rendered as-is

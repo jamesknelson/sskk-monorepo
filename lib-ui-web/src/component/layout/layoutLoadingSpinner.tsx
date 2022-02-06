@@ -1,12 +1,9 @@
 import { css } from '@emotion/react'
 import { animated, useSpring } from 'react-spring'
 import { useHasHydrated } from 'retil-hydration'
+import { TransitionHandleRef, useTransitionHandle } from 'retil-transition'
 
-import { ActivityIndicatorSpinner } from 'src/components/web/indicator/activityIndicatorSpinner'
-import {
-  TransitionHandleRef,
-  useTransitionHandle,
-} from 'src/utils/transitionHandle'
+import { ActivityIndicatorSpinner } from '~/component/indicator/activityIndicatorSpinner'
 
 export interface LayoutLoadingSpinnerProps {
   transitionHandleRef?: TransitionHandleRef
@@ -23,7 +20,7 @@ export function LayoutLoadingSpinner({
   useTransitionHandle(
     transitionHandleRef,
     {
-      show: () =>
+      show: async () =>
         api.start({
           opacity: 1,
         }),

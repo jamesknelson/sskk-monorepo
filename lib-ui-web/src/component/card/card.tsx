@@ -14,7 +14,7 @@ export const Card = styled.div<CardProps>(
     position: relative;
 
     background-color: ${theme.color.surface};
-    box-shadow: ${cardShadow({ color: theme.color.primary })};
+    box-shadow: ${cardShadow({ color: theme.color.primaryWash })};
     border: 1px solid ${theme.color.surfaceBorder};
     border-radius: ${radius};
   `,

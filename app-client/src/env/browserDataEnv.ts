@@ -5,10 +5,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 import { getDefaultHydrationEnvService } from 'retil-hydration'
 import { createState, fuse, getSnapshot, Source } from 'retil-source'
 
-import { customerRole, graphqlURL } from 'src/config'
-import { PrecachedQuery, QueryContext } from 'src/utils/precachedQuery'
+import { customerRole, graphqlURL } from '~/config'
+import { PrecachedQuery, QueryContext } from '~/util/precachedQuery'
 
-import { DataEnv } from './appEnv'
+import { DataEnv } from './env'
 import { AuthTokenInfoGetter } from './auth'
 
 export type SessionTokenSetter = (sessionToken: string | null) => void

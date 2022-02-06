@@ -1,102 +1,99 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { PopupDialogArrowDiv } from 'retil-interaction'
 
-import { structureColors } from 'src/style/colors'
-
-export const PopupArrow = styled(PopupDialogArrowDiv)`
-  position: absolute;
-  width: 0;
-  height: 0;
-
-  &::before,
-  &::after {
-    content: '';
-    margin: auto;
-    display: block;
+export const PopupArrow = styled(PopupDialogArrowDiv)(
+  ({ theme: { color } }) => css`
+    position: absolute;
     width: 0;
     height: 0;
-    border-style: solid;
-    border-color: transparent;
-    position: absolute;
-  }
-  &::before {
-    border-width: 8px;
-  }
-  &::after {
-    border-width: 7px;
-  }
 
-  &[data-placement*='bottom'] {
-    top: 0;
-    left: 0;
-    margin-top: -1rem;
-    width: 0.5rem;
-    height: 0.5rem;
+    &::before,
+    &::after {
+      content: '';
+      margin: auto;
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-color: transparent;
+      position: absolute;
+    }
     &::before {
-      border-color: transparent transparent ${structureColors.border}
-        transparent;
-      z-index: 1;
+      border-width: 8px;
     }
     &::after {
-      border-color: transparent transparent ${structureColors.bg} transparent;
-      z-index: 2;
-      margin-left: 1px;
-      margin-top: 2px;
+      border-width: 7px;
     }
-  }
-  &[data-placement*='top'] {
-    bottom: 0;
-    left: 0;
-    margin-bottom: -0.5rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    &::before {
-      border-color: ${structureColors.border} transparent transparent
-        transparent;
-      z-index: 1;
+
+    &[data-placement*='bottom'] {
+      top: 0;
+      left: 0;
+      margin-top: -1rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      &::before {
+        border-color: transparent transparent ${color.surfaceBorder} transparent;
+        z-index: 1;
+      }
+      &::after {
+        border-color: transparent transparent ${color.surface} transparent;
+        z-index: 2;
+        margin-left: 1px;
+        margin-top: 2px;
+      }
     }
-    &::after {
-      border-color: ${structureColors.bg} transparent transparent transparent;
-      z-index: 2;
-      margin-left: 1px;
-      margin-bottom: -2px;
+    &[data-placement*='top'] {
+      bottom: 0;
+      left: 0;
+      margin-bottom: -0.5rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      &::before {
+        border-color: ${color.surfaceBorder} transparent transparent transparent;
+        z-index: 1;
+      }
+      &::after {
+        border-color: ${color.surface} transparent transparent transparent;
+        z-index: 2;
+        margin-left: 1px;
+        margin-bottom: -2px;
+      }
     }
-  }
-  &[data-placement*='right'] {
-    top: 0;
-    left: 0;
-    margin-top: -0.75rem;
-    margin-left: -1rem;
-    height: 0.5rem;
-    width: 0.5rem;
-    &::before {
-      border-color: transparent ${structureColors.border} transparent
-        transparent;
-      z-index: 1;
+    &[data-placement*='right'] {
+      top: 0;
+      left: 0;
+      margin-top: -0.75rem;
+      margin-left: -1rem;
+      height: 0.5rem;
+      width: 0.5rem;
+      &::before {
+        border-color: transparent ${color.surfaceBorder} transparent transparent;
+        z-index: 1;
+      }
+      &::after {
+        border-color: transparent ${color.surface} transparent transparent;
+        z-index: 2;
+        margin-top: 1px;
+        margin-left: 2px;
+      }
     }
-    &::after {
-      border-color: transparent ${structureColors.bg} transparent transparent;
-      z-index: 2;
-      margin-top: 1px;
-      margin-left: 2px;
+    &[data-placement*='left'] {
+      top: 0;
+      right: -0.5rem;
+      margin-top: -0.75rem;
+      height: 0.5rem;
+      width: 0.5rem;
+      &::before {
+        border-color: transparent transparent transparent ${color.surfaceBorder};
+        z-index: 1;
+      }
+      &::after {
+        border-color: transparent transparent transparent ${color.surface};
+        z-index: 2;
+        margin-top: 1px;
+        margin-left: 0px;
+      }
     }
-  }
-  &[data-placement*='left'] {
-    top: 0;
-    right: -0.5rem;
-    margin-top: -0.75rem;
-    height: 0.5rem;
-    width: 0.5rem;
-    &::before {
-      border-color: transparent transparent transparent
-        ${structureColors.border};
-      z-index: 1;
-    }
-    &::after {
-      border-color: transparent transparent transparent ${structureColors.bg};
-      z-index: 2;
-      margin-top: 1px;
-      margin-left: 0px;
-    }
-  }
-`
+  `,
+)

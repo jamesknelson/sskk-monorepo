@@ -1,0 +1,8 @@
+mutation Login {
+  login {
+    session_token
+    customer {
+      ...customerIdentity
+    }
+  }
+}

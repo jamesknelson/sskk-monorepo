@@ -7,28 +7,31 @@ import {
   PopupTriggerSurface,
 } from 'retil-interaction'
 import { media, useMediaRenderer } from 'retil-media'
+import { NavAction } from 'retil-nav'
 
-import { OutlinedLabelledButtonBody } from 'src/components/web/button/outlinedLabelledButtonBody'
-import { Caret } from 'src/components/web/caret/caret'
-import { FocusHoverIndicatorRing } from 'src/components/web/indicator/focusHoverIndicatorRing'
-import { Menu, MenuItem } from 'src/components/web/menu'
-import { PopupDialogSurface } from 'src/components/web/popup'
-import { CustomerDetails, useAuthController } from 'src/env'
-import { easeOut } from 'src/style/easings'
+import { OutlinedLabelledButtonBody } from '~/component/button/outlinedLabelledButtonBody'
+import { Caret } from '~/component/caret'
+import { FocusHoverIndicatorRing } from '~/component/indicator/focusHoverIndicatorRing'
+import { Menu, MenuLinkItem } from '~/component/menu'
+import { PopupDialogSurface } from '~/component/popup'
+import { easeOut } from '~/style/easings'
 
 export interface CustomerMenuProps {
-  customer: CustomerDetails
+  customerName: string
+  scheme: {
+    createStory: () => NavAction
+    logout: () => NavAction
+  }
 }
 
 export function CustomerMenu(props: CustomerMenuProps) {
-  const { customer } = props
-  const { signOut } = useAuthController()
+  const { customerName, scheme } = props
   const renderWhenSmall = useMediaRenderer(media.small)
   const renderWhenAtLeastMedium = useMediaRenderer(media.atLeastMedium)
 
   return (
     <>
-      <LinkSurface href="/dashboard/stories/new">
+      <LinkSurface href={scheme.createStory()}>
         <OutlinedLabelledButtonBody label="Start a story" />
       </LinkSurface>
       <PopupProvider>
@@ -93,7 +96,7 @@ export function CustomerMenu(props: CustomerMenuProps) {
                   css={css`
                     margin: 0 0.5rem;
                   `}>
-                  {customer.contact_name}
+                  {customerName}
                 </span>
                 <Caret
                   css={css`
@@ -133,7 +136,7 @@ export function CustomerMenu(props: CustomerMenuProps) {
         </PopupTriggerSurface>
         <PopupDialogSurface placement="bottom-end">
           <Menu>
-            <MenuItem onClick={signOut}>Log Out</MenuItem>
+            <MenuLinkItem href={scheme.logout()}>Log Out</MenuLinkItem>
           </Menu>
         </PopupDialogSurface>
       </PopupProvider>

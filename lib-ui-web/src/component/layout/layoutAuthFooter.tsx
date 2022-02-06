@@ -4,30 +4,28 @@ import { rgba } from 'polished'
 import { animated, useTransition } from 'react-spring'
 import { highStyle } from 'retil-css'
 import { LinkSurface } from 'retil-interaction'
-import { useSourceLegacy } from 'retil-source'
+import { NavAction } from 'retil-nav'
 
-import { OutlinedLabelledButtonBody } from 'src/components/web/button/outlinedLabelledButtonBody'
-import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
-import { FlexGap } from 'src/components/web/flex/flexGap'
-import { useAppEnv } from 'src/env'
-import appURLs from 'src/routes/appURLs'
-import { authBarHiddenSource } from 'src/services/authBarService'
-import {
-  barHeight,
-  barWidth,
-  blockMarginHorizontal,
-} from 'src/style/dimensions'
-import { raisedCardShadow } from 'src/style/shadows'
-import { appAuthBarZ } from 'src/style/zIndexes'
+import { RaisedLabelledButtonBody } from '~/component/button/raisedLabelledButtonBody'
+import { OutlinedLabelledButtonBody } from '~/component/button/outlinedLabelledButtonBody'
+import { FlexGap } from '~/component/flex/flexGap'
+import { barHeight, barWidth, blockMarginHorizontal } from '~/style/dimensions'
+import { raisedCardShadow } from '~/style/shadows'
+import { appAuthBarZ } from '~/style/zIndexes'
 
-export interface LayoutAuthFooterProps {}
+export interface LayoutAuthFooterScheme {
+  join: () => NavAction
+  login: () => NavAction
+}
 
-export function LayoutAuthFooter(_props: LayoutAuthFooterProps) {
-  const env = useAppEnv()
-  const forceAuthBarHidden = useSourceLegacy(authBarHiddenSource)
-  const authBarHidden = env.customer !== null || forceAuthBarHidden
+export interface LayoutAuthFooterProps {
+  active: boolean
+  scheme: LayoutAuthFooterScheme
+}
 
-  let authFooterTransitions = useTransition(!authBarHidden, {
+export function LayoutAuthFooter(props: LayoutAuthFooterProps) {
+  const { active, scheme } = props
+  const authFooterTransitions = useTransition(active, {
     config: {
       tension: 320,
     },
@@ -73,11 +71,11 @@ export function LayoutAuthFooter(_props: LayoutAuthFooterProps) {
                 Reserve your Letterhouse <strong>@address</strong> before
                 someone else does. Join Letterhouse now!
               </AppAuthFooterMessage>
-              <LinkSurface href={appURLs.login()}>
+              <LinkSurface href={scheme.login()}>
                 <OutlinedLabelledButtonBody lowProfile label="Login" />
               </LinkSurface>
               <FlexGap size="0.5rem" />
-              <LinkSurface href={appURLs.join()}>
+              <LinkSurface href={scheme.join()}>
                 <RaisedLabelledButtonBody lowProfile label="Join" />
               </LinkSurface>
             </animated.footer>

@@ -5,15 +5,15 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 import type { ReactElement } from 'react'
 import { createServerNavEnv } from 'retil-nav'
 
-import { graphqlURL } from 'src/config'
-import { QueryContext, PrecachedQuery } from 'src/utils/precachedQuery'
+import { graphqlURL } from '~/config'
+import { QueryContext, PrecachedQuery } from '~/util/precachedQuery'
 
-import { AppEnv } from './appEnv'
+import { Env } from './env'
 
 export function createServerAppEnv(
   request: Omit<Request, 'params' | 'query'>,
   response: Response,
-): AppEnv {
+): Env {
   const cache = new InMemoryCache()
   const httpLink = new HttpLink({
     fetch,
@@ -52,12 +52,12 @@ export function createServerAppEnv(
     }
   }
 
-  const env: AppEnv = {
+  const env: Env = {
     ...createServerNavEnv(request, response),
     authUser: undefined,
     cache,
     client,
-    customer: undefined,
+    customerIdentity: undefined,
     hasHydrated: false,
     head: [] as ReactElement[],
     mutablePersistedContext: {},

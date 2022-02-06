@@ -1,3 +1,3 @@
-export * from './appEnv'
 export * from './auth'
-export * from './customerDetails'
+export * from './customerIdentity'
+export * from './env'

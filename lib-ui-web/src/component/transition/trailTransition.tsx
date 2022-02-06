@@ -1,11 +1,7 @@
 import React from 'react'
 import { animated, useTrail } from 'react-spring'
 import { useHasHydrated } from 'retil-hydration'
-
-import {
-  TransitionHandle,
-  useTransitionHandle,
-} from 'src/utils/transitionHandle'
+import { TransitionHandle, useTransitionHandle } from 'retil-transition'
 
 export interface SpringTrailColumnProps {
   children: React.ReactElement[]
@@ -50,12 +46,12 @@ export function SpringTrailColumn({
   useTransitionHandle(
     transitionHandleRef,
     {
-      show: () =>
+      show: async () =>
         api.start({
           ...enterStyles,
           from: fromStyles,
         }),
-      hide: () => api.start(exitStyles),
+      hide: async () => api.start(exitStyles),
     },
     [api.start],
   )

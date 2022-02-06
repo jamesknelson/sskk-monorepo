@@ -5,8 +5,8 @@ import {
   useTransitionHandle,
   useTransitionHandleRefContext,
 } from 'retil-transition'
+import { ColumnTransition } from 'retil-transition'
 
-import { ColumnTransition } from '~/component/transition/columnTransition'
 import { crossfadeTransitionConfig } from '~/style/transitionConfigs'
 
 import { BackgroundScene, BackgroundSceneComponent } from './backgroundScene'

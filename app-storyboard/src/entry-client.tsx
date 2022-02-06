@@ -9,7 +9,6 @@ import { getDefaultBrowserNavEnvService } from 'retil-nav'
 import { fuse } from 'retil-source'
 
 import { App } from './app'
-import appLoader from './appLoader'
 
 const styleCache = createStyleCache({ key: 'sskk' })
 const rootNode = document.getElementById('root')!
@@ -27,7 +26,4 @@ const envSource = fuse((use) => {
   }
 })
 
-hydrateRoot(
-  rootNode,
-  <App env={envSource} loader={appLoader} styleCache={styleCache} />,
-)
+hydrateRoot(rootNode, <App env={envSource} styleCache={styleCache} />)

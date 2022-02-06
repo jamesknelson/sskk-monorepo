@@ -65,7 +65,7 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
               text-shadow: 0 0 2px ${rgba(theme.color.primaryWash, 0.4)};
             `),
             inFocusedSurface(css`
-              color: ${theme.color.secondary[500]};
+              color: ${theme.color.secondary};
               transition: color 200ms ${easeOut}, text-shadow 200ms ${easeOut};
             `),
           ]}>
@@ -98,8 +98,8 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
             css={(theme) => [
               fieldInteractionIndicatorCSS,
               css`
-                background-color: ${theme.color.primary[100]};
-                box-shadow: 0 0 3px 0px ${theme.color.primary[100]};
+                background-color: ${theme.color.primaryWash};
+                box-shadow: 0 0 3px 0px ${theme.color.primaryWash};
               `,
               inHoveredSurface(
                 css`
@@ -115,8 +115,8 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
             css={(theme) => [
               fieldInteractionIndicatorCSS,
               css`
-                background-color: ${rgba(theme.color.secondary[500], 0.4)};
-                box-shadow: 0 0 3px 0px ${rgba(theme.color.secondary[500], 0.4)};
+                background-color: ${rgba(theme.color.secondary, 0.4)};
+                box-shadow: 0 0 3px 0px ${rgba(theme.color.secondary, 0.4)};
               `,
               inFocusedSurface(
                 css`
@@ -130,10 +130,10 @@ export const FieldBlock = forwardRef<HTMLDivElement, FieldBlockProps>(
       <div
         css={(theme) => [
           css`
-            background-color: ${theme.color.surfaceWash};
+            background-color: ${theme.color.primaryWash};
             border-radius: 0 0 ${standardRadius} ${standardRadius};
             padding: 0 0.5rem;
-            color: ${theme.color.onSurfaceWash};
+            color: ${theme.color.onPrimaryWash};
             font-family: sans-serif;
             font-size: 0.75rem;
             line-height: 1.5rem;

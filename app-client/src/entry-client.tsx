@@ -3,24 +3,13 @@
 /// <reference types="vite/client" />
 
 import createStyleCache from '@emotion/cache'
-import firebase from 'firebase/app'
-import 'firebase/auth'
 import { createRoot } from 'react-dom'
 
-import { App } from './app'
-import { firebase as firebaseConfig, firebaseEmulators } from './config'
+import { App } from './app/app'
+
 import { appPageSerializedDataGlobal } from './config'
 import { createBrowserAppEnvSource } from './env/browserAppEnv'
-import appLoader from './routes/appLoader'
-
-if (typeof window !== 'undefined') {
-  firebase.initializeApp(firebaseConfig)
-
-  const auth = firebase.auth()
-  if (firebaseEmulators.auth) {
-    auth.useEmulator(firebaseEmulators.auth)
-  }
-}
+import appLoader from './app/appLoader'
 
 const styleCache = createStyleCache({ key: 'sskk' })
 const rootNode = document.getElementById('root')!

@@ -1,0 +1,5 @@
+query CustomerIdentityById($customerId: uuid!) {
+  customer: customers_by_pk(id: $customerId) {
+    ...customerIdentity
+  }
+}

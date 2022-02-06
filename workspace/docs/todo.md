@@ -18,6 +18,7 @@ o update buttons storyboard
 
 - try and get a native app version working
   * create lib-ui-shared, add themes/constants/assets
+- remove the helmet-based head. instead, just add stuff to a head ref on the env
 
 
 - add tags to stories, and build a sidebar from them

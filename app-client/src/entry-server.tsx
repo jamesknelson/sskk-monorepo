@@ -8,11 +8,11 @@ import { renderToString } from 'react-dom/server'
 import { ServerMount } from 'retil-mount'
 import { createHref } from 'retil-nav'
 
-import { App } from './app'
+import { App } from './app/app'
 import { appPageSerializedDataGlobal } from './config'
 import { createServerAppEnv } from './env/serverAppEnv'
-import { HeadContext, renderHeadContextToString } from './head'
-import appLoader from './routes/appLoader'
+import { HeadContext, renderHeadContextToString } from './head/head'
+import appLoader from './app/appLoader'
 
 export async function render(
   request: Omit<Request, 'params' | 'query'>,

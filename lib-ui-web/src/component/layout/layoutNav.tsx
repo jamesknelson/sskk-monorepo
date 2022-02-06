@@ -2,11 +2,11 @@ import { css } from '@emotion/react'
 import { rgba } from 'polished'
 import { LinkSurface } from 'retil-interaction'
 
-import { FlexGap } from 'src/components/web/flex/flexGap'
-import { GlyphComponent, Icon } from 'src/components/web/icon/icon'
-import { barHeight, barWidth } from 'src/style/dimensions'
-import { Glasses, Home, Pen } from 'src/style/glyphs'
-import { appNavBarZ } from 'src/style/zIndexes'
+import { Glasses, Home, Pen } from '~/asset/glyph'
+import { FlexGap } from '~/component/flex/flexGap'
+import { GlyphComponent, Icon } from '~/component/icon'
+import { barHeight, barWidth } from '~/style/dimensions'
+import { appNavBarZ } from '~/style/zIndexes'
 
 export function LayoutNav() {
   return (

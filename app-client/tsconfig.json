@@ -1,47 +1,18 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
-    "lib": [
-      "dom",
-      "es2017"
-    ],
-    "module": "esnext",
-    "moduleResolution": "node",
     "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "paths": {
-      "@emotion/core": [
-        "./emotion-core-stub.ts"
-      ]
-    },
-    "preserveConstEnums": true,
-    "removeComments": false,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "esnext",
-    "types": [
-      "@emotion/react"
-    ]
+      "lib-prose*": ["lib-prose/src*"],
+      "lib-ui-web*": ["lib-ui-web/src*"],
+      "~*": ["app-client/src*"],
+    }
   },
-  "exclude": [
-    "src/**/*.stories.tsx",
-    ".storybook",
-    "node_modules"
-  ],
   "include": [
-    "@types/**.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.js"
+    "../workspace/types/*.d.ts",
+    "./src",
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

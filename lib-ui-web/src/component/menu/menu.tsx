@@ -1,7 +1,11 @@
+import { css, Theme } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useContext } from 'react'
-import { usePopupHandle } from 'retil-interaction'
-import { structureColors, textColors } from 'src/presentation/colors'
+import {
+  LinkSurface,
+  LinkSurfaceProps,
+  usePopupHandle,
+} from 'retil-interaction'
 
 const StyledMenu = styled.div`
   background-color: white;
@@ -19,8 +23,8 @@ const StyledMenu = styled.div`
   -webkit-overflow-scrolling: touch;
 `
 
-const StyledMenuItem = styled.div`
-  color: ${textColors.secondary};
+const menuStyles = ({ color }: Theme) => css`
+  color: ${color.onSurface};
   cursor: pointer;
   display: block;
   font-size: 0.9rem;
@@ -61,14 +65,16 @@ export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
   },
 )
 
-export const MenuDivider = styled.hr`
-  background-color: ${structureColors.divider};
-  border: none;
-  display: flex;
-  height: 1px;
-  margin: 0.5rem 0;
-  width: 100%;
-`
+export const MenuDivider = styled.hr(
+  ({ theme: { color } }) => css`
+    background-color: ${color.surfaceLine};
+    border: none;
+    display: flex;
+    height: 1px;
+    margin: 0.5rem 0;
+    width: 100%;
+  `,
+)
 
 export const MenuText = styled.div`
   display: flex;
@@ -106,6 +112,33 @@ export const MenuItem = React.forwardRef<HTMLDivElement, MenuItemProps>(
       [disabled, onClick, onDidSelect],
     )
 
-    return <StyledMenuItem {...rest} ref={ref} onClick={handleClick} />
+    return <div css={menuStyles} {...rest} ref={ref} onClick={handleClick} />
   },
 )
+
+export const MenuLinkItem = React.forwardRef<
+  HTMLAnchorElement,
+  LinkSurfaceProps
+>(({ disabled, onClick, ...rest }, ref) => {
+  const { onDidSelect } = useContext(MenuContext)
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      if (disabled) {
+        event.preventDefault()
+        return
+      }
+      if (onClick) {
+        onClick(event)
+      }
+      if (!event.defaultPrevented && onDidSelect) {
+        onDidSelect()
+      }
+    },
+    [disabled, onClick, onDidSelect],
+  )
+
+  return (
+    <LinkSurface css={menuStyles} {...rest} ref={ref} onClick={handleClick} />
+  )
+})

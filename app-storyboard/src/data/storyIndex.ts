@@ -1,4 +1,4 @@
-import { extractGlobData } from '~/utils/extractGlobData'
+import { extractGlobData } from '~/util/extractGlobData'
 
 import { getStoryMeta } from './storyMeta'
 

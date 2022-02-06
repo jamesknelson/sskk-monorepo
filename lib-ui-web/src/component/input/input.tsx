@@ -4,7 +4,7 @@ import { rgba } from 'polished'
 import React, { forwardRef, useCallback } from 'react'
 import { inInvalidSurface } from 'retil-interaction'
 
-import { easeOut } from 'src/style/easings'
+import { easeOut } from '~/style/easings'
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {

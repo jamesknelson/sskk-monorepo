@@ -102,7 +102,7 @@ const colorScheme: ColorScheme = {
   onBackground: neutral[10],
 
   primary: primary[30],
-  onPrimary: primary[95],
+  onPrimary: primary[10],
   primaryWash: primary[95],
   onPrimaryWash: primary[10],
 

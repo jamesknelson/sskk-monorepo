@@ -9,7 +9,7 @@ config:
   avoidOptionals: true
   maybeValue: T | null | undefined
 generates:
-  src/graphql.ts:
+  src/data/graphql.ts:
     plugins:
       - "typescript"
       - "typescript-operations"

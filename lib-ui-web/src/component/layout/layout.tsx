@@ -1,18 +1,25 @@
 import { css } from '@emotion/react'
 import React from 'react'
+import { ColumnTransition } from 'retil-transition'
 
-import { ColumnTransition } from 'src/components/web/transition/columnTransition'
-import { appMainZ } from 'src/style/zIndexes'
+import { appMainZ } from '~/style/zIndexes'
 
-import { LayoutAuthFooter } from './layoutAuthFooter'
+import { LayoutAuthFooter, LayoutAuthFooterScheme } from './layoutAuthFooter'
 import { LayoutNav } from './layoutNav'
 
 export interface LayoutProps {
   children: React.ReactNode
+  scheme: LayoutAuthFooterScheme
+  showAuthFooter?: boolean
   transitionKey: string
 }
 
-export function Layout({ children, transitionKey }: LayoutProps) {
+export function Layout({
+  children,
+  scheme,
+  showAuthFooter,
+  transitionKey,
+}: LayoutProps) {
   return (
     <div
       css={css`
@@ -46,7 +53,7 @@ export function Layout({ children, transitionKey }: LayoutProps) {
             transitionKey={transitionKey}
           />
         </main>
-        <LayoutAuthFooter />
+        <LayoutAuthFooter active={!!showAuthFooter} scheme={scheme} />
       </div>
     </div>
   )

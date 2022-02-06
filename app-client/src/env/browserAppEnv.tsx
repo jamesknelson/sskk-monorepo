@@ -1,61 +1,19 @@
-import { ApolloClient, ApolloQueryResult } from '@apollo/client'
 import { getDefaultHydrationEnvService } from 'retil-hydration'
 import { getDefaultBrowserNavEnvService } from 'retil-nav'
-import { fuse, observe } from 'retil-source'
+import { fuse } from 'retil-source'
 
-import { customerRole } from 'src/config'
-import {
-  LoginDocument,
-  CustomerDetailsDocument,
-  CustomerDetailsFragment,
-  CustomerDetailsQuery,
-} from 'src/graphql'
-
-import { AppEnv } from './appEnv'
 import { getAuthService } from './auth'
 import { createBrowserDataEnvService } from './browserDataEnv'
+import {
+  createCustomerIdentitySource,
+  loginCustomerIdentity,
+} from './customerIdentity'
+import { Env } from './env'
 
 const defaultLayoutOptions = {}
 
 const [hydrationEnvSource] = getDefaultHydrationEnvService()
 const [navEnvSource] = getDefaultBrowserNavEnvService()
-
-export type CustomerDetails = CustomerDetailsFragment
-
-export function createCustomerDetailsSource(
-  client: ApolloClient<any>,
-  customerId: string,
-) {
-  return observe((next, error, complete) => {
-    const query = client.watchQuery({
-      fetchPolicy: 'cache-only',
-      query: CustomerDetailsDocument,
-      variables: {
-        customerId,
-      },
-    })
-
-    const handleResult = (result: ApolloQueryResult<CustomerDetailsQuery>) => {
-      const errors = result.error || result.errors
-      if (errors) {
-        error(errors)
-        return
-      }
-
-      if (result.data) {
-        next(result.data.customer)
-      }
-    }
-
-    handleResult(query.getCurrentResult())
-
-    return query.subscribe({
-      next: handleResult,
-      error: error,
-      complete,
-    })
-  })
-}
 
 export function createBrowserAppEnvSource(initialSerializedData?: {
   cache: any
@@ -64,15 +22,13 @@ export function createBrowserAppEnvSource(initialSerializedData?: {
   return fuse((use, act, memo) => {
     const hydrationEnv = use(hydrationEnvSource)
     const navEnv = use(navEnvSource)
-
     const hasHydrated = hydrationEnv.hydrating === false
-
-    const [authSource] = getAuthService()
 
     // We don't want to use the auth source until hydration is complete,
     // as we don't want it to trigger any renders and cause the initial
     // content to be nuked.
-    const auth = hasHydrated ? use(authSource) : undefined
+    const auth = hasHydrated ? use(getAuthService()[0]) : undefined
+
     const [dataEnvSource, setSessionToken] = memo(createBrowserDataEnvService, [
       auth?.user?.getTokenInfo,
       hasHydrated ? undefined : initialSerializedData?.cache,
@@ -80,47 +36,29 @@ export function createBrowserAppEnvSource(initialSerializedData?: {
 
     const dataEnv = use(dataEnvSource)
 
+    // If we've authenticated a user via firebase, but haven't yet logged them
+    // into the app, then go ahead and do that.
     if (auth?.user && dataEnv.sessionId === undefined) {
       return act(async () => {
-        const { data } = await dataEnv.client.mutate({
-          mutation: LoginDocument,
-          context: {
-            role: customerRole,
-          },
-        })
-
-        const sessionToken = data?.login?.session_token || null
-        const customer = data?.login?.customer
-
-        if (customer) {
-          dataEnv.client.writeQuery({
-            query: CustomerDetailsDocument,
-            data: {
-              // Contains the data to write
-              customer,
-            },
-            variables: {
-              customerId: customer.id,
-            },
-          })
-        }
-
+        const sessionToken = await loginCustomerIdentity(dataEnv.client)
         setSessionToken(sessionToken)
       })
     }
 
     const customerId = auth?.user?.claims.customer_id
-    const customerSource =
+    const customerIdentitySource =
       customerId &&
-      memo(createCustomerDetailsSource, [dataEnv.client, customerId])
+      memo(createCustomerIdentitySource, [dataEnv.client, customerId])
 
-    const env: AppEnv = {
+    const env: Env = {
       ...navEnv,
       ...dataEnv,
       ...hydrationEnv,
       authUser: auth?.user,
-      customer:
-        auth?.user === null ? null : customerSource && use(customerSource),
+      customerIdentity:
+        auth?.user === null
+          ? null
+          : customerIdentitySource && use(customerIdentitySource),
       hasHydrated,
       head: [],
       mutablePersistedContext: {
