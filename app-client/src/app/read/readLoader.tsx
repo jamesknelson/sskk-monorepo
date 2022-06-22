@@ -1,9 +1,9 @@
 import { loadAsync } from 'retil-mount'
 
-import { AppEnv } from 'src/env'
-import { loadWithMutablePersistedContext } from 'src/env/routing'
+import { Env } from '~/env'
+import { loadWithMutablePersistedContext } from '~/util/routing'
 
-const asyncRouter = loadAsync(async (env: AppEnv) => {
+const asyncRouter = loadAsync(async (env: Env) => {
   const pageModulePromise = import('./readPage')
 
   const { Page } = await pageModulePromise

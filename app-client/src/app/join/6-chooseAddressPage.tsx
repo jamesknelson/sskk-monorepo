@@ -1,9 +1,9 @@
 import { css } from '@emotion/react'
 
-import { createBackgroundScene } from 'src/components/web/background'
-import { TextBlock } from 'src/components/web/block/textBlock'
-import { Card } from 'src/components/web/card/card'
-import { smallCardClampWidth } from 'src/style/dimensions'
+import { createBackgroundScene } from 'lib-ui-web/component/background'
+import { TextBlock } from 'lib-ui-web/component/block/textBlock'
+import { Card } from 'lib-ui-web/component/card/card'
+import { smallColumnClampWidth } from 'lib-ui-web/style/dimensions'
 
 export const title = "You've taken the first step."
 export const meta = {
@@ -12,7 +12,7 @@ export const meta = {
 
 export const backgroundScene = createBackgroundScene(async () => {
   const { default: Image } = await import(
-    'src/assets/backgrounds/hot-air-balloon.optimized.svg?url'
+    'lib-ui-web/asset/background/hot-air-balloon.optimized.svg?url'
   )
 
   return () => (
@@ -50,7 +50,7 @@ export function Page() {
       <Card
         css={css`
           margin: 2rem auto;
-          max-width: ${smallCardClampWidth};
+          max-width: ${smallColumnClampWidth};
           padding: 3rem 1.5rem 3rem;
         `}>
         <TextBlock

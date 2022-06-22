@@ -10,11 +10,12 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useHasHydrated } from 'retil-hydration'
 import { createState, Source } from 'retil-source'
 
-import { useAppEnv } from 'src/env'
-import { Schema } from 'src/prose/schema'
-import { createSuspenseLoader } from 'src/utils/createSuspenseLoader'
+import { Schema } from 'lib-prose/schema'
+
+import { createSuspenseLoader } from '~/util/createSuspenseLoader'
 
 export interface EditorHandle {
   root: HTMLDivElement
@@ -47,7 +48,7 @@ export interface EditorProps extends ProsemirrorProps {
 // Load this at run-time, as doing so accesses the `navigator` object, which
 // causes a crash if done during SSR.
 const getCodeBlockView = createSuspenseLoader(
-  async () => (await import('src/prose/codeBlockView')).CodeBlockView,
+  async () => (await import('lib-prose/codeBlockView')).CodeBlockView,
 )
 
 // Based on: https://github.com/dminkovsky/use-prosemirror/blob/93edf8ae5323e9cbffa03e793b494a28046d490a/src/ProseMirror.tsx
@@ -56,7 +57,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(function Editor(
   divRef,
 ): JSX.Element {
   const handleRef = props.handleRef
-  const env = useAppEnv()
+  const hasHydrated = useHasHydrated()
   const viewRef = useRef<EditorView<Schema> | null>(null)
   const { className, applyTransaction, state, style, ...restProps } = props
   const { current: initialRestProps } = useRef(restProps)
@@ -65,7 +66,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(function Editor(
 
   // The first time this is called will cause a Suspense promise to be thrown,
   // so we don't want to call it until hydration has completed.
-  const CodeBlockView = env.hasHydrated && getCodeBlockView()
+  const CodeBlockView = hasHydrated && getCodeBlockView()
 
   const focus = useCallback(() => {
     viewRef.current?.focus()

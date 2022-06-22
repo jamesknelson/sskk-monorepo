@@ -6,27 +6,30 @@ import { ButtonSurface } from 'retil-interaction'
 import { useSource } from 'retil-source'
 import { useEffectOnce } from 'retil-support'
 
-import { createBackgroundScene } from 'src/components/web/background'
-import { LetterMetaBlock } from 'src/components/web/block/letterMetaBlock'
-import { TextBlock } from 'src/components/web/block/textBlock'
-import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
-import { Card } from 'src/components/web/card/card'
+import { createBackgroundScene } from 'lib-ui-web/component/background'
+import { LetterMetaBlock } from 'lib-ui-web/component/block/letterMetaBlock'
+import { TextBlock } from 'lib-ui-web/component/block/textBlock'
+import { RaisedLabelledButtonBody } from 'lib-ui-web/component/button/raisedLabelledButtonBody'
+import { Card } from 'lib-ui-web/component/card/card'
 import {
   Editor,
   EditorHandle,
   EditorMenu,
   useEditorStateSource,
-} from 'src/components/web/editor'
-import { Tooltip } from 'src/components/web/tooltip'
-import { barHeight } from 'src/style/dimensions'
-import { standardRadius } from 'src/style/radii'
-import { createEditorState } from 'src/prose'
-import appURLs from 'src/app/appURLs'
+} from 'lib-ui-web/component/editor'
+import { Tooltip } from 'lib-ui-web/component/tooltip'
+import { barHeight } from 'lib-ui-web/style/dimensions'
+import { standardRadius } from 'lib-ui-web/style/radii'
+import { useTheme } from 'lib-ui-web/theme'
+
+import { createEditorState, proseContext } from 'lib-prose'
+
+import appURLs from '~/app/appScheme'
+import { useEnv } from '~/env'
 
 import { useJoinContext } from './joinContext'
 import { useNavController } from 'retil-nav'
-import { useAppEnv } from 'src/env'
-import { useTheme } from 'src/style/useTheme'
+import { CodeBlockView } from 'lib-prose/codeBlockView'
 
 export const title = 'Say hello!'
 export const meta = {
@@ -35,7 +38,7 @@ export const meta = {
 
 export const backgroundScene = createBackgroundScene(async () => {
   const { default: Image } = await import(
-    'src/assets/backgrounds/winter-cabin.optimized.svg?url'
+    'lib-ui-web/asset/background/winter-cabin.optimized.svg?url'
   )
 
   return () => (
@@ -69,7 +72,7 @@ const minTextLength = 280
 export function Page() {
   const colorScheme = useTheme().color
   const hasHydrated = useHasHydrated()
-  const appEnv = useAppEnv()
+  const appEnv = useEnv()
   const { navigate } = useNavController()
   const context = useJoinContext()
   const headerRef = useRef<HTMLDivElement>(null)
@@ -122,7 +125,7 @@ export function Page() {
     }
 
     navigate(
-      appEnv.customer
+      appEnv.customerIdentity
         ? appURLs.join.chooseAddress()
         : appURLs.join.createAccount(),
     )

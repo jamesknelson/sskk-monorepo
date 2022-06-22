@@ -2,7 +2,7 @@ import { Fragment, Node, NodeType, Schema } from 'prosemirror-model'
 import { TextSelection, Transaction } from 'prosemirror-state'
 import { findParentNodeOfType } from 'prosemirror-utils'
 
-import { HEADING, LIST_ITEM, PARAGRAPH } from '../nodeNames'
+import { HEADING, LIST_ITEM, PARAGRAPH } from '~/nodeNames'
 
 import { consolidateListNodes } from './consolidateListNodes'
 import { isListNode } from './isListNode'

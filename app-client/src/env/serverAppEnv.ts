@@ -6,7 +6,7 @@ import type { ReactElement } from 'react'
 import { createServerNavEnv } from 'retil-nav'
 
 import { graphqlURL } from '~/config'
-import { QueryContext, PrecachedQuery } from '~/util/precachedQuery'
+import { QueryContext, PrecachedQuery } from '~/data/precachedQuery'
 
 import { Env } from './env'
 

@@ -7,11 +7,11 @@ import {
   unstable_LowPriority as LowPriority,
 } from 'scheduler'
 
-import { customerRole, joinPersistenceKey } from 'src/config'
+import { customerRole, joinPersistenceKey } from '~/config'
 import {
   GetPersistedOnboardingDataDocument,
   PersistOnboardingDataDocument,
-} from 'src/graphql'
+} from '~/data/graphql'
 
 // Data will be persisted a maximum of once over this time period.
 const persistenceThrottleMilliseconds = 5000

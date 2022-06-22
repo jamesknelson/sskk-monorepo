@@ -7,12 +7,12 @@ import {
   inSelectedSurface,
 } from 'retil-interaction'
 
-import { FormatBold, FormatItalic } from 'src/style/glyphs'
-import { createToggleMarkCommand } from 'src/prose/commands/toggleMarkCommand'
-import { MARK_EM, MARK_STRONG } from 'src/prose/markNames'
-import { IconButtonBody } from 'src/components/web/button/iconButtonBody'
+import { createToggleMarkCommand } from 'lib-prose/command/toggleMarkCommand'
+import { MARK_EM, MARK_STRONG } from 'lib-prose/markNames'
 
-import { Theme } from 'src/types'
+import { FormatBold, FormatItalic } from '~/asset/glyph'
+import { IconButtonBody } from '~/component/button/iconButtonBody'
+import { Theme } from '~/theme'
 
 import { EditorHandle } from './editor'
 

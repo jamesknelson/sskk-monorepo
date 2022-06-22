@@ -31,9 +31,9 @@ const joinMatchLoader = loadMatch<JoinEnv>({
   [patternFor(urls.top)]: loadAsync(async (env) => {
     const pageModule = await import('./1-joinTopPage')
 
-    env.nav.precache(
-      joinPathnames(env.join.mountPath, urls.writeIntroLetter().pathname),
-    )
+    // env.nav.precache(
+    //   joinPathnames(env.join.mountPath, urls.writeIntroLetter().pathname),
+    // )
 
     return loadJoinStep({
       env,
@@ -45,9 +45,9 @@ const joinMatchLoader = loadMatch<JoinEnv>({
   [patternFor(urls.writeIntroLetter)]: loadAsync(async (env) => {
     const pageModule = await import('./2-writeIntroLetterPage')
 
-    env.nav.precache(
-      joinPathnames(env.join.mountPath, urls.createAccount().pathname),
-    )
+    // env.nav.precache(
+    //   joinPathnames(env.join.mountPath, urls.createAccount().pathname),
+    // )
 
     return loadJoinStep({
       env,
@@ -59,9 +59,9 @@ const joinMatchLoader = loadMatch<JoinEnv>({
   [patternFor(urls.createAccount)]: loadAsync(async (env) => {
     const pageModule = await import('./3-createAccountPage')
 
-    env.nav.precache(
-      joinPathnames(env.join.mountPath, urls.selectMembershipType().pathname),
-    )
+    // env.nav.precache(
+    //   joinPathnames(env.join.mountPath, urls.selectMembershipType().pathname),
+    // )
 
     return loadJoinStep({
       env,
@@ -98,9 +98,11 @@ function loadJoinStep(props: LoadJoinStepProps): React.ReactNode {
   const { env, mod, path } = props
 
   env.head.push(...createHeadTags(mod))
-  env.mutablePersistedContext.transitionKey = '/join'
+  env.mutablePersistedContext.appLayoutTransitionKey = '/join'
 
   mod.backgroundScene.load()
+
+  console.log(path, env.mutablePersistedContext)
 
   return (
     <JoinProvider

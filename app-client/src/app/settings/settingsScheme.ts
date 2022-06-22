@@ -1,11 +1,9 @@
-import { urlSchema } from 'src/util/urls'
+import { createScheme } from 'retil-nav-scheme'
 
-const urls = urlSchema({
+export default createScheme({
   changeEmail: () => `/change-email`,
   changePassword: () => `/change-password`,
 
   // Includes nametag and billing details
   membership: () => `/membership`,
 })
-
-export default urls

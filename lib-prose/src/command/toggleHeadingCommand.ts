@@ -3,9 +3,9 @@ import { findParentNodeOfType } from 'prosemirror-utils'
 
 import { noop } from 'retil-support'
 
-import { createProseCommand } from 'src/prose/proseCommand'
-import { toggleHeading } from 'src/prose/functions/toggleHeading'
-import { HEADING } from 'src/prose/nodeNames'
+import { toggleHeading } from '~/function/toggleHeading'
+import { HEADING } from '~/nodeNames'
+import { createProseCommand } from '~/proseCommand'
 
 export function createToggleHeadingCommand(level: number) {
   return createProseCommand({

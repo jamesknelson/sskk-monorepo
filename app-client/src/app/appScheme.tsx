@@ -8,6 +8,8 @@ import readScheme from './read/readScheme'
 // import settingsURLs from './settings/settingsURLs'
 
 export default createScheme({
+  top: () => '/',
+
   // editor: nestURLSchema('/editor', editorURLs),
 
   // /**

@@ -6,7 +6,7 @@ import { getDefaultHydrationEnvService } from 'retil-hydration'
 import { createState, fuse, getSnapshot, Source } from 'retil-source'
 
 import { customerRole, graphqlURL } from '~/config'
-import { PrecachedQuery, QueryContext } from '~/util/precachedQuery'
+import { PrecachedQuery, QueryContext } from '~/data/precachedQuery'
 
 import { DataEnv } from './env'
 import { AuthTokenInfoGetter } from './auth'

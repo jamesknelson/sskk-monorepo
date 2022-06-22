@@ -1,8 +1,8 @@
 import { toggleMark } from 'prosemirror-commands'
 import { EditorState, TextSelection, Transaction } from 'prosemirror-state'
 
-import { createProseCommand } from 'src/prose/proseCommand'
-import { findNodesWithSameMark } from 'src/prose/functions/findNodesWithSameMark'
+import { findNodesWithSameMark } from '~/function/findNodesWithSameMark'
+import { createProseCommand } from '~/proseCommand'
 
 export function createToggleMarkCommand(markName: string) {
   return createProseCommand({

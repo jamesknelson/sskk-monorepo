@@ -106,9 +106,7 @@ export interface AuthServiceOptions {
   // }
 }
 
-export function createAuthService(
-  options: AuthServiceOptions = {},
-): AuthService {
+export function createAuthService(options: AuthServiceOptions): AuthService {
   const {
     firebaseApp,
     languageCode = null,
@@ -334,8 +332,8 @@ export function createAuthService(
               )
 
               await updateProfile(firebaseUser, {
-                displayName: data.displayName || null,
-                photoURL: data.photoURL || null,
+                displayName: data.displayName || undefined,
+                photoURL: data.photoURL || undefined,
               })
             }
 

@@ -3,8 +3,8 @@ import { TextSelection, Transaction } from 'prosemirror-state'
 
 import { v4 as generateRandomUUID } from 'uuid'
 
-import { MARK_TEXT_SELECTION } from '../markNames'
-import { PARAGRAPH, TEXT } from '../nodeNames'
+import { MARK_TEXT_SELECTION } from '~/markNames'
+import { PARAGRAPH, TEXT } from '~/nodeNames'
 
 import { applyMark } from './applyMark'
 

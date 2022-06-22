@@ -1,18 +1,18 @@
 import { loadAsync } from 'retil-mount'
 import { loadMatch, loadRedirect } from 'retil-nav'
-import { AppEnv } from 'src/env'
+import { patternFor } from 'retil-nav-scheme'
 
-import { loadAuthenticated } from 'src/env/routing'
+import { Env } from '~/env'
+import { loadAuthenticated } from '~/util/routing'
 // import {
 //   DashboardPostListDocument,
 //   DashboardPostEditorDocument,
 // } from 'src/generated/graphql'
-import { /*decodeUUID, */ patternFor } from 'src/util/urls'
 
-import urls, { EditorLetterParams } from './editorURLs'
+import urls, { EditorLetterParams } from './editorScheme'
 
 const loader = loadAuthenticated(
-  loadMatch<AppEnv>({
+  loadMatch<Env>({
     '/': loadRedirect(urls.drafts()),
     [patternFor(urls.drafts)]: loadAsync(async (_env) => {
       const pageModulePromise = import('./dashboardPostListPage')
@@ -42,7 +42,7 @@ const loader = loadAuthenticated(
 
       return <Page />
     }),
-    [patternFor(urls.letter)]: loadAsync<AppEnv<EditorLetterParams>>(
+    [patternFor(urls.letter)]: loadAsync<Env<EditorLetterParams>>(
       async (_env) => {
         // let storyId: string
         // try {

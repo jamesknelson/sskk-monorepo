@@ -1,12 +1,13 @@
 import { css } from '@emotion/react'
 import { LinkSurface } from 'retil-interaction'
 
-import { createBackgroundScene } from 'src/components/web/background'
-import { LetterMetaBlock } from 'src/components/web/block/letterMetaBlock'
-import { TextBlock } from 'src/components/web/block/textBlock'
-import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
-import appURLs from 'src/app/appURLs'
-import { Card } from 'src/components/web/card/card'
+import { createBackgroundScene } from 'lib-ui-web/component/background'
+import { LetterMetaBlock } from 'lib-ui-web/component/block/letterMetaBlock'
+import { TextBlock } from 'lib-ui-web/component/block/textBlock'
+import { RaisedLabelledButtonBody } from 'lib-ui-web/component/button/raisedLabelledButtonBody'
+import { Card } from 'lib-ui-web/component/card'
+
+import appScheme from '~/app/appScheme'
 
 export const title = "You've just taken the first step."
 export const meta = {}
@@ -14,8 +15,8 @@ export const meta = {}
 export const backgroundScene = createBackgroundScene(async () => {
   const [{ default: MountainVillage }, { default: SailingShips }] =
     await Promise.all([
-      import('src/assets/backgrounds/mountain-village.optimized.svg?url'),
-      import('src/assets/backgrounds/sailing-ships.optimized.svg?url'),
+      import('lib-ui-web/asset/background/mountain-village.optimized.svg?url'),
+      import('lib-ui-web/asset/background/sailing-ships.optimized.svg?url'),
     ])
 
   return () => (
@@ -117,7 +118,7 @@ export function Page() {
           justify-content: center;
           margin: 1.5rem 0 1rem;
         `}>
-        <LinkSurface href={appURLs.join.writeIntroLetter()}>
+        <LinkSurface href={appScheme.join.writeIntroLetter()}>
           <RaisedLabelledButtonBody label="Say hello" rightGlyph="chevron" />
         </LinkSurface>
       </div>

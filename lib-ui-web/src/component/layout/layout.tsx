@@ -5,11 +5,11 @@ import { ColumnTransition } from 'retil-transition'
 import { appMainZ } from '~/style/zIndexes'
 
 import { LayoutAuthFooter, LayoutAuthFooterScheme } from './layoutAuthFooter'
-import { LayoutNav } from './layoutNav'
+import { LayoutNav, LayoutNavScheme } from './layoutNav'
 
 export interface LayoutProps {
   children: React.ReactNode
-  scheme: LayoutAuthFooterScheme
+  scheme: LayoutAuthFooterScheme & LayoutNavScheme
   showAuthFooter?: boolean
   transitionKey: string
 }
@@ -28,7 +28,7 @@ export function Layout({
         flex-grow: 1;
         max-width: 100%;
       `}>
-      <LayoutNav />
+      <LayoutNav scheme={scheme} />
       <div
         css={css`
           flex-grow: 1;

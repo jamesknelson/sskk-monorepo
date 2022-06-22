@@ -4,16 +4,17 @@ import { animated, useSpring } from 'react-spring'
 import { Boundary } from 'retil-boundary'
 import { useHasHydrated } from 'retil-hydration'
 import { delay, useEffectOnce } from 'retil-support'
-
-import { Background, BackgroundScene } from 'src/components/web/background'
-import { ColumnTransition } from 'src/components/web/transition/columnTransition'
-import { useTransitionHandleRefContext } from 'src/context/transitionHandleRefContext'
-import { useHideAuthBarEffect } from 'src/service/authBarService'
-import { barWidth, largeCardClampWidth } from 'src/style/dimensions'
 import {
+  ColumnTransition,
+  useTransitionHandleRefContext,
   useTransitionHandle,
   useTransitionHandleRef,
-} from 'src/util/transitionHandle'
+} from 'retil-transition'
+
+import { Background, BackgroundScene } from 'lib-ui-web/component/background'
+import { barWidth, largeColumnClampWidth } from 'lib-ui-web/style/dimensions'
+
+import { useHideAuthBarEffect } from '~/service/authBarService'
 
 import JoinHeader from './joinHeader'
 
@@ -113,7 +114,7 @@ export default function JoinLayout({
           flex-grow: 1;
           display: flex;
           flex-direction: column;
-          max-width: ${largeCardClampWidth};
+          max-width: ${largeColumnClampWidth};
           width: 100%;
           margin: 0 auto;
         `}>

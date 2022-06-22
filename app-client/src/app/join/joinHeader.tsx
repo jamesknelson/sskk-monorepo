@@ -4,15 +4,16 @@ import { highStyle } from 'retil-css'
 import { useNavLinkProps } from 'retil-nav'
 
 // import { ChevronLeft, ChevronRight } from 'src/assets/glyphs'
-import { Tooltip } from 'src/components/web/tooltip'
-import { barHeight, blockMarginHorizontal } from 'src/style/dimensions'
-import { easeIn, easeOut } from 'src/style/easings'
-import { useAppEnv } from 'src/env'
-import appURLs from 'src/app/appURLs'
+import { Tooltip } from 'lib-ui-web/component/tooltip'
+import { barHeight, blockMarginHorizontal } from 'lib-ui-web/style/dimensions'
+import { easeIn, easeOut } from 'lib-ui-web/style/easings'
+import { useTheme } from 'lib-ui-web/theme'
+
+import appScheme from '~/app/appScheme'
+import { useEnv } from '~/env'
 // import { Icon } from 'src/presentation/icon'
 
 import { JoinPath, useJoinContext } from './joinContext'
-import { useTheme } from 'src/style/useTheme'
 
 const totalStepCount = 6
 
@@ -118,7 +119,7 @@ const JoinPosition = ({
   const { completedSteps, path: activePath } = useJoinContext()
 
   const active = paths.includes(activePath)
-  const href = appURLs.join[paths[0]]()
+  const href = appScheme.join[paths[0]]()
 
   const percentage = (100 / (totalStepCount - 1)) * step
   const complete = completedSteps > step
@@ -194,7 +195,7 @@ const JoinPosition = ({
 
 function JoinStepIndicators() {
   const colorScheme = useTheme().color
-  const appEnv = useAppEnv()
+  const appEnv = useEnv()
   const { completedSteps } = useJoinContext()
   const progressBarProportion = Math.min(
     1,
@@ -251,7 +252,7 @@ function JoinStepIndicators() {
         tooltip="Write your introduction"
       />
       <JoinPosition
-        disableLink={!!appEnv.customer}
+        disableLink={!!appEnv.customerIdentity}
         paths={['createAccount']}
         step={2}
         tooltip="Create your login"

@@ -1,8 +1,8 @@
-import { urlSchema } from 'src/util/urls'
+import { createScheme } from 'retil-nav-scheme'
 
 export type EditorLetterParams = { letterId: string }
 
-const urls = urlSchema({
+const urls = createScheme({
   dashboard: () => `/dashboard`,
 
   drafts: () => `/drafts`,

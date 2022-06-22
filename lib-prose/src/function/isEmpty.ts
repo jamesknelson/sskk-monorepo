@@ -1,6 +1,6 @@
 import { EditorState } from 'prosemirror-state'
 
-import { Schema } from '../schema'
+import { Schema } from '~/schema'
 
 export function isEmpty(state: EditorState<Schema>): boolean {
   const doc = state.doc

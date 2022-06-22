@@ -73,9 +73,9 @@ const AddressPillContent: React.FunctionComponent = ({ children, ...rest }) => (
   <span
     {...rest}
     css={(theme) => css`
-      background-color: ${theme.color.primary};
+      background-color: ${theme.color.altSurface};
       border-radius: ${standardRadius};
-      color: ${theme.color.primary[900]};
+      color: ${theme.color.onAltSurface};
       padding: 0.25rem 0.5rem;
       margin-left: 0.5rem;
     `}>

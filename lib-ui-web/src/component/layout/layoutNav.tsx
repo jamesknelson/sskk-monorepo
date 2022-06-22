@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import { rgba } from 'polished'
 import { LinkSurface } from 'retil-interaction'
+import { NavAction } from 'retil-nav'
 
 import { Glasses, Home, Pen } from '~/asset/glyph'
 import { FlexGap } from '~/component/flex/flexGap'
@@ -8,7 +9,16 @@ import { GlyphComponent, Icon } from '~/component/icon'
 import { barHeight, barWidth } from '~/style/dimensions'
 import { appNavBarZ } from '~/style/zIndexes'
 
-export function LayoutNav() {
+export interface LayoutNavScheme {
+  read: () => NavAction
+  top: () => NavAction
+}
+
+export interface LayoutNavProps {
+  scheme: LayoutNavScheme
+}
+
+export function LayoutNav({ scheme }: LayoutNavProps) {
   return (
     <nav
       css={css`
@@ -41,8 +51,12 @@ export function LayoutNav() {
           size={barHeight}
         />
         <FlexGap size={'0.5rem'} />
-        <LayoutNavSidebarItem glyph={Home} href="/" label="Home" />
-        <LayoutNavSidebarItem glyph={Glasses} href="/" label="Read" />
+        <LayoutNavSidebarItem glyph={Home} href={scheme.top()} label="Home" />
+        <LayoutNavSidebarItem
+          glyph={Glasses}
+          href={scheme.read()}
+          label="Read"
+        />
         <LayoutNavSidebarItem glyph={Pen} href="/" label="Write" />
         <FlexGap />
         <div
@@ -68,7 +82,7 @@ export function LayoutNav() {
 
 interface LayoutNavSidebarItemProps {
   glyph: GlyphComponent
-  href: string
+  href: NavAction
   label: string
 }
 

@@ -1,6 +1,5 @@
 import { LinkSurface } from 'retil-interaction'
 
-import { LoadingPage } from '~/app/loadingPage'
 import { loadWhenUnauthenticated } from '~/util/routing'
 
 export function RecoverAccountPage() {
@@ -23,7 +22,6 @@ export function RecoverAccountPage() {
 const loader = loadWhenUnauthenticated(
   () => <RecoverAccountPage />,
   '/dashboard',
-  () => <LoadingPage />,
 )
 
 export default loader

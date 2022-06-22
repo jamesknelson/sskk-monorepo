@@ -12,8 +12,14 @@ TODO:
 o move url stuff to a retil package
 o update buttons storyboard
 
+- refactor app-storyboard to use the tool-* packagdes from retili
 
-- get everything set up so that I can publish a letter that's read from the db using the new libraries
+- figure out why loading the root join screen directly doesn't cause the content to become visible
+  (is it an issue w/ the transition?)
+
+- figure out how to precache the next step, without causing it to precache subsequent steps (we'll need to set in the env that it is due to precaching - maybe a 'head' and 'probe' method?)
+
+- finish the "hello my name is" screen
 
 
 - try and get a native app version working

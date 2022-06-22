@@ -1,7 +1,8 @@
 import { Fragment } from 'prosemirror-model'
 import { Node } from 'prosemirror-model'
 import { Transaction } from 'prosemirror-state'
-import { ORDERED_LIST } from '../nodeNames'
+
+import { ORDERED_LIST } from '~/nodeNames'
 
 import { isListNode } from './isListNode'
 

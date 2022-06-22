@@ -1,13 +1,13 @@
 import { loadAsync } from 'retil-mount'
 import { loadMatch } from 'retil-nav'
+import { patternFor } from 'retil-nav-scheme'
 
-import { AppEnv } from 'src/env'
+import { Env } from '~/env'
 // import { ProfileByHandleDocument } from 'src/generated/graphql'
-import { patternFor } from 'src/util/urls'
 
-import urls, { ProfileParams } from './profileURLs'
+import urls, { ProfileParams } from './profileScheme'
 
-const profileTopLoader = loadAsync<AppEnv<ProfileParams>>(async (_env) => {
+const profileTopLoader = loadAsync<Env<ProfileParams>>(async (_env) => {
   const pageModulePromise = import('./profilePage')
   // const query = await env.precacheQuery(ProfileByHandleDocument, {
   //   handle: env.nav.params.nametag,

@@ -43,7 +43,7 @@ const AppLayout = ({
 const appLoader = (props: LoaderProps<Env>) => (
   <AppLayout
     getTransitionKey={() =>
-      props.mutablePersistedContext.transitionKey || props.nav.pathname
+      props.mutablePersistedContext.appLayoutTransitionKey || props.nav.pathname
     }
     scheme={scheme}>
     <Boundary fallback={<LayoutLoadingSpinner />}>
@@ -64,13 +64,13 @@ const appLoader = (props: LoaderProps<Env>) => (
           ),
           [patternFor(scheme.logout)]: loadLazy(() => import('./logoutLoader')),
 
-          // [patternFor(scheme.join)]: loadLazy(
-          //   () => import('./join/joinLoader'),
-          // ),
+          [patternFor(scheme.join)]: loadLazy(
+            () => import('./join/joinLoader'),
+          ),
 
-          // [patternFor(scheme.read)]: loadLazy(
-          //   () => import('./read/readLoader'),
-          // ),
+          [patternFor(scheme.read)]: loadLazy(
+            () => import('./read/readLoader'),
+          ),
 
           // [patternFor(scheme.profile)]: loadLazy(
           //   () => import('./profile/profileLoader'),

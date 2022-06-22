@@ -1,10 +1,10 @@
-import { urlSchema } from 'src/util/urls'
+import { createScheme } from 'retil-nav-scheme'
 
 export type ProfileParams = {
   nametag: string
 }
 
-const urls = urlSchema({
+export default createScheme({
   /**
    * A full list of all the member's publications
    */
@@ -19,5 +19,3 @@ const urls = urlSchema({
    */
   top: () => `/`,
 })
-
-export default urls

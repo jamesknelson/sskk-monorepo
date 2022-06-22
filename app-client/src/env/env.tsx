@@ -9,7 +9,7 @@ import { AuthUser } from './auth'
 import { CustomerIdentity } from './customerIdentity'
 
 import { AppApolloClient } from '~/data/apollo'
-import { QueryPrecacher } from '~/util/precachedQuery'
+import { QueryPrecacher } from '~/data/precachedQuery'
 
 export interface AppAuthUser extends Omit<AuthUser, 'id'> {
   memberId?: string
@@ -23,7 +23,7 @@ export interface DataEnv {
 }
 
 export interface AppMutablePersistedContext {
-  transitionKey?: string
+  appLayoutTransitionKey?: string
 }
 
 export interface Env<

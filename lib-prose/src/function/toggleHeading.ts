@@ -1,7 +1,8 @@
 import { Schema } from 'prosemirror-model'
 import { Transaction } from 'prosemirror-state'
 
-import { BLOCKQUOTE, HEADING, LIST_ITEM, PARAGRAPH } from '../nodeNames'
+import { BLOCKQUOTE, HEADING, LIST_ITEM, PARAGRAPH } from '~/nodeNames'
+
 import { isInsideListItem } from './isInsideListItem'
 import { isListNode } from './isListNode'
 import { unwrapNodesFromList } from './toggleList'

@@ -2,12 +2,9 @@ import { css } from '@emotion/react'
 import { Placement } from '@popperjs/core'
 import { forwardRef } from 'react'
 import { animated, useSpring } from 'react-spring'
+import { TransitionHandle, useTransitionHandle } from 'retil-transition'
 
-import { standardRadius } from 'src/style/radii'
-import {
-  TransitionHandle,
-  useTransitionHandle,
-} from 'src/utils/transitionHandle'
+import { standardRadius } from '~/style/radii'
 
 export type { Placement }
 
@@ -40,12 +37,12 @@ export const TooltipBody = forwardRef<HTMLDivElement, TooltipBodyProps>(
     useTransitionHandle(
       props.transitionHandleRef,
       {
-        show: () =>
+        show: async () =>
           api.start({
             ...enterStyles,
             from: fromStyles,
           }),
-        hide: () => api.start(exitStyles),
+        hide: async () => api.start(exitStyles),
       },
       [api.start],
     )
@@ -54,12 +51,12 @@ export const TooltipBody = forwardRef<HTMLDivElement, TooltipBodyProps>(
       <animated.div
         style={spring}
         ref={refProp}
-        css={css`
+        css={({ color }) => css`
           padding: 0.25rem 0.75rem;
           border-radius: ${standardRadius};
 
-          background-color: ${paletteColors.ink700};
-          color: ${paletteColors.ink050};
+          background-color: ${color.inverseSurface};
+          color: ${color.onInverseSurface};
           font-family: sans-serif;
           font-size: 15px;
           font-weight: 500;

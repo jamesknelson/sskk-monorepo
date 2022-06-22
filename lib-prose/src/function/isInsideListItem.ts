@@ -1,6 +1,6 @@
 import { Node } from 'prosemirror-model'
 
-import { LIST_ITEM } from 'src/prose/nodeNames'
+import { LIST_ITEM } from '~/nodeNames'
 
 export function isInsideListItem(doc: Node, pos: number): boolean {
   if (doc.nodeSize < 2 || pos < 2) {

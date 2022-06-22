@@ -8,7 +8,7 @@ import {
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 import { useMemo } from 'react'
 
-import { Role } from 'src/type/roles'
+import { Role } from '~/type/roles'
 
 export interface QueryContext {
   role?: Role

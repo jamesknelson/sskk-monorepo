@@ -5,14 +5,14 @@ import { loadAsync } from 'retil-mount'
 //   LetterByHandleAndSlugDocument,
 //   LetterFieldsFragment,
 // } from 'src/generated/graphql'
-import { AppEnv } from 'src/env/appEnv'
-// import urls from 'src/pages/appURLs'
+import { Env } from '~/env'
+import appScheme from '~/app/appScheme'
 // import { PrecachedQuery } from 'src/utils/precachedQuery'
 // import { decodeUUID } from 'src/utils/uuid'
 
-import { LetterParams, LetterQuery } from './letterURLs'
+import { LetterParams, LetterQuery } from './letterScheme'
 
-const loader = loadAsync<AppEnv<LetterParams, LetterQuery>>(async (_env) => {
+const loader = loadAsync<Env<LetterParams, LetterQuery>>(async (_env) => {
   // const {
   //   letterId: maybeEncodedLetterId,
   //   letterSlug,

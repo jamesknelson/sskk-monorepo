@@ -1,20 +1,26 @@
 import { css } from '@emotion/react'
 import { useEffect, useRef } from 'react'
+import { getIssueMessage } from 'retil-issues'
 import { useNavController } from 'retil-nav'
 
-// import { Check } from 'src/assets/glyphs'
-import { createBackgroundScene } from 'src/components/web/background'
-import { TextBlock } from 'src/components/web/block/textBlock'
-import { RaisedLabelledButtonBody } from 'src/components/web/button/raisedLabelledButtonBody'
-import { Card } from 'src/components/web/card/card'
-import { FormFieldBlock, FormInput } from 'src/components/web/form'
-import { useAppEnv } from 'src/env'
-import { useAuthController } from 'src/env/auth'
-import { validateCreateUserWithPasswordRequest } from 'src/env/firebaseAuthIssues'
-import { messages } from 'src/locale/en'
-import appURLs from 'src/app/appURLs'
-import { smallCardClampWidth } from 'src/style/dimensions'
-import { createForm, FormSubmitButtonSurface, useForm } from 'src/util/form'
+import { createBackgroundScene } from 'lib-ui-web/component/background'
+import { TextBlock } from 'lib-ui-web/component/block/textBlock'
+import { RaisedLabelledButtonBody } from 'lib-ui-web/component/button/raisedLabelledButtonBody'
+import { Card } from 'lib-ui-web/component/card/card'
+import { smallColumnClampWidth } from 'lib-ui-web/style/dimensions'
+
+import appURLs from '~/app/appScheme'
+import { useEnv } from '~/env'
+import { useAuthController } from '~/env/auth'
+import { validateCreateUserWithPasswordRequest } from '~/env/auth/authServiceIssues'
+import { messages } from '~/locale/en'
+import {
+  createForm,
+  FormSubmitButtonSurface,
+  useForm,
+  FormFieldBlock,
+  FormInput,
+} from '~/util/form'
 
 import { useJoinContext } from './joinContext'
 
@@ -25,7 +31,7 @@ export const meta = {
 
 export const backgroundScene = createBackgroundScene(async () => {
   const { default: Image } = await import(
-    'src/assets/backgrounds/steam-train.optimized.svg?url'
+    'lib-ui-web/asset/background/steam-train.optimized.svg?url'
   )
 
   return () => (
@@ -63,7 +69,7 @@ export function Page() {
       <Card
         css={css`
           margin: 2rem auto;
-          max-width: ${smallCardClampWidth};
+          max-width: ${smallColumnClampWidth};
           padding: 3rem 1.5rem 3rem;
         `}>
         <RegisterForm>
@@ -135,7 +141,7 @@ export function Page() {
 }
 
 const RegisterForm = createForm((props) => {
-  const env = useAppEnv()
+  const env = useEnv()
   const { createUserWithPassword } = useAuthController()
   const { navigate } = useNavController()
   const { persistence } = useJoinContext()
@@ -143,9 +149,7 @@ const RegisterForm = createForm((props) => {
   const form = useForm({
     ...props,
     getMessage: (issue) =>
-      (issue.path && messages.auth[issue.path][issue.code]) ||
-      issue.message ||
-      issue.code,
+      getIssueMessage(issue, messages) || issue.message || issue.code,
     initialValue: {
       displayName: '',
       email: '',
@@ -163,7 +167,7 @@ const RegisterForm = createForm((props) => {
     onValidate: validateCreateUserWithPasswordRequest,
   })
 
-  const customer = env.customer
+  const customer = env.customerIdentity
   const { current: initiallyPersistedData } = useRef(persistence.get())
 
   // This will only be called after account creation, as the router prevents

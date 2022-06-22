@@ -6,6 +6,7 @@ import { root } from 'retil-support'
 
 export const messages = {
   [root]: {
+    alreadyLoggedIn: "You're already logged in!",
     error: 'Something went wrong.',
   },
   email: {
